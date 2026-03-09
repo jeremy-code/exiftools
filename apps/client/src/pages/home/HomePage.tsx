@@ -1,13 +1,19 @@
 import { Link as RouterLink } from "react-router";
 
+import { Link } from "@exiftools/ui/components/Link";
+
 const HomePage = () => {
   return (
     <ul>
       <li>
-        <RouterLink to="/editor">Editor</RouterLink>
+        <Link asChild>
+          <RouterLink to="/editor">Editor</RouterLink>
+        </Link>
       </li>
       <li>
-        <RouterLink to="/viewer">Viewer</RouterLink>
+        <Link asChild>
+          <RouterLink to="/viewer">Viewer</RouterLink>
+        </Link>
       </li>
     </ul>
   );

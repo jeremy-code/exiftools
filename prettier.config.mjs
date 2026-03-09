@@ -1,8 +1,9 @@
 /** @import { Config } from "prettier" */
+/** @import { PluginOptions } from "prettier-plugin-tailwindcss" */
 
 /**
  * @see {@link https://prettier.io/docs/en/configuration.html}
- * @satisfies {Config}
+ * @satisfies {Config & PluginOptions}
  */
 export default {
   printWidth: 80,
@@ -10,4 +11,7 @@ export default {
   singleQuote: false,
   trailingComma: "all",
   experimentalTernaries: true,
+  plugins: ["prettier-plugin-tailwindcss"],
+  tailwindStylesheet: "./packages/ui/src/globals.css",
+  tailwindFunctions: ["cx", "cn", "cnMerge", "tv", "twMerge"],
 };

@@ -17,6 +17,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@exiftools/ui": "workspace:*",
+    "@fontsource-variable/lexend": "^5.2.11",
     "react": "^19.2.4",
     "react-compiler-runtime": "^1.0.0",
     "react-dom": "^19.2.4",
@@ -25,6 +27,7 @@
   "devDependencies": {
     "@exiftools/eslint-config": "workspace:*",
     "@exiftools/tsconfig": "workspace:*",
+    "@tailwindcss/vite": "^4.2.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",

@@ -1,3 +1,6 @@
+import "@exiftools/ui/globals.css";
+import "@fontsource-variable/lexend/index.css";
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
