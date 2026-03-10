@@ -43,6 +43,9 @@ importers:
       "@fontsource-variable/lexend":
         specifier: ^5.2.11
         version: 5.2.11
+      libexif-wasm:
+        specifier: ^0.0.3
+        version: 0.0.3
       lucide-react:
         specifier: ^0.577.0
         version: 0.577.0(react@19.2.4)
@@ -3366,6 +3369,13 @@ packages:
       }
     engines: { node: ">= 0.8.0" }
 
+  libexif-wasm@0.0.3:
+    resolution:
+      {
+        integrity: sha512-rtgnSiTDkfRHRcOxBZYcnJS0pxCLcERD4rPJ0CBPDHg33RfcfyNMND9H5Fw8z3iIcNHcqVGuUm5jzrpxz2jazQ==,
+      }
+    engines: { node: ">=16.0.0" }
+
   lightningcss-android-arm64@1.31.1:
     resolution:
       {
@@ -6645,6 +6655,8 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
       type-check: 0.4.0
+
+  libexif-wasm@0.0.3: {}
 
   lightningcss-android-arm64@1.31.1:
     optional: true

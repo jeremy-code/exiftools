@@ -21,6 +21,7 @@
   "dependencies": {
     "@exiftools/ui": "workspace:*",
     "@fontsource-variable/lexend": "^5.2.11",
+    "libexif-wasm": "^0.0.3",
     "lucide-react": "^0.577.0",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",
