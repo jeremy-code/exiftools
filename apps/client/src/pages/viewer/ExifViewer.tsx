@@ -32,32 +32,33 @@ const ExifViewer = ({ file }: ExifViewerProps) => {
 
   const exifDataObject = mapExifData(exifData);
 
-  const rows = Object.entries(exifDataObject).flatMap(([ifd, value]) =>
-    value === null ?
-      [{ ifd, tag: "—", value: "empty" }]
-    : Object.entries(value).map(([tag, val]) => ({ ifd, tag, value: val })),
-  );
-
   // TODO: Display data in something better than a table
   return (
-    <table className="w-full text-sm">
-      <thead>
-        <tr>
-          <th className="p-2 text-left font-medium">IFD</th>
-          <th className="p-2 text-left font-medium">Tag</th>
-          <th className="p-2 text-left font-medium">Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map(({ ifd, tag, value }) => (
-          <tr key={`${ifd}-${tag}`}>
-            <td className="p-2 font-mono">{ifd}</td>
-            <td className="p-2 font-mono">{tag}</td>
-            <td className="p-2">{String(value)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="space-y-6">
+      {Object.entries(exifDataObject).map(([ifd, value]) => (
+        <div key={ifd}>
+          <h3 className="mb-2 font-semibold">{ifd}</h3>
+          {value !== null ?
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr className="border-b">
+                  <th className="p-2 text-left font-medium">Tag</th>
+                  <th className="p-2 text-left font-medium">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(value).map(([tag, val]) => (
+                  <tr key={tag} className="border-b">
+                    <td className="p-2">{val?.title ?? tag}</td>
+                    <td className="p-2">{String(val?.value)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          : <p className="text-muted-foreground">empty</p>}
+        </div>
+      ))}
+    </div>
   );
 };
 
