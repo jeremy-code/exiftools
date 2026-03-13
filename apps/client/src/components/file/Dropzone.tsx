@@ -1,3 +1,5 @@
+import type { ComponentPropsWithRef } from "react";
+
 import { FileIcon, FileUp, X } from "lucide-react";
 import { AccessibleIcon } from "radix-ui";
 import {
@@ -50,9 +52,14 @@ const AcceptedFile = ({ file, index }: AcceptedFileProps) => {
 type DropzoneProps = {
   dropzoneOptions?: DropzoneOptions;
   inputProps?: DropzoneInputProps;
+  rootProps?: ComponentPropsWithRef<"div">;
 };
 
-const Dropzone = ({ dropzoneOptions, inputProps }: DropzoneProps) => {
+const Dropzone = ({
+  dropzoneOptions,
+  inputProps,
+  rootProps,
+}: DropzoneProps) => {
   const acceptedFiles = useDropzoneState((state) => state.acceptedFiles);
   const addAcceptedFiles = useDropzoneState((state) => state.addAcceptedFiles);
   const {
@@ -75,12 +82,14 @@ const Dropzone = ({ dropzoneOptions, inputProps }: DropzoneProps) => {
   return (
     <div
       {...getRootProps({
+        ...rootProps,
         className: cn(
           "flex flex-col items-center gap-6 rounded border border-dashed p-6 text-muted-foreground",
           {
             "border-red-600 bg-red-600/10": fileRejections.length > 0,
             "border-blue-600 bg-blue-600/10": isDragAccept,
           },
+          rootProps?.className,
         ),
       })}
     >
