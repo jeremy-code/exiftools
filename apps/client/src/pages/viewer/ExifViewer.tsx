@@ -7,6 +7,7 @@ import { cn } from "tailwind-variants";
 import { FileInformation } from "#components/file/FileInformation";
 import { useDropzoneState } from "#hooks/useDropzoneState";
 import { useExifData } from "#hooks/useExifData";
+import { formatPlural } from "#utils/formatPlural";
 import { mapExifData } from "#utils/mapExifData";
 import {
   Accordion,
@@ -14,6 +15,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@exiftools/ui/components/Accordion";
+import { Badge } from "@exiftools/ui/components/Badge";
 import { Button } from "@exiftools/ui/components/Button";
 import { Skeleton } from "@exiftools/ui/components/Skeleton";
 import {
@@ -71,14 +73,22 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
       >
         {Object.entries(exifDataObject).map(([ifd, value]) => {
           const isEmpty = value === null;
+          const entries = !isEmpty ? Object.entries(value) : [];
 
           return (
             <AccordionItem key={ifd} value={ifd} disabled={isEmpty}>
               <AccordionTrigger>
-                {ifd}
-                {isEmpty ? " (empty)" : null}
+                <div className="flex gap-2">
+                  {ifd}
+                  <Badge>
+                    {formatPlural(entries.length, {
+                      one: " tag",
+                      other: " tags",
+                    })}
+                  </Badge>
+                </div>
               </AccordionTrigger>
-              {value !== null ?
+              {!isEmpty ?
                 <AccordionContent>
                   {/* TODO: Display data in something better than a table */}
                   <Table>
@@ -89,7 +99,7 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {Object.entries(value).map(([tag, val]) => (
+                      {entries.map(([tag, val]) => (
                         <TableRow key={tag}>
                           <TableCell>{val?.title ?? tag}</TableCell>
                           <TableCell>{String(val?.value)}</TableCell>
