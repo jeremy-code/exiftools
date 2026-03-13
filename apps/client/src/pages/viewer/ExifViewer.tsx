@@ -1,5 +1,8 @@
+import type { ComponentPropsWithRef } from "react";
+
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
+import { cn } from "tailwind-variants";
 
 import { FileInformation } from "#components/file/FileInformation";
 import { useDropzoneState } from "#hooks/useDropzoneState";
@@ -13,12 +16,20 @@ import {
 } from "@exiftools/ui/components/Accordion";
 import { Button } from "@exiftools/ui/components/Button";
 import { Skeleton } from "@exiftools/ui/components/Skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@exiftools/ui/components/Table";
 
 type ExifViewerProps = {
   file: File;
-};
+} & ComponentPropsWithRef<"div">;
 
-const ExifViewer = ({ file }: ExifViewerProps) => {
+const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
   const { isPending, data: arrayBuffer } = useQuery({
     queryKey: [file],
     queryFn: () => file.arrayBuffer(),
@@ -41,7 +52,7 @@ const ExifViewer = ({ file }: ExifViewerProps) => {
   const exifDataObject = mapExifData(exifData);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={cn("flex flex-col gap-4", className)} {...props}>
       <div>
         <Button variant="ghost" onClick={() => removeAcceptedFileByIndex(0)}>
           <ArrowLeft className="size-[1em]" />
@@ -56,13 +67,13 @@ const ExifViewer = ({ file }: ExifViewerProps) => {
           .map(([key]) => key)}
         variant="enclosed"
         type="multiple"
-        className="max-w-xl"
+        size="lg"
       >
         {Object.entries(exifDataObject).map(([ifd, value]) => {
           const isEmpty = value === null;
 
           return (
-            <AccordionItem value={ifd} key={ifd} disabled={isEmpty}>
+            <AccordionItem key={ifd} value={ifd} disabled={isEmpty}>
               <AccordionTrigger>
                 {ifd}
                 {isEmpty ? " (empty)" : null}
@@ -70,22 +81,22 @@ const ExifViewer = ({ file }: ExifViewerProps) => {
               {value !== null ?
                 <AccordionContent>
                   {/* TODO: Display data in something better than a table */}
-                  <table className="w-full border-collapse text-sm">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="p-2 text-left font-medium">Tag</th>
-                        <th className="p-2 text-left font-medium">Value</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableHeader>Tag</TableHeader>
+                        <TableHeader>Value</TableHeader>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
                       {Object.entries(value).map(([tag, val]) => (
-                        <tr key={tag} className="border-b">
-                          <td className="p-2">{val?.title ?? tag}</td>
-                          <td className="p-2">{String(val?.value)}</td>
-                        </tr>
+                        <TableRow key={tag}>
+                          <TableCell>{val?.title ?? tag}</TableCell>
+                          <TableCell>{String(val?.value)}</TableCell>
+                        </TableRow>
                       ))}
-                    </tbody>
-                  </table>
+                    </TableBody>
+                  </Table>
                 </AccordionContent>
               : null}
             </AccordionItem>
