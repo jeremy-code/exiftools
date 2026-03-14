@@ -1,15 +1,11 @@
-/// <reference types="vitest" />
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { playwright } from "@vitest/browser-playwright";
+import { defineConfig } from "vitest/config";
 
-export default defineConfig({
+const viteConfig = defineConfig({
   plugins: [
-    react({
-      babel: {
-        plugins: ["babel-plugin-react-compiler"],
-      },
-    }),
+    react({ babel: { plugins: ["babel-plugin-react-compiler"] } }),
     tailwindcss(),
   ],
   esbuild: {
@@ -25,4 +21,14 @@ export default defineConfig({
   worker: { format: "es" },
   // Otherwise, "wasm streaming compile failed" error
   optimizeDeps: { exclude: ["libexif-wasm"] },
+  test: {
+    clearMocks: true,
+    browser: {
+      enabled: true,
+      instances: [{ browser: "chromium" }],
+      provider: playwright(),
+    },
+  },
 });
+
+export default viteConfig;

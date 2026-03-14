@@ -7,6 +7,7 @@ import pluginImportX, { createNodeResolver } from "eslint-plugin-import-x";
 import pluginPromise from "eslint-plugin-promise";
 import turbo from "eslint-plugin-turbo";
 import tseslint from "typescript-eslint";
+import vitest from "@vitest/eslint-plugin";
 
 import disables from "./disables.js";
 
@@ -59,6 +60,12 @@ export const baseConfig = defineConfig(
           alphabetize: { order: "asc" },
         },
       ],
+      "@typescript-eslint/unbound-method": [
+        "error",
+        {
+          ignoreStatic: true,
+        },
+      ],
     },
     settings: {
       /**
@@ -72,6 +79,19 @@ export const baseConfig = defineConfig(
         createTypeScriptImportResolver({ alwaysTryTypes: true }),
         createNodeResolver(),
       ],
+    },
+  },
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    plugins: { vitest },
+    rules: {
+      ...vitest.configs.recommended.rules,
+      "vitest/prefer-importing-vitest-globals": "error",
+    },
+    settings: {
+      vitest: {
+        typecheck: true,
+      },
     },
   },
 );
