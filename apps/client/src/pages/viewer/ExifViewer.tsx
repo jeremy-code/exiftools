@@ -1,6 +1,7 @@
 import type { ComponentPropsWithRef } from "react";
 
 import { useQuery } from "@tanstack/react-query";
+import { ExifIfd, ExifTagInfo, getEnumKeyFromValue } from "libexif-wasm";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "tailwind-variants";
 
@@ -8,7 +9,6 @@ import { FileInformation } from "#components/file/FileInformation";
 import { useDropzoneState } from "#hooks/useDropzoneState";
 import { useExifData } from "#hooks/useExifData";
 import { formatPlural } from "#utils/formatPlural";
-import { mapExifData } from "#utils/mapExifData";
 import {
   Accordion,
   AccordionContent,
@@ -33,8 +33,8 @@ type ExifViewerProps = {
 
 const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
   const { isPending, data: arrayBuffer } = useQuery({
-    queryKey: [file],
-    queryFn: () => file.arrayBuffer(),
+    queryKey: [file] as const,
+    queryFn: ({ queryKey: [file] }) => file.arrayBuffer(),
   });
   const exifData = useExifData(arrayBuffer);
   const removeAcceptedFileByIndex = useDropzoneState(
@@ -51,8 +51,6 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
     }
   }
 
-  const exifDataObject = mapExifData(exifData);
-
   return (
     <div className={cn("flex flex-col gap-4", className)} {...props}>
       <div>
@@ -64,30 +62,34 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
       <FileInformation file={file} />
       <Accordion
         // Expand all nonempty IFDs
-        defaultValue={Object.entries(exifDataObject)
-          .filter(([, value]) => value !== null)
-          .map(([key]) => key)}
+        defaultValue={exifData.ifd
+          .filter((ifd) => ifd.entries.length !== 0)
+          .map((_, index) => getEnumKeyFromValue(ExifIfd, index) ?? "COUNT")}
         variant="enclosed"
         type="multiple"
         size="lg"
       >
-        {Object.entries(exifDataObject).map(([ifd, value]) => {
-          const isEmpty = value === null;
-          const entries = !isEmpty ? Object.entries(value) : [];
+        {exifData.ifd.map((ifd, index) => {
+          const ifdName = getEnumKeyFromValue(ExifIfd, index) ?? "COUNT";
+          if (ifdName === "COUNT") {
+            throw new Error("Invalid number of IFDs found");
+          }
+          const isEmpty = ifd.entries.length === 0;
 
           return (
-            <AccordionItem key={ifd} value={ifd} disabled={isEmpty}>
+            <AccordionItem key={ifdName} value={ifdName} disabled={isEmpty}>
               <AccordionTrigger>
                 <div className="flex gap-2">
-                  {ifd}
+                  {ifdName}
                   <Badge>
-                    {formatPlural(entries.length, {
+                    {formatPlural(ifd.entries.length, {
                       one: " tag",
                       other: " tags",
                     })}
                   </Badge>
                 </div>
               </AccordionTrigger>
+
               {!isEmpty ?
                 <AccordionContent>
                   {/* TODO: Display data in something better than a table */}
@@ -99,12 +101,16 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {entries.map(([tag, val]) => (
-                        <TableRow key={tag}>
-                          <TableCell>{val?.title ?? tag}</TableCell>
-                          <TableCell>{String(val?.value)}</TableCell>
-                        </TableRow>
-                      ))}
+                      {ifd.entries
+                        .filter((entry) => entry.tag !== null)
+                        .map((entry) => (
+                          <TableRow key={entry.tag}>
+                            <TableCell>
+                              {ExifTagInfo.getTitleInIfd(entry.tag!, ifdName)}
+                            </TableCell>
+                            <TableCell>{entry.getValue()}</TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </AccordionContent>
