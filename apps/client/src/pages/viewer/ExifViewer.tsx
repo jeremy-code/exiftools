@@ -17,15 +17,13 @@ import {
 } from "@exiftools/ui/components/Accordion";
 import { Badge } from "@exiftools/ui/components/Badge";
 import { Button } from "@exiftools/ui/components/Button";
-import { Skeleton } from "@exiftools/ui/components/Skeleton";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@exiftools/ui/components/Table";
+  DataList,
+  DataListItem,
+  DataListItemLabel,
+  DataListItemValue,
+} from "@exiftools/ui/components/DataList";
+import { Skeleton } from "@exiftools/ui/components/Skeleton";
 
 type ExifViewerProps = {
   file: File;
@@ -68,6 +66,7 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
         variant="enclosed"
         type="multiple"
         size="lg"
+        className="shadow-sm"
       >
         {exifData.ifd.map((ifd, index) => {
           const ifdName = getEnumKeyFromValue(ExifIfd, index) ?? "COUNT";
@@ -92,27 +91,23 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
 
               {!isEmpty ?
                 <AccordionContent>
-                  {/* TODO: Display data in something better than a table */}
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableHeader>Tag</TableHeader>
-                        <TableHeader>Value</TableHeader>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {ifd.entries
-                        .filter((entry) => entry.tag !== null)
-                        .map((entry) => (
-                          <TableRow key={entry.tag}>
-                            <TableCell>
-                              {ExifTagInfo.getTitleInIfd(entry.tag!, ifdName)}
-                            </TableCell>
-                            <TableCell>{entry.getValue()}</TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
+                  <DataList>
+                    {ifd.entries
+                      .filter((entry) => entry.tag !== null)
+                      .map((entry) => (
+                        <DataListItem
+                          className="flex-col! max-md:items-start md:flex-row!"
+                          key={entry.tag}
+                        >
+                          <DataListItemLabel className="font-medium md:w-1/3">
+                            {ExifTagInfo.getTitleInIfd(entry.tag!, ifdName)}
+                          </DataListItemLabel>
+                          <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-muted-foreground before:content-['=']">
+                            {entry.getValue()}
+                          </DataListItemValue>
+                        </DataListItem>
+                      ))}
+                  </DataList>
                 </AccordionContent>
               : null}
             </AccordionItem>

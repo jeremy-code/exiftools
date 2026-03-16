@@ -22,13 +22,15 @@ const accordionVariants = tv({
 
 const Accordion = ({
   variant,
+  size,
   className,
   ...props
 }: ComponentPropsWithRef<typeof AccordionPrimitive.Root> &
   VariantProps<typeof accordionVariants>) => {
   return (
     <AccordionPrimitive.Root
-      className={accordionVariants({ variant, className })}
+      data-variant={variant}
+      className={accordionVariants({ variant, size, className })}
       {...props}
     />
   );
@@ -41,7 +43,7 @@ const AccordionItem = ({
   return (
     <AccordionPrimitive.Item
       className={cn(
-        "border-b [overflow-anchor:none] hover:bg-subtle data-[state=open]:bg-subtle",
+        "[overflow-anchor:none] group-data-[variant=enclosed]/accordion:not-last:border-b",
         className,
       )}
       {...props}
