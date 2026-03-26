@@ -1,16 +1,19 @@
+import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
+import { Features } from "lightningcss";
 import { defineConfig } from "vitest/config";
 
 const viteConfig = defineConfig({
   plugins: [
-    react({ babel: { plugins: ["babel-plugin-react-compiler"] } }),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
   ],
-  esbuild: {
-    supported: {
-      "top-level-await": true, // https://emscripten.org/docs/tools_reference/settings_reference.html#modularize
+  css: {
+    lightningcss: {
+      exclude: Features.LightDark,
     },
   },
   /**
