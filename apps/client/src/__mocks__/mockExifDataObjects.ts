@@ -1,0 +1,100 @@
+import type { ExifDataObject } from "#lib/exif/serializeExifData";
+import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
+
+const MOCK_EXIF_DATA_OBJECT = {
+  byteOrder: "MOTOROLA",
+  data: [],
+  dataType: "COUNT",
+  ifd: {
+    IFD_0: [
+      {
+        ifd: "IFD_0",
+        tag: "X_RESOLUTION",
+        format: "RATIONAL",
+        components: 1,
+        data: [0, 0, 0, 72, 0, 0, 0, 1],
+        size: 8,
+        value: "72",
+      },
+      {
+        ifd: "IFD_0",
+        tag: "Y_RESOLUTION",
+        format: "RATIONAL",
+        components: 1,
+        data: [0, 0, 0, 72, 0, 0, 0, 1],
+        size: 8,
+        value: "72",
+      },
+      {
+        ifd: "IFD_0",
+        tag: "RESOLUTION_UNIT",
+        format: "SHORT",
+        components: 1,
+        data: [0, 2],
+        size: 2,
+        value: "Inch",
+      },
+      {
+        ifd: "IFD_0",
+        tag: "YCBCR_POSITIONING",
+        format: "SHORT",
+        components: 1,
+        data: [0, 1],
+        size: 2,
+        value: "Centered",
+      },
+    ],
+    IFD_1: [],
+    EXIF: [
+      {
+        ifd: "EXIF",
+        tag: "EXIF_VERSION",
+        format: "UNDEFINED",
+        components: 4,
+        data: [48, 50, 51, 50],
+        size: 4,
+        value: "Exif Version 2.32",
+      },
+      {
+        ifd: "EXIF",
+        tag: "DATE_TIME_ORIGINAL",
+        format: "ASCII",
+        components: 20,
+        data: Array.from(encodeStringToUtf8("1970:01:01 12:00:00")),
+        size: 20,
+        value: "1970:01:01 12:00:00",
+      },
+      {
+        ifd: "EXIF",
+        tag: "COMPONENTS_CONFIGURATION",
+        format: "UNDEFINED",
+        components: 4,
+        data: [1, 2, 3, 0],
+        size: 4,
+        value: "Y Cb Cr -",
+      },
+      {
+        ifd: "EXIF",
+        tag: "COLOR_SPACE",
+        format: "SHORT",
+        components: 1,
+        data: [255, 255],
+        size: 2,
+        value: "Uncalibrated",
+      },
+      {
+        ifd: "EXIF",
+        tag: "FLASH_PIX_VERSION",
+        format: "UNDEFINED",
+        components: 4,
+        data: [48, 49, 48, 48],
+        size: 4,
+        value: "FlashPix Version 1.0",
+      },
+    ],
+    GPS: [],
+    INTEROPERABILITY: [],
+  },
+} satisfies ExifDataObject;
+
+export { MOCK_EXIF_DATA_OBJECT };
