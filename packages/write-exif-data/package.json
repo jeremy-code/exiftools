@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "private": false,
   "exports": {
+    ".": {
+      "@exiftools/development": "./src/index.js",
+      "default": "./src/index"
+    },
     "./*": {
       "@exiftools/development": "./src/*.js",
       "default": "./src/*"

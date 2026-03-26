@@ -75,7 +75,7 @@ const DataListItemLabel = ({
   return (
     <Comp
       className={cn(
-        "flex min-w-30 items-center gap-1 text-muted-foreground",
+        "flex min-w-30 items-start gap-1 text-muted-foreground",
         "group-data-[variant=bold]/data-list:font-medium",
         className,
       )}

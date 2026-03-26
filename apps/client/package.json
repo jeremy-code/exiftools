@@ -19,10 +19,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@exiftools/write-exif-data": "workspace:*",
     "@exiftools/ui": "workspace:*",
     "@fontsource-variable/lexend": "^5.2.11",
     "@std/path": "npm:@jsr/std__path@^1.1.4",
     "@tanstack/react-query": "^5.95.2",
+    "@tanstack/react-table": "^8.21.3",
     "libexif-wasm": "^0.0.3",
     "lucide-react": "^1.7.0",
     "next-themes": "^0.4.6",
@@ -45,6 +47,7 @@
     "@tanstack/react-query-devtools": "^5.95.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/wicg-file-system-access": "^2023.10.7",
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/browser-playwright": "^4.1.2",
     "babel-plugin-react-compiler": "^1.0.0",
