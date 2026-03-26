@@ -74,9 +74,9 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
             </Button>
           </div>
           <FileInformation file={file} />
-          {Object.entries(exifDataObject.ifd).map(([key, value]) => (
-            <ExifEditorIfd key={key} exifEntryObjects={value} />
-          ))}
+          <ExifEditorIfd
+            exifEntryObjects={Object.values(exifDataObject.ifd).flat()}
+          />
         </div>
       </ExifEditorStateStoreContext>
     </Suspense>
