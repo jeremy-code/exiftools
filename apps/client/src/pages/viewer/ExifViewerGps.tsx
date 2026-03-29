@@ -2,7 +2,7 @@ import { ExifIfd, type ExifData } from "libexif-wasm";
 import { Marker, Popup } from "react-leaflet";
 
 import { Map } from "#components/map/Map";
-import { formatLatLngFromExif } from "#lib/exif/gps/formatLatLng";
+import { formatLatLngFromExif } from "#lib/exif/gps/formatLatLngFromExif";
 import { getLatLngFromExif } from "#lib/exif/gps/getLatLngFromExif";
 
 type ExifViewerGpsProps = {

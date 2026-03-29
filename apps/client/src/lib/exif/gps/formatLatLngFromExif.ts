@@ -1,20 +1,28 @@
-import { LatLng } from "leaflet";
 import type { ExifContent } from "libexif-wasm";
 
-import { dmsToDecimalDegrees } from "#lib/leaflet/dmsToDecimalDegrees";
+import type { DMS } from "#lib/leaflet/interfaces";
 
-import { parseCoordinateEntry } from "./parseCoordinateEntry";
 import { getRequiredEntry } from "../getRequiredEntry";
 import { parseRationals } from "../parseRationals";
+import { parseCoordinateEntry } from "./parseCoordinateEntry";
 
-const getLatLngFromExif = (exifDataGpsIfd: ExifContent): LatLng => {
-  const latitude = dmsToDecimalDegrees(
+const formatCoordinate = ({
+  degrees,
+  minutes,
+  seconds,
+  direction,
+}: DMS): string => {
+  return `${degrees}°${minutes}\u2032${seconds}″ ${direction}`;
+};
+
+const formatLatLngFromExif = (exifDataGpsIfd: ExifContent): string => {
+  const latitude = formatCoordinate(
     parseCoordinateEntry(
       getRequiredEntry(exifDataGpsIfd, "LATITUDE"),
       getRequiredEntry(exifDataGpsIfd, "LATITUDE_REF"),
     ),
   );
-  const longitude = dmsToDecimalDegrees(
+  const longitude = formatCoordinate(
     parseCoordinateEntry(
       getRequiredEntry(exifDataGpsIfd, "LONGITUDE"),
       getRequiredEntry(exifDataGpsIfd, "LONGITUDE_REF"),
@@ -25,15 +33,14 @@ const getLatLngFromExif = (exifDataGpsIfd: ExifContent): LatLng => {
   const altitudeRefEntry = exifDataGpsIfd.getEntry("ALTITUDE_REF");
 
   if (altitudeEntry !== null && altitudeRefEntry !== null) {
-    const absoluteAltitude = parseRationals(altitudeEntry)[0];
-    if (absoluteAltitude !== undefined) {
+    const altitude = parseRationals(altitudeEntry)[0];
+    if (altitude !== undefined) {
       const isSeaLevel = altitudeRefEntry.data[0] === 0;
-      const altitude = isSeaLevel ? absoluteAltitude : -absoluteAltitude;
-      return new LatLng(latitude, longitude, altitude);
+      return `${latitude} ${longitude} ${!isSeaLevel ? "\u2212" : ""}${altitude}m`;
     }
   }
 
-  return new LatLng(latitude, longitude);
+  return `${latitude} ${longitude}`;
 };
 
-export { getLatLngFromExif };
+export { formatLatLngFromExif };

@@ -1,29 +1,31 @@
-import type { ExifEntry } from "libexif-wasm";
+import {
+  exifGetRational,
+  exifFormatGetSize,
+  type ExifEntry,
+} from "libexif-wasm";
 
-const UINT32_SIZE_IN_BYTES = 4;
+const RATIONAL_SIZE = exifFormatGetSize("RATIONAL");
 
 const parseRationals = (exifEntry: ExifEntry) => {
   if (exifEntry.format !== "RATIONAL") {
     throw new Error("Invalid entry");
   }
 
-  const data = new Uint8Array(exifEntry.data);
-  const dataView = new DataView(data.buffer);
+  const byteOrder = exifEntry.parent?.parent?.getByteOrder() ?? "MOTOROLA";
 
-  const result = [];
-
-  for (let i = 0; i < data.length; i += 2 * UINT32_SIZE_IN_BYTES) {
-    const numerator = dataView.getUint32(i, true);
-    const denominator = dataView.getUint32(i + UINT32_SIZE_IN_BYTES, true);
-    if (denominator === 0) {
+  return Array.from({ length: exifEntry.components }, (_, index) => {
+    const offset = index * RATIONAL_SIZE;
+    const rational = exifGetRational(
+      exifEntry.data.subarray(offset, offset + RATIONAL_SIZE),
+      byteOrder,
+    );
+    if (rational.denominator === 0) {
       throw new Error(
-        `Zero denominator encountered at byte offset ${i} when parsing ${exifEntry.tag}.`,
+        `Exif entry "${exifEntry.tag}" has a rational with a denominator of 0.`,
       );
     }
-    result.push(numerator / denominator);
-  }
-
-  return result;
+    return rational.numerator / rational.denominator;
+  });
 };
 
 export { parseRationals };

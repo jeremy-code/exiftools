@@ -7,4 +7,11 @@ const isDirection = (value: unknown): value is Direction => {
   );
 };
 
-export { type Direction, isDirection };
+type DMS = {
+  degrees: number;
+  minutes: number;
+  seconds: number;
+  direction: Direction;
+};
+
+export { type Direction, isDirection, type DMS };
