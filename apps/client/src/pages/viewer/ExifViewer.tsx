@@ -3,6 +3,7 @@ import type { ComponentPropsWithRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ExifTagInfo } from "libexif-wasm";
 import { ArrowLeft } from "lucide-react";
+import { ErrorBoundary } from "react-error-boundary";
 import { cn } from "tailwind-variants";
 
 import { FileInformation } from "#components/file/FileInformation";
@@ -29,6 +30,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@exiftools/ui/components/Tooltip";
+
+import { ExifViewerGps } from "./ExifViewerGps";
 
 type ExifViewerProps = {
   file: File;
@@ -133,6 +136,16 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
           );
         })}
       </Accordion>
+      <ErrorBoundary
+        fallback={
+          <p className="text-muted-foreground">
+            The GPS IFD was found in the image EXIF metadata, but valid
+            longitude and latitude coordinates were not found.
+          </p>
+        }
+      >
+        <ExifViewerGps exifData={exifData} />
+      </ErrorBoundary>
     </div>
   );
 };

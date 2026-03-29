@@ -1,0 +1,44 @@
+import { ExifIfd, type ExifData } from "libexif-wasm";
+import { Marker, Popup } from "react-leaflet";
+
+import { Map } from "#components/map/Map";
+import { formatLatLngFromExif } from "#lib/exif/gps/formatLatLng";
+import { getLatLngFromExif } from "#lib/exif/gps/getLatLngFromExif";
+
+type ExifViewerGpsProps = {
+  exifData: ExifData;
+};
+
+const ExifViewerGps = ({ exifData }: ExifViewerGpsProps) => {
+  const exifDataGpsIfd = exifData.ifd[ExifIfd.GPS];
+
+  if (exifDataGpsIfd.count === 0) {
+    return <p>GPS IFD is empty.</p>;
+  }
+
+  const coordinate = getLatLngFromExif(exifDataGpsIfd);
+
+  return (
+    <Map className="h-120 rounded" center={coordinate}>
+      <Marker position={coordinate}>
+        <Popup>
+          {formatLatLngFromExif(exifDataGpsIfd)}{" "}
+          <a
+            href={`https://www.openstreetmap.org/#map=18/${coordinate.lat}/${coordinate.lng}`}
+            target="_blank"
+          >
+            (OSM)
+          </a>{" "}
+          <a
+            href={`geo:${coordinate.lat},${coordinate.lng}${coordinate.alt !== undefined ? `,${coordinate.alt}` : ""}`}
+            target="_blank"
+          >
+            (geo)
+          </a>
+        </Popup>
+      </Marker>
+    </Map>
+  );
+};
+
+export { ExifViewerGps };
