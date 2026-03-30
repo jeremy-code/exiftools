@@ -19,7 +19,7 @@ import { Button } from "@exiftools/ui/components/Button";
 import { Skeleton } from "@exiftools/ui/components/Skeleton";
 import { writeExifData } from "@exiftools/write-exif-data";
 
-import { ExifEditorIfd } from "./ExifEditorIfd";
+import { ExifEditorIfd } from "./-ExifEditorIfd";
 
 type ExifEditorProps = {
   file: File;

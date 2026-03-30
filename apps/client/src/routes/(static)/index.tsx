@@ -1,9 +1,9 @@
-import { Link as RouterLink } from "react-router";
+import { createFileRoute, Link as RouterLink } from "@tanstack/react-router";
 
 import { ThemeToggle } from "#components/misc/ThemeToggle";
 import { Link } from "@exiftools/ui/components/Link";
 
-const HomePage = () => {
+const HomeComponent = () => {
   return (
     <>
       <ThemeToggle size="lg" />
@@ -23,4 +23,8 @@ const HomePage = () => {
   );
 };
 
-export { HomePage };
+const Route = createFileRoute("/(static)/")({
+  component: HomeComponent,
+});
+
+export { Route };

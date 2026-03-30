@@ -4,6 +4,7 @@ import globals from "globals";
 import pluginQuery from "@tanstack/eslint-plugin-query";
 import reactCompiler from "eslint-plugin-react-compiler";
 import reactHooks from "eslint-plugin-react-hooks";
+import pluginRouter from "@tanstack/eslint-plugin-router";
 
 import { baseConfig } from "./index.js";
 import disables from "./disables.js";
@@ -15,6 +16,7 @@ export const reactConfig = defineConfig(
   pluginQuery.configs["flat/recommended"],
   reactCompiler.configs.recommended,
   reactHooks.configs.flat["recommended-latest"],
+  pluginRouter.configs["flat/recommended"],
   {
     name: "@exiftools/eslint-config/react.js",
     rules: {
@@ -34,6 +36,24 @@ export const reactConfig = defineConfig(
              */
             attributes: false,
           },
+        },
+      ],
+      // https://tanstack.com/router/latest/docs/eslint/eslint-plugin-router#typescript-eslint
+      "@typescript-eslint/only-throw-error": [
+        "error",
+        {
+          allow: [
+            {
+              from: "package",
+              package: "@tanstack/router-core",
+              name: "Redirect",
+            },
+            {
+              from: "package",
+              package: "@tanstack/router-core",
+              name: "NotFoundError",
+            },
+          ],
         },
       ],
     },

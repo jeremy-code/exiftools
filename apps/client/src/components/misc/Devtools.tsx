@@ -4,12 +4,17 @@ import {
   type TanStackDevtoolsReactPlugin,
 } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 const devtoolsPlugins = [
   {
     name: "TanStack Query",
     // https://github.com/TanStack/devtools/blob/main/packages/devtools-utils/src/react/plugin.tsx
     render: (_el, props) => <ReactQueryDevtoolsPanel {...props} />,
+  },
+  {
+    name: "TanStack Router",
+    render: <TanStackRouterDevtools />,
   },
 ] satisfies TanStackDevtoolsReactPlugin[];
 

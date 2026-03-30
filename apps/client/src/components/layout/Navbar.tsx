@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react";
 
-import { Link as RouterLink } from "react-router";
+import { Link as RouterLink } from "@tanstack/react-router";
 import { cn } from "tailwind-variants";
 
 import { ThemeToggle } from "#components/misc/ThemeToggle";

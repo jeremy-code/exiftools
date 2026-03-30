@@ -1,11 +1,13 @@
+import { createFileRoute } from "@tanstack/react-router";
+
 import { Dropzone } from "#components/file/Dropzone";
 import { FileUrlInput } from "#components/file/FileUrlInput";
 import { useDropzoneState } from "#hooks/useDropzoneState";
 import { Heading } from "@exiftools/ui/components/Heading";
 
-import { ExifEditor } from "./ExifEditor";
+import { ExifEditor } from "./-ExifEditor";
 
-const EditorPage = () => {
+const EditorComponent = () => {
   const acceptedFiles = useDropzoneState((state) => state.acceptedFiles);
 
   if (acceptedFiles.length === 0) {
@@ -39,4 +41,8 @@ const EditorPage = () => {
   return null;
 };
 
-export { EditorPage };
+const Route = createFileRoute("/(app)/(editor)/editor")({
+  component: EditorComponent,
+});
+
+export { Route };

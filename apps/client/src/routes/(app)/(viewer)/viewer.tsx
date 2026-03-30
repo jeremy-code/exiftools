@@ -1,11 +1,13 @@
+import { createFileRoute } from "@tanstack/react-router";
+
 import { Dropzone } from "#components/file/Dropzone";
 import { FileUrlInput } from "#components/file/FileUrlInput";
 import { useDropzoneState } from "#hooks/useDropzoneState";
 import { Heading } from "@exiftools/ui/components/Heading";
 
-import { ExifViewer } from "./ExifViewer";
+import { ExifViewer } from "./-ExifViewer";
 
-const ViewerPage = () => {
+const ViewerComponent = () => {
   const acceptedFiles = useDropzoneState((state) => state.acceptedFiles);
 
   if (acceptedFiles.length === 0) {
@@ -39,4 +41,8 @@ const ViewerPage = () => {
   return null;
 };
 
-export { ViewerPage };
+const Route = createFileRoute("/(app)/(viewer)/viewer")({
+  component: ViewerComponent,
+});
+
+export { Route };

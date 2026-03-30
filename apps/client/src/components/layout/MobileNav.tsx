@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react";
 
+import { Link as RouterLink } from "@tanstack/react-router";
 import { VisuallyHidden } from "radix-ui";
-import { Link as RouterLink } from "react-router";
 import { cn } from "tailwind-variants";
 
 import { Button, type ButtonProps } from "@exiftools/ui/components/Button";

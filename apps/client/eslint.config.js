@@ -1,1 +1,3 @@
-export { default } from "@exiftools/eslint-config/react.js";
+import reactEslintConfig from "@exiftools/eslint-config/react.js";
+
+export default [...reactEslintConfig, { ignores: ["./src/routeTree.gen.ts"] }];

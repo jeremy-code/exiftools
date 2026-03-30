@@ -31,7 +31,7 @@ import {
   TooltipTrigger,
 } from "@exiftools/ui/components/Tooltip";
 
-import { ExifViewerGps } from "./ExifViewerGps";
+import { ExifViewerGps } from "./-ExifViewerGps";
 
 type ExifViewerProps = {
   file: File;
