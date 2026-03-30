@@ -1,5 +1,4 @@
 import "@exiftools/ui/globals.css";
-import "@fontsource-variable/lexend/index.css";
 import "leaflet/dist/leaflet.css";
 
 import { createRoot } from "react-dom/client";

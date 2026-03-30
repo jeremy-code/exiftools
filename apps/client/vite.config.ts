@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import { Features } from "lightningcss";
+import { viteWebfontDownload } from "vite-plugin-webfont-dl";
 import { defineConfig } from "vitest/config";
 
 const viteConfig = defineConfig({
@@ -10,6 +11,13 @@ const viteConfig = defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
+    viteWebfontDownload([
+      // https://fonts.google.com/specimen/Lexend
+      `https://fonts.googleapis.com/css2?${new URLSearchParams({
+        family: "Lexend:wght@100..900",
+        display: "swap",
+      }).toString()}`,
+    ]),
   ],
   css: {
     lightningcss: {
