@@ -34,7 +34,7 @@ jobs:
         run: pnpm run format:check
 
       - name: Install Playwright browsers
-        run: pnpm --filter @exiftools/client exec playwright install --with-deps
+        run: pnpm --filter @exiftools/client exec playwright install --with-deps chromium
 
       - name: Test
         run: pnpm run test

@@ -30,8 +30,6 @@ const viteConfig = defineConfig({
    * rather.` while building from libexif-wasm/dist/output/libexif.js
    **/
   worker: { format: "es" },
-  // Otherwise, "wasm streaming compile failed" error
-  optimizeDeps: { exclude: ["libexif-wasm"] },
   test: {
     clearMocks: true,
     browser: {
