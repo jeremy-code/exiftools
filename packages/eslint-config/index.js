@@ -34,6 +34,27 @@ export const baseConfig = defineConfig(
       globals: { ...globals.node },
     },
     rules: {
+      /**
+       * @see {@link https://typescript-eslint.io/rules/unbound-method/}
+       */
+      "@typescript-eslint/unbound-method": ["error", { ignoreStatic: true }],
+      /**
+       * I intend to use TS Enums like "a namespaced bag of values"
+       *
+       * @see {@link https://typescript-eslint.io/rules/no-unsafe-enum-comparison/}
+       */
+      "@typescript-eslint/no-unsafe-enum-comparison": "off",
+      /**
+       * @see {@link https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/exports-last.md}
+       */
+      "import-x/exports-last": "error",
+      /**
+       * @see {@link https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/group-exports.md}
+       */
+      "import-x/group-exports": "error",
+      /**
+       * @see {@link https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/newline-after-import.md}
+       */
       "import-x/newline-after-import": ["error", { considerComments: true }],
       /**
        * @see {@link https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/order.md}
@@ -60,14 +81,6 @@ export const baseConfig = defineConfig(
           alphabetize: { order: "asc" },
         },
       ],
-      "@typescript-eslint/unbound-method": [
-        "error",
-        {
-          ignoreStatic: true,
-        },
-      ],
-      // I intend to use TS Enums like "a namespaced bag of values"
-      "@typescript-eslint/no-unsafe-enum-comparison": "off",
     },
     settings: {
       /**
@@ -75,7 +88,7 @@ export const baseConfig = defineConfig(
        */
       "import-x/internal-regex": "^@exiftools/",
       /**
-       * @see {@link https://github.com/un-ts/eslint-plugin-import-x/tree/master/resolvers}
+       * @see {@link https://github.com/un-ts/eslint-plugin-import-x#resolvers}
        */
       "import-x/resolver-next": [
         createTypeScriptImportResolver({ alwaysTryTypes: true }),
@@ -84,10 +97,12 @@ export const baseConfig = defineConfig(
     },
   },
   {
-    files: ["**/*.ts", "**/*.tsx"],
-    plugins: { vitest },
+    files: ["**/*.test.{ts,tsx}"],
+    extends: [vitest.configs.recommended],
     rules: {
-      ...vitest.configs.recommended.rules,
+      /**
+       * @see {@link https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-importing-vitest-globals.md}
+       */
       "vitest/prefer-importing-vitest-globals": "error",
     },
     settings: {

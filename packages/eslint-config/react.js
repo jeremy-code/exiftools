@@ -20,25 +20,24 @@ export const reactConfig = defineConfig(
   {
     name: "@exiftools/eslint-config/react.js",
     rules: {
+      /**
+       * Server actions must be async functions and may be passed to `action`
+       * and `onSubmit` props, which return `void` and not `Promise<void>`. This
+       * triggers `no-misused-promises`. However, making it synchronous throws
+       * "Functions cannot be directly passed unless explicitly exposed with
+       * 'use server'".
+       *
+       * @see {@link https://typescript-eslint.io/rules/no-misused-promises/#checksvoidreturn}
+       * @see {@link https://react.dev/reference/rsc/server-actions}
+       */
       "@typescript-eslint/no-misused-promises": [
         "error",
-        {
-          checksVoidReturn: {
-            /**
-             * Server actions must be async functions and may be passed to
-             * `action` and `onSubmit` props, which return `void` and not
-             * `Promise<void>`. This triggers `no-misused-promises`. However,
-             * making it a synchronous function throws error "Functions cannot
-             * be directly passed unless explicitly exposed with 'use server'".
-             *
-             * @see {@link https://typescript-eslint.io/rules/no-misused-promises/#checksvoidreturn}
-             * @see {@link https://react.dev/reference/rsc/server-actions}
-             */
-            attributes: false,
-          },
-        },
+        { checksVoidReturn: { attributes: false } },
       ],
-      // https://tanstack.com/router/latest/docs/eslint/eslint-plugin-router#typescript-eslint
+      /**
+       * @see {@link https://typescript-eslint.io/rules/only-throw-error/}
+       * @see {@link https://tanstack.com/router/latest/docs/eslint/eslint-plugin-router#typescript-eslint}
+       */
       "@typescript-eslint/only-throw-error": [
         "error",
         {
@@ -46,12 +45,7 @@ export const reactConfig = defineConfig(
             {
               from: "package",
               package: "@tanstack/router-core",
-              name: "Redirect",
-            },
-            {
-              from: "package",
-              package: "@tanstack/router-core",
-              name: "NotFoundError",
+              name: ["Redirect", "NotFoundError"],
             },
           ],
         },

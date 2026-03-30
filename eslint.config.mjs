@@ -1,5 +1,5 @@
-import base from "@exiftools/eslint-config";
 /** @import { Linter } from "eslint" */
+import base from "@exiftools/eslint-config";
 
 /**
  * @satisfies {Linter.Config[]}

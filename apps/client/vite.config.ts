@@ -3,10 +3,9 @@ import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
-import { playwright } from "@vitest/browser-playwright";
 import { fontless } from "fontless";
 import { Features } from "lightningcss";
-import { defineConfig } from "vitest/config";
+import { defineConfig } from "vite";
 
 const viteConfig = defineConfig({
   plugins: [
@@ -30,14 +29,6 @@ const viteConfig = defineConfig({
    * rather.` while building from libexif-wasm/dist/output/libexif.js
    **/
   worker: { format: "es" },
-  test: {
-    clearMocks: true,
-    browser: {
-      enabled: true,
-      instances: [{ browser: "chromium" }],
-      provider: playwright(),
-    },
-  },
 });
 
 export default viteConfig;
