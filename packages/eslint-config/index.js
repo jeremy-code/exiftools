@@ -35,15 +35,24 @@ export const baseConfig = defineConfig(
     },
     rules: {
       /**
+       * Single extends when using declaration merging can be useful
+       *
        * @see {@link https://typescript-eslint.io/rules/unbound-method/}
        */
-      "@typescript-eslint/unbound-method": ["error", { ignoreStatic: true }],
+      "@typescript-eslint/no-empty-object-type": [
+        "error",
+        { allowInterfaces: "with-single-extends" },
+      ],
       /**
        * I intend to use TS Enums like "a namespaced bag of values"
        *
        * @see {@link https://typescript-eslint.io/rules/no-unsafe-enum-comparison/}
        */
       "@typescript-eslint/no-unsafe-enum-comparison": "off",
+      /**
+       * @see {@link https://typescript-eslint.io/rules/unbound-method/}
+       */
+      "@typescript-eslint/unbound-method": ["error", { ignoreStatic: true }],
       /**
        * @see {@link https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/exports-last.md}
        */

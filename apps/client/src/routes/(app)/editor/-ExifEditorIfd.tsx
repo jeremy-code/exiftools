@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
 
 import {
   createColumnHelper,
@@ -7,13 +7,16 @@ import {
   getExpandedRowModel,
   getGroupedRowModel,
   useReactTable,
-  type CellContext,
   type RowData,
 } from "@tanstack/react-table";
+import { useShallow } from "zustand/react/shallow";
 
 import { ColumnResizer } from "#components/table/ColumnResizer";
 import { ExpandRows } from "#components/table/ExpandRows";
-import { useExifEditorStateStore } from "#hooks/useExifEditorState";
+import {
+  type ExifEditorStoreActions,
+  useExifEditorStoreContext,
+} from "#hooks/useExifEditor";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { formatPlural } from "#utils/formatPlural";
 import { Badge } from "@exiftools/ui/components/Badge";
@@ -27,43 +30,13 @@ import {
   type TableProps,
 } from "@exiftools/ui/components/Table";
 
+import { DeleteCell } from "./-components/DeleteCell";
+import { ValueCell } from "./-components/ValueCell";
+
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- All declarations of 'TableMeta' must have identical type parameters.
-  interface TableMeta<TData extends RowData> {
-    updateExifEntry: (
-      columnId: "IFD_0" | "IFD_1" | "EXIF" | "GPS" | "INTEROPERABILITY",
-      rowIndex: number,
-      value: string,
-    ) => void;
-  }
+  interface TableMeta<TData extends RowData> extends ExifEditorStoreActions {}
 }
-
-const ValueCell = ({
-  getValue,
-  row,
-  table,
-}: CellContext<ExifEntryObject, string | null>) => {
-  const initialValue = getValue();
-  const [value, setValue] = useState(initialValue ?? "");
-
-  return (
-    <input
-      className="border border-transparent focus:border-border focus:bg-background focus:outline-none"
-      disabled={row.original.format !== "ASCII"}
-      value={value}
-      onBlur={() => {
-        table.options.meta?.updateExifEntry(
-          row.original.ifd,
-          Number(row.id),
-          value,
-        );
-      }}
-      onChange={(e) => {
-        setValue(e.target.value);
-      }}
-    />
-  );
-};
 
 const columnHelper = createColumnHelper<ExifEntryObject>();
 const columns = [
@@ -71,6 +44,7 @@ const columns = [
   columnHelper.accessor("tag", { header: "Tag" }),
   columnHelper.accessor("format", { header: "Format" }),
   columnHelper.accessor("formattedValue", { header: "Value", cell: ValueCell }),
+  columnHelper.display({ id: "delete", cell: DeleteCell }),
 ];
 
 const fallbackData: ExifEntryObject[] = [];
@@ -80,8 +54,11 @@ type ExifEditorIfdProps = {
 } & TableProps;
 
 const ExifEditorIfd = ({ exifEntryObjects, ...props }: ExifEditorIfdProps) => {
-  const updateExifEntry = useExifEditorStateStore(
-    (state) => state.updateExifEntry,
+  const exifEditorStoreActions = useExifEditorStoreContext(
+    useShallow((state) => ({
+      updateExifEntry: state.updateExifEntry,
+      removeExifEntry: state.removeExifEntry,
+    })),
   );
   const table = useReactTable({
     columns,
@@ -94,9 +71,7 @@ const ExifEditorIfd = ({ exifEntryObjects, ...props }: ExifEditorIfdProps) => {
       grouping: ["ifd"],
       expanded: true,
     },
-    meta: {
-      updateExifEntry,
-    },
+    meta: exifEditorStoreActions,
   });
 
   return (

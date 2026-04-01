@@ -7,10 +7,7 @@ import { useStore } from "zustand";
 
 import { FileInformation } from "#components/file/FileInformation";
 import { useDropzoneState } from "#hooks/useDropzoneState";
-import {
-  useExifEditorState,
-  ExifEditorStateStoreContext,
-} from "#hooks/useExifEditorState";
+import { useExifEditor, ExifEditorStoreContext } from "#hooks/useExifEditor";
 import { saveFile } from "#utils/saveFile";
 import { Button } from "@exiftools/ui/components/Button";
 import { Skeleton } from "@exiftools/ui/components/Skeleton";
@@ -27,9 +24,9 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
     queryKey: [file] as const,
     queryFn: ({ queryKey: [file] }) => file.arrayBuffer(),
   });
-  const { exifDataRef, exifEditorStateStore } = useExifEditorState(arrayBuffer);
+  const { exifDataRef, exifEditorStore } = useExifEditor(arrayBuffer);
   const exifDataObject = useStore(
-    exifEditorStateStore,
+    exifEditorStore,
     (state) => state.exifDataObject,
   );
   const removeAcceptedFileByIndex = useDropzoneState(
@@ -38,7 +35,7 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
 
   return (
     <Suspense fallback={<Skeleton className="h-50" />}>
-      <ExifEditorStateStoreContext value={exifEditorStateStore}>
+      <ExifEditorStoreContext value={exifEditorStore}>
         <div className={cn("flex flex-col gap-4", className)} {...props}>
           <div>
             <Button
@@ -50,13 +47,13 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
             </Button>
             <Button
               onClick={async () => {
-                const exifData = exifDataRef.current?.saveData();
-                if (exifData === undefined) {
+                const exifData = exifDataRef.current;
+                if (exifData === null) {
                   throw new Error("Reference to ExifData instance not found");
                 }
                 const newFileInBytes = writeExifData(
                   await file.bytes(),
-                  exifData,
+                  exifData.saveData(),
                 );
                 const newFile = new File(
                   [new Uint8Array(newFileInBytes)],
@@ -74,7 +71,7 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
             exifEntryObjects={Object.values(exifDataObject.ifd).flat()}
           />
         </div>
-      </ExifEditorStateStoreContext>
+      </ExifEditorStoreContext>
     </Suspense>
   );
 };
