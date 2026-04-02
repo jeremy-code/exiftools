@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as staticIndexRouteImport } from './routes/(static)/index'
+import { Route as staticTagsIndexRouteImport } from './routes/(static)/tags/index'
 import { Route as appViewerIndexRouteImport } from './routes/(app)/viewer/index'
 import { Route as appEditorIndexRouteImport } from './routes/(app)/editor/index'
 
 const staticIndexRoute = staticIndexRouteImport.update({
   id: '/(static)/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const staticTagsIndexRoute = staticTagsIndexRouteImport.update({
+  id: '/(static)/tags/',
+  path: '/tags/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const appViewerIndexRoute = appViewerIndexRouteImport.update({
@@ -33,30 +39,39 @@ export interface FileRoutesByFullPath {
   '/': typeof staticIndexRoute
   '/editor/': typeof appEditorIndexRoute
   '/viewer/': typeof appViewerIndexRoute
+  '/tags/': typeof staticTagsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof staticIndexRoute
   '/editor': typeof appEditorIndexRoute
   '/viewer': typeof appViewerIndexRoute
+  '/tags': typeof staticTagsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(static)/': typeof staticIndexRoute
   '/(app)/editor/': typeof appEditorIndexRoute
   '/(app)/viewer/': typeof appViewerIndexRoute
+  '/(static)/tags/': typeof staticTagsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/editor/' | '/viewer/'
+  fullPaths: '/' | '/editor/' | '/viewer/' | '/tags/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/editor' | '/viewer'
-  id: '__root__' | '/(static)/' | '/(app)/editor/' | '/(app)/viewer/'
+  to: '/' | '/editor' | '/viewer' | '/tags'
+  id:
+    | '__root__'
+    | '/(static)/'
+    | '/(app)/editor/'
+    | '/(app)/viewer/'
+    | '/(static)/tags/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   staticIndexRoute: typeof staticIndexRoute
   appEditorIndexRoute: typeof appEditorIndexRoute
   appViewerIndexRoute: typeof appViewerIndexRoute
+  staticTagsIndexRoute: typeof staticTagsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +81,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof staticIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(static)/tags/': {
+      id: '/(static)/tags/'
+      path: '/tags'
+      fullPath: '/tags/'
+      preLoaderRoute: typeof staticTagsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(app)/viewer/': {
@@ -89,6 +111,7 @@ const rootRouteChildren: RootRouteChildren = {
   staticIndexRoute: staticIndexRoute,
   appEditorIndexRoute: appEditorIndexRoute,
   appViewerIndexRoute: appViewerIndexRoute,
+  staticTagsIndexRoute: staticTagsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
