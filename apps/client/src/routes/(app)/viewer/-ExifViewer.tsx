@@ -129,7 +129,7 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
                               : title}
                             </DataListItemLabel>
                             <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-muted-foreground before:content-['=']">
-                              {entry.value}
+                              {entry.toString()}
                             </DataListItemValue>
                           </DataListItem>
                         );
