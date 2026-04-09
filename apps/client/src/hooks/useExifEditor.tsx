@@ -1,4 +1,4 @@
-import { createContext, use, useMemo, useState } from "react";
+import { createContext, use, useCallback, useMemo } from "react";
 
 import { ExifData, ExifIfd } from "libexif-wasm";
 import { create, useStore } from "zustand";
@@ -19,6 +19,7 @@ type ExifEditorStoreState = {
 type ExifEditorStoreActions = {
   updateExifEntry: (exifEntryObject: ExifEntryObject, value: string) => void;
   removeExifEntry: (exifEntryObject: ExifEntryObject) => void;
+  fix: () => void;
 };
 
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
@@ -27,12 +28,12 @@ const useExifEditor = <TArrayBuffer extends ArrayBufferLike = ArrayBufferLike>(
   arrayBuffer: TArrayBuffer,
 ) => {
   const exifDataRef = useExifDataRef(arrayBuffer);
-  const getExifDataRef = () => {
+  const getExifDataRef = useCallback(() => {
     if (exifDataRef.current === null) {
       throw new Error("Reference to ExifData instance not found");
     }
     return exifDataRef.current;
-  };
+  }, [exifDataRef]);
 
   const initialExifDataObject = useMemo(() => {
     const exifData = ExifData.from(arrayBuffer);
@@ -41,45 +42,55 @@ const useExifEditor = <TArrayBuffer extends ArrayBufferLike = ArrayBufferLike>(
     return exifDataObject;
   }, [arrayBuffer]);
 
-  const [exifEditorStore] = useState(() =>
-    create<ExifEditorStore>((set) => ({
-      exifDataObject: initialExifDataObject,
-      updateExifEntry: (exifEntryObject, value) => {
-        set(() => {
-          const exifData = getExifDataRef();
-          const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
-          const exifEntry = exifContent?.getEntry(exifEntryObject.tag);
+  const exifEditorStore = useMemo(
+    () =>
+      create<ExifEditorStore>((set) => ({
+        exifDataObject: initialExifDataObject,
+        updateExifEntry: (exifEntryObject, value) => {
+          set(() => {
+            const exifData = getExifDataRef();
+            const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
+            const exifEntry = exifContent?.getEntry(exifEntryObject.tag);
 
-          if (exifEntry === null) {
-            throw new Error("Invalid Exif Entry");
-          }
+            if (exifEntry === null) {
+              throw new Error("Invalid Exif Entry");
+            }
 
-          // TODO: Handle other formats than ASCII
-          if (exifEntry.format === "ASCII") {
-            const utf8Array = encodeStringToUtf8(value);
-            exifEntry.data = utf8Array;
-            exifEntry.components = utf8Array.length;
-          }
+            // TODO: Handle other formats than ASCII
+            if (exifEntry.format === "ASCII") {
+              const utf8Array = encodeStringToUtf8(value);
+              exifEntry.data = utf8Array;
+              exifEntry.components = utf8Array.length;
+            }
 
-          return { exifDataObject: serializeExifData(exifData) };
-        });
-      },
-      removeExifEntry: (exifEntryObject) => {
-        set(() => {
-          const exifData = getExifDataRef();
-          const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
-          const exifEntry = exifContent?.getEntry(exifEntryObject.tag);
+            return { exifDataObject: serializeExifData(exifData) };
+          });
+        },
+        removeExifEntry: (exifEntryObject) => {
+          set(() => {
+            const exifData = getExifDataRef();
+            const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
+            const exifEntry = exifContent?.getEntry(exifEntryObject.tag);
 
-          if (exifEntry === null) {
-            throw new Error("Invalid Exif Entry");
-          }
+            if (exifEntry === null) {
+              throw new Error("Invalid Exif Entry");
+            }
 
-          exifContent.removeEntry(exifEntry);
+            exifContent.removeEntry(exifEntry);
 
-          return { exifDataObject: serializeExifData(exifData) };
-        });
-      },
-    })),
+            return { exifDataObject: serializeExifData(exifData) };
+          });
+        },
+        fix: () => {
+          set(() => {
+            const exifData = getExifDataRef();
+            exifData.fix();
+
+            return { exifDataObject: serializeExifData(exifData) };
+          });
+        },
+      })),
+    [getExifDataRef, initialExifDataObject],
   );
 
   return { exifEditorStore, exifDataRef };

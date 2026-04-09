@@ -22,13 +22,11 @@ type ExifEditorProps = {
 const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
   const { data: arrayBuffer } = useSuspenseQuery({
     queryKey: [file] as const,
-    queryFn: ({ queryKey: [file] }) => file.arrayBuffer(),
+    // Deliberately calling from file prop instead of queryKey since File cannot be serialized
+    queryFn: () => file.arrayBuffer(),
   });
   const { exifDataRef, exifEditorStore } = useExifEditor(arrayBuffer);
-  const exifDataObject = useStore(
-    exifEditorStore,
-    (state) => state.exifDataObject,
-  );
+  const fix = useStore(exifEditorStore, (state) => state.fix);
   const removeAcceptedFileByIndex = useDropzoneState(
     (state) => state.removeAcceptedFileByIndex,
   );
@@ -65,11 +63,16 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
             >
               Export
             </Button>
+            <Button
+              onClick={() => {
+                fix();
+              }}
+            >
+              Fix
+            </Button>
           </div>
           <FileInformation file={file} />
-          <ExifEditorIfd
-            exifEntryObjects={Object.values(exifDataObject.ifd).flat()}
-          />
+          <ExifEditorIfd />
         </div>
       </ExifEditorStoreContext>
     </Suspense>

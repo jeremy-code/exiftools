@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useMemo, type CSSProperties } from "react";
 
 import {
   createColumnHelper,
@@ -20,6 +20,7 @@ import {
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { formatPlural } from "#utils/formatPlural";
 import { Badge } from "@exiftools/ui/components/Badge";
+import { Link } from "@exiftools/ui/components/Link";
 import {
   Table,
   TableHead,
@@ -49,15 +50,21 @@ const columns = [
 
 const fallbackData: ExifEntryObject[] = [];
 
-type ExifEditorIfdProps = {
-  exifEntryObjects: ExifEntryObject[];
-} & TableProps;
+type ExifEditorIfdProps = TableProps;
 
-const ExifEditorIfd = ({ exifEntryObjects, ...props }: ExifEditorIfdProps) => {
+const ExifEditorIfd = (props: ExifEditorIfdProps) => {
+  const exifDataObject = useExifEditorStoreContext(
+    (state) => state.exifDataObject,
+  );
+  const exifEntryObjects = useMemo(
+    () => Object.values(exifDataObject.ifd).flat(),
+    [exifDataObject],
+  );
   const exifEditorStoreActions = useExifEditorStoreContext(
     useShallow((state) => ({
       updateExifEntry: state.updateExifEntry,
       removeExifEntry: state.removeExifEntry,
+      fix: state.fix,
     })),
   );
   const table = useReactTable({
@@ -74,12 +81,32 @@ const ExifEditorIfd = ({ exifEntryObjects, ...props }: ExifEditorIfdProps) => {
     meta: exifEditorStoreActions,
   });
 
+  if (exifEntryObjects.length === 0) {
+    return (
+      <div>
+        There doesn't seem to be any Exif entries.{" "}
+        <Link
+          color="blue"
+          underline
+          asChild
+          onClick={() => {
+            exifEditorStoreActions.fix();
+          }}
+        >
+          <button>Initialize with default entries?</button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <Table
       variant="outline"
-      className="w-[--table-width] table-fixed"
+      className="w-(--table-width) table-fixed"
       style={
-        { "--table-width": `${table.getCenterTotalSize()}px` } as CSSProperties
+        {
+          "--table-width": `${table.getCenterTotalSize()}px`,
+        } as CSSProperties
       }
       {...props}
     >
