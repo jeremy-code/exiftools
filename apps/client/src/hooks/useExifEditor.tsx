@@ -1,5 +1,6 @@
 import { createContext, use, useCallback, useMemo } from "react";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ExifData, ExifIfd } from "libexif-wasm";
 import { create, useStore } from "zustand";
 
@@ -24,9 +25,12 @@ type ExifEditorStoreActions = {
 
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
 
-const useExifEditor = <TArrayBuffer extends ArrayBufferLike = ArrayBufferLike>(
-  arrayBuffer: TArrayBuffer,
-) => {
+const useExifEditor = (file: File) => {
+  const { data: arrayBuffer } = useSuspenseQuery({
+    queryKey: [file] as const,
+    // Deliberately calling from file prop instead of queryKey since File cannot be serialized
+    queryFn: () => file.arrayBuffer(),
+  });
   const exifDataRef = useExifDataRef(arrayBuffer);
   const getExifDataRef = useCallback(() => {
     if (exifDataRef.current === null) {

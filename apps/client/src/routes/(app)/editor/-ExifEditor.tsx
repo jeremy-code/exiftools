@@ -1,6 +1,5 @@
 import { Suspense, type ComponentPropsWithRef } from "react";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "tailwind-variants";
 import { useStore } from "zustand";
@@ -20,12 +19,7 @@ type ExifEditorProps = {
 } & ComponentPropsWithRef<"div">;
 
 const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
-  const { data: arrayBuffer } = useSuspenseQuery({
-    queryKey: [file] as const,
-    // Deliberately calling from file prop instead of queryKey since File cannot be serialized
-    queryFn: () => file.arrayBuffer(),
-  });
-  const { exifDataRef, exifEditorStore } = useExifEditor(arrayBuffer);
+  const { exifDataRef, exifEditorStore } = useExifEditor(file);
   const fix = useStore(exifEditorStore, (state) => state.fix);
   const removeAcceptedFileByIndex = useDropzoneState(
     (state) => state.removeAcceptedFileByIndex,
