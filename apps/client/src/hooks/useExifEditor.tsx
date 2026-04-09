@@ -4,12 +4,14 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { ExifData, ExifIfd } from "libexif-wasm";
 import { create, useStore } from "zustand";
 
+import { getOrInsertEntry } from "#lib/exif/getOrInsertEntry";
 import {
   serializeExifData,
   type ExifDataObject,
   type ExifEntryObject,
 } from "#lib/exif/serializeExifData";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
+import { getImageDimensions } from "#utils/getImageDimensions";
 
 import { useExifDataRef } from "./useExifDataRef";
 
@@ -21,6 +23,7 @@ type ExifEditorStoreActions = {
   updateExifEntry: (exifEntryObject: ExifEntryObject, value: string) => void;
   removeExifEntry: (exifEntryObject: ExifEntryObject) => void;
   fix: () => void;
+  addImageDimensions: () => Promise<void>;
 };
 
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
@@ -93,8 +96,32 @@ const useExifEditor = (file: File) => {
             return { exifDataObject: serializeExifData(exifData) };
           });
         },
+        addImageDimensions: async () => {
+          const imageDimensions = await getImageDimensions(file);
+
+          set(() => {
+            const exifData = getExifDataRef();
+
+            const exifIfd = exifData.ifd[ExifIfd.IFD_0];
+
+            const imageWidthEntry = getOrInsertEntry(exifIfd, "IMAGE_WIDTH");
+            const imageHeightEntry = getOrInsertEntry(exifIfd, "IMAGE_LENGTH");
+
+            imageWidthEntry.format = "SHORT";
+            imageHeightEntry.format = "SHORT";
+
+            imageWidthEntry.fromTypedArray(
+              new Uint16Array([imageDimensions.width]),
+            );
+            imageHeightEntry.fromTypedArray(
+              new Uint16Array([imageDimensions.height]),
+            );
+
+            return { exifDataObject: serializeExifData(exifData) };
+          });
+        },
       })),
-    [getExifDataRef, initialExifDataObject],
+    [getExifDataRef, initialExifDataObject, file],
   );
 
   return { exifEditorStore, exifDataRef };

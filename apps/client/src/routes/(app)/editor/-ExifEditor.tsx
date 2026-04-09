@@ -21,6 +21,11 @@ type ExifEditorProps = {
 const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
   const { exifDataRef, exifEditorStore } = useExifEditor(file);
   const fix = useStore(exifEditorStore, (state) => state.fix);
+  const addImageDimensions = useStore(
+    exifEditorStore,
+    (state) => state.addImageDimensions,
+  );
+
   const removeAcceptedFileByIndex = useDropzoneState(
     (state) => state.removeAcceptedFileByIndex,
   );
@@ -29,7 +34,7 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
     <Suspense fallback={<Skeleton className="h-50" />}>
       <ExifEditorStoreContext value={exifEditorStore}>
         <div className={cn("flex flex-col gap-4", className)} {...props}>
-          <div>
+          <div className="flex gap-2">
             <Button
               variant="ghost"
               onClick={() => removeAcceptedFileByIndex(0)}
@@ -63,6 +68,23 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
               }}
             >
               Fix
+            </Button>
+            <Button
+              onClick={() => {
+                if (exifDataRef.current === null) {
+                  console.log("is null");
+                }
+                exifDataRef.current?.dump();
+              }}
+            >
+              Dump
+            </Button>
+            <Button
+              onClick={async () => {
+                await addImageDimensions();
+              }}
+            >
+              Add image dimensions
             </Button>
           </div>
           <FileInformation file={file} />
