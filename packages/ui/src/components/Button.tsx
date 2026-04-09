@@ -16,6 +16,7 @@ const buttonVariants = tv({
       muted: null,
       ghost: null,
       surface: "border",
+      outline: "border",
     },
     size: {
       xs: "h-8 min-w-8 gap-1 px-2.5 text-xs/4",
@@ -40,6 +41,11 @@ const buttonVariants = tv({
       color: "default",
       variant: "ghost",
       className: "bg-transparent hover:bg-muted",
+    },
+    {
+      color: "default",
+      variant: "outline",
+      className: "border-border bg-transparent hover:bg-muted",
     },
   ],
   defaultVariants: {
@@ -69,4 +75,4 @@ const Button = ({
   );
 };
 
-export { Button, type ButtonProps };
+export { buttonVariants, Button, type ButtonProps };
