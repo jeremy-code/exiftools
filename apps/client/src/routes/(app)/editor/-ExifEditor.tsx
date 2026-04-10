@@ -77,7 +77,7 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
                 if (exifData === null) {
                   throw new Error("Reference to ExifData instance not found");
                 }
-                exifData?.dump();
+                exifData.dump();
               }}
             >
               Dump

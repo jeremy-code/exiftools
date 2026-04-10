@@ -2,6 +2,7 @@ import type { CellContext } from "@tanstack/react-table";
 
 import { EXIF_TAG_VALUE_MAP } from "#lib/exif/exifTagValueMap";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import { Input } from "@exiftools/ui/components/Input";
 
 import { EnumValueCell } from "./EnumValueCell";
 
@@ -61,8 +62,8 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
   // All DateTime inputs are also ASCII format, so this is fine
   if (isAscii) {
     return (
-      <input
-        className="border border-transparent focus:border-border focus:bg-background focus:outline-none"
+      <Input
+        className="focus:border-border focus:bg-background"
         type={isDateTime ? "datetime-local" : "text"}
         value={!isDateTime ? value : convertExifTimestampToIsoTimestamp(value)}
         onChange={(e) => {

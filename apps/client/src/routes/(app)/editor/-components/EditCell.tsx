@@ -1,4 +1,6 @@
 import type { CellContext } from "@tanstack/react-table";
+import { Pencil } from "lucide-react";
+import { AccessibleIcon } from "radix-ui";
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Button } from "@exiftools/ui/components/Button";
@@ -22,7 +24,11 @@ const EditCell = ({ row }: ValueCellProps) => {
     <Dialog>
       <form>
         <DialogTrigger asChild>
-          <Button variant="outline">Edit</Button>
+          <Button variant="outline" size="icon">
+            <AccessibleIcon.Root label="Edit">
+              <Pencil size="16" />
+            </AccessibleIcon.Root>
+          </Button>
         </DialogTrigger>
         <DialogContent className="overflow-auto">
           <DialogHeader>

@@ -31,6 +31,11 @@ import {
   TableBody,
   type TableProps,
 } from "@exiftools/ui/components/Table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@exiftools/ui/components/Tooltip";
 
 import { DeleteCell } from "./-components/DeleteCell";
 import { EditCell } from "./-components/EditCell";
@@ -46,15 +51,35 @@ const columns = [
   columnHelper.accessor((originalRow) => exifIfdGetName(originalRow.ifd), {
     id: "ifd",
     header: "Image File Directory",
+    size: 180,
   }),
   columnHelper.accessor(
     (originalRow) =>
       ExifTagInfo.getTitleInIfd(originalRow.tag, originalRow.ifd),
-    { id: "tag", header: "Tag" },
+    {
+      id: "tag",
+      header: "Tag",
+      size: 260,
+      cell: ({ getValue, row }) => (
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger>{getValue()}</TooltipTrigger>
+          <TooltipContent>
+            {ExifTagInfo.getDescriptionInIfd(
+              row.original.tag,
+              row.original.ifd,
+            )}
+          </TooltipContent>
+        </Tooltip>
+      ),
+    },
   ),
-  columnHelper.accessor("formattedValue", { header: "Value", cell: ValueCell }),
-  columnHelper.display({ id: "delete", cell: DeleteCell }),
-  columnHelper.display({ id: "edit", cell: EditCell }),
+  columnHelper.accessor("formattedValue", {
+    header: "Value",
+    cell: ValueCell,
+    size: 500,
+  }),
+  columnHelper.display({ id: "edit", cell: EditCell, size: 60 }),
+  columnHelper.display({ id: "delete", cell: DeleteCell, size: 60 }),
 ];
 
 const fallbackData: ExifEntryObject[] = [];
@@ -91,10 +116,22 @@ const ExifEditorIfd = (props: ExifEditorIfdProps) => {
     meta: exifEditorStoreActions,
   });
 
+  const columnSizeVars = useMemo(() => {
+    return table
+      .getFlatHeaders()
+      .reduce<{ [key: string]: number }>((acc, header) => {
+        acc[`--header-${header.id}-size`] = header.getSize();
+        acc[`--col-${header.column.id}-size`] = header.column.getSize();
+        return acc;
+      }, {});
+    // eslint-disable-next-line react-compiler/react-compiler -- See below
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- https://tanstack.com/table/latest/docs/framework/react/examples/column-resizing-performant
+  }, [table.getState().columnSizingInfo, table.getState().columnSizing]);
+
   if (exifEntryObjects.length === 0) {
     return (
       <div>
-        There doesn't seem to be any Exif entries.{" "}
+        {"There doesn't seem to be any Exif entries. "}
         <Link
           color="blue"
           underline
@@ -112,10 +149,11 @@ const ExifEditorIfd = (props: ExifEditorIfdProps) => {
   return (
     <Table
       variant="outline"
-      className="w-(--table-width) table-fixed"
+      className="max-w-full min-w-(--table-width) table-fixed"
       style={
         {
           "--table-width": `${table.getCenterTotalSize()}px`,
+          ...columnSizeVars,
         } as CSSProperties
       }
       {...props}
@@ -129,7 +167,7 @@ const ExifEditorIfd = (props: ExifEditorIfdProps) => {
                 className="group relative w-(--table-header-width)"
                 style={
                   {
-                    "--table-header-width": `${header.getSize()}px`,
+                    "--table-header-width": `calc(var(--header-${header?.id}-size) * 1px)`,
                   } as CSSProperties
                 }
               >
@@ -153,7 +191,7 @@ const ExifEditorIfd = (props: ExifEditorIfdProps) => {
                 className="w-(--table-cell-size)"
                 style={
                   {
-                    "--table-cell-size": `${cell.column.getSize()}px`,
+                    "--table-cell-size": `calc(var(--col-${cell.column.id}-size) * 1px)`,
                   } as CSSProperties
                 }
               >
