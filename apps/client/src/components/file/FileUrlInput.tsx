@@ -38,9 +38,18 @@ const FileUrlInput = ({
       });
       return;
     }
+
+    const contentType = response.headers.get("Content-Type");
+    const lastModified = response.headers.get("Last-Modified");
+
     const file = new File(
       [await response.blob()],
       basename(urlObject.pathname),
+      {
+        type: contentType ?? undefined,
+        lastModified:
+          lastModified !== null ? Date.parse(lastModified) : undefined,
+      },
     );
     addAcceptedFiles([file]);
   };
