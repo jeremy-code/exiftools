@@ -1,18 +1,25 @@
-import { useCallback, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useState,
+  type ComponentPropsWithRef,
+} from "react";
 
 import {
-  ExifData,
-  ExifEntry,
-  ExifIfd,
   mapRationalToObject,
   type RationalObject,
+  type ValidTypedArray,
 } from "libexif-wasm";
+import { cn } from "tailwind-variants";
 
 import { RationalInput } from "#components/editor/RationalInput";
 import { useExifEditorStoreContext } from "#hooks/useExifEditor";
+import { getValueFromExifEntryObject } from "#lib/exif/getValueFromExifEntryObject";
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import { type ExifEntryObject } from "#lib/exif/serializeExifData";
 import { arrayEquals } from "#utils/arrayEquals";
+import { decodeStringFromUtf8 } from "#utils/decodeStringFromUtf8";
+import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { Button } from "@exiftools/ui/components/Button";
 import {
   DataList,
@@ -20,70 +27,96 @@ import {
   DataListItemLabel,
   DataListItemValue,
 } from "@exiftools/ui/components/DataList";
-import { Input } from "@exiftools/ui/components/Input";
+import { Input, type InputProps } from "@exiftools/ui/components/Input";
+import {
+  Textarea,
+  type TextareaProps,
+} from "@exiftools/ui/components/Textarea";
 
 type ExifEntryEditorProps = {
   exifEntryObject: ExifEntryObject;
 };
 
-const getEntryValue = (
-  exifEntryObject: Partial<ExifEntryObject> &
-    Pick<ExifEntryObject, "format" | "byteOrder" | "value" | "ifd" | "tag">,
-) => {
-  const exifData = ExifData.new();
-  exifData.byteOrder = exifEntryObject.byteOrder;
-  const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
-  const exifEntry = ExifEntry.new();
-  exifEntry.tag = exifEntryObject.tag;
-  exifEntry.format = exifEntryObject.format;
-  exifContent.addEntry(exifEntry);
-
-  exifEntry.fromTypedArray(
-    newTypedArrayInFormat(exifEntryObject.value, exifEntryObject.format),
-  );
-  const formattedValue = exifEntry.toString();
-
-  exifData.free();
-  return formattedValue;
-};
-
 const ValidityCheck = ({
+  className,
   exifEntryObject,
   newValue,
+  ...props
 }: {
   exifEntryObject: ExifEntryObject;
-  newValue: number[];
-}) => {
-  const value = getEntryValue({
+  newValue: ValidTypedArray;
+} & ComponentPropsWithRef<"span">) => {
+  const expectedValue = getValueFromExifEntryObject({
     ...exifEntryObject,
-    value: newValue,
+    value: Array.from(newValue),
   });
+  const isEmptyString = expectedValue === "";
 
-  return <span>{value !== "" ? value : "(empty)"}</span>;
+  return (
+    <span
+      className={cn(
+        { "text-muted-foreground italic": isEmptyString },
+        className,
+      )}
+      {...props}
+    >
+      {!isEmptyString ? expectedValue : "(empty)"}
+    </span>
+  );
 };
 
 const ExifEntryValueEditor = ({
   value,
   setValue,
+  ...props
 }: {
   value: number;
   setValue: (value: number) => void;
-}) => {
+} & Omit<InputProps, "value">) => {
   return (
     <Input
+      {...props}
       type="number"
       value={value}
       onChange={(e) => {
         if (!Number.isNaN(e.target.valueAsNumber)) {
           setValue(e.target.valueAsNumber);
+        } else if (e.target.value === "") {
+          setValue(0);
         }
       }}
     />
   );
 };
 
+const ExifEntryAsciiValueEditor = ({
+  value,
+  setValue,
+  ...props
+}: {
+  value: ValidTypedArray;
+  setValue: (value: ValidTypedArray) => void;
+} & Omit<TextareaProps, "value">) => {
+  const asciiValue = useMemo(
+    () => decodeStringFromUtf8(Uint8Array.from(value)),
+    [value],
+  );
+
+  return (
+    <Textarea
+      {...props}
+      value={asciiValue}
+      onChange={(e) => {
+        setValue(encodeStringToUtf8(e.target.value));
+      }}
+    />
+  );
+};
+
 const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
-  const [newValue, setNewValue] = useState(exifEntryObject.value);
+  const [newValue, setNewValue] = useState(() =>
+    newTypedArrayInFormat(exifEntryObject.value, exifEntryObject.format),
+  );
   const updateExifEntry = useExifEditorStoreContext(
     (state) => state.updateExifEntry,
   );
@@ -106,9 +139,10 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
     [setNewValueAtIndex],
   );
 
-  const isChanged = arrayEquals(exifEntryObject.value, newValue);
-
-  console.log("exifEntryObject", exifEntryObject);
+  const isChanged = useMemo(
+    () => !arrayEquals(exifEntryObject.value, Array.from(newValue)),
+    [newValue, exifEntryObject.value],
+  );
 
   return (
     <div className="flex flex-col gap-8">
@@ -142,7 +176,12 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
                 setRational={setRationalAtIndex(index)}
               />
             ))
-          : newValue.map((value, index) => (
+          : exifEntryObject.format === "ASCII" ?
+            <ExifEntryAsciiValueEditor
+              value={newValue}
+              setValue={setNewValue}
+            />
+          : Array.from(newValue).map((value, index) => (
               <ExifEntryValueEditor
                 key={index}
                 value={value}
@@ -153,19 +192,21 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
         </div>
       </div>
       <div>
-        Expected change:{" "}
-        <ValidityCheck exifEntryObject={exifEntryObject} newValue={newValue} />
+        {"Expected change: "}
+        {isChanged ?
+          <ValidityCheck
+            exifEntryObject={exifEntryObject}
+            newValue={newValue}
+          />
+        : <span className="text-muted-foreground italic">no changes</span>}
       </div>
       <Button
-        disabled={isChanged}
+        disabled={!isChanged}
         onClick={() => {
-          updateExifEntry(
-            exifEntryObject,
-            newTypedArrayInFormat(newValue, exifEntryObject.format),
-          );
+          updateExifEntry(exifEntryObject, newValue);
         }}
       >
-        {isChanged ? "Saved" : "Save changes"}
+        {isChanged ? "Save changes" : "Saved"}
       </Button>
     </div>
   );

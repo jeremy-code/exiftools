@@ -1,0 +1,35 @@
+import { Slot } from "radix-ui";
+import type { PrimitivePropsWithRef } from "radix-ui/internal";
+import { tv, type VariantProps } from "tailwind-variants";
+
+const textareaVariants = tv({
+  base: [
+    "relative field-sizing-content w-full min-w-0 appearance-none rounded border bg-surface text-start",
+    "placeholder:text-solid",
+    "disabled:bg-input disabled:cursor-not-allowed disabled:opacity-50",
+    "data-invalid:border-destructive",
+  ],
+  variants: {
+    size: {
+      xs: "px-2 py-1.5 text-xs/4",
+      sm: "px-2.5 py-2 text-sm/5",
+      md: "px-3 py-2 text-sm/5",
+      lg: "px-4 py-3 text-base/6",
+      xl: "px-4.5 py-3.5 text-base/6",
+    },
+  },
+  defaultVariants: {
+    size: "sm",
+  },
+});
+
+type TextareaProps = PrimitivePropsWithRef<"textarea"> &
+  VariantProps<typeof textareaVariants>;
+
+const Textarea = ({ asChild, className, size, ...props }: TextareaProps) => {
+  const Comp = asChild ? Slot.Root : "textarea";
+
+  return <Comp className={textareaVariants({ className, size })} {...props} />;
+};
+
+export { textareaVariants, Textarea, type TextareaProps };
