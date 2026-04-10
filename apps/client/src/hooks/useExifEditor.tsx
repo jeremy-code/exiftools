@@ -13,7 +13,7 @@ import {
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { getImageDimensions } from "#utils/getImageDimensions";
 
-import { useExifDataRef } from "./useExifDataRef";
+import { useExifData } from "./useExifData";
 
 type ExifEditorStoreState = {
   exifDataObject: ExifDataObject;
@@ -37,13 +37,13 @@ const useExifEditor = (file: File) => {
     // Deliberately calling from file prop instead of queryKey since File cannot be serialized
     queryFn: () => file.arrayBuffer(),
   });
-  const exifDataRef = useExifDataRef(arrayBuffer);
-  const getExifDataRef = useCallback(() => {
-    if (exifDataRef.current === null) {
+  const exifData = useExifData(arrayBuffer);
+  const getExifData = useCallback(() => {
+    if (exifData === null) {
       throw new Error("Reference to ExifData instance not found");
     }
-    return exifDataRef.current;
-  }, [exifDataRef]);
+    return exifData;
+  }, [exifData]);
 
   const initialExifDataObject = useMemo(() => {
     const exifData = ExifData.from(arrayBuffer);
@@ -58,7 +58,7 @@ const useExifEditor = (file: File) => {
         exifDataObject: initialExifDataObject,
         updateExifEntry: (exifEntryObject, value) => {
           set(() => {
-            const exifData = getExifDataRef();
+            const exifData = getExifData();
             const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
             const exifEntry = exifContent?.getEntry(exifEntryObject.tag);
 
@@ -87,7 +87,7 @@ const useExifEditor = (file: File) => {
         },
         removeExifEntry: (exifEntryObject) => {
           set(() => {
-            const exifData = getExifDataRef();
+            const exifData = getExifData();
             const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
             const exifEntry = exifContent?.getEntry(exifEntryObject.tag);
 
@@ -102,7 +102,7 @@ const useExifEditor = (file: File) => {
         },
         fix: () => {
           set(() => {
-            const exifData = getExifDataRef();
+            const exifData = getExifData();
             exifData.fix();
 
             return { exifDataObject: serializeExifData(exifData) };
@@ -112,8 +112,7 @@ const useExifEditor = (file: File) => {
           const imageDimensions = await getImageDimensions(file);
 
           set(() => {
-            const exifData = getExifDataRef();
-
+            const exifData = getExifData();
             const exifIfd = exifData.ifd[ExifIfd.IFD_0];
 
             const imageWidthEntry = getOrInsertEntry(exifIfd, "IMAGE_WIDTH");
@@ -133,10 +132,10 @@ const useExifEditor = (file: File) => {
           });
         },
       })),
-    [getExifDataRef, initialExifDataObject, file],
+    [getExifData, initialExifDataObject, file],
   );
 
-  return { exifEditorStore, exifDataRef };
+  return { exifEditorStore, exifData };
 };
 
 type ExifEditorStoreApi = ReturnType<typeof useExifEditor>["exifEditorStore"];

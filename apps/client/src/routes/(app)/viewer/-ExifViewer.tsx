@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ExifTagInfo } from "libexif-wasm";
 import { ArrowLeft } from "lucide-react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -24,7 +24,6 @@ import {
   DataListItemLabel,
   DataListItemValue,
 } from "@exiftools/ui/components/DataList";
-import { Skeleton } from "@exiftools/ui/components/Skeleton";
 import {
   Tooltip,
   TooltipContent,
@@ -38,9 +37,9 @@ type ExifViewerProps = {
 } & ComponentPropsWithRef<"div">;
 
 const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
-  const { isPending, data: arrayBuffer } = useQuery({
+  const { data: arrayBuffer } = useSuspenseQuery({
     queryKey: [file] as const,
-    queryFn: ({ queryKey: [file] }) => file.arrayBuffer(),
+    queryFn: () => file.arrayBuffer(),
   });
   const exifData = useExifData(arrayBuffer);
   const removeAcceptedFileByIndex = useDropzoneState(
@@ -48,13 +47,9 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
   );
 
   if (exifData === null) {
-    if (isPending) {
-      return <Skeleton className="h-50" />;
-    } else {
-      return (
-        <>An error occurred while attempting to read the file's EXIF data.</>
-      );
-    }
+    return (
+      <>An error occurred while attempting to read the file's EXIF data.</>
+    );
   }
 
   return (

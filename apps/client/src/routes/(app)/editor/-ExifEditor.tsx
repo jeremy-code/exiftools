@@ -19,7 +19,7 @@ type ExifEditorProps = {
 } & ComponentPropsWithRef<"div">;
 
 const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
-  const { exifDataRef, exifEditorStore } = useExifEditor(file);
+  const { exifData, exifEditorStore } = useExifEditor(file);
   const fix = useStore(exifEditorStore, (state) => state.fix);
   const addImageDimensions = useStore(
     exifEditorStore,
@@ -44,7 +44,6 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
             </Button>
             <Button
               onClick={async () => {
-                const exifData = exifDataRef.current;
                 if (exifData === null) {
                   throw new Error("Reference to ExifData instance not found");
                 }
@@ -71,10 +70,10 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
             </Button>
             <Button
               onClick={() => {
-                if (exifDataRef.current === null) {
+                if (exifData === null) {
                   console.log("is null");
                 }
-                exifDataRef.current?.dump();
+                exifData?.dump();
               }}
             >
               Dump
