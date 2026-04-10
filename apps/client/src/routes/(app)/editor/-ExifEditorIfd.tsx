@@ -9,6 +9,7 @@ import {
   useReactTable,
   type RowData,
 } from "@tanstack/react-table";
+import { exifIfdGetName, ExifTagInfo } from "libexif-wasm";
 import { useShallow } from "zustand/react/shallow";
 
 import { ColumnResizer } from "#components/table/ColumnResizer";
@@ -42,9 +43,15 @@ declare module "@tanstack/react-table" {
 
 const columnHelper = createColumnHelper<ExifEntryObject>();
 const columns = [
-  columnHelper.accessor("ifd", { header: "Ifd" }),
-  columnHelper.accessor("tag", { header: "Tag" }),
-  columnHelper.accessor("format", { header: "Format" }),
+  columnHelper.accessor((originalRow) => exifIfdGetName(originalRow.ifd), {
+    id: "ifd",
+    header: "Image File Directory",
+  }),
+  columnHelper.accessor(
+    (originalRow) =>
+      ExifTagInfo.getTitleInIfd(originalRow.tag, originalRow.ifd),
+    { id: "tag", header: "Tag" },
+  ),
   columnHelper.accessor("formattedValue", { header: "Value", cell: ValueCell }),
   columnHelper.display({ id: "delete", cell: DeleteCell }),
   columnHelper.display({ id: "edit", cell: EditCell }),

@@ -45,7 +45,6 @@ const DialogContent = ({
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Content
-        data-slot="dialog-content"
         className={cn(
           "fixed top-1/2 left-1/2 z-[calc(infinity)] flex max-h-[85vh] w-full -translate-x-1/2 -translate-y-1/2 flex-col rounded-md bg-surface shadow-lg",
           "max-w-[min(calc(100%-2rem),--spacing(320))]",

@@ -24,15 +24,14 @@ const EditCell = ({ row }: ValueCellProps) => {
         <DialogTrigger asChild>
           <Button variant="outline">Edit</Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="overflow-auto">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
+            <DialogTitle>Edit Exif data</DialogTitle>
             <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
+              Make changes to the Exif entry here. Click save when you&apos;re
               done.
             </DialogDescription>
           </DialogHeader>
-
           <DialogBody>
             <ExifEntryEditor exifEntryObject={row.original} />
           </DialogBody>

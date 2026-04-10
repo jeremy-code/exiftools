@@ -6,7 +6,11 @@ import {
 } from "react";
 
 import {
+  exifFormatGetName,
+  exifFormatGetSize,
+  exifIfdGetName,
   mapRationalToObject,
+  ExifTagInfo,
   type RationalObject,
   type ValidTypedArray,
 } from "libexif-wasm";
@@ -20,7 +24,13 @@ import { type ExifEntryObject } from "#lib/exif/serializeExifData";
 import { arrayEquals } from "#utils/arrayEquals";
 import { decodeStringFromUtf8 } from "#utils/decodeStringFromUtf8";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
+import { formatPlural } from "#utils/formatPlural";
 import { Button } from "@exiftools/ui/components/Button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@exiftools/ui/components/Collapsible";
 import {
   DataList,
   DataListItem,
@@ -113,6 +123,13 @@ const ExifEntryAsciiValueEditor = ({
   );
 };
 
+const supportLevelMap = {
+  MANDATORY: "Mandatory",
+  UNKNOWN: "Unknown",
+  NOT_RECORDED: "Not recorded",
+  OPTIONAL: "Optional",
+};
+
 const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
   const [newValue, setNewValue] = useState(() =>
     newTypedArrayInFormat(exifEntryObject.value, exifEntryObject.format),
@@ -143,53 +160,127 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
     () => !arrayEquals(exifEntryObject.value, Array.from(newValue)),
     [newValue, exifEntryObject.value],
   );
+  const [isByteEditorOpen, setIsByteEditorOpen] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-8">
-      <DataList orientation="vertical" variant="bold">
-        <DataListItem>
-          <DataListItemLabel>Tag</DataListItemLabel>
-          <DataListItemValue>{exifEntryObject.tag}</DataListItemValue>
-          <DataListItemLabel>Size</DataListItemLabel>
-          <DataListItemValue>{exifEntryObject.size}</DataListItemValue>
-          <DataListItemLabel>IFD</DataListItemLabel>
-          <DataListItemValue>{exifEntryObject.ifd}</DataListItemValue>
-          <DataListItemLabel>Value</DataListItemLabel>
-          <DataListItemValue>
-            {exifEntryObject.formattedValue}
-          </DataListItemValue>
-        </DataListItem>
-      </DataList>
-      <div>
-        <p>Edit</p>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(--spacing(50),1fr))]">
-          {(
-            exifEntryObject.format === "RATIONAL" ||
-            exifEntryObject.format === "SRATIONAL"
-          ) ?
-            mapRationalToObject(
-              newTypedArrayInFormat(newValue, exifEntryObject.format),
-            ).map((rationalObject, index) => (
-              <RationalInput
-                key={`${rationalObject.numerator}/${rationalObject.denominator}`}
-                initialRational={rationalObject}
-                setRational={setRationalAtIndex(index)}
-              />
-            ))
-          : exifEntryObject.format === "ASCII" ?
-            <ExifEntryAsciiValueEditor
-              value={newValue}
-              setValue={setNewValue}
+      <Collapsible
+        open={isInfoOpen}
+        onOpenChange={(open) => setIsInfoOpen(open)}
+      >
+        <CollapsibleTrigger asChild>
+          <Button variant="outline">
+            {isInfoOpen ? "Close information" : "Open information"}
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="mt-4">
+          <DataList orientation="horizontal" variant="bold">
+            <DataListItem>
+              <DataListItemLabel className="min-w-50">Tag</DataListItemLabel>
+              <DataListItemValue>
+                {ExifTagInfo.getTitleInIfd(
+                  exifEntryObject.tag,
+                  exifEntryObject.ifd,
+                )}
+              </DataListItemValue>
+            </DataListItem>
+            <DataListItem>
+              <DataListItemLabel className="min-w-50">
+                Tag description
+              </DataListItemLabel>
+              <DataListItemValue>
+                {ExifTagInfo.getDescriptionInIfd(
+                  exifEntryObject.tag,
+                  exifEntryObject.ifd,
+                )}
+              </DataListItemValue>
+            </DataListItem>
+            <DataListItem>
+              <DataListItemLabel className="min-w-50">
+                Image File Directory
+              </DataListItemLabel>
+              <DataListItemValue>
+                {exifIfdGetName(exifEntryObject.ifd)}
+              </DataListItemValue>
+            </DataListItem>
+            <DataListItem>
+              <DataListItemLabel className="min-w-50">
+                Support level
+              </DataListItemLabel>
+              <DataListItemValue>
+                {
+                  supportLevelMap[
+                    ExifTagInfo.getSupportLevelInIfd(
+                      exifEntryObject.tag,
+                      exifEntryObject.ifd,
+                    )
+                  ]
+                }
+              </DataListItemValue>
+            </DataListItem>
+            <DataListItem>
+              <DataListItemLabel className="min-w-50">Format</DataListItemLabel>
+              <DataListItemValue>
+                {exifFormatGetName(exifEntryObject.format)} (
+                {formatPlural(exifFormatGetSize(exifEntryObject.format), {
+                  one: " byte",
+                  other: " bytes",
+                })}
+                )
+              </DataListItemValue>
+            </DataListItem>
+            <DataListItem>
+              <DataListItemLabel className="min-w-50">
+                Components
+              </DataListItemLabel>
+              <DataListItemValue>
+                {formatPlural(exifEntryObject.components, {
+                  one: " component",
+                  other: " components",
+                })}
+                {" ("}
+                {formatPlural(exifEntryObject.size, {
+                  one: " byte",
+                  other: " bytes",
+                })}
+                {" in total)"}
+              </DataListItemValue>
+            </DataListItem>
+            <DataListItem>
+              <DataListItemLabel className="min-w-50">Value</DataListItemLabel>
+              <DataListItemValue>
+                {exifEntryObject.formattedValue}
+              </DataListItemValue>
+            </DataListItem>
+          </DataList>
+        </CollapsibleContent>
+      </Collapsible>
+
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(--spacing(50),1fr))]">
+        {(
+          exifEntryObject.format === "RATIONAL" ||
+          exifEntryObject.format === "SRATIONAL"
+        ) ?
+          mapRationalToObject(
+            newTypedArrayInFormat(newValue, exifEntryObject.format),
+          ).map((rationalObject, index) => (
+            <RationalInput
+              key={`${rationalObject.numerator}/${rationalObject.denominator}`}
+              initialRational={rationalObject}
+              setRational={setRationalAtIndex(index)}
             />
-          : Array.from(newValue).map((value, index) => (
-              <ExifEntryValueEditor
-                key={index}
-                value={value}
-                setValue={setNewValueAtIndex(index)}
-              />
-            ))
-          }
-        </div>
+          ))
+        : exifEntryObject.format === "ASCII" ?
+          <ExifEntryAsciiValueEditor value={newValue} setValue={setNewValue} />
+        : Array.from(newValue).map((value, index) => (
+            <ExifEntryValueEditor
+              key={index}
+              value={value}
+              setValue={setNewValueAtIndex(index)}
+            />
+          ))
+        }
       </div>
       <div>
         {"Expected change: "}
@@ -200,6 +291,30 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
           />
         : <span className="text-muted-foreground italic">no changes</span>}
       </div>
+      {(exifEntryObject.format === "ASCII" ||
+        exifEntryObject.format === "RATIONAL" ||
+        exifEntryObject.format === "SRATIONAL") && (
+        <Collapsible
+          open={isByteEditorOpen}
+          onOpenChange={(open) => setIsByteEditorOpen(open)}
+        >
+          <CollapsibleTrigger asChild>
+            <Button variant="outline">
+              {isByteEditorOpen ? "Close byte editor" : "Open byte editor"}
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(--spacing(30),1fr))]">
+            {Array.from(newValue).map((value, index) => (
+              <ExifEntryValueEditor
+                key={index}
+                value={value}
+                setValue={setNewValueAtIndex(index)}
+              />
+            ))}
+          </CollapsibleContent>
+        </Collapsible>
+      )}
+
       <Button
         disabled={!isChanged}
         onClick={() => {
