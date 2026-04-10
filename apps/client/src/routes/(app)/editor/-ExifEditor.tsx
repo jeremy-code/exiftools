@@ -21,12 +21,10 @@ type ExifEditorProps = {
 
 const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
   const { exifData, exifEditorStore } = useExifEditor(file);
-  const fix = useStore(exifEditorStore, (state) => state.fix);
-  const addImageDimensions = useStore(
+  const [fix, addImageDimensions] = useStore(
     exifEditorStore,
-    (state) => state.addImageDimensions,
+    useShallow((state) => [state.fix, state.addImageDimensions]),
   );
-
   const [removeAcceptedFileByIndex, replaceAcceptedFileByIndex] =
     useDropzoneState(
       useShallow((state) => [
@@ -77,7 +75,7 @@ const ExifEditor = ({ file, className, ...props }: ExifEditorProps) => {
             <Button
               onClick={() => {
                 if (exifData === null) {
-                  console.log("is null");
+                  throw new Error("Reference to ExifData instance not found");
                 }
                 exifData?.dump();
               }}
