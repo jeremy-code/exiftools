@@ -18,10 +18,6 @@ const viteConfig = defineConfig({
     fontless(),
     devtools(),
   ],
-  define: {
-    // https://github.com/vitejs/vite/issues/1973
-    "process.env": process.env,
-  },
   css: {
     lightningcss: {
       exclude: Features.LightDark,
