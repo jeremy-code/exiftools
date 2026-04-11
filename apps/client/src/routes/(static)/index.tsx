@@ -1,21 +1,31 @@
 import { createFileRoute, Link as RouterLink } from "@tanstack/react-router";
 
-import { ThemeToggle } from "#components/misc/ThemeToggle";
 import { Link } from "@exiftools/ui/components/Link";
 
 const HomeComponent = () => {
   return (
     <>
-      <ThemeToggle size="lg" />
-      <ul>
+      <ul className="list-disc [&_ul]:list-[revert]">
         <li>
-          <Link asChild>
+          <Link color="link" underline asChild>
             <RouterLink to="/editor">Editor</RouterLink>
+          </Link>
+          <ul className="list-disc pl-3">
+            <li>
+              <Link color="link" underline asChild>
+                <RouterLink to="/editor/gps">GPS Editor</RouterLink>
+              </Link>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <Link color="link" underline asChild>
+            <RouterLink to="/viewer">Viewer</RouterLink>
           </Link>
         </li>
         <li>
-          <Link asChild>
-            <RouterLink to="/viewer">Viewer</RouterLink>
+          <Link color="link" underline asChild>
+            <RouterLink to="/tags">Tags</RouterLink>
           </Link>
         </li>
       </ul>
