@@ -1,19 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ExifData } from "libexif-wasm";
 
+import { serializeFile } from "#utils/serializeFile";
+
 const useExifData = (file: File) => {
   const { data: exifData } = useSuspenseQuery({
-    queryKey: [
-      "useExifData",
-      {
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        webkitRelativePath: file.webkitRelativePath,
-        lastModified: file.lastModified,
-      },
-      file,
-    ],
+    queryKey: ["useExifData", serializeFile(file), file],
     queryFn: async () => {
       try {
         return await ExifData.fromReadableStream(file.stream());

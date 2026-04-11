@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 
 import { formatBytes } from "#utils/formatBytes";
 import { getImageDimensions } from "#utils/getImageDimensions";
+import { serializeFile } from "#utils/serializeFile";
 import { Badge } from "@exiftools/ui/components/Badge";
 import {
   Card,
@@ -27,17 +28,7 @@ const FileDimensionsInformation = ({
   ...props
 }: { file: File } & DataListItemValueProps) => {
   const { data: dimensions } = useSuspenseQuery({
-    queryKey: [
-      "FileDimensionsInformation",
-      {
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        webkitRelativePath: file.webkitRelativePath,
-        lastModified: file.lastModified,
-      },
-      file,
-    ],
+    queryKey: ["FileDimensionsInformation", serializeFile(file), file],
     queryFn: () => getImageDimensions(file),
   });
 
