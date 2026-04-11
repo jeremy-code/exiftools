@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 
+import { useDisposeQueryCache } from "#hooks/useDisposeQueryCache";
 import { Toaster } from "@exiftools/ui/components/Toaster";
 import { TooltipProvider } from "@exiftools/ui/components/Tooltip";
 
@@ -14,10 +15,13 @@ const Devtools =
   : () => null;
 
 const queryClient = new QueryClient();
+
 /**
  * Provides global application context.
  */
 const AppProvider = ({ children }: { children: Readonly<ReactNode> }) => {
+  useDisposeQueryCache(queryClient);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>

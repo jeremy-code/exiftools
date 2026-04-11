@@ -1,6 +1,5 @@
-import type { ComponentPropsWithRef } from "react";
+import { Suspense, type ComponentPropsWithRef } from "react";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { ExifTagInfo } from "libexif-wasm";
 import { ArrowLeft } from "lucide-react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -37,116 +36,110 @@ type ExifViewerProps = {
 } & ComponentPropsWithRef<"div">;
 
 const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
-  const { data: arrayBuffer } = useSuspenseQuery({
-    queryKey: [file] as const,
-    queryFn: () => file.arrayBuffer(),
-  });
-  const exifData = useExifData(arrayBuffer);
+  const exifData = useExifData(file);
   const removeAcceptedFileByIndex = useDropzoneState(
     (state) => state.removeAcceptedFileByIndex,
   );
 
-  if (exifData === null) {
-    return (
-      <>An error occurred while attempting to read the file's EXIF data.</>
-    );
-  }
-
   return (
-    <div className={cn("flex flex-col gap-4", className)} {...props}>
-      <div>
-        <Button variant="ghost" onClick={() => removeAcceptedFileByIndex(0)}>
-          <ArrowLeft className="size-[1em]" />
-          Upload different image
-        </Button>
-      </div>
-      <FileInformation file={file} />
-      <Accordion
-        // Expand all nonempty IFDs
-        defaultValue={exifData.ifd
-          .filter((ifd) => ifd.count !== 0)
-          .map((ifd) => ifd.ifd)
-          .filter((ifd) => ifd !== null)}
-        variant="enclosed"
-        type="multiple"
-        size="lg"
-        className="shadow-sm"
-      >
-        {exifData.ifd.map((ifd) => {
-          const ifdName = ifd.ifd;
-          if (ifdName === null) {
-            throw new Error("Invalid IFD");
-          }
+    <Suspense>
+      <div className={cn("flex flex-col gap-4", className)} {...props}>
+        <div>
+          <Button variant="ghost" onClick={() => removeAcceptedFileByIndex(0)}>
+            <ArrowLeft className="size-[1em]" />
+            Upload different image
+          </Button>
+        </div>
+        <FileInformation file={file} />
+        <Accordion
+          // Expand all nonempty IFDs
+          defaultValue={exifData.ifd
+            .filter((ifd) => ifd.count !== 0)
+            .map((ifd) => ifd.ifd)
+            .filter((ifd) => ifd !== null)}
+          variant="enclosed"
+          type="multiple"
+          size="lg"
+          className="shadow-sm"
+        >
+          {exifData.ifd.map((ifd) => {
+            const ifdName = ifd.ifd;
+            if (ifdName === null) {
+              throw new Error("Invalid IFD");
+            }
 
-          const isEmpty = ifd.count === 0;
+            const isEmpty = ifd.count === 0;
 
-          return (
-            <AccordionItem key={ifdName} value={ifdName} disabled={isEmpty}>
-              <AccordionTrigger>
-                <div className="flex gap-2">
-                  {ifdName}
-                  <Badge>
-                    {formatPlural(ifd.count, {
-                      one: " tag",
-                      other: " tags",
-                    })}
-                  </Badge>
-                </div>
-              </AccordionTrigger>
-
-              {!isEmpty && (
-                <AccordionContent>
-                  <DataList variant="bold">
-                    {ifd.entries
-                      .filter((entry) => entry.tag !== null)
-                      .map((entry) => {
-                        const tag = entry.tag!;
-                        const title = ExifTagInfo.getTitleInIfd(tag, ifdName);
-                        const description = ExifTagInfo.getDescriptionInIfd(
-                          tag,
-                          ifdName,
-                        );
-
-                        return (
-                          <DataListItem
-                            className="flex-col! md:flex-row!"
-                            key={tag}
-                          >
-                            <DataListItemLabel className="md:w-1/3">
-                              {/* Some tags (e.g. RECOMMENDED_EXPOSURE_INDEX) don't have a description in ExifTagTable[] */}
-                              {description !== null && description !== "" ?
-                                <Tooltip delayDuration={0}>
-                                  <TooltipTrigger className="select-auto">
-                                    {title}
-                                  </TooltipTrigger>
-                                  <TooltipContent>{description}</TooltipContent>
-                                </Tooltip>
-                              : title}
-                            </DataListItemLabel>
-                            <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-muted-foreground before:content-['=']">
-                              {entry.toString()}
-                            </DataListItemValue>
-                          </DataListItem>
-                        );
+            return (
+              <AccordionItem key={ifdName} value={ifdName} disabled={isEmpty}>
+                <AccordionTrigger>
+                  <div className="flex gap-2">
+                    {ifdName}
+                    <Badge>
+                      {formatPlural(ifd.count, {
+                        one: " tag",
+                        other: " tags",
                       })}
-                  </DataList>
-                </AccordionContent>
-              )}
-            </AccordionItem>
-          );
-        })}
-      </Accordion>
-      <ErrorBoundary
-        fallback={
-          <p className="text-muted-foreground">
-            The GPS IFD was found in the image EXIF metadata, but valid
-            longitude and latitude coordinates were not found.
-          </p>
-        }
-      >
-        <ExifViewerGps exifData={exifData} />
-      </ErrorBoundary>
-    </div>
+                    </Badge>
+                  </div>
+                </AccordionTrigger>
+
+                {!isEmpty && (
+                  <AccordionContent>
+                    <DataList variant="bold">
+                      {ifd.entries
+                        .filter((entry) => entry.tag !== null)
+                        .map((entry) => {
+                          const tag = entry.tag!;
+                          const title = ExifTagInfo.getTitleInIfd(tag, ifdName);
+                          const description = ExifTagInfo.getDescriptionInIfd(
+                            tag,
+                            ifdName,
+                          );
+
+                          return (
+                            <DataListItem
+                              className="flex-col! md:flex-row!"
+                              key={tag}
+                            >
+                              <DataListItemLabel className="md:w-1/3">
+                                {/* Some tags (e.g. RECOMMENDED_EXPOSURE_INDEX) don't have a description in ExifTagTable[] */}
+                                {description !== null && description !== "" ?
+                                  <Tooltip delayDuration={0}>
+                                    <TooltipTrigger className="select-auto">
+                                      {title}
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      {description}
+                                    </TooltipContent>
+                                  </Tooltip>
+                                : title}
+                              </DataListItemLabel>
+                              <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-muted-foreground before:content-['=']">
+                                {entry.toString()}
+                              </DataListItemValue>
+                            </DataListItem>
+                          );
+                        })}
+                    </DataList>
+                  </AccordionContent>
+                )}
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+        <ErrorBoundary
+          fallback={
+            <p className="text-muted-foreground">
+              The GPS IFD was found in the image EXIF metadata, but valid
+              longitude and latitude coordinates were not found.
+            </p>
+          }
+        >
+          <ExifViewerGps exifData={exifData} />
+        </ErrorBoundary>
+      </div>
+    </Suspense>
   );
 };
 

@@ -1,8 +1,7 @@
 import { createContext, use, useMemo } from "react";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { imageDimensionsFromStream } from "image-dimensions";
-import { ExifData, ExifIfd, type ValidTypedArray } from "libexif-wasm";
+import { ExifIfd, type ValidTypedArray } from "libexif-wasm";
 import { create, useStore } from "zustand";
 
 import { getOrInsertEntry } from "#lib/exif/getOrInsertEntry";
@@ -32,24 +31,14 @@ type ExifEditorStoreActions = {
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
 
 const useExifEditor = (file: File) => {
-  const { data: arrayBuffer } = useSuspenseQuery({
-    queryKey: [file] as const,
-    // Deliberately calling from file prop instead of queryKey since File cannot be serialized
-    queryFn: () => file.arrayBuffer(),
-  });
-  const exifData = useExifData(arrayBuffer);
+  const exifData = useExifData(file);
 
-  const initialExifDataObject = useMemo(() => {
-    const exifData = ExifData.from(arrayBuffer);
-    const exifDataObject = serializeExifData(exifData);
-    exifData.free();
-    return exifDataObject;
-  }, [arrayBuffer]);
+  const exifDataObject = useMemo(() => serializeExifData(exifData), [exifData]);
 
   const exifEditorStore = useMemo(
     () =>
       create<ExifEditorStore>((set) => ({
-        exifDataObject: initialExifDataObject,
+        exifDataObject,
         updateExifEntry: (exifEntryObject, value) => {
           set(() => {
             if (exifData === null) {
@@ -140,7 +129,7 @@ const useExifEditor = (file: File) => {
           });
         },
       })),
-    [exifData, initialExifDataObject, file],
+    [exifData, exifDataObject, file],
   );
 
   return { exifEditorStore, exifData };

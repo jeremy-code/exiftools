@@ -8,7 +8,7 @@
 
     /* Language and Environment */
     "target": "ES2024",
-    "lib": ["ES2024"],
+    "lib": ["ES2024", "ESNext.Disposable"],
     "moduleDetection": "force",
 
     /* Modules */

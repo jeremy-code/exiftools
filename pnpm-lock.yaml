@@ -77,8 +77,8 @@ importers:
         specifier: ^4.4.0
         version: 4.4.0
       libexif-wasm:
-        specifier: ^0.4.3
-        version: 0.4.3
+        specifier: ^0.5.0
+        version: 0.5.0
       lucide-react:
         specifier: ^1.8.0
         version: 1.8.0(react@19.2.5)
@@ -4976,10 +4976,10 @@ packages:
       }
     engines: { node: ">= 0.8.0" }
 
-  libexif-wasm@0.4.3:
+  libexif-wasm@0.5.0:
     resolution:
       {
-        integrity: sha512-9V/TGIsowT2PbDJCToXcYTq2gdm+YI6YDL1/O8KrrZIm+pZAUlbx7kt2/AQby6+CrDkI/ElcjbxiKnC1MYe0jA==,
+        integrity: sha512-6KVH7RCxa2P6hvOZY3ArhFilrYGia4Jdoo4iIZ/cvmHxaQA82SUmGiobNAM0zukdILojPgTRPohhbwkY9KFAOg==,
       }
     engines: { node: ">=16.0.0" }
 
@@ -9893,7 +9893,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libexif-wasm@0.4.3: {}
+  libexif-wasm@0.5.0: {}
 
   lightningcss-android-arm64@1.32.0:
     optional: true
