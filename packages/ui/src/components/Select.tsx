@@ -12,7 +12,7 @@ const {
 
 const selectTriggerVariants = tv({
   base: [
-    "flex min-h-9 items-center justify-between gap-1 rounded-sm border px-2.5 text-start text-sm/5 transition-colors",
+    "flex min-h-9 w-full items-center justify-between gap-1 rounded-sm border px-2.5 text-start text-sm/5 transition-colors",
     "data-placeholder:text-muted-foreground",
     "data-disabled:cursor-not-allowed data-disabled:opacity-50",
   ],
