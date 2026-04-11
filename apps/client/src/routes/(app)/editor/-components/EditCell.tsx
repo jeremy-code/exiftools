@@ -14,12 +14,9 @@ import {
   DialogTrigger,
 } from "@exiftools/ui/components/Dialog";
 
-import type { ValueCellProps } from "./ValueCell";
 import { ExifEntryEditor } from "../-ExifEntryEditor";
 
-type EditCellProps = CellContext<ExifEntryObject, unknown>;
-
-const EditCell = ({ row }: ValueCellProps) => {
+const EditCell = ({ row }: CellContext<ExifEntryObject, unknown>) => {
   return (
     <Dialog>
       <form>
@@ -47,4 +44,4 @@ const EditCell = ({ row }: ValueCellProps) => {
   );
 };
 
-export { EditCell, type EditCellProps };
+export { EditCell };

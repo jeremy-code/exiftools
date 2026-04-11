@@ -93,7 +93,7 @@ const SelectItem = ({
     className={cn(
       "relative flex h-6.5 items-center rounded-sm pr-9.5 pl-6.5 text-sm/none select-none",
       "data-disabled:cursor-not-allowed data-disabled:opacity-50",
-      "data-highlighted:bg-blue-500 data-highlighted:text-white data-highlighted:outline-none",
+      "data-highlighted:bg-accent data-highlighted:text-white data-highlighted:outline-none",
       className,
     )}
     {...props}

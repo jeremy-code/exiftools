@@ -24,6 +24,7 @@ type ExifEditorStoreActions = {
     value: string | ValidTypedArray,
   ) => void;
   removeExifEntry: (exifEntryObject: ExifEntryObject) => void;
+  removeExifEntries: (exifEntryObjects: ExifEntryObject[]) => void;
   fix: () => void;
   addImageDimensions: () => Promise<void>;
 };
@@ -84,6 +85,23 @@ const useExifEditor = (file: File) => {
 
             exifContent.removeEntry(exifEntry);
 
+            return { exifDataObject: serializeExifData(exifData) };
+          });
+        },
+        removeExifEntries: (exifEntryObjects) => {
+          set(() => {
+            exifEntryObjects.forEach((exifEntryObject) => {
+              if (exifData === null) {
+                throw new Error("Reference to ExifData instance not found");
+              }
+              const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
+              const exifEntry = exifContent?.getEntry(exifEntryObject.tag);
+
+              if (exifEntry === null) {
+                throw new Error("Invalid Exif Entry");
+              }
+              exifContent.removeEntry(exifEntry);
+            });
             return { exifDataObject: serializeExifData(exifData) };
           });
         },
