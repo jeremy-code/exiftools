@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useMemo, type CSSProperties } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -55,17 +55,18 @@ const SupportLevelCell = (props: CellContext<TagEntry, SupportLevel>) => {
 };
 
 const columns = [
-  columnHelper.group({
-    id: "information",
-    header: "Information",
-    columns: [
-      columnHelper.accessor("tagVal", { header: "Tag" }),
-      columnHelper.accessor("name", { header: "Name" }),
-    ],
+  columnHelper.accessor("tagVal", {
+    header: "Tag",
+    size: 64,
+  }),
+  columnHelper.accessor("title", {
+    header: "Name",
+    size: 200,
   }),
   columnHelper.group({
     id: "supportLevel",
     header: "Support Level",
+    size: 700,
     columns: [
       columnHelper.accessor("esl.IFD_0", {
         header: () => "IFD 0",
@@ -103,6 +104,19 @@ const TagsComponent = () => {
     },
     enableSorting: true,
   });
+  const columnSizeCssVars = useMemo(
+    () =>
+      table
+        .getFlatHeaders()
+        .reduce<Record<`--${string}`, number>>((acc, header) => {
+          acc[`--header-${header.id}-size`] = header.getSize();
+          acc[`--col-${header.column.id}-size`] = header.column.getSize();
+          return acc;
+        }, {}),
+    // eslint-disable-next-line react-compiler/react-compiler -- See below
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- https://tanstack.com/table/latest/docs/framework/react/examples/column-resizing-performant
+    [table.getState().columnSizingInfo, table.getState().columnSizing],
+  );
 
   return (
     <div className="flex flex-col gap-2">
@@ -116,6 +130,7 @@ const TagsComponent = () => {
         style={
           {
             "--table-width": `${table.getCenterTotalSize()}px`,
+            ...columnSizeCssVars,
           } as CSSProperties
         }
       >
@@ -125,11 +140,11 @@ const TagsComponent = () => {
               {headerGroup.headers.map((header) => (
                 <TableHeader
                   key={header.id}
-                  className="group w-(--table-header-width)"
+                  className="group relative w-(--table-header-width)"
                   colSpan={header.colSpan}
                   style={
                     {
-                      "--table-header-width": `${header.getSize()}px`,
+                      "--table-header-width": `calc(var(--header-${header.id}-size) * 1px)`,
                     } as CSSProperties
                   }
                 >
@@ -163,10 +178,10 @@ const TagsComponent = () => {
               {row.getVisibleCells().map((cell) => (
                 <TableCell
                   key={cell.id}
-                  className="w-(--table-cell-size)"
+                  className="w-(--table-cell-size) max-w-(--table-cell-size)"
                   style={
                     {
-                      "--table-cell-size": `${cell.column.getSize()}px`,
+                      "--table-cell-size": `calc(var(--col-${cell.column.id}-size) * 1px)`,
                     } as CSSProperties
                   }
                 >
