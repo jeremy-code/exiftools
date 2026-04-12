@@ -31,7 +31,7 @@ const toastVariants = tv({
   variants: {
     variant: {
       default: "border bg-background text-foreground",
-      destructive: "bg-red-500 text-red-50",
+      destructive: "bg-destructive text-destructive-foreground",
     },
   },
   defaultVariants: { variant: "default" },
@@ -67,7 +67,7 @@ const ToastDescription = ({
   <ToastPrimitives.Description
     className={cn(
       "text-sm text-muted-foreground",
-      "in-data-[variant='destructive']:text-red-50",
+      "in-data-[variant=destructive]:text-destructive-foreground",
       className,
     )}
     {...props}
@@ -96,7 +96,7 @@ const ToastClose = ({
       variant="surface"
       size="icon"
       className={cn(
-        "in-data-[variant='destructive']:text-destructive-foreground in-data-[variant='destructive']:border-0 in-data-[variant='destructive']:bg-red-600 in-data-[variant='destructive']:hover:bg-red-700",
+        "in-data-[variant=destructive]:border-0 in-data-[variant=destructive]:bg-destructive in-data-[variant=destructive]:text-destructive-foreground in-data-[variant=destructive]:hover:bg-destructive-hover",
         className,
       )}
     >
