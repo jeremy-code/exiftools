@@ -32,6 +32,7 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
     >
       <div className="container flex items-center justify-between py-4">
         <RouterLink className="flex items-center gap-2 font-semibold" to="/">
+          <img width="24" height="24" src="/favicon.svg" />
           exiftools
         </RouterLink>
         <div className="flex items-center gap-2">
