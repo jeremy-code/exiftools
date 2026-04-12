@@ -1,16 +1,16 @@
 import type { ComponentPropsWithRef } from "react";
 
-import { basename } from "@std/path/basename";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 import { useDropzoneState } from "#hooks/useDropzoneState";
+import { getFileFromResponse } from "#utils/getFileFromResponse";
 import { Button, type ButtonProps } from "@exiftools/ui/components/Button";
 import { Input, type InputProps } from "@exiftools/ui/components/Input";
 import { Spinner } from "@exiftools/ui/components/Spinner";
 import { toast } from "@exiftools/ui/hooks/useToast";
 
 type FieldValues = {
-  exifUrl: string;
+  fileUrl: string;
 };
 
 type FileUrlInputProps = {
@@ -28,29 +28,16 @@ const FileUrlInput = ({
   const addAcceptedFiles = useDropzoneState((state) => state.addAcceptedFiles);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const urlObject = new URL(data.exifUrl);
-    const response = await fetch(urlObject);
+    const response = await fetch(data.fileUrl);
     if (!response.ok) {
       toast({
         title: "Fetching from URL failed",
-        description: `Fetching ${data.exifUrl} failed with error ${response.status}.`,
+        description: `Fetching ${data.fileUrl} failed with error code ${response.status}.`,
         variant: "destructive",
       });
       return;
     }
-
-    const contentType = response.headers.get("Content-Type");
-    const lastModified = response.headers.get("Last-Modified");
-
-    const file = new File(
-      [await response.blob()],
-      basename(urlObject.pathname),
-      {
-        type: contentType ?? undefined,
-        lastModified:
-          lastModified !== null ? Date.parse(lastModified) : undefined,
-      },
-    );
+    const file = await getFileFromResponse(response);
     addAcceptedFiles([file]);
   };
 
@@ -61,8 +48,9 @@ const FileUrlInput = ({
           type="url"
           className="rounded-r-none border-r-0"
           {...inputProps}
-          {...register("exifUrl", {
+          {...register("fileUrl", {
             required: true,
+            // May be overkill, since "type" is already set to "url"
             validate: (data) => URL.canParse(data),
           })}
         />
