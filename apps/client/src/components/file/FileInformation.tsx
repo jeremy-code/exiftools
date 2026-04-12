@@ -2,6 +2,7 @@ import { Suspense, type ComponentPropsWithRef } from "react";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { cn } from "tailwind-variants";
 
 import { formatBytes } from "#utils/formatBytes";
 import { getImageDimensions } from "#utils/getImageDimensions";
@@ -23,10 +24,12 @@ import {
 import { Link } from "@exiftools/ui/components/Link";
 import { Skeleton } from "@exiftools/ui/components/Skeleton";
 
+type FileDimensionsInformationProps = { file: File } & DataListItemValueProps;
+
 const FileDimensionsInformation = ({
   file,
   ...props
-}: { file: File } & DataListItemValueProps) => {
+}: FileDimensionsInformationProps) => {
   const { data: dimensions } = useSuspenseQuery({
     queryKey: ["FileDimensionsInformation", serializeFile(file), file],
     queryFn: () => getImageDimensions(file),
@@ -34,25 +37,37 @@ const FileDimensionsInformation = ({
 
   return (
     <DataListItemValue {...props}>
-      {dimensions?.width} x {dimensions?.height}
+      {(
+        dimensions !== undefined &&
+        dimensions.width !== 0 &&
+        dimensions.height !== 0
+      ) ?
+        `${dimensions?.width}px \u00d7 ${dimensions?.height}px`
+      : "Unknown"}
     </DataListItemValue>
   );
 };
 
 type FileInformationProps = { file: File } & ComponentPropsWithRef<"div">;
 
-const FileInformation = ({ file, ...props }: FileInformationProps) => {
+const FileInformation = ({
+  file,
+  className,
+  ...props
+}: FileInformationProps) => {
   const objectUrl = URL.createObjectURL(file);
 
   return (
-    <div className="grid gap-4 md:grid-cols-[1fr_2fr]" {...props}>
+    <div
+      className={cn("grid gap-4 md:grid-cols-[1fr_2fr]", className)}
+      {...props}
+    >
       <Card
-        className="overflow-auto [--checker-size:--spacing(5)] md:h-0 md:min-h-full"
+        className="overflow-auto bg-size-[var(--checker-size)_var(--checker-size)] [--checker-size:--spacing(5)] md:h-0 md:min-h-full"
         style={{
           // https://css-tricks.com/background-patterns-simplified-by-conic-gradients/#aa-checkerboard
           backgroundImage:
             "repeating-conic-gradient(var(--color-gray-300) 0 25%, var(--color-white) 0 50%)",
-          backgroundSize: "var(--checker-size) var(--checker-size)",
         }}
       >
         <img
@@ -70,19 +85,26 @@ const FileInformation = ({ file, ...props }: FileInformationProps) => {
         <CardContent className="flex flex-col gap-3">
           <DataList orientation="vertical" variant="bold">
             <DataListItem>
-              <DataListItemLabel>File name</DataListItemLabel>
-              <DataListItemValue>
+              <DataListItemLabel>File</DataListItemLabel>
+              <DataListItemValue className="gap-2">
                 <Link
-                  onClick={() => {
-                    const objectUrl = URL.createObjectURL(file);
-                    window.open(objectUrl);
-                    URL.revokeObjectURL(objectUrl);
-                  }}
                   className="cursor-pointer wrap-break-word break-all"
+                  asChild
                   underline
                 >
-                  {file.name}
+                  <button
+                    onClick={() => {
+                      const objectUrl = URL.createObjectURL(file);
+                      window.open(objectUrl);
+                      URL.revokeObjectURL(objectUrl);
+                    }}
+                  >
+                    {file.name}
+                  </button>
                 </Link>
+                <Badge className="select-auto">
+                  {file.type !== "" ? file.type : "Unknown"}
+                </Badge>
               </DataListItemValue>
             </DataListItem>
             <DataListItem>
@@ -99,14 +121,6 @@ const FileInformation = ({ file, ...props }: FileInformationProps) => {
                 <time dateTime={dayjs(file.lastModified).toISOString()}>
                   {dayjs(file.lastModified).format("YYYY MMM D, h:mmA")}
                 </time>
-              </DataListItemValue>
-            </DataListItem>
-            <DataListItem>
-              <DataListItemLabel>MIME type</DataListItemLabel>
-              <DataListItemValue>
-                <Badge className="select-auto">
-                  {file.type !== "" ? file.type : "Unknown"}
-                </Badge>
               </DataListItemValue>
             </DataListItem>
             <DataListItem>
