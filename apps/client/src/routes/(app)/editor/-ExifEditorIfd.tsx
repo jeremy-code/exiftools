@@ -70,7 +70,7 @@ const columns = [
     size: 130,
     cell: ({ getValue, row }) => (
       <Tooltip delayDuration={0}>
-        <TooltipTrigger>
+        <TooltipTrigger className="text-left">
           {ExifTagInfo.getTitleInIfd(getValue(), row.original.ifd)}
         </TooltipTrigger>
         <TooltipContent>
