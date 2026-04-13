@@ -28,17 +28,25 @@ const FileUrlInput = ({
   const addAcceptedFiles = useDropzoneStore((state) => state.addAcceptedFiles);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const response = await fetch(data.fileUrl);
-    if (!response.ok) {
+    try {
+      const response = await fetch(data.fileUrl);
+      if (!response.ok) {
+        toast({
+          title: "Fetching from URL failed",
+          description: `Fetching ${data.fileUrl} failed with error code ${response.status}.`,
+          variant: "destructive",
+        });
+        return;
+      }
+      const file = await getFileFromResponse(response);
+      addAcceptedFiles([file]);
+    } catch (e) {
       toast({
         title: "Fetching from URL failed",
-        description: `Fetching ${data.fileUrl} failed with error code ${response.status}.`,
+        description: `An error occurred while attempting to fetch ${data.fileUrl}: ${e instanceof Error ? e.message : "unknown error"}.`,
         variant: "destructive",
       });
-      return;
     }
-    const file = await getFileFromResponse(response);
-    addAcceptedFiles([file]);
   };
 
   return (
