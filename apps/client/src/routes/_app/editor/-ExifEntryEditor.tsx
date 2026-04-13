@@ -24,7 +24,7 @@ import { useExifEditorStoreContext } from "#hooks/useExifEditor";
 import { getValueFromExifEntryObject } from "#lib/exif/getValueFromExifEntryObject";
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import { type ExifEntryObject } from "#lib/exif/serializeExifData";
-import { arrayEquals } from "#utils/arrayEquals";
+import { arrayLikeEquals } from "#utils/arrayLikeEquals";
 import { formatPlural } from "#utils/formatPlural";
 import { Button } from "@exiftools/ui/components/Button";
 import {
@@ -103,7 +103,7 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
   }, []);
 
   const isChanged = useMemo(
-    () => !arrayEquals(exifEntryObject.value, Array.from(newValue)),
+    () => !arrayLikeEquals(exifEntryObject.value, newValue),
     [newValue, exifEntryObject.value],
   );
   const [isByteEditorOpen, setIsByteEditorOpen] = useState(false);
