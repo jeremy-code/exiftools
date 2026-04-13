@@ -1,17 +1,70 @@
-type PluralRules = Partial<Record<Intl.LDMLPluralRule, string>> &
-  Record<"other", string>;
+type PluralRules = {
+  other: string;
+} & Partial<Record<Intl.LDMLPluralRule, string>>;
+
+const parseFormatPluralOptions = (
+  options?: Intl.PluralRulesOptions & Intl.NumberFormatOptions,
+): [
+  Intl.PluralRulesOptions | undefined,
+  Intl.NumberFormatOptions | undefined,
+] => {
+  if (options === undefined) {
+    return [options, options];
+  }
+  const {
+    localeMatcher,
+    type,
+    minimumIntegerDigits,
+    minimumFractionDigits,
+    maximumFractionDigits,
+    minimumSignificantDigits,
+    maximumSignificantDigits,
+    roundingPriority,
+    roundingIncrement,
+    roundingMode,
+    ...numberFormatOptions
+  } = options;
+
+  const pluralRulesOptions: Intl.PluralRulesOptions = {
+    localeMatcher,
+    type,
+    minimumIntegerDigits,
+    minimumFractionDigits,
+    maximumFractionDigits,
+    minimumSignificantDigits,
+    maximumSignificantDigits,
+  };
+
+  return [
+    pluralRulesOptions,
+    {
+      ...numberFormatOptions,
+      localeMatcher,
+      minimumIntegerDigits,
+      minimumFractionDigits,
+      maximumFractionDigits,
+      minimumSignificantDigits,
+      maximumSignificantDigits,
+      roundingPriority,
+      roundingIncrement,
+      roundingMode,
+    },
+  ];
+};
 
 const formatPlural = (
   num: number,
-  rules: PluralRules,
-  ...[locales, options]: ConstructorParameters<Intl.PluralRulesConstructor>
+  pluralRules: PluralRules,
+  locales?: Intl.LocalesArgument,
+  options?: Intl.PluralRulesOptions & Intl.NumberFormatOptions,
 ) => {
+  const [pluralRulesOptions, numberFormatOptions] =
+    parseFormatPluralOptions(options);
+  const pluralRulesInstance = new Intl.PluralRules(locales, pluralRulesOptions);
   const suffix =
-    rules[new Intl.PluralRules(locales, options).select(num)] ?? rules.other;
+    pluralRules[pluralRulesInstance.select(num)] ?? pluralRules.other ?? "";
 
-  // Options are not passed to `toLocaleString` and using the shared parameters
-  // of Intl.PluralRules. Feel free to add as an parameter if needed.
-  return `${num.toLocaleString(locales, options)}${suffix ?? ""}`;
+  return `${num.toLocaleString(locales, numberFormatOptions)}${suffix}`;
 };
 
 export { formatPlural, type PluralRules };
