@@ -3,6 +3,7 @@ import {
   type TanStackDevtoolsReactInit,
   type TanStackDevtoolsReactPlugin,
 } from "@tanstack/react-devtools";
+import { formDevtoolsPlugin } from "@tanstack/react-form-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
@@ -16,6 +17,7 @@ const devtoolsPlugins = [
     name: "TanStack Router",
     render: <TanStackRouterDevtools />,
   },
+  formDevtoolsPlugin(),
 ] satisfies TanStackDevtoolsReactPlugin[];
 
 const Devtools = (props: TanStackDevtoolsReactInit) => {
