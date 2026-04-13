@@ -1,4 +1,7 @@
 {
   "extends": "@exiftools/tsconfig/tsconfig-react",
+  "compilerOptions": {
+    "types": ["wicg-file-system-access"]
+  },
   "include": ["src"]
 }
