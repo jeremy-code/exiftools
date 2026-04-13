@@ -21,7 +21,7 @@ const UNITS = [
   "gigabyte",
   "terabyte",
   "petabyte",
-] as const;
+] as const satisfies Intl.NumberFormatOptions["unit"][];
 
 // SI units, where 1 gigabyte = 1000 megabytes
 export const formatBytes = (
