@@ -57,11 +57,17 @@ const SupportLevelCell = (props: CellContext<TagEntry, SupportLevel>) => {
 const columns = [
   columnHelper.accessor("tagVal", {
     header: "Tag",
-    size: 64,
+    size: 80,
+    cell: ({ getValue }) => "0x" + getValue().toString(16).padStart(4, "0"),
   }),
   columnHelper.accessor("title", {
     header: "Name",
     size: 200,
+    cell: ({ getValue, row }) => {
+      const value = getValue();
+
+      return value !== "" ? value : row.original.name;
+    },
   }),
   columnHelper.group({
     id: "supportLevel",
