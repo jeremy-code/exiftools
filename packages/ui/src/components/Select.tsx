@@ -61,7 +61,7 @@ const SelectContent = ({
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       className={cn(
-        "overflow-y-auto rounded-sm border bg-surface shadow-xs",
+        "z-[calc(infinity)] overflow-y-auto rounded-sm border bg-surface shadow-xs",
         className,
       )}
       {...props}

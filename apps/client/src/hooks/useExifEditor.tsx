@@ -44,6 +44,11 @@ type ExifEditorStoreActions = {
   ) => void;
   removeExifEntry: (exifEntryObject: ExifEntryObject) => void;
   removeExifEntries: (exifEntryObjects: ExifEntryObject[]) => void;
+  addExifEntry: (
+    exifEntryObject: Partial<ExifEntryObject> &
+      Pick<ExifEntryObject, "ifd" | "tag" | "format">,
+    value: string | ValidTypedArray,
+  ) => void;
   fix: () => void;
   addImageDimensions: () => Promise<void>;
 };
@@ -101,6 +106,40 @@ const useExifEditor = (file: File) => {
               const exifContent = exifEntry.parent!; // Never null since entry must belong to an IFD
               exifContent.removeEntry(exifEntry);
             });
+            return { exifDataObject: serializeExifData(exifData) };
+          });
+        },
+        addExifEntry: (exifEntryObject, value) => {
+          set(() => {
+            if (exifData === null) {
+              throw new Error("Reference to ExifData instance not found");
+            }
+            const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
+            const prevExifEntry = exifContent.getEntry(exifEntryObject.tag);
+            if (prevExifEntry !== null) {
+              throw new Error(
+                `Exif entry with tag ${exifEntryObject.tag} already exists.`,
+              );
+            }
+            const exifEntry = getOrInsertEntry(
+              exifContent,
+              exifEntryObject.tag,
+            );
+            exifEntry.format = exifEntryObject.format;
+            if (
+              exifEntryObject.format === "ASCII" &&
+              typeof value === "string"
+            ) {
+              const utf8Array = encodeStringToUtf8(value);
+              exifEntry.data = utf8Array;
+              exifEntry.components = utf8Array.length;
+            } else {
+              if (!isTypedArray(value)) {
+                throw new Error("Non-ASCII entries expect a TypedArray value");
+              }
+              exifEntry.fromTypedArray(value);
+            }
+
             return { exifDataObject: serializeExifData(exifData) };
           });
         },

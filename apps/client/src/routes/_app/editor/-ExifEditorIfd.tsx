@@ -108,6 +108,7 @@ const ExifEditorIfd = (props: ExifEditorIfdProps) => {
       updateExifEntry: state.updateExifEntry,
       removeExifEntry: state.removeExifEntry,
       removeExifEntries: state.removeExifEntries,
+      addExifEntry: state.addExifEntry,
       fix: state.fix,
       addImageDimensions: state.addImageDimensions,
     })),
