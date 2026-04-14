@@ -1,6 +1,7 @@
 import type { ComponentPropsWithRef } from "react";
 
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
 
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { getFileFromResponse } from "#utils/getFileFromResponse";
@@ -20,35 +21,30 @@ const FileUrlInput = ({
   ...props
 }: FileUrlInputProps) => {
   const addAcceptedFiles = useDropzoneStore((state) => state.addAcceptedFiles);
-  const form = useForm({
-    defaultValues: {
-      fileUrl: "",
-    },
-    onSubmit: async ({ value }) => {
-      try {
-        const response = await fetch(value.fileUrl);
-
-        if (!response.ok) {
-          toast({
-            title: "Fetching from URL failed",
-            description: `Fetching ${value.fileUrl} failed with error code ${response.status}.`,
-            variant: "destructive",
-          });
-          return;
-        }
-
-        const file = await getFileFromResponse(response);
-        addAcceptedFiles([file]);
-      } catch (e) {
-        toast({
-          title: "Fetching from URL failed",
-          description: `An error occurred while attempting to fetch ${value.fileUrl}: ${
-            e instanceof Error ? e.message : "unknown error"
-          }.`,
-          variant: "destructive",
-        });
+  const mutation = useMutation({
+    mutationFn: async (input: string) => {
+      const response = await fetch(input);
+      if (!response.ok) {
+        throw new Error(response.statusText);
       }
+      return await getFileFromResponse(response);
     },
+    mutationKey: ["FileUrlInput"],
+    onSuccess: (data) => {
+      addAcceptedFiles([data]);
+    },
+    onError: (error, variables) => {
+      toast({
+        title: "Fetching from URL failed",
+        description: `Fetching ${variables} failed with error ${error.message}.`,
+        variant: "destructive",
+      });
+    },
+  });
+  const form = useForm({
+    defaultValues: { fileUrl: "" },
+    // Using mutateAsync so form.isSubmitting is true while fetching
+    onSubmit: ({ value }) => mutation.mutateAsync(value.fileUrl),
   });
 
   return (
