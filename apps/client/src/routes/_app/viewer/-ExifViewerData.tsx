@@ -1,5 +1,4 @@
 import { ExifTagInfo } from "libexif-wasm";
-import { Badge } from "lucide-react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { useExifData } from "#hooks/useExifData";
@@ -10,6 +9,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@exiftools/ui/components/Accordion";
+import { Badge } from "@exiftools/ui/components/Badge";
 import {
   DataList,
   DataListItem,
@@ -24,8 +24,14 @@ import {
 
 import { ExifViewerGps } from "./-ExifViewerGps";
 
-const ExifViewerData = ({ file }: { file: File }) => {
-  const exifData = useExifData(file);
+const ExifViewerData = ({
+  file,
+  fileHashPromise,
+}: {
+  file: File;
+  fileHashPromise: Promise<string>;
+}) => {
+  const exifData = useExifData(file, fileHashPromise);
   return (
     <>
       <Accordion

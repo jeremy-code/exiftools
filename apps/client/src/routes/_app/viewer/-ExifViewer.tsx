@@ -5,6 +5,7 @@ import { cn } from "tailwind-variants";
 
 import { FileInformation } from "#components/file/FileInformation";
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
+import { useFileHashPromise } from "#hooks/useFileHashPromise";
 import { Button } from "@exiftools/ui/components/Button";
 import { Skeleton } from "@exiftools/ui/components/Skeleton";
 
@@ -18,6 +19,7 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
   const removeAcceptedFileByIndex = useDropzoneStore(
     (state) => state.removeAcceptedFileByIndex,
   );
+  const fileHashPromise = useFileHashPromise(file);
 
   return (
     <div>
@@ -30,7 +32,7 @@ const ExifViewer = ({ file, className, ...props }: ExifViewerProps) => {
         </div>
         <FileInformation file={file} />
         <Suspense fallback={<Skeleton className="h-50 w-full" />}>
-          <ExifViewerData file={file} />
+          <ExifViewerData file={file} fileHashPromise={fileHashPromise} />
         </Suspense>
       </div>
     </div>

@@ -1,13 +1,11 @@
-import { Suspense, type ComponentPropsWithRef } from "react";
+import { Suspense, use, useMemo, type ComponentPropsWithRef } from "react";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { cn } from "tailwind-variants";
 
-import { useFileHash } from "#hooks/useFileHash";
+import { useFileHashPromise } from "#hooks/useFileHashPromise";
 import { formatBytes } from "#utils/formatBytes";
 import { getImageDimensions } from "#utils/getImageDimensions";
-import { serializeFile } from "#utils/serializeFile";
 import { Badge } from "@exiftools/ui/components/Badge";
 import {
   Card,
@@ -24,47 +22,29 @@ import {
 } from "@exiftools/ui/components/DataList";
 import { Link } from "@exiftools/ui/components/Link";
 import { Skeleton } from "@exiftools/ui/components/Skeleton";
-import { toast } from "@exiftools/ui/hooks/useToast";
-
-type FileInformationValueProps = { file: File } & DataListItemValueProps;
 
 const FileDimensionsInformation = ({
-  file,
+  fileDimensionsPromise,
   ...props
-}: FileInformationValueProps) => {
-  const { data: dimensions } = useSuspenseQuery({
-    queryKey: ["FileDimensionsInformation", serializeFile(file), file],
-    queryFn: () => getImageDimensions(file),
-  });
+}: {
+  fileDimensionsPromise: Promise<{ width: number; height: number }>;
+} & DataListItemValueProps) => {
+  const fileDimensions = use(fileDimensionsPromise);
 
   return (
     <DataListItemValue {...props}>
-      {(
-        dimensions !== undefined &&
-        dimensions.width !== 0 &&
-        dimensions.height !== 0
-      ) ?
-        `${dimensions?.width}px \u00d7 ${dimensions?.height}px`
+      {fileDimensions.width !== 0 && fileDimensions.height !== 0 ?
+        `${fileDimensions?.width}px \u00d7 ${fileDimensions?.height}px`
       : "Unknown"}
     </DataListItemValue>
   );
 };
 
-const FileHashInformation = ({ file, ...props }: FileInformationValueProps) => {
-  const { fileHash, isPending, error } = useFileHash(file);
-
-  if (isPending) {
-    return <Skeleton className="h-5 w-40" />;
-  }
-
-  if (error !== null) {
-    toast({
-      title: "Generating file hash failed",
-      description: `Failed to generate hash for ${file.name}.`,
-      variant: "destructive",
-    });
-  }
-
+const FileHashInformation = ({
+  fileHashPromise,
+  ...props
+}: { fileHashPromise: Promise<string> } & DataListItemValueProps) => {
+  const fileHash = use(fileHashPromise);
   return (
     <DataListItemValue {...props}>{fileHash ?? "Unknown"}</DataListItemValue>
   );
@@ -78,6 +58,8 @@ const FileInformation = ({
   ...props
 }: FileInformationProps) => {
   const objectUrl = URL.createObjectURL(file);
+  const fileHashPromise = useFileHashPromise(file);
+  const fileDimensionsPromise = useMemo(() => getImageDimensions(file), [file]);
 
   return (
     <div
@@ -148,12 +130,16 @@ const FileInformation = ({
             <DataListItem>
               <DataListItemLabel>Dimensions</DataListItemLabel>
               <Suspense fallback={<Skeleton className="h-5 w-20" />}>
-                <FileDimensionsInformation file={file} />
+                <FileDimensionsInformation
+                  fileDimensionsPromise={fileDimensionsPromise}
+                />
               </Suspense>
             </DataListItem>
             <DataListItem>
               <DataListItemLabel>File hash (SHA-256)</DataListItemLabel>
-              <FileHashInformation file={file} />
+              <Suspense fallback={<Skeleton className="h-5 w-60" />}>
+                <FileHashInformation fileHashPromise={fileHashPromise} />
+              </Suspense>
             </DataListItem>
           </DataList>
         </CardContent>

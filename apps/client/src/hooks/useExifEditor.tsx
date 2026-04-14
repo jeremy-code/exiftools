@@ -11,6 +11,7 @@ import {
 } from "#lib/exif/serializeExifData";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { getImageDimensions } from "#utils/getImageDimensions";
+import { isTypedArray } from "#utils/isTypedArray";
 
 import { useExifData } from "./useExifData";
 
@@ -31,8 +32,8 @@ type ExifEditorStoreActions = {
 
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
 
-const useExifEditor = (file: File) => {
-  const exifData = useExifData(file);
+const useExifEditor = (file: File, fileHashPromise: Promise<string>) => {
+  const exifData = useExifData(file, fileHashPromise);
 
   const exifDataObject = useMemo(() => serializeExifData(exifData), [exifData]);
 
@@ -53,16 +54,12 @@ const useExifEditor = (file: File) => {
             }
 
             // TODO: Handle other formats than ASCII
-            if (exifEntry.format === "ASCII") {
-              if (typeof value !== "string") {
-                throw new Error("ASCII entries expect a string value");
-              }
-
+            if (exifEntry.format === "ASCII" && typeof value === "string") {
               const utf8Array = encodeStringToUtf8(value);
               exifEntry.data = utf8Array;
               exifEntry.components = utf8Array.length;
             } else {
-              if (typeof value === "string") {
+              if (!isTypedArray(value)) {
                 throw new Error("Non-ASCII entries expect a TypedArray value");
               }
               exifEntry.fromTypedArray(value);
