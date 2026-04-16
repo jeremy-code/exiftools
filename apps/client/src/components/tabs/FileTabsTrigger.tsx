@@ -1,5 +1,6 @@
 import type { ComponentPropsWithRef } from "react";
 
+import { useSortable } from "@dnd-kit/react/sortable";
 import { X } from "lucide-react";
 import { AccessibleIcon } from "radix-ui";
 import { cn } from "tailwind-variants";
@@ -14,20 +15,27 @@ type FileTabsTriggerProps = {
 } & Omit<ComponentPropsWithRef<typeof TabsTrigger>, "value">;
 
 const FileTabsTrigger = ({
+  className,
   index,
   file,
   removeFile,
-  className,
   ...props
 }: FileTabsTriggerProps) => {
+  const { ref, isDragSource } = useSortable({
+    id: String(index),
+    index,
+  });
+
   return (
     <TabsTrigger
-      {...props}
+      ref={ref}
+      data-dragging={isDragSource}
       className={cn(
-        "flex items-center pr-10! transition-colors data-[state=inactive]:hover:bg-subtle/80",
+        "flex items-center pr-10! transition-colors data-[dragging=true]:opacity-50 data-[state=inactive]:hover:bg-subtle/80",
         className,
       )}
       value={String(index)}
+      {...props}
     >
       <span className="line-clamp-1">
         {file !== null ?

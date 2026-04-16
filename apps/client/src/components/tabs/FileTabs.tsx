@@ -1,8 +1,9 @@
-import { type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 import { Plus } from "lucide-react";
 import { AccessibleIcon } from "radix-ui";
 
+import { SortableList } from "#components/dnd/SortableList";
 import { useFileTabsStore } from "#hooks/useFileTabsStore";
 import { Button } from "@exiftools/ui/components/Button";
 import { Tabs, TabsList, type TabsProps } from "@exiftools/ui/components/Tabs";
@@ -23,45 +24,71 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
   const removeFile = useFileTabsStore((state) => state.removeFile);
   const createNewTab = useFileTabsStore((state) => state.createNewTab);
   const updateFile = useFileTabsStore((state) => state.updateFile);
+  const reorderFiles = useFileTabsStore((state) => state.reorderFiles);
+  const fileTabsListRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Tabs
-      {...props}
-      value={String(activeFileIndex)}
-      onValueChange={(value) => setActiveFileIndex(Number(value))}
+    <SortableList
+      containerRef={fileTabsListRef}
+      onSortEnd={({ initialIndex, index }) => {
+        reorderFiles(initialIndex, index);
+
+        // Keep the active tab correct after reorder
+        if (activeFileIndex === initialIndex) {
+          setActiveFileIndex(index);
+        } else if (
+          activeFileIndex > Math.min(initialIndex, index) &&
+          activeFileIndex <= Math.max(initialIndex, index)
+        ) {
+          setActiveFileIndex(
+            initialIndex < index ? activeFileIndex - 1 : activeFileIndex + 1,
+          );
+        }
+      }}
     >
-      <TabsList fitted className="items-center gap-1" variant="enclosed">
+      <Tabs
+        {...props}
+        value={String(activeFileIndex)}
+        onValueChange={(value) => setActiveFileIndex(Number(value))}
+      >
+        <TabsList
+          ref={fileTabsListRef}
+          fitted
+          className="items-center gap-1"
+          variant="enclosed"
+        >
+          {files.map((file, index) => (
+            <FileTabsTrigger
+              key={index}
+              index={index}
+              file={file}
+              removeFile={() => removeFile(index)}
+            />
+          ))}
+          <Button
+            className="text-muted-foreground"
+            size="icon-sm"
+            variant="muted"
+            onClick={() => createNewTab()}
+          >
+            <AccessibleIcon.Root label="New tab">
+              <Plus size={16} />
+            </AccessibleIcon.Root>
+          </Button>
+        </TabsList>
+
         {files.map((file, index) => (
-          <FileTabsTrigger
+          <FileTabsContent
             key={index}
             index={index}
             file={file}
-            removeFile={() => removeFile(index)}
-          />
+            updateFile={(file) => updateFile(file, index)}
+          >
+            {children}
+          </FileTabsContent>
         ))}
-        <Button
-          className="text-muted-foreground"
-          size="icon-sm"
-          variant="muted"
-          onClick={() => createNewTab()}
-        >
-          <AccessibleIcon.Root label="New tab">
-            <Plus size={16} />
-          </AccessibleIcon.Root>
-        </Button>
-      </TabsList>
-
-      {files.map((file, index) => (
-        <FileTabsContent
-          key={index}
-          index={index}
-          file={file}
-          updateFile={(file) => updateFile(file, index)}
-        >
-          {children}
-        </FileTabsContent>
-      ))}
-    </Tabs>
+      </Tabs>
+    </SortableList>
   );
 };
 

@@ -1,5 +1,6 @@
 import { createContext, use, useState } from "react";
 
+import { arrayMove } from "@dnd-kit/helpers";
 import { create, useStore } from "zustand";
 
 type FileTabsState = {
@@ -9,6 +10,7 @@ type FileTabsState = {
   updateFile: (file: File, index: number) => void;
   createNewTab: () => void;
   setActiveFileIndex: (index: number) => void;
+  reorderFiles: (oldIndex: number, newIndex: number) => void;
 };
 
 const createFileTabsStore = () =>
@@ -44,6 +46,10 @@ const createFileTabsStore = () =>
     setActiveFileIndex: (index) =>
       set(() => ({
         activeFileIndex: index,
+      })),
+    reorderFiles: (oldIndex: number, newIndex: number) =>
+      set((state) => ({
+        files: arrayMove(state.files, oldIndex, newIndex),
       })),
   }));
 
