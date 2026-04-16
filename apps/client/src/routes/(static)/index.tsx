@@ -1,5 +1,7 @@
 import { createFileRoute, Link as RouterLink } from "@tanstack/react-router";
 
+import { FileTabs } from "#components/tabs/FileTabs";
+import { FileTabsStoreProvider } from "#hooks/useFileTabsStore";
 import { Link } from "@exiftools/ui/components/Link";
 
 const HomeComponent = () => {
@@ -29,6 +31,9 @@ const HomeComponent = () => {
           </Link>
         </li>
       </ul>
+      <FileTabsStoreProvider>
+        <FileTabs />
+      </FileTabsStoreProvider>
     </>
   );
 };

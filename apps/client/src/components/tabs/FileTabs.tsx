@@ -2,6 +2,7 @@ import { useRef, type ReactNode } from "react";
 
 import { Plus } from "lucide-react";
 import { AccessibleIcon } from "radix-ui";
+import { useShallow } from "zustand/react/shallow";
 
 import { SortableList } from "#components/dnd/SortableList";
 import { useFileTabsStore } from "#hooks/useFileTabsStore";
@@ -16,15 +17,25 @@ type FileTabsProps = {
 } & TabsProps;
 
 const FileTabs = ({ children, ...props }: FileTabsProps) => {
-  const files = useFileTabsStore((state) => state.files);
-  const activeFileIndex = useFileTabsStore((state) => state.activeFileIndex);
-  const setActiveFileIndex = useFileTabsStore(
-    (state) => state.setActiveFileIndex,
+  const {
+    files,
+    activeFileIndex,
+    setActiveFileIndex,
+    removeFile,
+    createNewTab,
+    updateFile,
+    reorderFiles,
+  } = useFileTabsStore(
+    useShallow((state) => ({
+      files: state.files,
+      activeFileIndex: state.activeFileIndex,
+      setActiveFileIndex: state.setActiveFileIndex,
+      removeFile: state.removeFile,
+      createNewTab: state.createNewTab,
+      updateFile: state.updateFile,
+      reorderFiles: state.reorderFiles,
+    })),
   );
-  const removeFile = useFileTabsStore((state) => state.removeFile);
-  const createNewTab = useFileTabsStore((state) => state.createNewTab);
-  const updateFile = useFileTabsStore((state) => state.updateFile);
-  const reorderFiles = useFileTabsStore((state) => state.reorderFiles);
   const fileTabsListRef = useRef<HTMLDivElement>(null);
 
   return (
