@@ -8,6 +8,7 @@ import { useShallow } from "zustand/react/shallow";
 import { FileInformation } from "#components/file/FileInformation";
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { useExifEditor, ExifEditorStoreContext } from "#hooks/useExifEditor";
+import { useFileStore } from "#hooks/useFileStore";
 import { saveFile } from "#utils/saveFile";
 import { Button } from "@exiftools/ui/components/Button";
 import { Skeleton } from "@exiftools/ui/components/Skeleton";
@@ -21,9 +22,7 @@ const ExifEditorApp = ({ file }: { file: File }) => {
     exifEditorStore,
     useShallow((state) => [state.fix, state.addImageDimensions]),
   );
-  const replaceAcceptedFileByIndex = useDropzoneStore(
-    (state) => state.replaceAcceptedFileByIndex,
-  );
+  const { setFile } = useFileStore();
 
   return (
     <ExifEditorStoreContext value={exifEditorStore}>
@@ -43,7 +42,7 @@ const ExifEditorApp = ({ file }: { file: File }) => {
               { type: file.type, lastModified: new Date().getTime() },
             );
             await saveFile(newFile);
-            replaceAcceptedFileByIndex(0, newFile);
+            setFile(newFile);
           }}
         >
           <Save size={16} />

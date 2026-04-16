@@ -3,6 +3,7 @@ import type { ComponentPropsWithRef, ReactNode } from "react";
 import { Dropzone } from "#components/file/Dropzone";
 import { FileUrlInput } from "#components/file/FileUrlInput";
 import { DropzoneStoreProvider } from "#hooks/useDropzoneStore";
+import { FileStoreProvider } from "#hooks/useFileStore";
 import { Heading } from "@exiftools/ui/components/Heading";
 import { TabsContent } from "@exiftools/ui/components/Tabs";
 
@@ -52,7 +53,7 @@ const FileTabsContent = ({
               }}
             />
           </div>
-        : children}
+        : <FileStoreProvider initialFile={file}>{children}</FileStoreProvider>}
       </DropzoneStoreProvider>
     </TabsContent>
   );

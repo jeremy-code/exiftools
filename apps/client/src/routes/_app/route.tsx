@@ -1,12 +1,15 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
-import { DropzoneStoreProvider } from "#hooks/useDropzoneStore";
+import { FileTabs } from "#components/tabs/FileTabs";
+import { FileTabsStoreProvider } from "#hooks/useFileTabsStore";
 
 const AppLayoutComponent = () => {
   return (
-    <DropzoneStoreProvider>
-      <Outlet />
-    </DropzoneStoreProvider>
+    <FileTabsStoreProvider>
+      <FileTabs>
+        <Outlet />
+      </FileTabs>
+    </FileTabsStoreProvider>
   );
 };
 
