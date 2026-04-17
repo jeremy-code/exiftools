@@ -2,6 +2,7 @@ import type { CellContext } from "@tanstack/react-table";
 
 import { DateInput } from "#components/editor/DateInput";
 import { DatetimeLocalInput } from "#components/editor/DatetimeLocalInput";
+import { ExifVersionInput } from "#components/editor/ExifVersionInput";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { dayjs } from "#utils/date";
@@ -84,6 +85,19 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
         onChange={(e) => {
           table.options.meta?.updateExifEntry(row.original, e.target.value);
         }}
+      />
+    );
+  }
+
+  if (row.original.tag === "EXIF_VERSION") {
+    return (
+      <ExifVersionInput
+        value={new Uint8Array(row.original.value)}
+        setValue={(value) =>
+          table.options.meta?.updateExifEntry(row.original, value)
+        }
+        altText={value}
+        inputProps={{ className: "focus:border-border focus:bg-background" }}
       />
     );
   }
