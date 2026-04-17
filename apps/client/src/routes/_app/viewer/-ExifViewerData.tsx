@@ -113,6 +113,65 @@ const ExifViewerData = ({ file }: { file: File }) => {
       >
         <ExifViewerGps exifData={exifData} />
       </ErrorBoundary>
+
+      {exifData.mnoteData !== null && (
+        <Accordion
+          defaultValue={["MAKERNOTE"]}
+          variant="enclosed"
+          type="multiple"
+          size="lg"
+          className="shadow-sm"
+        >
+          <AccordionItem value="MAKERNOTE">
+            <AccordionTrigger>
+              <div className="flex gap-2">
+                Makernote
+                <Badge>
+                  {formatPlural(exifData.mnoteData.dataCount, {
+                    one: " tag",
+                    other: " tags",
+                  })}
+                </Badge>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <DataList variant="bold">
+                {exifData.mnoteData.data.map((mnoteDatum, index) => {
+                  return (
+                    <DataListItem
+                      className="flex-col! md:flex-row!"
+                      key={index}
+                      // id is not unique
+                    >
+                      <DataListItemLabel className="md:w-1/3">
+                        {(
+                          mnoteDatum.description !== null &&
+                          mnoteDatum.description !== ""
+                        ) ?
+                          <Tooltip>
+                            <TooltipTrigger className="select-auto">
+                              {mnoteDatum.title}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              {mnoteDatum.description}
+                            </TooltipContent>
+                          </Tooltip>
+                        : (mnoteDatum.title ??
+                          mnoteDatum.name ??
+                          `ID ${mnoteDatum.id} (${index})`)
+                        }
+                      </DataListItemLabel>
+                      <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-muted-foreground before:content-['=']">
+                        {mnoteDatum.value}
+                      </DataListItemValue>
+                    </DataListItem>
+                  );
+                })}
+              </DataList>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      )}
     </>
   );
 };
