@@ -1,5 +1,6 @@
 import type { CellContext } from "@tanstack/react-table";
 
+import { DateInput } from "#components/editor/DateInput";
 import { DatetimeLocalInput } from "#components/editor/DatetimeLocalInput";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
@@ -39,6 +40,21 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
         exifEntryObject={row.original}
         value={value}
         updateExifEntry={table.options.meta!.updateExifEntry}
+      />
+    );
+  }
+
+  if (row.original.tag === "DATE_STAMP") {
+    return (
+      <DateInput
+        className="focus:border-border focus:bg-background"
+        value={dayjs(value, "YYYY:MM:DD")}
+        onValueChange={(date) => {
+          table.options.meta?.updateExifEntry(
+            row.original,
+            date.format("YYYY:MM:DD"),
+          );
+        }}
       />
     );
   }
