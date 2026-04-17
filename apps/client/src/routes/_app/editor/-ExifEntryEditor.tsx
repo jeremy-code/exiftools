@@ -14,13 +14,14 @@ import {
   type RationalObject,
   type ValidTypedArray,
 } from "libexif-wasm";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Minus, Plus } from "lucide-react";
 import { cn } from "tailwind-variants";
 
 import { AsciiTextarea } from "#components/editor/AsciiTextarea";
 import { NumberInput } from "#components/editor/NumberInput";
 import { RationalInput } from "#components/editor/RationalInput";
 import { useExifEditorStoreContext } from "#hooks/useExifEditor";
+import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { getValueFromExifEntryObject } from "#lib/exif/getValueFromExifEntryObject";
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import { type ExifEntryObject } from "#lib/exif/serializeExifData";
@@ -108,6 +109,12 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
   );
   const [isByteEditorOpen, setIsByteEditorOpen] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
+
+  const isRationalOrSRational =
+    exifEntryObject.format === "RATIONAL" ||
+    exifEntryObject.format === "SRATIONAL";
+  const maxNumberOfComponents =
+    EXIF_TAG_MAP[exifEntryObject.tag]?.maxNumberOfComponents;
 
   return (
     <div className="flex flex-col gap-8">
@@ -211,11 +218,8 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
         </CollapsibleTrigger>
       </Collapsible>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(--spacing(50),1fr))]">
-        {(
-          exifEntryObject.format === "RATIONAL" ||
-          exifEntryObject.format === "SRATIONAL"
-        ) ?
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+        {isRationalOrSRational ?
           mapRationalToObject(
             newTypedArrayInFormat(newValue, exifEntryObject.format),
           ).map((rationalObject, index) => (
@@ -257,14 +261,56 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
               {isByteEditorOpen ? "Close byte editor" : "Open byte editor"}
             </Button>
           </CollapsibleTrigger>
-          <CollapsibleContent className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(--spacing(30),1fr))]">
-            {Array.from(newValue).map((value, index) => (
-              <NumberInput
-                key={index}
-                value={value}
-                setValue={setNewValueAtIndex(index)}
-              />
-            ))}
+          <CollapsibleContent className="mt-4">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+              {Array.from(newValue).map((value, index) => (
+                <NumberInput
+                  key={index}
+                  value={value}
+                  setValue={setNewValueAtIndex(index)}
+                />
+              ))}
+            </div>
+            <div className="mt-4 flex gap-2">
+              {exifEntryObject.components !== 1 &&
+                exifEntryObject.format !== "ASCII" && (
+                  <Button
+                    size="icon"
+                    onClick={() => {
+                      setNewValue((prev) =>
+                        newTypedArrayInFormat(
+                          Array.from(prev).slice(
+                            0,
+                            isRationalOrSRational ? -2 : -1,
+                          ),
+                          exifEntryObject.format,
+                        ),
+                      );
+                    }}
+                  >
+                    <Minus size={16} />
+                  </Button>
+                )}
+              {(maxNumberOfComponents === undefined ||
+                exifEntryObject.components < maxNumberOfComponents) &&
+                exifEntryObject.format !== "ASCII" && (
+                  <Button
+                    size="icon"
+                    onClick={() => {
+                      setNewValue((prev) =>
+                        newTypedArrayInFormat(
+                          isRationalOrSRational ?
+                            Array.from(prev).concat([0, 1])
+                          : Array.from(prev).concat([0]),
+                          exifEntryObject.format,
+                        ),
+                      );
+                    }}
+                  >
+                    <Plus size={16} />
+                  </Button>
+                )}
+            </div>
           </CollapsibleContent>
         </Collapsible>
       )}
