@@ -30,7 +30,7 @@ const FileTabsTrigger = ({
       ref={ref}
       data-dragging={isDragSource}
       className={cn(
-        "flex items-center pr-10! transition-colors data-[dragging=true]:opacity-50",
+        "flex min-w-50 items-center pr-10! transition-colors data-[dragging=true]:opacity-50",
         "data-[state=inactive]:hover:bg-gray-100",
         "dark:data-[state=inactive]:hover:bg-gray-700/50",
         className,

@@ -7,6 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 import { SortableList } from "#components/dnd/SortableList";
 import { useFileTabsStore } from "#hooks/useFileTabsStore";
 import { Button } from "@exiftools/ui/components/Button";
+import { ScrollArea } from "@exiftools/ui/components/ScrollArea";
 import { Tabs, TabsList, type TabsProps } from "@exiftools/ui/components/Tabs";
 
 import { FileTabsContent } from "./FileTabsContent";
@@ -48,32 +49,38 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
         value={activeTabId}
         onValueChange={(id) => setActiveTabId(id)}
       >
-        <TabsList
-          ref={fileTabsListRef}
-          fitted
-          className="items-center gap-1"
-          variant="enclosed"
-        >
-          {tabs.map((tab, index) => (
-            <FileTabsTrigger
-              key={tab.id}
-              id={tab.id}
-              index={index}
-              file={tab.file}
-              removeTab={() => removeTab(tab.id)}
-            />
-          ))}
-          <Button
-            className="text-muted-foreground"
-            size="icon-sm"
-            variant="muted"
-            onClick={() => createNewTab()}
-          >
-            <AccessibleIcon.Root label="New tab">
-              <Plus size={16} />
-            </AccessibleIcon.Root>
-          </Button>
-        </TabsList>
+        <ScrollArea className="flex rounded-md">
+          <div className="flex">
+            <TabsList
+              ref={fileTabsListRef}
+              fitted
+              className="w-full gap-1 rounded-r-none"
+              variant="enclosed"
+            >
+              {tabs.map((tab, index) => (
+                <FileTabsTrigger
+                  key={tab.id}
+                  id={tab.id}
+                  index={index}
+                  file={tab.file}
+                  removeTab={() => removeTab(tab.id)}
+                />
+              ))}
+            </TabsList>
+            <div className="sticky right-0 size-12 rounded-r-md bg-muted p-1.5">
+              <Button
+                className="text-muted-foreground"
+                size="icon-sm"
+                variant="muted"
+                onClick={() => createNewTab()}
+              >
+                <AccessibleIcon.Root label="New tab">
+                  <Plus size={16} />
+                </AccessibleIcon.Root>
+              </Button>
+            </div>
+          </div>
+        </ScrollArea>
         {tabs.map((tab) => (
           <FileTabsContent
             key={tab.id}
