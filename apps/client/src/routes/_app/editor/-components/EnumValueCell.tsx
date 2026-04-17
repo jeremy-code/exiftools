@@ -1,5 +1,5 @@
 import type { ExifEditorStoreActions } from "#hooks/useExifEditor";
-import { EXIF_TAG_VALUE_MAP } from "#lib/exif/exifTagValueMap";
+import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import {
@@ -19,14 +19,18 @@ const EnumValueCell = ({
   value: string;
   updateExifEntry: ExifEditorStoreActions["updateExifEntry"];
 }) => {
-  if (!(exifEntryObject.tag in EXIF_TAG_VALUE_MAP)) {
+  if (!(exifEntryObject.tag in EXIF_TAG_MAP)) {
+    throw new Error("Invalid tag was provided, expected mapped Exif tag");
+  }
+
+  const values = EXIF_TAG_MAP[exifEntryObject.tag]?.values;
+  if (values === undefined) {
     throw new Error("Invalid tag was provided, expected enum");
   }
 
-  const tag = exifEntryObject.tag as keyof typeof EXIF_TAG_VALUE_MAP;
-  if (!(value in EXIF_TAG_VALUE_MAP[tag])) {
+  if (!(value in values)) {
     throw new Error(
-      `Invalid value was provided, received ${value}, expected one of ${Object.keys(EXIF_TAG_VALUE_MAP[tag]).join()}`,
+      `Invalid value was provided, received ${value}, expected one of ${Object.keys(values).join()}`,
     );
   }
 
@@ -34,21 +38,14 @@ const EnumValueCell = ({
     <Select
       value={value}
       onValueChange={(value) => {
-        if (!(value in EXIF_TAG_VALUE_MAP[tag])) {
+        if (!(value in values) || values[value] === undefined) {
           throw new Error(
-            `Invalid value was provided, received ${value}, expected one of ${Object.keys(EXIF_TAG_VALUE_MAP[tag]).join()}`,
+            `Invalid value was provided, received ${value}, expected one of ${Object.keys(values).join()}`,
           );
         }
         updateExifEntry(
           exifEntryObject,
-          newTypedArrayInFormat(
-            [
-              EXIF_TAG_VALUE_MAP[tag][
-                value as keyof (typeof EXIF_TAG_VALUE_MAP)[typeof tag]
-              ],
-            ],
-            exifEntryObject.format,
-          ),
+          newTypedArrayInFormat([values[value]], exifEntryObject.format),
         );
       }}
     >
@@ -58,7 +55,7 @@ const EnumValueCell = ({
         />
       </SelectTrigger>
       <SelectContent>
-        {Object.keys(EXIF_TAG_VALUE_MAP[tag]).map((key) => (
+        {Object.keys(values).map((key) => (
           <SelectItem key={`${exifEntryObject.tag}-${key}`} value={key}>
             {key}
           </SelectItem>

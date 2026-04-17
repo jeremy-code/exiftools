@@ -1,7 +1,7 @@
 import type { CellContext } from "@tanstack/react-table";
 
 import { DatetimeLocalInput } from "#components/editor/DatetimeLocalInput";
-import { EXIF_TAG_VALUE_MAP } from "#lib/exif/exifTagValueMap";
+import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { dayjs } from "#utils/date";
 import { Input } from "@exiftools/ui/components/Input";
@@ -27,10 +27,11 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
   const isAscii = row.original.format === "ASCII";
   const isDateTime = DATETIME_TAGS.includes(row.original.tag);
   const isEnum =
-    row.original.tag in EXIF_TAG_VALUE_MAP &&
+    row.original.tag in EXIF_TAG_MAP &&
     row.original.components === 1 &&
-    value in
-      EXIF_TAG_VALUE_MAP[row.original.tag as keyof typeof EXIF_TAG_VALUE_MAP];
+    EXIF_TAG_MAP[row.original.tag] !== undefined &&
+    EXIF_TAG_MAP[row.original.tag]!.values !== undefined &&
+    value in EXIF_TAG_MAP[row.original.tag]!.values!;
 
   if (isEnum) {
     return (
