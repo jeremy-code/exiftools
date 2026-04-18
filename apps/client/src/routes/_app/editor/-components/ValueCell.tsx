@@ -3,6 +3,7 @@ import type { CellContext } from "@tanstack/react-table";
 import { DateInput } from "#components/editor/DateInput";
 import { DatetimeLocalInput } from "#components/editor/DatetimeLocalInput";
 import { ExifVersionInput } from "#components/editor/ExifVersionInput";
+import { GpsTagVersionInput } from "#components/editor/GpsTagVersionInput";
 import { NumberInput } from "#components/editor/NumberInput";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
@@ -30,11 +31,13 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
   const value = getValue() ?? "";
   const isAscii = row.original.format === "ASCII";
   const isDateTime = DATETIME_TAGS.includes(row.original.tag);
-  const isEnum =
+  const isInTagMap =
     row.original.tag in EXIF_TAG_MAP &&
+    EXIF_TAG_MAP[row.original.tag] !== undefined;
+  const isEnum =
+    isInTagMap &&
     row.original.components === 1 &&
-    EXIF_TAG_MAP[row.original.tag] !== undefined &&
-    EXIF_TAG_MAP[row.original.tag]!.values !== undefined &&
+    EXIF_TAG_MAP[row.original.tag]?.values !== undefined &&
     value in EXIF_TAG_MAP[row.original.tag]!.values!;
 
   if (isEnum) {
@@ -58,6 +61,20 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
             date.format("YYYY:MM:DD"),
           );
         }}
+      />
+    );
+  } else if (row.original.tag === "VERSION_ID") {
+    return (
+      <GpsTagVersionInput
+        value={row.original.value}
+        setValue={(value) =>
+          table.options.meta?.updateExifEntry(
+            row.original,
+            new Uint8Array(value),
+          )
+        }
+        altText={value}
+        inputProps={{ className: "focus:border-border focus:bg-background" }}
       />
     );
   }

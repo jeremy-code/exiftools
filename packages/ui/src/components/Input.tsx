@@ -4,7 +4,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 
 const inputVariants = tv({
   base: [
-    "flex h-9 w-full appearance-none rounded border bg-surface px-3 py-1 text-start text-sm transition-opacity",
+    "flex h-9 w-full appearance-none rounded border bg-surface px-3 py-1 text-start text-sm transition-opacity hover:border-border-hover",
     "file:border-0 file:bg-transparent file:text-sm file:font-medium",
     "placeholder:text-solid",
     "disabled:cursor-not-allowed disabled:bg-muted disabled:opacity-50",
@@ -23,7 +23,7 @@ const inputVariants = tv({
   },
 });
 
-type InputProps = ComponentPropsWithRef<"input"> &
+type InputProps = Omit<ComponentPropsWithRef<"input">, "size"> &
   VariantProps<typeof inputVariants>;
 
 const Input = ({ className, size, ...props }: InputProps) => {
