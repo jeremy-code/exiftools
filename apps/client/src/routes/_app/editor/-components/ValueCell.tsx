@@ -3,7 +3,9 @@ import type { CellContext } from "@tanstack/react-table";
 import { DateInput } from "#components/editor/DateInput";
 import { DatetimeLocalInput } from "#components/editor/DatetimeLocalInput";
 import { ExifVersionInput } from "#components/editor/ExifVersionInput";
+import { NumberInput } from "#components/editor/NumberInput";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
+import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { dayjs } from "#utils/date";
 import { Input } from "@exiftools/ui/components/Input";
@@ -98,6 +100,43 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
         }
         altText={value}
         inputProps={{ className: "focus:border-border focus:bg-background" }}
+      />
+    );
+  }
+
+  if (
+    row.original.components === 1 &&
+    (row.original.format === "SRATIONAL" ||
+      row.original.format === "RATIONAL") &&
+    row.original.value[1] === 1
+  ) {
+    return (
+      <NumberInput
+        value={row.original.value[0]!}
+        setValue={(value) => {
+          table.options.meta?.updateExifEntry(
+            row.original,
+            newTypedArrayInFormat([value, 1], row.original.format),
+          );
+        }}
+      />
+    );
+  }
+
+  if (
+    row.original.components === 1 &&
+    row.original.format !== "SRATIONAL" &&
+    row.original.format !== "RATIONAL"
+  ) {
+    return (
+      <NumberInput
+        value={row.original.value[0]!}
+        setValue={(value) => {
+          table.options.meta?.updateExifEntry(
+            row.original,
+            newTypedArrayInFormat([value], row.original.format),
+          );
+        }}
       />
     );
   }
