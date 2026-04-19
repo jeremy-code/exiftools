@@ -70,6 +70,7 @@ const DeleteEntriesButton = ({ table }: { table: Table<ExifEntryObject> }) => {
                   throw new Error("No rows to delete");
                 }
                 removeExifEntries(rowsToDelete);
+                setRowsToDelete([]);
               }}
               className="ml-3"
             >
