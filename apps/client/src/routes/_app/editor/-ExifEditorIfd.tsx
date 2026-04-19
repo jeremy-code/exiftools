@@ -127,6 +127,7 @@ const ExifEditorIfd = (props: ExifEditorIfdProps) => {
     // Do NOT reorder columns when grouped
     groupedColumnMode: false,
     meta: exifEditorStoreActions,
+    autoResetPageIndex: false, // TanStack/table#5026
   });
 
   const columnSizeCssVars = useMemo(
