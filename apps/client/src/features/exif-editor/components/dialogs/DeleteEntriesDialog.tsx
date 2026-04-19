@@ -18,7 +18,9 @@ import {
 } from "@exiftools/ui/components/AlertDialog";
 import { Button } from "@exiftools/ui/components/Button";
 
-const DeleteEntriesButton = ({ table }: { table: Table<ExifEntryObject> }) => {
+type DeleteEntriesDialogProps = { table: Table<ExifEntryObject> };
+
+const DeleteEntriesDialog = ({ table }: DeleteEntriesDialogProps) => {
   const removeExifEntries = useExifEditorStoreContext(
     (state) => state.removeExifEntries,
   );
@@ -83,4 +85,4 @@ const DeleteEntriesButton = ({ table }: { table: Table<ExifEntryObject> }) => {
   );
 };
 
-export { DeleteEntriesButton };
+export { DeleteEntriesDialog, type DeleteEntriesDialogProps };

@@ -1,7 +1,6 @@
 import { useMemo, type CSSProperties } from "react";
 
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
@@ -9,7 +8,6 @@ import {
   useReactTable,
   type RowData,
 } from "@tanstack/react-table";
-import { exifIfdGetName, ExifTagInfo } from "libexif-wasm";
 import { useShallow } from "zustand/react/shallow";
 
 import { ColumnResizer } from "#components/table/ColumnResizer";
@@ -31,71 +29,21 @@ import {
   TableBody,
   type TableProps,
 } from "@exiftools/ui/components/Table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@exiftools/ui/components/Tooltip";
 
-import { AddEntryButton } from "./-components/AddEntryButton";
-import { DeleteEntriesButton } from "./-components/DeleteEntriesButton";
-import { EditCell } from "./-components/EditCell";
-import { SelectCell } from "./-components/SelectCell";
-import { SelectHeader } from "./-components/SelectHeader";
-import { ValueCell } from "./-components/ValueCell";
+import { AddEntryDialog } from "./dialogs/AddEntryDialog";
+import { DeleteEntriesDialog } from "./dialogs/DeleteEntriesDialog";
+import { columns } from "./table/columns";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- All declarations of 'TableMeta' must have identical type parameters.
   interface TableMeta<TData extends RowData> extends ExifEditorStoreActions {}
 }
 
-const columnHelper = createColumnHelper<ExifEntryObject>();
-const columns = [
-  columnHelper.display({
-    id: "select",
-    aggregatedCell: SelectCell,
-    cell: SelectCell,
-    header: SelectHeader,
-    size: 24,
-  }),
-  columnHelper.accessor("ifd", {
-    id: "ifd",
-    cell: ({ getValue }) => exifIfdGetName(getValue()),
-    header: "IFD",
-    size: 30,
-  }),
-  columnHelper.accessor("tag", {
-    id: "tag",
-    header: "Tag",
-    size: 70,
-    cell: ({ getValue, row }) => (
-      <Tooltip>
-        <TooltipTrigger className="text-left">
-          {ExifTagInfo.getTitleInIfd(getValue(), row.original.ifd)}
-        </TooltipTrigger>
-        <TooltipContent>
-          {ExifTagInfo.getDescriptionInIfd(getValue(), row.original.ifd)}
-        </TooltipContent>
-      </Tooltip>
-    ),
-  }),
-  columnHelper.accessor("formattedValue", {
-    header: "Value",
-    cell: ValueCell,
-    size: 90,
-  }),
-  columnHelper.display({
-    id: "edit",
-    cell: EditCell,
-    size: 35,
-  }),
-];
-
 const fallbackData: ExifEntryObject[] = [];
 
-type ExifEditorIfdProps = TableProps;
+type ExifTableProps = TableProps;
 
-const ExifEditorIfd = (props: ExifEditorIfdProps) => {
+const ExifTable = (props: ExifTableProps) => {
   const exifDataObject = useExifEditorStoreContext(
     (state) => state.exifDataObject,
   );
@@ -244,11 +192,11 @@ const ExifEditorIfd = (props: ExifEditorIfdProps) => {
         </TableBody>
       </Table>
       <div className="flex gap-2">
-        <DeleteEntriesButton table={table} />
-        <AddEntryButton />
+        <DeleteEntriesDialog table={table} />
+        <AddEntryDialog />
       </div>
     </>
   );
 };
 
-export { ExifEditorIfd, type ExifEditorIfdProps };
+export { ExifTable, type ExifTableProps };

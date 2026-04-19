@@ -14,9 +14,11 @@ import {
   DialogTrigger,
 } from "@exiftools/ui/components/Dialog";
 
-import { ExifEntryEditor } from "../-ExifEntryEditor";
+import { ExifEntryEditor } from "../entry/ExifEntryEditor";
 
-const EditCell = ({ row }: CellContext<ExifEntryObject, unknown>) => {
+type EditEntryDialogProps = CellContext<ExifEntryObject, unknown>;
+
+const EditEntryDialog = ({ row }: EditEntryDialogProps) => {
   return (
     <Dialog>
       <div className="flex justify-center">
@@ -47,4 +49,4 @@ const EditCell = ({ row }: CellContext<ExifEntryObject, unknown>) => {
   );
 };
 
-export { EditCell };
+export { EditEntryDialog, type EditEntryDialogProps };

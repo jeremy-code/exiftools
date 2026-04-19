@@ -32,7 +32,7 @@ import {
 } from "@exiftools/ui/components/Select";
 import { Spinner } from "@exiftools/ui/components/Spinner";
 
-type ExifEntryAddProps = ComponentPropsWithRef<"div">;
+type ExifEntryAddFormProps = ComponentPropsWithRef<"div">;
 
 type FieldValues = {
   ifd: Ifd;
@@ -50,7 +50,7 @@ const DEFAULT_FORM_VALUES: FieldValues = {
   value: "",
 };
 
-const ExifEntryAdd = (props: ExifEntryAddProps) => {
+const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
   const addExifEntry = useExifEditorStoreContext((state) => state.addExifEntry);
   const form = useForm({
     defaultValues: DEFAULT_FORM_VALUES,
@@ -200,4 +200,4 @@ const ExifEntryAdd = (props: ExifEntryAddProps) => {
   );
 };
 
-export { ExifEntryAdd };
+export { ExifEntryAddForm, type ExifEntryAddFormProps };

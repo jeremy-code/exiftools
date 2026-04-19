@@ -1,3 +1,5 @@
+import type { ComponentPropsWithRef } from "react";
+
 import { Plus } from "lucide-react";
 import { AccessibleIcon } from "radix-ui";
 
@@ -12,11 +14,13 @@ import {
   DialogTrigger,
 } from "@exiftools/ui/components/Dialog";
 
-import { ExifEntryAdd } from "../-ExifEntryAdd";
+import { ExifEntryAddForm } from "../entry/ExifEntryAddForm";
 
-const AddEntryButton = () => {
+type AddEntryDialogProps = ComponentPropsWithRef<typeof Dialog>;
+
+const AddEntryDialog = (props: AddEntryDialogProps) => {
   return (
-    <Dialog>
+    <Dialog {...props}>
       <div className="flex justify-center">
         <DialogTrigger asChild>
           <Button variant="outline" size="icon">
@@ -37,11 +41,11 @@ const AddEntryButton = () => {
           </DialogDescription>
         </DialogHeader>
         <DialogBody className="isolation-auto">
-          <ExifEntryAdd />
+          <ExifEntryAddForm />
         </DialogBody>
       </DialogContent>
     </Dialog>
   );
 };
 
-export { AddEntryButton };
+export { AddEntryDialog, type AddEntryDialogProps };

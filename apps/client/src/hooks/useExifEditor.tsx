@@ -13,8 +13,6 @@ import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { getImageDimensions } from "#utils/getImageDimensions";
 import { isTypedArray } from "#utils/isTypedArray";
 
-import { useExifData } from "./useExifData";
-
 const getExifEntryFromExifEntryObject = (
   exifData: ExifData | null,
   exifEntryObject: ExifEntryObject,
@@ -50,14 +48,12 @@ type ExifEditorStoreActions = {
     value: string | ValidTypedArray,
   ) => void;
   fix: () => void;
-  addImageDimensions: () => Promise<void>;
+  addImageDimensions: (file: File) => Promise<void>;
 };
 
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
 
-const useExifEditor = (file: File) => {
-  const exifData = useExifData(file);
-
+const useExifEditor = (exifData: ExifData) => {
   const exifDataObject = useMemo(() => serializeExifData(exifData), [exifData]);
 
   const exifEditorStore = useMemo(
@@ -153,7 +149,7 @@ const useExifEditor = (file: File) => {
             return { exifDataObject: serializeExifData(exifData) };
           });
         },
-        addImageDimensions: async () => {
+        addImageDimensions: async (file: File) => {
           const imageDimensions = await getImageDimensions(file);
 
           set(() => {
@@ -179,13 +175,13 @@ const useExifEditor = (file: File) => {
           });
         },
       })),
-    [exifData, exifDataObject, file],
+    [exifData, exifDataObject],
   );
 
-  return { exifEditorStore, exifData };
+  return exifEditorStore;
 };
 
-type ExifEditorStoreApi = ReturnType<typeof useExifEditor>["exifEditorStore"];
+type ExifEditorStoreApi = ReturnType<typeof useExifEditor>;
 
 const ExifEditorStoreContext = createContext<ExifEditorStoreApi | null>(null);
 
