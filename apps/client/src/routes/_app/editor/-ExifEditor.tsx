@@ -1,4 +1,4 @@
-import { Suspense, type ComponentPropsWithRef } from "react";
+import { Suspense, useTransition, type ComponentPropsWithRef } from "react";
 
 import { Save } from "lucide-react";
 import { cn } from "tailwind-variants";
@@ -11,6 +11,7 @@ import { useFileStore } from "#hooks/useFileStore";
 import { saveFile } from "#utils/saveFile";
 import { Button } from "@exiftools/ui/components/Button";
 import { Skeleton } from "@exiftools/ui/components/Skeleton";
+import { Spinner } from "@exiftools/ui/components/Spinner";
 import { writeExifData } from "@exiftools/write-exif-data";
 
 import { ExifEditorIfd } from "./-ExifEditorIfd";
@@ -22,11 +23,13 @@ const ExifEditorApp = ({ file }: { file: File }) => {
     useShallow((state) => [state.fix, state.addImageDimensions]),
   );
   const { setFile } = useFileStore();
+  const [isPending, startTransition] = useTransition();
 
   return (
     <ExifEditorStoreContext value={exifEditorStore}>
       <div className="flex gap-2">
         <Button
+          disabled={isPending}
           onClick={async () => {
             if (exifData === null) {
               throw new Error("Reference to ExifData instance not found");
@@ -40,12 +43,18 @@ const ExifEditorApp = ({ file }: { file: File }) => {
               file.name,
               { type: file.type, lastModified: new Date().getTime() },
             );
-            await saveFile(newFile);
-            setFile(newFile);
+            startTransition(() => setFile(newFile));
+            void saveFile(newFile);
           }}
         >
-          <Save size={16} />
-          Save
+          {isPending && <Spinner className="absolute" />}
+          <span
+            className="inline-flex items-center gap-2 data-[pending=true]:invisible"
+            data-pending={isPending}
+          >
+            <Save size={16} />
+            Save
+          </span>
         </Button>
         <Button onClick={() => fix()}>Fix</Button>
         <Button
