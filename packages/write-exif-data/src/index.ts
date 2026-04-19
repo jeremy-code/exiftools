@@ -1,8 +1,10 @@
 import { MARKER_FIRST_BYTE, JpegMarker } from "./constants";
 import { isValidExif } from "./exif/isValidExif";
+import { assertEndsWithEOI } from "./jpeg/assertEndsWithEOI";
 import { assertMarker } from "./jpeg/assertMarker";
 import { createSegment } from "./jpeg/createSegment";
 import { splitJpegIntoSegments } from "./jpeg/splitJpegIntoSegments";
+import { arrayLikeEquals } from "./utils/arrayLikeEquals";
 import { concatUint8Arrays } from "./utils/concatUint8Arrays";
 
 type SegmentIndexes = {
@@ -37,12 +39,18 @@ const writeExifData = (image: Uint8Array, exif: Uint8Array): Uint8Array => {
   if (!isValidExif(exif)) {
     throw new Error("Invalid Exif data provided");
   }
+  assertEndsWithEOI(image);
 
   const segments = splitJpegIntoSegments(image);
   const indexes = findSegmentIndexes(segments);
   const exifSegment = createSegment(JpegMarker.APP1, exif);
 
   if (indexes.exif !== undefined) {
+    // Exif is the same, return original image
+    if (arrayLikeEquals(segments[indexes.exif]!, exif)) {
+      return image;
+    }
+
     // Replace previous Exif data
     segments[indexes.exif] = exifSegment;
   } else if (indexes.lastAPP1 !== undefined) {
