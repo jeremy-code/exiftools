@@ -53,7 +53,13 @@ const FileTabsContent = ({
               }}
             />
           </div>
-        : <FileStoreProvider initialFile={file}>{children}</FileStoreProvider>}
+        : <FileStoreProvider
+            initialFile={file}
+            onFileChange={(file) => updateFile(file)}
+          >
+            {children}
+          </FileStoreProvider>
+        }
       </DropzoneStoreProvider>
     </TabsContent>
   );

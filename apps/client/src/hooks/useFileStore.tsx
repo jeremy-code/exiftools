@@ -15,13 +15,20 @@ const FileStoreContext = createContext<FileStore | null>(null);
 
 type FileStoreProviderProps = {
   initialFile: File | (() => File);
+  onFileChange: (file: File) => void;
 } & Readonly<{ children: React.ReactNode }>;
 
 const FileStoreProvider = ({
   initialFile,
+  onFileChange,
   children,
 }: FileStoreProviderProps) => {
   const [file, setFile] = useState(initialFile);
+
+  if (file !== initialFile) {
+    onFileChange(file);
+  }
+
   return (
     <FileStoreContext value={{ file, setFile }}>{children}</FileStoreContext>
   );
