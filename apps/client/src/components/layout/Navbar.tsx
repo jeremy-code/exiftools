@@ -20,7 +20,7 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b bg-background",
+        "sticky inset-x-0 top-0 z-50 border-b bg-background",
         className,
       )}
       {...props}
