@@ -1,9 +1,11 @@
 import { createContext, use, useMemo } from "react";
 
+import type { LatLng } from "leaflet";
 import { ExifIfd, type ExifData, type ValidTypedArray } from "libexif-wasm";
 import { create, useStore } from "zustand";
 
 import { getOrInsertEntry } from "#lib/exif/getOrInsertEntry";
+import { updateLatLng } from "#lib/exif/gps/updateLatLng";
 import {
   serializeExifData,
   type ExifDataObject,
@@ -49,6 +51,7 @@ type ExifEditorStoreActions = {
   ) => void;
   fix: () => void;
   addImageDimensions: (file: File) => Promise<void>;
+  updateLatLng: (latLng: LatLng) => void;
 };
 
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
@@ -141,9 +144,6 @@ const useExifEditor = (exifData: ExifData) => {
         },
         fix: () => {
           set(() => {
-            if (exifData === null) {
-              throw new Error("Reference to ExifData instance not found");
-            }
             exifData.fix();
 
             return { exifDataObject: serializeExifData(exifData) };
@@ -170,6 +170,13 @@ const useExifEditor = (exifData: ExifData) => {
             imageHeightEntry.fromTypedArray(
               new Uint16Array([imageDimensions.height]),
             );
+
+            return { exifDataObject: serializeExifData(exifData) };
+          });
+        },
+        updateLatLng: (latLng: LatLng) => {
+          set(() => {
+            updateLatLng(exifData.ifd[ExifIfd.GPS], latLng);
 
             return { exifDataObject: serializeExifData(exifData) };
           });

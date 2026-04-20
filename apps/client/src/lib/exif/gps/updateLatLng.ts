@@ -40,7 +40,7 @@ const updateLatLng = (exifDataGpsIfd: ExifContent, latLng: LatLng) => {
     mapRationalFromObject(
       [latitude.degrees, latitude.minutes, latitude.seconds].map((value) =>
         approximateRational(
-          value,
+          Math.abs(value),
           undefined,
           undefined,
           MAX_UINT32_VALUE,
@@ -54,7 +54,7 @@ const updateLatLng = (exifDataGpsIfd: ExifContent, latLng: LatLng) => {
     mapRationalFromObject(
       [longitude.degrees, longitude.minutes, longitude.seconds].map((value) =>
         approximateRational(
-          value,
+          Math.abs(value),
           undefined,
           undefined,
           MAX_UINT32_VALUE,
@@ -74,7 +74,7 @@ const updateLatLng = (exifDataGpsIfd: ExifContent, latLng: LatLng) => {
       mapRationalFromObject(
         [
           approximateRational(
-            latLng.alt,
+            Math.abs(latLng.alt),
             undefined,
             undefined,
             MAX_UINT32_VALUE,

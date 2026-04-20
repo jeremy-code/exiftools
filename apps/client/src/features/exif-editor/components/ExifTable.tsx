@@ -31,6 +31,7 @@ import {
 } from "@exiftools/ui/components/Table";
 
 import { AddEntryDialog } from "./dialogs/AddEntryDialog";
+import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
 import { DeleteEntriesDialog } from "./dialogs/DeleteEntriesDialog";
 import { columns } from "./table/columns";
 
@@ -59,6 +60,7 @@ const ExifTable = (props: ExifTableProps) => {
       addExifEntry: state.addExifEntry,
       fix: state.fix,
       addImageDimensions: state.addImageDimensions,
+      updateLatLng: state.updateLatLng,
     })),
   );
   const table = useReactTable({
@@ -194,6 +196,7 @@ const ExifTable = (props: ExifTableProps) => {
       <div className="flex gap-2">
         <DeleteEntriesDialog table={table} />
         <AddEntryDialog />
+        <AddGpsEntriesDialog />
       </div>
     </>
   );
