@@ -4,10 +4,10 @@ import {
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
-  getGroupedRowModel,
   useReactTable,
   type RowData,
 } from "@tanstack/react-table";
+import type { Ifd } from "libexif-wasm";
 import { useShallow } from "zustand/react/shallow";
 
 import { ColumnResizer } from "#components/table/ColumnResizer";
@@ -49,7 +49,10 @@ const ExifTable = (props: ExifTableProps) => {
     (state) => state.exifDataObject,
   );
   const exifEntryObjects = useMemo(
-    () => Object.values(exifDataObject.ifd).flat(),
+    () =>
+      (Object.entries(exifDataObject.ifd) as [Ifd, ExifEntryObject[]][]).map(
+        ([ifd, entries]) => ({ ifd, entries }),
+      ),
     [exifDataObject],
   );
   const exifEditorStoreActions = useExifEditorStoreContext(
@@ -65,19 +68,16 @@ const ExifTable = (props: ExifTableProps) => {
   );
   const table = useReactTable({
     columns,
+    getSubRows: (originalRow) =>
+      "entries" in originalRow ? originalRow.entries : undefined,
     columnResizeMode: "onChange",
     data: exifEntryObjects ?? fallbackData,
     getCoreRowModel: getCoreRowModel(),
-    getGroupedRowModel: getGroupedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     initialState: {
-      grouping: ["ifd"],
       expanded: true,
     },
-    // Do NOT reorder columns when grouped
-    groupedColumnMode: false,
     meta: exifEditorStoreActions,
-    autoResetPageIndex: false, // TanStack/table#5026
   });
 
   const columnSizeCssVars = useMemo(

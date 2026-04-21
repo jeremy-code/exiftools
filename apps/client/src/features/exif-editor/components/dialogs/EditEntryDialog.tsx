@@ -2,7 +2,6 @@ import type { CellContext } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
 import { AccessibleIcon } from "radix-ui";
 
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Button } from "@exiftools/ui/components/Button";
 import {
   Dialog,
@@ -15,10 +14,15 @@ import {
 } from "@exiftools/ui/components/Dialog";
 
 import { ExifEntryEditor } from "../entry/ExifEntryEditor";
+import type { ExifTableRow } from "../table/columns";
 
-type EditEntryDialogProps = CellContext<ExifEntryObject, unknown>;
+type EditEntryDialogProps = CellContext<ExifTableRow, unknown>;
 
 const EditEntryDialog = ({ row }: EditEntryDialogProps) => {
+  if ("entries" in row.original) {
+    return null;
+  }
+
   return (
     <Dialog>
       <div className="flex justify-center">

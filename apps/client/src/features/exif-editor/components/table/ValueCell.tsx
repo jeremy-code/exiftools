@@ -12,9 +12,10 @@ import { dayjs } from "#utils/date";
 import { Input } from "@exiftools/ui/components/Input";
 
 import { EnumValueCell } from "./EnumValueCell";
+import type { ExifTableRow } from "./columns";
 
 type ValueCellProps = CellContext<
-  ExifEntryObject,
+  ExifTableRow,
   ExifEntryObject["formattedValue"]
 >;
 
@@ -28,48 +29,54 @@ const DATETIME_TAGS = [
 ];
 
 const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
+  const originalRow = row.original;
+
+  if ("entries" in originalRow) {
+    return null;
+  }
+
   const value = getValue() ?? "";
-  const isAscii = row.original.format === "ASCII";
-  const isDateTime = DATETIME_TAGS.includes(row.original.tag);
+  const isAscii = originalRow.format === "ASCII";
+  const isDateTime = DATETIME_TAGS.includes(originalRow.tag);
   const isInTagMap =
-    row.original.tag in EXIF_TAG_MAP &&
-    EXIF_TAG_MAP[row.original.tag] !== undefined;
+    originalRow.tag in EXIF_TAG_MAP &&
+    EXIF_TAG_MAP[originalRow.tag] !== undefined;
   const isEnum =
     isInTagMap &&
-    row.original.components === 1 &&
-    EXIF_TAG_MAP[row.original.tag]?.values !== undefined &&
-    value in EXIF_TAG_MAP[row.original.tag]!.values!;
+    originalRow.components === 1 &&
+    EXIF_TAG_MAP[originalRow.tag]?.values !== undefined &&
+    value in EXIF_TAG_MAP[originalRow.tag]!.values!;
 
   if (isEnum) {
     return (
       <EnumValueCell
-        exifEntryObject={row.original}
+        exifEntryObject={originalRow}
         value={value}
         updateExifEntry={table.options.meta!.updateExifEntry}
       />
     );
   }
 
-  if (row.original.tag === "DATE_STAMP") {
+  if (originalRow.tag === "DATE_STAMP") {
     return (
       <DateInput
         className="focus:border-border focus:bg-background"
         value={dayjs(value, "YYYY:MM:DD")}
         onValueChange={(date) => {
           table.options.meta?.updateExifEntry(
-            row.original,
+            originalRow,
             date.format("YYYY:MM:DD"),
           );
         }}
       />
     );
-  } else if (row.original.tag === "VERSION_ID") {
+  } else if (originalRow.tag === "VERSION_ID") {
     return (
       <GpsTagVersionInput
-        value={row.original.value}
+        value={originalRow.value}
         setValue={(value) =>
           table.options.meta?.updateExifEntry(
-            row.original,
+            originalRow,
             new Uint8Array(value),
           )
         }
@@ -86,7 +93,7 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
         value={dayjs(value, EXIF_TIMESTAMP_FORMAT)}
         onValueChange={(datetimeLocal) => {
           table.options.meta?.updateExifEntry(
-            row.original,
+            originalRow,
             datetimeLocal.format(EXIF_TIMESTAMP_FORMAT),
           );
         }}
@@ -102,18 +109,18 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
         type="text"
         value={value}
         onChange={(e) => {
-          table.options.meta?.updateExifEntry(row.original, e.target.value);
+          table.options.meta?.updateExifEntry(originalRow, e.target.value);
         }}
       />
     );
   }
 
-  if (row.original.tag === "EXIF_VERSION") {
+  if (originalRow.tag === "EXIF_VERSION") {
     return (
       <ExifVersionInput
-        value={new Uint8Array(row.original.value)}
+        value={new Uint8Array(originalRow.value)}
         setValue={(value) =>
-          table.options.meta?.updateExifEntry(row.original, value)
+          table.options.meta?.updateExifEntry(originalRow, value)
         }
         altText={value}
         inputProps={{ className: "focus:border-border focus:bg-background" }}
@@ -122,18 +129,17 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
   }
 
   if (
-    row.original.components === 1 &&
-    (row.original.format === "SRATIONAL" ||
-      row.original.format === "RATIONAL") &&
-    row.original.value[1] === 1
+    originalRow.components === 1 &&
+    (originalRow.format === "SRATIONAL" || originalRow.format === "RATIONAL") &&
+    originalRow.value[1] === 1
   ) {
     return (
       <NumberInput
-        value={row.original.value[0]!}
+        value={originalRow.value[0]!}
         setValue={(value) => {
           table.options.meta?.updateExifEntry(
-            row.original,
-            newTypedArrayInFormat([value, 1], row.original.format),
+            originalRow,
+            newTypedArrayInFormat([value, 1], originalRow.format),
           );
         }}
       />
@@ -141,17 +147,17 @@ const ValueCell = ({ getValue, row, table }: ValueCellProps) => {
   }
 
   if (
-    row.original.components === 1 &&
-    row.original.format !== "SRATIONAL" &&
-    row.original.format !== "RATIONAL"
+    originalRow.components === 1 &&
+    originalRow.format !== "SRATIONAL" &&
+    originalRow.format !== "RATIONAL"
   ) {
     return (
       <NumberInput
-        value={row.original.value[0]!}
+        value={originalRow.value[0]!}
         setValue={(value) => {
           table.options.meta?.updateExifEntry(
-            row.original,
-            newTypedArrayInFormat([value], row.original.format),
+            originalRow,
+            newTypedArrayInFormat([value], originalRow.format),
           );
         }}
       />

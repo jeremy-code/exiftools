@@ -1,5 +1,5 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { exifIfdGetName, ExifTagInfo } from "libexif-wasm";
+import { ExifTagInfo, type Ifd } from "libexif-wasm";
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import {
@@ -8,12 +8,20 @@ import {
   TooltipContent,
 } from "@exiftools/ui/components/Tooltip";
 
+import { IfdCell } from "./IfdCell";
 import { SelectCell } from "./SelectCell";
 import { SelectHeader } from "./SelectHeader";
 import { ValueCell } from "./ValueCell";
 import { EditEntryDialog } from "../dialogs/EditEntryDialog";
 
-const columnHelper = createColumnHelper<ExifEntryObject>();
+type ExifTableRow =
+  | ExifEntryObject
+  | {
+      ifd: Ifd;
+      entries: ExifTableRow[];
+    };
+
+const columnHelper = createColumnHelper<ExifTableRow>();
 
 const columns = [
   columnHelper.display({
@@ -25,7 +33,8 @@ const columns = [
   }),
   columnHelper.accessor("ifd", {
     id: "ifd",
-    cell: ({ getValue }) => exifIfdGetName(getValue()),
+    aggregatedCell: IfdCell,
+    cell: IfdCell,
     header: "IFD",
     size: 30,
   }),
@@ -33,16 +42,20 @@ const columns = [
     id: "tag",
     header: "Tag",
     size: 70,
-    cell: ({ getValue, row }) => (
-      <Tooltip>
-        <TooltipTrigger className="text-left">
-          {ExifTagInfo.getTitleInIfd(getValue(), row.original.ifd)}
-        </TooltipTrigger>
-        <TooltipContent>
-          {ExifTagInfo.getDescriptionInIfd(getValue(), row.original.ifd)}
-        </TooltipContent>
-      </Tooltip>
-    ),
+    cell: ({ row }) =>
+      "entries" in row.original ?
+        null
+      : <Tooltip>
+          <TooltipTrigger className="text-left">
+            {ExifTagInfo.getTitleInIfd(row.original.tag, row.original.ifd)}
+          </TooltipTrigger>
+          <TooltipContent>
+            {ExifTagInfo.getDescriptionInIfd(
+              row.original.tag,
+              row.original.ifd,
+            )}
+          </TooltipContent>
+        </Tooltip>,
   }),
   columnHelper.accessor("formattedValue", {
     header: "Value",
@@ -56,4 +69,4 @@ const columns = [
   }),
 ];
 
-export { columns };
+export { type ExifTableRow, columns };

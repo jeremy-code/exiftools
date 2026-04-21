@@ -1,9 +1,10 @@
 import type { CellContext } from "@tanstack/react-table";
 
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Checkbox } from "@exiftools/ui/components/Checkbox";
 
-const SelectCell = ({ row }: CellContext<ExifEntryObject, unknown>) => {
+import type { ExifTableRow } from "./columns";
+
+const SelectCell = ({ row }: CellContext<ExifTableRow, unknown>) => {
   const checked =
     row.getIsSelected() ? true
     : row.getIsSomeSelected() ? "indeterminate"

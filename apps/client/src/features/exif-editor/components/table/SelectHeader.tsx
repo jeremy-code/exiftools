@@ -1,9 +1,10 @@
 import type { HeaderContext } from "@tanstack/react-table";
 
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Checkbox } from "@exiftools/ui/components/Checkbox";
 
-const SelectHeader = ({ table }: HeaderContext<ExifEntryObject, unknown>) => {
+import type { ExifTableRow } from "./columns";
+
+const SelectHeader = ({ table }: HeaderContext<ExifTableRow, unknown>) => {
   const checked =
     table.getIsAllRowsSelected() ? true
     : table.getIsSomeRowsSelected() ? "indeterminate"

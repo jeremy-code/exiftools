@@ -18,7 +18,9 @@ import {
 } from "@exiftools/ui/components/AlertDialog";
 import { Button } from "@exiftools/ui/components/Button";
 
-type DeleteEntriesDialogProps = { table: Table<ExifEntryObject> };
+import type { ExifTableRow } from "../table/columns";
+
+type DeleteEntriesDialogProps = { table: Table<ExifTableRow> };
 
 const DeleteEntriesDialog = ({ table }: DeleteEntriesDialogProps) => {
   const removeExifEntries = useExifEditorStoreContext(
@@ -43,7 +45,10 @@ const DeleteEntriesDialog = ({ table }: DeleteEntriesDialogProps) => {
                 .filter(
                   ([key, value]) => !key.startsWith("ifd:") && value === true,
                 )
-                .map(([selectedRow]) => table.getRow(selectedRow).original),
+                .map(([selectedRow]) => table.getRow(selectedRow).original)
+                .filter(
+                  (value): value is ExifEntryObject => !("entries" in value),
+                ),
             );
           }}
         >
