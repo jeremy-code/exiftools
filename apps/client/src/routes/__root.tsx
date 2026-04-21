@@ -42,7 +42,7 @@ const RootComponent = () => {
     <RootDocument>
       <AppProvider>
         <Navbar />
-        <main className="container py-8">
+        <main>
           <Outlet />
         </main>
         <Footer />

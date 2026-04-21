@@ -49,12 +49,13 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
         value={activeTabId}
         onValueChange={(id) => setActiveTabId(id)}
       >
-        <ScrollArea className="flex rounded-md">
-          <div className="flex">
+        {/* Offset by height of Navbar */}
+        <div className="sticky top-[--spacing(19.75)] z-[calc(infinity)] order-1 container pt-3">
+          <ScrollArea className="rounded-md border bg-muted shadow">
             <TabsList
               ref={fileTabsListRef}
               fitted
-              className="w-full gap-1 rounded-r-none"
+              className="gap-1"
               variant="enclosed"
             >
               {tabs.map((tab, index) => (
@@ -66,23 +67,24 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
                   removeTab={() => removeTab(tab.id)}
                 />
               ))}
+              <div className="sticky top-0 right-1">
+                <Button
+                  className="text-muted-foreground"
+                  size="icon"
+                  variant="muted"
+                  onClick={() => createNewTab()}
+                >
+                  <AccessibleIcon.Root label="New tab">
+                    <Plus size={16} />
+                  </AccessibleIcon.Root>
+                </Button>
+              </div>
             </TabsList>
-            <div className="sticky right-0 size-12 rounded-r-md bg-muted p-1.5">
-              <Button
-                className="text-muted-foreground"
-                size="icon-sm"
-                variant="muted"
-                onClick={() => createNewTab()}
-              >
-                <AccessibleIcon.Root label="New tab">
-                  <Plus size={16} />
-                </AccessibleIcon.Root>
-              </Button>
-            </div>
-          </div>
-        </ScrollArea>
+          </ScrollArea>
+        </div>
         {tabs.map((tab) => (
           <FileTabsContent
+            className="container pb-8"
             key={tab.id}
             id={tab.id}
             file={tab.file}
