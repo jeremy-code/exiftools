@@ -26,7 +26,12 @@ const toDecimalDegrees = (
 ) => {
   const [degrees, minutes, seconds] = mapRationalArray(coordinate.value);
   const direction = coordinateRef.formattedValue;
-  if (!degrees || !minutes || !seconds || !isDirection(direction)) {
+  if (
+    degrees === undefined ||
+    minutes === undefined ||
+    seconds === undefined ||
+    !isDirection(direction)
+  ) {
     return null;
   }
   return dmsToDecimalDegrees({ degrees, minutes, seconds, direction });
