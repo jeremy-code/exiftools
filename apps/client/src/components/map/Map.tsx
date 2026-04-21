@@ -22,4 +22,4 @@ const Map = ({ className, children, zoom, ...props }: MapProps) => {
   );
 };
 
-export { Map };
+export { Map, type MapProps };

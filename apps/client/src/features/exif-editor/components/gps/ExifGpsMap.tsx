@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { LatLng, type Map as LeafletMap } from "leaflet";
-import { Marker, Popup } from "react-leaflet";
+import { Popup } from "react-leaflet";
+import { cn } from "tailwind-variants";
 
+import { DraggableMarker } from "#components/map/DraggableMarker";
 import { GeoSearchControl } from "#components/map/GeoSearchControl";
-import { Map } from "#components/map/Map";
-import { icon } from "#components/map/icon";
+import { Map, type MapProps } from "#components/map/Map";
 import { useGeoSearchLocation } from "#hooks/useGeoSearchLocation";
 import { formatLatLng } from "#lib/leaflet/formatLatLng";
 import { formatLatLngAsGeoUri } from "#lib/leaflet/formatLatLngAsGeoUri";
@@ -15,13 +16,15 @@ type ExifGpsMapProps = {
   longitude: number | undefined;
   altitude: number | undefined;
   setCoordinate: (coordinate: LatLng) => void;
-};
+} & MapProps;
 
 const ExifGpsMap = ({
+  className,
   latitude,
   longitude,
   altitude,
   setCoordinate,
+  ...props
 }: ExifGpsMapProps) => {
   const coordinate = useMemo(
     () =>
@@ -30,30 +33,40 @@ const ExifGpsMap = ({
       : undefined,
     [latitude, longitude, altitude],
   );
-
   const [map, setMap] = useState<LeafletMap | null>(null);
-  const { latLng: geoSearchLocation, label } = useGeoSearchLocation(map);
-
-  if (
-    geoSearchLocation !== null &&
-    (coordinate === undefined || !geoSearchLocation.equals(coordinate))
-  ) {
-    setCoordinate(geoSearchLocation);
-  }
+  const { label } = useGeoSearchLocation(map, ({ location }) => {
+    const newLatLng = new LatLng(location.y, location.x, coordinate?.alt);
+    if (coordinate === undefined || !coordinate.equals(newLatLng)) {
+      setCoordinate(newLatLng);
+    }
+  });
 
   // Leaflet Map isn't controlled by map, so center={coordinate} does not update
   // as expected. Hence, using useEffect to pan whenenvr the coordinate changes
   useEffect(() => {
-    if (coordinate) {
+    if (coordinate !== undefined) {
       map?.panTo(coordinate);
     }
   }, [map, coordinate]);
 
   return (
-    <Map className="h-80 rounded" center={coordinate} ref={setMap}>
+    <Map
+      className={cn("h-80 rounded", className)}
+      center={coordinate}
+      ref={setMap}
+      {...props}
+    >
       <GeoSearchControl showMarker={false} />
       {coordinate !== undefined && (
-        <Marker icon={icon} position={coordinate}>
+        <DraggableMarker
+          position={coordinate}
+          onDragEnd={(event) => {
+            const newCoordinate = event.target.getLatLng();
+            if (coordinate === undefined || !newCoordinate.equals(coordinate)) {
+              setCoordinate(newCoordinate);
+            }
+          }}
+        >
           <Popup>
             {!!label && `${label}\n`}
             {`${formatLatLng(coordinate)} `}
@@ -67,7 +80,7 @@ const ExifGpsMap = ({
               (geo)
             </a>
           </Popup>
-        </Marker>
+        </DraggableMarker>
       )}
     </Map>
   );
