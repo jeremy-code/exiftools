@@ -3,6 +3,7 @@ import { useCallback, useMemo, type ComponentPropsWithRef } from "react";
 import { useForm } from "@tanstack/react-form";
 import { LatLng } from "leaflet";
 import type { Tag } from "libexif-wasm";
+import { z } from "zod";
 import { useShallow } from "zustand/react/shallow";
 
 import { useExifEditorStoreContext } from "#hooks/useExifEditor";
@@ -10,6 +11,7 @@ import { mapRationalArray } from "#lib/exif/mapRationalArray";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { dmsToDecimalDegrees } from "#lib/leaflet/dmsToDecimalDegrees";
 import { isDirection } from "#lib/leaflet/interfaces";
+import { Latitude, Longitude } from "#schemas/common";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { Button } from "@exiftools/ui/components/Button";
 import { Input } from "@exiftools/ui/components/Input";
@@ -35,6 +37,12 @@ const toDecimalDegrees = (
     return null;
   }
   return dmsToDecimalDegrees({ degrees, minutes, seconds, direction });
+};
+
+type FieldValues = {
+  latitude: number | undefined;
+  longitude: number | undefined;
+  altitude: number | undefined;
 };
 
 const getInitialFieldValues = (
@@ -91,11 +99,12 @@ const getInitialFieldValues = (
   };
 };
 
-type FieldValues = {
-  latitude: number | undefined;
-  longitude: number | undefined;
-  altitude: number | undefined;
-};
+const gpsFormSchema = z.object({
+  latitude: Latitude,
+  longitude: Longitude,
+  // TypeScript treats .optional() and union of undefined differently
+  altitude: z.union([z.number(), z.undefined()]),
+});
 
 const ExifEntryAddGpsForm = (props: ExifEntryAddGpsFormProps) => {
   const { updateLatLng, exifDataObject } = useExifEditorStoreContext(
@@ -117,6 +126,7 @@ const ExifEntryAddGpsForm = (props: ExifEntryAddGpsFormProps) => {
         );
       }
     },
+    validators: { onSubmit: gpsFormSchema },
   });
 
   const setGpsForm = useCallback(
