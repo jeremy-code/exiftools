@@ -4,7 +4,7 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "env": ["DEV"],
+      "env": ["DEV", "URL"],
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "!.env.example"],
       "outputs": ["dist/**"]
@@ -13,6 +13,7 @@
       "dependsOn": ["^lint"]
     },
     "dev": {
+      "env": ["PORT"],
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", ".env*", "!.env.example"],
       "persistent": true

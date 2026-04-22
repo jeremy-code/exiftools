@@ -8,14 +8,18 @@ import {
   createRootRoute,
   HeadContent,
   Scripts,
+  useLocation,
 } from "@tanstack/react-router";
 
 import { Footer } from "#components/layout/Footer";
 import { Navbar } from "#components/layout/Navbar";
 import { AppProvider } from "#components/misc/AppProvider";
+import { getBaseUrl } from "#utils/getBaseUrl";
 import uiCss from "@exiftools/ui/globals.css?url";
 
 const RootDocument = ({ children }: Readonly<{ children: ReactNode }>) => {
+  const pathname = useLocation({ select: (location) => location.pathname });
+
   return (
     /**
      * @remarks
@@ -27,6 +31,10 @@ const RootDocument = ({ children }: Readonly<{ children: ReactNode }>) => {
      */
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link
+          rel="canonical"
+          href={new URL(pathname, getBaseUrl()).toString()}
+        />
         <HeadContent />
       </head>
       <body>
