@@ -27,9 +27,13 @@ const viteConfig = defineConfig({
     devtools(),
   ],
   css: {
+    transformer: "lightningcss",
     lightningcss: {
       exclude: Features.LightDark,
     },
+  },
+  build: {
+    cssMinify: "lightningcss",
   },
   /**
    * Otherwise, Vite errors `[commonjs--resolver] Module format "iife"

@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-import "@exiftools/ui/globals.css";
 import "../leaflet.css";
 
 import type { ReactNode } from "react";
@@ -14,6 +13,7 @@ import {
 import { Footer } from "#components/layout/Footer";
 import { Navbar } from "#components/layout/Navbar";
 import { AppProvider } from "#components/misc/AppProvider";
+import uiCss from "@exiftools/ui/globals.css?url";
 
 const RootDocument = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (
@@ -54,10 +54,13 @@ const RootComponent = () => {
 const Route = createRootRoute({
   head: () => ({
     meta: [
-      { charSet: "UTF-8" },
+      { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1.0" },
     ],
-    links: [{ href: "favicon.svg", rel: "shortcut icon", type: "image/svg" }],
+    links: [
+      { href: "favicon.svg", rel: "shortcut icon", type: "image/svg" },
+      { rel: "stylesheet", href: uiCss },
+    ],
   }),
   component: RootComponent,
 });
