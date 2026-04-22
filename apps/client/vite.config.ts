@@ -26,6 +26,9 @@ const viteConfig = defineConfig({
     fontless(),
     devtools(),
   ],
+  define: {
+    "import.meta.env.URL": JSON.stringify(process.env.URL),
+  },
   css: {
     transformer: "lightningcss",
     lightningcss: {
