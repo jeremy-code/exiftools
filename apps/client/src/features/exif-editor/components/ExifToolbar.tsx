@@ -9,6 +9,9 @@ import { writeExifData } from "@exiftools/write-exif-data";
 
 import { useExifEditorContext } from "../ExifEditorProvider";
 
+// https://evilmartians.com/chronicles/how-to-detect-safari-and-ios-versions-with-ease
+const isMobileWebKit = () => "ongesturechange" in window;
+
 const ExifToolbar = () => {
   const { file, setFile } = useFileStore();
   const exifData = useExifEditorContext();
@@ -19,19 +22,45 @@ const ExifToolbar = () => {
   return (
     <div className="flex flex-wrap gap-2">
       <Button
-        onClick={async () => {
-          // https://react.dev/reference/react/useTransition#react-doesnt-treat-my-state-update-after-await-as-a-transition
-          const newFileInBytes = writeExifData(
-            await file.bytes(),
-            exifData.saveData(),
-          );
-          const newFile = new File(
-            [new Uint8Array(newFileInBytes)],
-            file.name,
-            { type: file.type, lastModified: new Date().getTime() },
-          );
-          await saveFile(newFile);
-          setFile(newFile);
+        onClick={() => {
+          const generateFile = async () => {
+            const newFileInBytes = writeExifData(
+              await file.bytes(),
+              exifData.saveData(),
+            );
+
+            const newFile = new File(
+              [new Uint8Array(newFileInBytes)],
+              file.name,
+              {
+                type: file.type,
+                lastModified: new Date().getTime(),
+              },
+            );
+            setFile(newFile);
+            return newFile;
+          };
+
+          // For an unfathomable reason, Mobile iOS specifically seems to have
+          // issues with saveFile(), returning a NotReadableError "The I/O read
+          // operation failed." afterwards. For more information, see
+          // jeremy-code/exiftools#7.
+          if (isMobileWebKit()) {
+            // Safari seemingly blocks asynchronous calls to window.open:
+            // https://stackoverflow.com/a/39387533/18551960
+            const windowProxy = window.open(undefined, "_blank");
+
+            void generateFile().then((file) => {
+              if (windowProxy !== null) {
+                const blobUrl = URL.createObjectURL(file);
+                windowProxy.location.assign(blobUrl);
+                URL.revokeObjectURL(blobUrl);
+              }
+              return;
+            });
+          } else {
+            void generateFile().then(saveFile);
+          }
         }}
       >
         <Save size={16} />
