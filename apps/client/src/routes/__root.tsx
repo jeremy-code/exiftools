@@ -66,13 +66,13 @@ const Route = createRootRoute({
       { name: "viewport", content: "width=device-width, initial-scale=1.0" },
     ],
     links: [
-      { href: "favicon.svg", rel: "shortcut icon", type: "image/svg" },
+      { rel: "shortcut icon", type: "image/svg", href: "/favicon.svg" },
       { rel: "stylesheet", href: uiCss },
       {
-        href: "apple-touch-icon.png",
         rel: "apple-touch-icon",
         type: "image/png",
         sizes: "180x180",
+        href: "/apple-touch-icon.png",
       },
     ],
   }),
