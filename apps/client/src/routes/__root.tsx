@@ -50,7 +50,7 @@ const RootComponent = () => {
     <RootDocument>
       <AppProvider>
         <Navbar />
-        <main>
+        <main className="grid">
           <Outlet />
         </main>
         <Footer />
