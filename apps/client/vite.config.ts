@@ -26,10 +26,6 @@ const viteConfig = defineConfig({
     fontless(),
     devtools(),
   ],
-  base:
-    "URL" in process.env && typeof process.env.URL === "string" ?
-      `${process.env.URL}/`
-    : "/",
   css: {
     transformer: "lightningcss",
     lightningcss: {
