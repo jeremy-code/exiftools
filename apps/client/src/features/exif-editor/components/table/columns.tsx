@@ -1,16 +1,12 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { ExifTagInfo, type Ifd } from "libexif-wasm";
+import type { Ifd } from "libexif-wasm";
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@exiftools/ui/components/Tooltip";
 
 import { IfdCell } from "./IfdCell";
 import { SelectCell } from "./SelectCell";
 import { SelectHeader } from "./SelectHeader";
+import { TagCell } from "./TagCell";
 import { ValueCell } from "./ValueCell";
 import { EditEntryDialog } from "../dialogs/EditEntryDialog";
 
@@ -37,20 +33,7 @@ const columns = [
     id: "tag",
     header: "Tag",
     size: 70,
-    cell: ({ row }) =>
-      "entries" in row.original ?
-        null
-      : <Tooltip>
-          <TooltipTrigger className="text-left">
-            {ExifTagInfo.getTitleInIfd(row.original.tag, row.original.ifd)}
-          </TooltipTrigger>
-          <TooltipContent>
-            {ExifTagInfo.getDescriptionInIfd(
-              row.original.tag,
-              row.original.ifd,
-            )}
-          </TooltipContent>
-        </Tooltip>,
+    cell: TagCell,
   }),
   columnHelper.accessor("formattedValue", {
     header: "Value",
