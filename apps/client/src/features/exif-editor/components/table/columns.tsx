@@ -14,12 +14,7 @@ import { SelectHeader } from "./SelectHeader";
 import { ValueCell } from "./ValueCell";
 import { EditEntryDialog } from "../dialogs/EditEntryDialog";
 
-type ExifTableRow =
-  | ExifEntryObject
-  | {
-      ifd: Ifd;
-      entries: ExifTableRow[];
-    };
+type ExifTableRow = ExifEntryObject | { ifd: Ifd; entries: ExifTableRow[] };
 
 const columnHelper = createColumnHelper<ExifTableRow>();
 

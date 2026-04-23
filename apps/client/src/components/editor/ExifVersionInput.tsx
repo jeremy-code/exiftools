@@ -8,25 +8,22 @@ import { Input, type InputProps } from "@exiftools/ui/components/Input";
 const textEncoder = new TextEncoder();
 
 type ExifVersionInputProps = {
-  value: Uint8Array;
-  altText: string;
-  setValue: (value: Uint8Array) => void;
+  value: number[];
+  onValueChange: (value: number[]) => void;
   inputProps?: Omit<InputProps, "value">;
 } & ComponentPropsWithRef<"div">;
 
 const ExifVersionInput = ({
   className,
   value,
-  setValue,
-  altText,
+  onValueChange,
   inputProps,
   ...props
 }: ExifVersionInputProps) => {
-  const exifVersion = useMemo(() => decodeStringFromUtf8(value), [value]);
-
-  if (exifVersion.length !== 4) {
-    return altText;
-  }
+  const exifVersion = useMemo(
+    () => decodeStringFromUtf8(new Uint8Array(value)),
+    [value],
+  );
 
   // Everything seems to make sense except 0230 === 2.3?
   const major = parseInt(exifVersion.slice(0, 2));
@@ -42,10 +39,12 @@ const ExifVersionInput = ({
         value={major}
         onChange={(event) => {
           if (!Number.isNaN(event.target.valueAsNumber)) {
-            setValue(
-              textEncoder.encode(
-                event.target.valueAsNumber.toString().padStart(2, "0") +
-                  minor.toString().padStart(2, "0"),
+            onValueChange(
+              Array.from(
+                textEncoder.encode(
+                  event.target.valueAsNumber.toString().padStart(2, "0") +
+                    minor.toString().padStart(2, "0"),
+                ),
               ),
             );
           }
@@ -59,10 +58,12 @@ const ExifVersionInput = ({
         value={minor}
         onChange={(event) => {
           if (!Number.isNaN(event.target.valueAsNumber)) {
-            setValue(
-              textEncoder.encode(
-                major.toString().padStart(2, "0") +
-                  event.target.valueAsNumber.toString().padStart(2, "0"),
+            onValueChange(
+              Array.from(
+                textEncoder.encode(
+                  major.toString().padStart(2, "0") +
+                    event.target.valueAsNumber.toString().padStart(2, "0"),
+                ),
               ),
             );
           }

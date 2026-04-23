@@ -2,10 +2,10 @@ import { Input, type InputProps } from "@exiftools/ui/components/Input";
 
 type NumberInputProps = {
   value: number;
-  setValue: (value: number) => void;
+  onValueChange: (value: number) => void;
 } & Omit<InputProps, "value">;
 
-const NumberInput = ({ value, setValue, ...props }: NumberInputProps) => {
+const NumberInput = ({ value, onValueChange, ...props }: NumberInputProps) => {
   return (
     <Input
       {...props}
@@ -13,9 +13,9 @@ const NumberInput = ({ value, setValue, ...props }: NumberInputProps) => {
       value={value}
       onChange={(event) => {
         if (!Number.isNaN(event.target.valueAsNumber)) {
-          setValue(event.target.valueAsNumber);
+          onValueChange(event.target.valueAsNumber);
         } else {
-          setValue(0);
+          onValueChange(0);
         }
       }}
     />

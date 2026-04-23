@@ -7,24 +7,22 @@ import { Input, type InputProps } from "@exiftools/ui/components/Input";
 
 type GpsTagVersionInputProps = {
   value: number[];
-  setValue: (value: number[]) => void;
-  inputProps: InputProps;
-  altText: string;
+  onValueChange: (value: number[]) => void;
+  inputProps?: InputProps;
 } & ComponentPropsWithRef<"div">;
 
 const GpsTagVersionInput = ({
   className,
   value,
-  setValue,
+  onValueChange,
   inputProps,
-  altText,
   ...props
 }: GpsTagVersionInputProps) => {
   const breakpoint = useBreakpoint("max-sm");
 
   // There really isn't enough room to edit four values in one line
   if (breakpoint) {
-    return altText;
+    return value.join(".");
   }
 
   return (
@@ -38,7 +36,7 @@ const GpsTagVersionInput = ({
             value={byte}
             onChange={(e) => {
               if (!Number.isNaN(e.target.valueAsNumber)) {
-                setValue(value.with(index, e.target.valueAsNumber));
+                onValueChange(value.with(index, e.target.valueAsNumber));
               }
             }}
           />
