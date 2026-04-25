@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { Table } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 
-import { useExifEditorStoreContext } from "#hooks/useExifEditor";
+import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import {
   AlertDialog,

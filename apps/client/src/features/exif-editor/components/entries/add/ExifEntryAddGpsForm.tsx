@@ -6,7 +6,7 @@ import type { Tag } from "libexif-wasm";
 import { z } from "zod";
 import { useShallow } from "zustand/react/shallow";
 
-import { useExifEditorStoreContext } from "#hooks/useExifEditor";
+import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { mapRationalArray } from "#lib/exif/mapRationalArray";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { dmsToDecimalDegrees } from "#lib/leaflet/dmsToDecimalDegrees";

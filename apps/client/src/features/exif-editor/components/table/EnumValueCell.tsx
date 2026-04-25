@@ -1,4 +1,4 @@
-import type { ExifEditorStoreActions } from "#hooks/useExifEditor";
+import type { ExifEditorStoreActions } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";

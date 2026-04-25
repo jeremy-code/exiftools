@@ -15,7 +15,7 @@ import { ExpandRows } from "#components/table/ExpandRows";
 import {
   type ExifEditorStoreActions,
   useExifEditorStoreContext,
-} from "#hooks/useExifEditor";
+} from "#features/exif-editor/hooks/useExifEditor";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { formatPlural } from "#utils/formatPlural";
 import { Badge } from "@exifi/ui/components/Badge";

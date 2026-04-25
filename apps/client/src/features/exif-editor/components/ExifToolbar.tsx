@@ -1,7 +1,7 @@
 import { Save } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 
-import { useExifEditorStoreContext } from "#hooks/useExifEditor";
+import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { useFileStore } from "#hooks/useFileStore";
 import { saveFile } from "#utils/saveFile";
 import { writeExifData } from "@exifi/exif-utils";

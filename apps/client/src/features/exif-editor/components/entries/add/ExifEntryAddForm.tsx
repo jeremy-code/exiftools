@@ -10,7 +10,7 @@ import {
 } from "libexif-wasm";
 import { IFD_NAMES } from "libexif-wasm/constants";
 
-import { useExifEditorStoreContext } from "#hooks/useExifEditor";
+import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { Button } from "@exifi/ui/components/Button";
 import {

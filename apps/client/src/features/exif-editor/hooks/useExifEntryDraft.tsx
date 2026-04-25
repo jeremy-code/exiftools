@@ -4,7 +4,7 @@ import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { arrayLikeEquals } from "#utils/arrayLikeEquals";
 
-import { useExifEditorStoreContext } from "../../../hooks/useExifEditor";
+import { useExifEditorStoreContext } from "./useExifEditor";
 
 const useExifEntryDraft = (exifEntryObject: ExifEntryObject) => {
   const updateExifEntry = useExifEditorStoreContext((s) => s.updateExifEntry);
