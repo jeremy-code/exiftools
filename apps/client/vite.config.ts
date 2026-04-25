@@ -7,8 +7,6 @@ import { fontless } from "fontless";
 import { Features } from "lightningcss";
 import { defineConfig } from "vite";
 
-import { dependencies } from "./package.json";
-
 const viteConfig = defineConfig({
   plugins: [
     tanstackStart({
@@ -30,7 +28,10 @@ const viteConfig = defineConfig({
   ],
   define: {
     __BUILD_TIMESTAMP__: JSON.stringify(new Date().getTime()),
-    __LIBEXIF_WASM_VERSION__: JSON.stringify(dependencies["libexif-wasm"]),
+    __LIBEXIF_WASM_VERSION__: JSON.stringify(
+      (await import("libexif-wasm/package.json", { with: { type: "json" } }))
+        .version,
+    ),
     "import.meta.env.COMMIT_REF": JSON.stringify(process.env.COMMIT_REF),
     "import.meta.env.URL": JSON.stringify(process.env.URL),
   },
