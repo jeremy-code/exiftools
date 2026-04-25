@@ -7,7 +7,7 @@ import { saveFile } from "#utils/saveFile";
 import { writeExifData } from "@exifi/exif-utils";
 import { Button } from "@exifi/ui/components/Button";
 
-import { useExifEditorContext } from "../ExifEditorProvider";
+import { useExifEditorContext } from "../hooks/useExifEditorContext";
 
 // https://evilmartians.com/chronicles/how-to-detect-safari-and-ios-versions-with-ease
 const isMobileWebKit = () => "ongesturechange" in window;

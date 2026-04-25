@@ -1,6 +1,4 @@
-import { createContext, use, type ReactNode } from "react";
-
-import type { ExifData } from "libexif-wasm";
+import { type ReactNode } from "react";
 
 import {
   ExifEditorStoreContext,
@@ -9,16 +7,7 @@ import {
 import { useExifData } from "#hooks/useExifData";
 import { useFileStore } from "#hooks/useFileStore";
 
-const ExifEditorContext = createContext<ExifData | null>(null);
-
-const useExifEditorContext = () => {
-  const exifEditorContext = use(ExifEditorContext);
-
-  if (exifEditorContext === null) {
-    throw new Error("Missing ExifEditorProvider in the tree");
-  }
-  return exifEditorContext;
-};
+import { ExifEditorContext } from "./hooks/useExifEditorContext";
 
 const ExifEditorProvider = ({
   children,
@@ -36,4 +25,4 @@ const ExifEditorProvider = ({
   );
 };
 
-export { ExifEditorContext, ExifEditorProvider, useExifEditorContext };
+export { ExifEditorProvider };
