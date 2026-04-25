@@ -7,12 +7,12 @@ import { EnumSelect } from "#components/editor/EnumSelect";
 import { ExifVersionInput } from "#components/editor/ExifVersionInput";
 import { GpsTagVersionInput } from "#components/editor/GpsTagVersionInput";
 import { NumberInput } from "#components/editor/NumberInput";
-import { classifyExifEntry } from "#features/exif-editor/utils/classifyExifEntry";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
 import { Input } from "@exifi/ui/components/Input";
 
 import type { ExifTableRow } from "./columns";
+import { getExifQuickEditor } from "../../editors/quick/getExifQuickEditor";
 
 type ValueCellProps = CellContext<
   ExifTableRow,
@@ -26,49 +26,45 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
     return null;
   }
 
-  const classification = classifyExifEntry(originalRow, (value) =>
+  const quickEditor = getExifQuickEditor(originalRow, (value) =>
     table.options.meta?.updateExifEntry(originalRow, value),
   );
 
-  if (classification === null) {
+  if (quickEditor === null) {
     return getValue() ?? "";
   }
   const className = "focus:border-border focus:bg-background";
 
-  switch (classification.kind) {
+  switch (quickEditor.kind) {
     case "enum":
     case "enumAscii":
       return (
         <EnumSelect
           placeholder={`Select a value for ${ExifTagInfo.getTitleInIfd(originalRow.tag, originalRow.ifd)}`}
-          {...classification.ctx}
+          {...quickEditor}
         />
       );
     case "dateStamp":
-      return <DateInput className={className} {...classification.ctx} />;
+      return <DateInput className={className} {...quickEditor} />;
     case "versionId":
-      return (
-        <GpsTagVersionInput className={className} {...classification.ctx} />
-      );
+      return <GpsTagVersionInput className={className} {...quickEditor} />;
     case "datetime":
-      return (
-        <DatetimeLocalInput className={className} {...classification.ctx} />
-      );
+      return <DatetimeLocalInput className={className} {...quickEditor} />;
     case "ascii":
       return (
         <Input
           className={className}
           type="text"
-          value={classification.ctx.value}
-          onChange={(e) => classification.ctx.onValueChange(e.target.value)}
+          {...quickEditor}
+          onChange={(e) => quickEditor.onValueChange(e.target.value)}
         />
       );
     case "exifVersion":
-      return <ExifVersionInput className={className} {...classification.ctx} />;
-    case "number":
-      return <NumberInput className={className} {...classification.ctx} />;
+      return <ExifVersionInput className={className} {...quickEditor} />;
+    case "simpleNumeric":
+      return <NumberInput className={className} {...quickEditor} />;
     default:
-      assertNever(classification);
+      assertNever(quickEditor);
   }
 };
 
