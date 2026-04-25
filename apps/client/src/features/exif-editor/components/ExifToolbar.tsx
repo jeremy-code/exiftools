@@ -4,8 +4,8 @@ import { useShallow } from "zustand/react/shallow";
 import { useExifEditorStoreContext } from "#hooks/useExifEditor";
 import { useFileStore } from "#hooks/useFileStore";
 import { saveFile } from "#utils/saveFile";
+import { writeExifData } from "@exiftools/exif-utils";
 import { Button } from "@exiftools/ui/components/Button";
-import { writeExifData } from "@exiftools/write-exif-data";
 
 import { useExifEditorContext } from "../ExifEditorProvider";
 

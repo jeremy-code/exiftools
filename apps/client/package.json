@@ -24,7 +24,7 @@
     "@dnd-kit/helpers": "^0.4.0",
     "@dnd-kit/react": "^0.4.0",
     "@exiftools/ui": "workspace:*",
-    "@exiftools/write-exif-data": "workspace:*",
+    "@exiftools/exif-utils": "workspace:*",
     "@react-leaflet/core": "^3.0.0",
     "@std/path": "npm:@jsr/std__path@^1.1.4",
     "@tanstack/react-form": "^1.29.1",
