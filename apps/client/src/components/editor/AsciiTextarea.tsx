@@ -6,10 +6,14 @@ import { Textarea, type TextareaProps } from "@exifi/ui/components/Textarea";
 
 type AsciiTextareaProps = {
   value: number[];
-  setValue: (value: number[]) => void;
+  onValueChange: (value: number[]) => void;
 } & Omit<TextareaProps, "value">;
 
-const AsciiTextarea = ({ value, setValue, ...props }: AsciiTextareaProps) => {
+const AsciiTextarea = ({
+  value,
+  onValueChange,
+  ...props
+}: AsciiTextareaProps) => {
   const asciiValue = useMemo(
     () => decodeStringFromUtf8(new Uint8Array(value)),
     [value],
@@ -20,7 +24,7 @@ const AsciiTextarea = ({ value, setValue, ...props }: AsciiTextareaProps) => {
       {...props}
       value={asciiValue}
       onChange={(event) => {
-        setValue(Array.from(encodeStringToUtf8(event.target.value)));
+        onValueChange(Array.from(encodeStringToUtf8(event.target.value)));
       }}
     />
   );

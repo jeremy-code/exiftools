@@ -218,14 +218,14 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
             />
           ))
         : exifEntryObject.format === "ASCII" ?
-          <AsciiTextarea value={newValue} setValue={setNewValue} />
+          <AsciiTextarea value={newValue} onValueChange={setNewValue} />
         : exifEntryObject.tag === "USER_COMMENT" ?
-          <UserCommentTextarea value={newValue} setValue={setNewValue} />
+          <UserCommentTextarea value={newValue} onValueChange={setNewValue} />
         : newValue.map((value, index) => (
             <NumberInput
               key={index}
               value={value}
-              setValue={setNewValueAtIndex(index)}
+              onValueChange={setNewValueAtIndex(index)}
             />
           ))
         }
@@ -259,7 +259,7 @@ const ExifEntryEditor = ({ exifEntryObject }: ExifEntryEditorProps) => {
                 <NumberInput
                   key={index}
                   value={value}
-                  setValue={setNewValueAtIndex(index)}
+                  onValueChange={setNewValueAtIndex(index)}
                 />
               ))}
             </div>
