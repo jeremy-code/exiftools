@@ -6,6 +6,7 @@ import { resolveEnumAscii } from "./resolvers/resolveEnumAscii";
 import { resolveExifVersion } from "./resolvers/resolveExifVersion";
 import { resolveSimpleNumeric } from "./resolvers/resolveSimpleNumeric";
 import { resolveSimpleRational } from "./resolvers/resolveSimpleRational";
+import { resolveTimeStamp } from "./resolvers/resolveTimeStamp";
 import { resolveVerisonId } from "./resolvers/resolveVersionId";
 import type { QuickEditorResolver } from "./types";
 
@@ -16,6 +17,7 @@ const resolvers: QuickEditorResolver[] = [
   resolveDateTime, // tag === "DATE_TIME"
   resolveExifVersion, // tag === "EXIF_VERSION"
   resolveVerisonId, // tag === "VERSION_ID"
+  resolveTimeStamp, // tag === "TIME_STAMP"
   resolveAscii, // format === "ASCII"
   resolveSimpleRational, // format === "RATIONAL" && denominator === 1
   resolveSimpleNumeric, // format is numeric && components === 1

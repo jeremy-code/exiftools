@@ -7,6 +7,7 @@ import { EnumSelect } from "#components/editor/EnumSelect";
 import { ExifVersionInput } from "#components/editor/ExifVersionInput";
 import { GpsTagVersionInput } from "#components/editor/GpsTagVersionInput";
 import { NumberInput } from "#components/editor/NumberInput";
+import { TimeStampInput } from "#components/editor/TimeStampInput";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
 import { Input } from "@exifi/ui/components/Input";
@@ -50,6 +51,8 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
       return <GpsTagVersionInput className={className} {...quickEditor} />;
     case "datetime":
       return <DatetimeLocalInput className={className} {...quickEditor} />;
+    case "timeStamp":
+      return <TimeStampInput className={className} {...quickEditor} />;
     case "ascii":
       return (
         <Input
