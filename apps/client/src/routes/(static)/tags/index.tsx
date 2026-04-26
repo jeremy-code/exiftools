@@ -63,7 +63,11 @@ const columns = [
   columnHelper.accessor("tagVal", {
     header: "Tag",
     size: 80,
-    cell: ({ getValue }) => "0x" + getValue().toString(16).padStart(4, "0"),
+    cell: ({ getValue }) => (
+      <span className="font-mono">
+        {"0x" + getValue().toString(16).padStart(4, "0")}
+      </span>
+    ),
   }),
   columnHelper.accessor("title", {
     header: "Name",
@@ -141,103 +145,100 @@ const TagsComponent = () => {
 
   return (
     <div className="container py-8">
-      <div className="flex flex-col gap-2">
-        <Heading as="h1" size="2xl" className="mb-4">
-          Exif tags
-        </Heading>
-
-        <Table
-          variant="outline"
-          className="w-(--table-width) table-fixed"
-          style={
-            {
-              "--table-width": `${table.getCenterTotalSize()}px`,
-              ...columnSizeCssVars,
-            } as CSSProperties
-          }
-        >
-          <TableHead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHeader
-                    key={header.id}
-                    className="group relative w-(--table-header-width)"
-                    colSpan={header.colSpan}
-                    style={
-                      {
-                        "--table-header-width": `calc(var(--header-${header.id}-size) * 1px)`,
-                      } as CSSProperties
-                    }
-                  >
-                    {!header.isPlaceholder ?
-                      <div className="flex items-center justify-between gap-1">
-                        <div>
-                          {header.column.getCanSort() ?
-                            <SortingHandlerToggle column={header.column}>
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext(),
-                              )}
-                            </SortingHandlerToggle>
-                          : flexRender(
+      <Heading as="h1" size="2xl" className="mb-4">
+        Exif tags
+      </Heading>
+      <Table
+        variant="outline"
+        className="w-(--table-width) table-fixed"
+        style={
+          {
+            "--table-width": `${table.getCenterTotalSize()}px`,
+            ...columnSizeCssVars,
+          } as CSSProperties
+        }
+      >
+        <TableHead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHeader
+                  key={header.id}
+                  className="group relative w-(--table-header-width)"
+                  colSpan={header.colSpan}
+                  style={
+                    {
+                      "--table-header-width": `calc(var(--header-${header.id}-size) * 1px)`,
+                    } as CSSProperties
+                  }
+                >
+                  {!header.isPlaceholder ?
+                    <div className="flex items-center justify-between gap-1">
+                      <div>
+                        {header.column.getCanSort() ?
+                          <SortingHandlerToggle column={header.column}>
+                            {flexRender(
                               header.column.columnDef.header,
                               header.getContext(),
-                            )
-                          }
-                        </div>
+                            )}
+                          </SortingHandlerToggle>
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )
+                        }
                       </div>
-                    : null}
-                    <ColumnResizer header={header} />
-                  </TableHeader>
-                ))}
-              </TableRow>
-            ))}
-          </TableHead>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow className="has-focus:bg-subtle" key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={cell.id}
-                    className="w-(--table-cell-size) max-w-(--table-cell-size)"
-                    style={
-                      {
-                        "--table-cell-size": `calc(var(--col-${cell.column.id}-size) * 1px)`,
-                      } as CSSProperties
-                    }
-                  >
-                    {cell.getIsGrouped() ?
-                      <ExpandRows row={row}>
-                        <span className="flex gap-2">
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                          <Badge>
-                            {formatPlural(row.subRows.length, {
-                              one: " tag",
-                              other: " tags",
-                            })}
-                          </Badge>
-                        </span>
-                      </ExpandRows>
-                    : cell.getIsAggregated() ?
-                      flexRender(
-                        cell.column.columnDef.aggregatedCell ??
+                    </div>
+                  : null}
+                  <ColumnResizer header={header} />
+                </TableHeader>
+              ))}
+            </TableRow>
+          ))}
+        </TableHead>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => (
+            <TableRow className="has-focus:bg-subtle" key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <TableCell
+                  key={cell.id}
+                  className="w-(--table-cell-size) max-w-(--table-cell-size)"
+                  style={
+                    {
+                      "--table-cell-size": `calc(var(--col-${cell.column.id}-size) * 1px)`,
+                    } as CSSProperties
+                  }
+                >
+                  {cell.getIsGrouped() ?
+                    <ExpandRows row={row}>
+                      <span className="flex gap-2">
+                        {flexRender(
                           cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )
-                    : !cell.getIsPlaceholder() ?
-                      flexRender(cell.column.columnDef.cell, cell.getContext())
-                    : null}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+                          cell.getContext(),
+                        )}
+                        <Badge>
+                          {formatPlural(row.subRows.length, {
+                            one: " tag",
+                            other: " tags",
+                          })}
+                        </Badge>
+                      </span>
+                    </ExpandRows>
+                  : cell.getIsAggregated() ?
+                    flexRender(
+                      cell.column.columnDef.aggregatedCell ??
+                        cell.column.columnDef.cell,
+                      cell.getContext(),
+                    )
+                  : !cell.getIsPlaceholder() ?
+                    flexRender(cell.column.columnDef.cell, cell.getContext())
+                  : null}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };
