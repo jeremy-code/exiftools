@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
-import { useForm } from "@tanstack/react-form";
+import { formOptions } from "@tanstack/react-form";
 import { LatLng } from "leaflet";
 import type { Tag } from "libexif-wasm";
 import { z } from "zod";
@@ -53,7 +53,7 @@ const getInitialFieldValues = (
   return { longitude, latitude, altitude };
 };
 
-const useExifEntryAddGpsForm = () => {
+const useExifEntryAddGpsFormOptions = () => {
   const { updateLatLng, exifDataObject } = useExifEditorStoreContext(
     useShallow((state) => ({
       updateLatLng: state.updateLatLng,
@@ -64,32 +64,25 @@ const useExifEntryAddGpsForm = () => {
     () => getInitialFieldValues(exifDataObject.ifd.GPS),
     [exifDataObject],
   );
-  const gpsForm = useForm({
-    defaultValues: initialFormValues,
-    onSubmit: ({ value }) => {
-      if (value.latitude !== undefined && value.longitude !== undefined) {
-        updateLatLng(
-          new LatLng(value.latitude, value.longitude, value.altitude),
-        );
-      }
-    },
-    validators: { onSubmit: gpsFormSchema },
-  });
-
-  const setGpsForm = useCallback(
-    (latLng: LatLng) => {
-      gpsForm.setFieldValue("latitude", latLng.lat);
-      gpsForm.setFieldValue("longitude", latLng.lng);
-
-      // Retain previous altitude if undefined
-      if (latLng.alt !== undefined) {
-        gpsForm.setFieldValue("altitude", latLng.alt);
-      }
-    },
-    [gpsForm],
+  const gpsFormOptions = useMemo(
+    () =>
+      formOptions({
+        defaultValues: initialFormValues,
+        onSubmit: ({ value }) => {
+          if (value.latitude !== undefined && value.longitude !== undefined) {
+            updateLatLng(
+              new LatLng(value.latitude, value.longitude, value.altitude),
+            );
+          }
+        },
+        validators: {
+          onSubmit: gpsFormSchema,
+        },
+      }),
+    [initialFormValues, updateLatLng],
   );
 
-  return { gpsForm, setGpsForm };
+  return gpsFormOptions;
 };
 
-export { useExifEntryAddGpsForm };
+export { useExifEntryAddGpsFormOptions };
