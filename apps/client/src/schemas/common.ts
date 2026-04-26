@@ -8,6 +8,6 @@ const Latitude = z
 const Longitude = z
   .number()
   .min(-180, "Longitude must be at least 180 degrees.")
-  .max(180, "Longitude must be less than or equal to 180 degrees.");
+  .lt(180, "Longitude must be less than 180 degrees.");
 
 export { Longitude, Latitude };
