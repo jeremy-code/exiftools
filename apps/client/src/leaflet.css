@@ -8,3 +8,7 @@
 .leaflet-control-geosearch {
   color: #333;
 }
+
+.leaflet-control-geosearch form input {
+  text-indent: unset;
+}
