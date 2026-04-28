@@ -1,10 +1,6 @@
-import { useState } from "react";
-
-import type { Table } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 
-import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import { formatPlural } from "#utils/formatPlural";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,40 +14,19 @@ import {
 } from "@exifi/ui/components/AlertDialog";
 import { Button } from "@exifi/ui/components/Button";
 
-import type { ExifTableRow } from "../table/columns";
+type DeleteEntriesDialogProps = {
+  rows: string[];
+  deleteRows: () => void;
+};
 
-type DeleteEntriesDialogProps = { table: Table<ExifTableRow> };
-
-const DeleteEntriesDialog = ({ table }: DeleteEntriesDialogProps) => {
-  const removeExifEntries = useExifEditorStoreContext(
-    (state) => state.removeExifEntries,
-  );
-  const [rowsToDelete, setRowsToDelete] = useState<ExifEntryObject[]>([]);
-
+const DeleteEntriesDialog = ({
+  rows,
+  deleteRows,
+}: DeleteEntriesDialogProps) => {
   return (
-    <AlertDialog
-      open={rowsToDelete.length !== 0}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
-          setRowsToDelete([]);
-        }
-      }}
-    >
+    <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button
-          onClick={() => {
-            setRowsToDelete(
-              Object.entries(table.getState().rowSelection)
-                .filter(
-                  ([key, value]) => !key.startsWith("ifd:") && value === true,
-                )
-                .map(([selectedRow]) => table.getRow(selectedRow).original)
-                .filter(
-                  (value): value is ExifEntryObject => !("entries" in value),
-                ),
-            );
-          }}
-        >
+        <Button>
           <Trash2 size={16} />
           Delete
         </Button>
@@ -64,23 +39,17 @@ const DeleteEntriesDialog = ({ table }: DeleteEntriesDialogProps) => {
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogBody>
-          This action will delete {rowsToDelete.length} Exif entries.
+          {`This action will delete ${formatPlural(rows.length, {
+            one: " Exif entry",
+            other: " Exif entries",
+          })}`}
         </AlertDialogBody>
         <AlertDialogFooter>
           <AlertDialogCancel asChild>
             <Button>Cancel</Button>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Button
-              onClick={() => {
-                if (rowsToDelete.length === 0) {
-                  throw new Error("No rows to delete");
-                }
-                removeExifEntries(rowsToDelete);
-                setRowsToDelete([]);
-              }}
-              className="ml-3"
-            >
+            <Button onClick={() => deleteRows()} className="ml-3">
               Delete
             </Button>
           </AlertDialogAction>

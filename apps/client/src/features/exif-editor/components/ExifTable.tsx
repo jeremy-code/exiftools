@@ -1,4 +1,4 @@
-import { useMemo, type CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 
 import {
   flexRender,
@@ -6,6 +6,7 @@ import {
   getExpandedRowModel,
   useReactTable,
   type RowData,
+  type RowSelectionState,
 } from "@tanstack/react-table";
 import type { Ifd } from "libexif-wasm";
 import { useShallow } from "zustand/react/shallow";
@@ -32,7 +33,7 @@ import {
 
 import { AddEntryDialog } from "./dialogs/AddEntryDialog";
 import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
-import { DeleteEntriesDialog } from "./dialogs/DeleteEntriesDialog";
+import { SelectionBar } from "./table/SelectionBar";
 import { columns } from "./table/columns";
 
 declare module "@tanstack/react-table" {
@@ -64,8 +65,11 @@ const ExifTable = (props: ExifTableProps) => {
       fix: state.fix,
       addImageDimensions: state.addImageDimensions,
       updateLatLng: state.updateLatLng,
+      setGpsExifFromGeolocationPosition:
+        state.setGpsExifFromGeolocationPosition,
     })),
   );
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const table = useReactTable({
     columns,
     getSubRows: (originalRow) =>
@@ -74,8 +78,12 @@ const ExifTable = (props: ExifTableProps) => {
     data: exifEntryObjects ?? fallbackData,
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
+    onRowSelectionChange: setRowSelection,
     initialState: {
       expanded: true,
+    },
+    state: {
+      rowSelection,
     },
     meta: exifEditorStoreActions,
   });
@@ -193,8 +201,8 @@ const ExifTable = (props: ExifTableProps) => {
           ))}
         </TableBody>
       </Table>
+      <SelectionBar rowSelection={rowSelection} table={table} />
       <div className="flex gap-2">
-        <DeleteEntriesDialog table={table} />
         <AddEntryDialog />
         <AddGpsEntriesDialog />
       </div>
