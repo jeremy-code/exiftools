@@ -50,7 +50,7 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
         onValueChange={(id) => setActiveTabId(id)}
       >
         {/* Offset by height of Navbar */}
-        <div className="sticky top-[--spacing(19.75)] z-50 order-1 container pt-3">
+        <div className="sticky top-[--spacing(20)] z-50 order-1 container pt-2">
           <ScrollArea className="rounded-md border bg-muted shadow">
             <TabsList
               ref={fileTabsListRef}
