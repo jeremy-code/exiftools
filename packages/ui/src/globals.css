@@ -83,6 +83,10 @@
     }
   }
 
+  html body[data-scroll-locked="1"] {
+    overflow: auto !important;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     :has(:target) {
       @apply scroll-smooth;

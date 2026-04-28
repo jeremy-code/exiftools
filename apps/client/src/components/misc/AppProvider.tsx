@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import { useDisposeQueryCache } from "#hooks/useDisposeQueryCache";
 import { Toaster } from "@exifi/ui/components/Toaster";
 import { TooltipProvider } from "@exifi/ui/components/Tooltip";
+import { usePreventScrollLock } from "@exifi/ui/hooks/usePreventScrollLock";
 
 const Devtools =
   import.meta.env.DEV ?
@@ -21,6 +22,7 @@ const queryClient = new QueryClient();
  */
 const AppProvider = ({ children }: { children: Readonly<ReactNode> }) => {
   useDisposeQueryCache(queryClient);
+  usePreventScrollLock();
 
   return (
     <QueryClientProvider client={queryClient}>
