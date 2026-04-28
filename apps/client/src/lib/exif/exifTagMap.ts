@@ -350,6 +350,9 @@ const EXIF_TAG_MAP: Partial<Record<Tag, ExifTagInformation>> = {
     ifd: ["EXIF"],
     format: ["UNDEFINED"],
     maxNumberOfComponents: 1,
+    values: {
+      DSC: 3,
+    },
   },
   SCENE_TYPE: {
     ifd: ["EXIF"],
