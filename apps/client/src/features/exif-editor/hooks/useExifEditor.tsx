@@ -12,6 +12,7 @@ import {
   type ExifDataObject,
   type ExifEntryObject,
 } from "#lib/exif/serializeExifData";
+import { updateDateAndTimeDigitized } from "#lib/exif/updateDateAndTimeDigitized";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { getImageDimensions } from "#utils/getImageDimensions";
 import { isTypedArray } from "#utils/isTypedArray";
@@ -56,6 +57,7 @@ type ExifEditorStoreActions = {
   setGpsExifFromGeolocationPosition: (
     geoLocationPosition: GeolocationPosition,
   ) => void;
+  updateDateAndTimeDigitized: () => void;
 };
 
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
@@ -197,6 +199,12 @@ const useExifEditor = (exifData: ExifData) => {
               exifData.ifd[ExifIfd.GPS],
               geoLocationPosition,
             );
+            return { exifDataObject: serializeExifData(exifData) };
+          });
+        },
+        updateDateAndTimeDigitized: () => {
+          set(() => {
+            updateDateAndTimeDigitized(exifData.ifd[ExifIfd.EXIF]);
             return { exifDataObject: serializeExifData(exifData) };
           });
         },

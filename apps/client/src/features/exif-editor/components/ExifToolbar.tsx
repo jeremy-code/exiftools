@@ -16,14 +16,19 @@ const isMobileWebKit = () => "ongesturechange" in window;
 const ExifToolbar = () => {
   const { file, setFile } = useFileStore();
   const exifData = useExifEditorContext();
-  const [fix, addImageDimensions, setGpsExifFromGeolocationPosition] =
-    useExifEditorStoreContext(
-      useShallow((state) => [
-        state.fix,
-        state.addImageDimensions,
-        state.setGpsExifFromGeolocationPosition,
-      ]),
-    );
+  const [
+    fix,
+    addImageDimensions,
+    setGpsExifFromGeolocationPosition,
+    updateDateAndTimeDigitized,
+  ] = useExifEditorStoreContext(
+    useShallow((state) => [
+      state.fix,
+      state.addImageDimensions,
+      state.setGpsExifFromGeolocationPosition,
+      state.updateDateAndTimeDigitized,
+    ]),
+  );
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -83,6 +88,9 @@ const ExifToolbar = () => {
         }}
       >
         Set Exif to current GPS position
+      </Button>
+      <Button onClick={() => updateDateAndTimeDigitized()}>
+        Set Date and Time Digitized to current time
       </Button>
     </div>
   );
