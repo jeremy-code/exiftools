@@ -9,6 +9,8 @@ import { writeExifData } from "@exifi/exif-utils";
 import { Button } from "@exifi/ui/components/Button";
 
 import { useExifEditorContext } from "../hooks/useExifEditorContext";
+import { AddEntryDialog } from "./dialogs/AddEntryDialog";
+import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
 
 // https://evilmartians.com/chronicles/how-to-detect-safari-and-ios-versions-with-ease
 const isMobileWebKit = () => "ongesturechange" in window;
@@ -92,6 +94,8 @@ const ExifToolbar = () => {
       <Button onClick={() => updateDateAndTimeDigitized()}>
         Set Date and Time Digitized to current time
       </Button>
+      <AddEntryDialog />
+      <AddGpsEntriesDialog />
     </div>
   );
 };

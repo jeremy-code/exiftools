@@ -31,14 +31,15 @@ import {
   type TableProps,
 } from "@exifi/ui/components/Table";
 
-import { AddEntryDialog } from "./dialogs/AddEntryDialog";
-import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
 import { SelectionBar } from "./table/SelectionBar";
 import { columns } from "./table/columns";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- All declarations of 'TableMeta' must have identical type parameters.
-  interface TableMeta<TData extends RowData> extends ExifEditorStoreActions {}
+  interface TableMeta<TData extends RowData> extends Pick<
+    ExifEditorStoreActions,
+    "removeExifEntry" | "updateExifEntry" | "fix"
+  > {}
 }
 
 const fallbackData: ExifEntryObject[] = [];
@@ -60,13 +61,7 @@ const ExifTable = (props: ExifTableProps) => {
     useShallow((state) => ({
       updateExifEntry: state.updateExifEntry,
       removeExifEntry: state.removeExifEntry,
-      removeExifEntries: state.removeExifEntries,
-      addExifEntry: state.addExifEntry,
       fix: state.fix,
-      addImageDimensions: state.addImageDimensions,
-      updateLatLng: state.updateLatLng,
-      setGpsExifFromGeolocationPosition:
-        state.setGpsExifFromGeolocationPosition,
     })),
   );
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -202,10 +197,6 @@ const ExifTable = (props: ExifTableProps) => {
         </TableBody>
       </Table>
       <SelectionBar rowSelection={rowSelection} table={table} />
-      <div className="flex gap-2">
-        <AddEntryDialog />
-        <AddGpsEntriesDialog />
-      </div>
     </>
   );
 };
