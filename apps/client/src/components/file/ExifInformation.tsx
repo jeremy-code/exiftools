@@ -46,8 +46,8 @@ const ExifThumbnailInformation = ({ thumbnail }: { thumbnail: Uint8Array }) => {
     <>
       <Link href={blobUrl} color="blue">
         Exists
-      </Link>
-      <Suspense fallback={<Skeleton className="h-[1em] w-[50px]" />}>
+      </Link>{" "}
+      <Suspense fallback={<Skeleton className="h-[1em] w-15" />}>
         (<ImageDimensions imageDimensionsPromise={imageDimensionsPromise} />)
       </Suspense>
     </>
@@ -113,7 +113,7 @@ const ExifInformation = ({
             <DataListItemLabel className="min-w-unset">
               Thumbnail
             </DataListItemLabel>
-            <DataListItemValue className="gap-1">
+            <DataListItemValue className="inline">
               {exifData.data !== null ?
                 <ExifThumbnailInformation thumbnail={exifData.data} />
               : "Does not exist"}
