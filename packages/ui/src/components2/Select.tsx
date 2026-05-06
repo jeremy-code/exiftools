@@ -1,0 +1,112 @@
+import { ChevronDown } from "lucide-react";
+import {
+  Select as AriaSelect,
+  type SelectProps as AriaSelectProps,
+  Button,
+  ListBox,
+  type ListBoxProps,
+  type ListBoxItemProps as SelectItemProps,
+  SelectValue,
+  type ValidationResult,
+} from "react-aria-components/Select";
+import { cn, tv } from "tailwind-variants";
+
+import {
+  ListBoxItem as SelectItem,
+  ListBoxSection as SelectSection,
+  type ListBoxSectionProps as SelectSectionProps,
+} from "./ListBox";
+import { Popover } from "./Popover";
+import { Description, FieldError, Label } from "./form";
+import { composeTailwindRenderProps } from "../utils/composeTailwindRenderProps";
+import { focusRing } from "../utils/focusRing";
+
+const selectVariants = tv({
+  extend: focusRing,
+  base: [
+    "flex min-h-9 w-full min-w-max items-center justify-between gap-1 rounded-sm border border-border bg-surface px-2.5 pr-2 text-start text-sm/5 transition-colors",
+    "[-webkit-tap-highlight-color:transparent]",
+  ],
+  variants: {
+    isDisabled: {
+      false: [
+        "pressed:border-fg-muted text-fg-bold group-invalid/select:outline group-invalid/select:outline-destructive hover:border-fg-subtle",
+        "forced-colors:group-invalid/select:outline-[Mark]",
+      ],
+      true: [
+        "border-transparent bg-bg-muted text-neutral",
+        "forced-colors:text-[GrayText]",
+      ],
+    },
+  },
+});
+
+type SelectionMode = "single" | "multiple";
+
+type SelectProps<T extends object, M extends SelectionMode> = {
+  children: ListBoxProps<T>["children"];
+  label?: string;
+  description?: string;
+  errorMessage?: string | ((validation: ValidationResult) => string);
+  items?: Iterable<T>;
+} & Omit<AriaSelectProps<T, M>, "children">;
+
+const Select = <
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- Match `AriaSelectProps` type
+  T extends object = {},
+  M extends SelectionMode = "single",
+>({
+  className,
+  children,
+  label,
+  description,
+  errorMessage,
+  items,
+  ...props
+}: SelectProps<T, M>) => {
+  return (
+    <AriaSelect
+      {...props}
+      className={composeTailwindRenderProps(
+        className,
+        "group/select relative flex flex-col gap-1",
+      )}
+    >
+      {label && <Label>{label}</Label>}
+      <Button className={selectVariants}>
+        <SelectValue className="basis-content line-clamp-1 shrink-0 text-sm">
+          {({ selectedText, defaultChildren }) =>
+            selectedText || defaultChildren
+          }
+        </SelectValue>
+        <ChevronDown
+          aria-hidden
+          className={cn(
+            "size-4 shrink-0 text-fg-muted group-disabled/select:text-border",
+            "forced-colors:text-[ButtonText] forced-colors:group-disabled/select:text-[GrayText]",
+          )}
+        />
+      </Button>
+      {description && <Description>{description}</Description>}
+      <FieldError>{errorMessage}</FieldError>
+      <Popover containerPadding={0}>
+        <ListBox
+          items={items}
+          className="max-h-[inherit] overflow-auto p-1 outline-hidden"
+        >
+          {children}
+        </ListBox>
+      </Popover>
+    </AriaSelect>
+  );
+};
+
+export {
+  Select,
+  type SelectProps,
+  selectVariants,
+  SelectItem,
+  type SelectItemProps,
+  SelectSection,
+  type SelectSectionProps,
+};
