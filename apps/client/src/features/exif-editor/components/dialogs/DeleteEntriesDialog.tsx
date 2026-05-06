@@ -1,61 +1,58 @@
 import { Trash2 } from "lucide-react";
 
 import { formatPlural } from "#utils/formatPlural";
+import { Button } from "@exifi/ui/components2/Button";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogBody,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@exifi/ui/components/AlertDialog";
-import { Button } from "@exifi/ui/components/Button";
+  Dialog,
+  DialogTrigger,
+  type DialogTriggerProps,
+  DialogTitle,
+  DialogBody,
+  DialogHeader,
+  DialogFooter,
+} from "@exifi/ui/components2/Dialog";
+import { Modal } from "@exifi/ui/components2/Modal";
 
 type DeleteEntriesDialogProps = {
   rows: string[];
   deleteRows: () => void;
-};
+} & Omit<DialogTriggerProps, "children">;
 
 const DeleteEntriesDialog = ({
   rows,
   deleteRows,
+  ...props
 }: DeleteEntriesDialogProps) => {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button>
-          <Trash2 size={16} />
-          Delete
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent
+    <DialogTrigger {...props}>
+      <Button aria-label="Delete entries">
+        <Trash2 size={16} />
+        Delete
+      </Button>
+      <Modal
         aria-description="Delete Exif entries alert dialog"
-        className="max-w-[min(calc(100%-2rem),--spacing(140))]"
+        modalProps={{
+          className: "max-w-[min(calc(100%-2rem),--spacing(140))]",
+        }}
       >
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-        </AlertDialogHeader>
-        <AlertDialogBody>
-          {`This action will delete ${formatPlural(rows.length, {
-            one: " Exif entry",
-            other: " Exif entries",
-          })}`}
-        </AlertDialogBody>
-        <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button>Cancel</Button>
-          </AlertDialogCancel>
-          <AlertDialogAction asChild>
+        <Dialog>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
+            {`This action will delete ${formatPlural(rows.length, {
+              one: " Exif entry",
+              other: " Exif entries",
+            })}`}
+          </DialogBody>
+          <DialogFooter closeButton>
             <Button onClick={() => deleteRows()} className="ml-3">
               Delete
             </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </DialogFooter>
+        </Dialog>
+      </Modal>
+    </DialogTrigger>
   );
 };
 

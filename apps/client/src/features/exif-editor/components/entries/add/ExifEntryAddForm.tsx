@@ -12,7 +12,6 @@ import { IFD_NAMES } from "libexif-wasm/constants";
 
 import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
-import { Button } from "@exifi/ui/components/Button";
 import {
   Combobox,
   ComboboxItem,
@@ -32,6 +31,7 @@ import {
   SelectValue,
 } from "@exifi/ui/components/Select";
 import { Spinner } from "@exifi/ui/components/Spinner";
+import { Button } from "@exifi/ui/components2/Button";
 
 type FieldValues = {
   ifd: Ifd;
@@ -193,20 +193,25 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
             </>
           )}
         />
-        <form.Subscribe
-          selector={(state) => state.isSubmitting}
-          children={(isSubmitting) => (
-            <Button type="submit" variant="surface" disabled={isSubmitting}>
-              {isSubmitting && <Spinner className="absolute" />}
-              <span
-                className="data-[pending=true]:invisible"
-                data-pending={isSubmitting}
-              >
-                Submit
-              </span>
-            </Button>
-          )}
-        />
+        <div className="flex flex-row-reverse gap-2">
+          <form.Subscribe
+            selector={(state) => state.isSubmitting}
+            children={(isSubmitting) => (
+              <Button type="submit" variant="surface" isDisabled={isSubmitting}>
+                {isSubmitting && <Spinner className="absolute" />}
+                <span
+                  className="data-[pending=true]:invisible"
+                  data-pending={isSubmitting}
+                >
+                  Submit
+                </span>
+              </Button>
+            )}
+          />
+          <Button variant="ghost" slot="close">
+            Cancel
+          </Button>
+        </div>
       </div>
     </form>
   );
