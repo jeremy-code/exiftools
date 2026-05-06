@@ -12,8 +12,8 @@ import { useShallow } from "zustand/react/shallow";
 
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { formatBytes } from "#utils/formatBytes";
-import { Button } from "@exifi/ui/components/Button";
 import { Link } from "@exifi/ui/components/Link";
+import { Button } from "@exifi/ui/components2/Button";
 
 type AcceptedFileProps = {
   file: File;
@@ -57,13 +57,10 @@ const AcceptedFile = ({
       <div className="grid aspect-square place-content-center">
         <Button
           size="icon"
-          onClick={() => {
-            removeFile();
-          }}
+          onPress={() => removeFile()}
+          aria-label="Remove file"
         >
-          <AccessibleIcon.Root label="Remove file">
-            <X className="size-4" />
-          </AccessibleIcon.Root>
+          <X className="size-4" />
         </Button>
       </div>
     </li>

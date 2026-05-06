@@ -112,6 +112,9 @@ importers:
       react:
         specifier: ^19.2.5
         version: 19.2.5
+      react-aria-components:
+        specifier: ^1.17.0
+        version: 1.17.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       react-compiler-runtime:
         specifier: ^1.0.0
         version: 1.0.0(react@19.2.5)

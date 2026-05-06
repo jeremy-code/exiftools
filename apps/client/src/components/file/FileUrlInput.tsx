@@ -5,9 +5,9 @@ import { useMutation } from "@tanstack/react-query";
 
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { getFileFromResponse } from "#utils/getFileFromResponse";
-import { Button, type ButtonProps } from "@exifi/ui/components/Button";
 import { Input, type InputProps } from "@exifi/ui/components/Input";
 import { Spinner } from "@exifi/ui/components/Spinner";
+import { Button, type ButtonProps } from "@exifi/ui/components2/Button";
 import { toast } from "@exifi/ui/hooks/useToast";
 
 type FileUrlInputProps = {
@@ -86,7 +86,7 @@ const FileUrlInput = ({
               type="submit"
               variant="surface"
               className="rounded-l-none"
-              disabled={isSubmitting}
+              isDisabled={isSubmitting}
               {...buttonProps}
             >
               {isSubmitting && <Spinner className="absolute" />}

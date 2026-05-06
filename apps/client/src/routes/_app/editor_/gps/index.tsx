@@ -15,8 +15,8 @@ import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { saveFile } from "#utils/saveFile";
 import { seo } from "#utils/seo";
 import { writeExifData } from "@exifi/exif-utils";
-import { Button } from "@exifi/ui/components/Button";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
+import { Button } from "@exifi/ui/components2/Button";
 
 const defaultOsmProvider = new OpenStreetMapProvider();
 
@@ -64,8 +64,7 @@ const EditorGpsApp = ({
       </Map>
       {latLng?.toString()}
       <Button
-        onClick={async (e) => {
-          e.preventDefault();
+        onPress={async () => {
           if (latLng === null) {
             return;
           }
