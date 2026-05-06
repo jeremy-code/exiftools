@@ -35,13 +35,15 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
     return getValue() ?? "";
   }
   const className = "focus:border-border focus:bg-background";
+  const title = ExifTagInfo.getTitleInIfd(originalRow.tag, originalRow.ifd);
 
   switch (quickEditor.kind) {
     case "enum":
     case "enumAscii":
       return (
         <EnumSelect
-          placeholder={`Select a value for ${ExifTagInfo.getTitleInIfd(originalRow.tag, originalRow.ifd)}`}
+          aria-label={title}
+          placeholder={`Select a value for ${title}`}
           {...quickEditor}
         />
       );

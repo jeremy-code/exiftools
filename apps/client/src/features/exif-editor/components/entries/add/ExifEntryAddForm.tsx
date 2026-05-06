@@ -23,15 +23,9 @@ import {
 } from "@exifi/ui/components/Combobox";
 import { Input } from "@exifi/ui/components/Input";
 import { Label } from "@exifi/ui/components/Label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@exifi/ui/components/Select";
 import { Spinner } from "@exifi/ui/components/Spinner";
 import { Button } from "@exifi/ui/components2/Button";
+import { Select, SelectItem } from "@exifi/ui/components2/Select";
 
 type FieldValues = {
   ifd: Ifd;
@@ -116,68 +110,54 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
         <form.Field
           name="ifd"
           children={(field) => (
-            <>
-              <Label>Image File Domain</Label>
-              <Select
-                value={field.state.value}
-                onValueChange={(value) => {
-                  field.handleChange(value as FieldValues["ifd"]);
-                }}
-              >
-                <SelectTrigger onBlur={field.handleBlur}>
-                  <SelectValue placeholder="Select an IFD" />
-                </SelectTrigger>
-                <SelectContent>
-                  {IFD_NAMES.map((ifdName) => (
-                    <SelectItem key={ifdName} value={ifdName}>
-                      {ifdName}{" "}
-                      <form.Subscribe
-                        selector={(state) => state.values.tagEntry?.esl}
-                      >
-                        {(esl) => (esl === undefined ? null : esl[ifdName])}
-                      </form.Subscribe>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </>
+            <Select
+              label="Image File Domain"
+              value={field.state.value}
+              onChange={(value) => {
+                field.handleChange(value as FieldValues["ifd"]);
+              }}
+              placeholder="Select an IFD"
+            >
+              {IFD_NAMES.map((ifdName) => (
+                <SelectItem key={ifdName} textValue={ifdName}>
+                  {ifdName}{" "}
+                  <form.Subscribe
+                    selector={(state) => state.values.tagEntry?.esl}
+                  >
+                    {(esl) => (esl === undefined ? null : esl[ifdName])}
+                  </form.Subscribe>
+                </SelectItem>
+              ))}
+            </Select>
           )}
         />
         <form.Field
           name="format"
           children={(field) => (
-            <>
-              <Label>Format</Label>
-              <Select
-                value={field.state.value}
-                onValueChange={(value) => {
-                  field.handleChange(value as FieldValues["format"]);
-                }}
-              >
-                <SelectTrigger onBlur={field.handleBlur}>
-                  <SelectValue placeholder="Select a format" />
-                </SelectTrigger>
-                <SelectContent>
-                  <form.Subscribe
-                    selector={(state) => state.values.tagEntry?.tag}
-                  >
-                    {(tag) =>
-                      typeof tag === "string" && tag in EXIF_TAG_MAP ?
-                        EXIF_TAG_MAP[tag]?.format.map((format) => (
-                          <SelectItem key={format} value={format}>
-                            {format}
-                          </SelectItem>
-                        ))
-                      : Array.from(ExifFormat).map(([format]) => (
-                          <SelectItem key={format} value={format}>
-                            {format}
-                          </SelectItem>
-                        ))
-                    }
-                  </form.Subscribe>
-                </SelectContent>
-              </Select>
-            </>
+            <Select
+              label="Format"
+              value={field.state.value}
+              placeholder="Select a format"
+              onChange={(value) => {
+                field.handleChange(value as FieldValues["format"]);
+              }}
+            >
+              <form.Subscribe selector={(state) => state.values.tagEntry?.tag}>
+                {(tag) =>
+                  typeof tag === "string" && tag in EXIF_TAG_MAP ?
+                    EXIF_TAG_MAP[tag]?.format.map((format) => (
+                      <SelectItem key={format} textValue={format}>
+                        {format}
+                      </SelectItem>
+                    ))
+                  : Array.from(ExifFormat).map(([format]) => (
+                      <SelectItem key={format} textValue={format}>
+                        {format}
+                      </SelectItem>
+                    ))
+                }
+              </form.Subscribe>
+            </Select>
           )}
         />
         <form.Field

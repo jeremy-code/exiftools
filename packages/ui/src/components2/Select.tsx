@@ -49,6 +49,7 @@ type SelectProps<T extends object, M extends SelectionMode> = {
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
   items?: Iterable<T>;
+  listboxProps?: Omit<ListBoxProps<T>, "children">;
 } & Omit<AriaSelectProps<T, M>, "children">;
 
 const Select = <
@@ -62,6 +63,7 @@ const Select = <
   description,
   errorMessage,
   items,
+  listboxProps,
   ...props
 }: SelectProps<T, M>) => {
   return (
@@ -93,6 +95,7 @@ const Select = <
         <ListBox
           items={items}
           className="max-h-[inherit] overflow-auto p-1 outline-hidden"
+          {...listboxProps}
         >
           {children}
         </ListBox>
