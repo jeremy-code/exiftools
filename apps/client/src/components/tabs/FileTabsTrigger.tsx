@@ -1,19 +1,17 @@
-import type { ComponentPropsWithRef } from "react";
-
 import { useSortable } from "@dnd-kit/react/sortable";
 import { X } from "lucide-react";
 import { AccessibleIcon } from "radix-ui";
 import { cn } from "tailwind-variants";
 
 import { Button } from "@exifi/ui/components/Button";
-import { TabsTrigger } from "@exifi/ui/components/Tabs";
+import { Tab, type TabProps } from "@exifi/ui/components2/Tabs";
 
 type FileTabsTriggerProps = {
   id: string;
   index: number;
   file: File | null;
   removeTab: () => void;
-} & Omit<ComponentPropsWithRef<typeof TabsTrigger>, "value">;
+} & TabProps;
 
 const FileTabsTrigger = ({
   className,
@@ -26,8 +24,9 @@ const FileTabsTrigger = ({
   const { ref, isDragSource } = useSortable({ id, index });
 
   return (
-    <TabsTrigger
+    <Tab
       ref={ref}
+      id={id}
       data-dragging={isDragSource}
       className={cn(
         "flex min-w-50 items-center pr-10! transition-colors data-[dragging=true]:opacity-50",
@@ -35,7 +34,6 @@ const FileTabsTrigger = ({
         "dark:data-[state=inactive]:hover:bg-gray-700/50",
         className,
       )}
-      value={id}
       {...props}
     >
       <span className="line-clamp-1">
@@ -59,7 +57,7 @@ const FileTabsTrigger = ({
           <X size={16} />
         </AccessibleIcon.Root>
       </Button>
-    </TabsTrigger>
+    </Tab>
   );
 };
 

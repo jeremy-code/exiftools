@@ -5,14 +5,14 @@ import { FileUrlInput } from "#components/file/FileUrlInput";
 import { DropzoneStoreProvider } from "#hooks/useDropzoneStore";
 import { FileStoreProvider } from "#hooks/useFileStore";
 import { Heading } from "@exifi/ui/components/Heading";
-import { TabsContent } from "@exifi/ui/components/Tabs";
+import { TabPanel } from "@exifi/ui/components2/Tabs";
 
 type FileTabsContentProps = {
   file: File | null;
   id: string;
   updateFile: (file: File) => void;
   children: ReactNode;
-} & Omit<ComponentPropsWithRef<typeof TabsContent>, "value">;
+} & Omit<ComponentPropsWithRef<typeof TabPanel>, "id">;
 
 const FileTabsContent = ({
   children,
@@ -22,7 +22,7 @@ const FileTabsContent = ({
   ...props
 }: FileTabsContentProps) => {
   return (
-    <TabsContent {...props} value={id}>
+    <TabPanel {...props} id={id}>
       <DropzoneStoreProvider>
         {file === null ?
           <div className="flex flex-col gap-2">
@@ -61,7 +61,7 @@ const FileTabsContent = ({
           </FileStoreProvider>
         }
       </DropzoneStoreProvider>
-    </TabsContent>
+    </TabPanel>
   );
 };
 
