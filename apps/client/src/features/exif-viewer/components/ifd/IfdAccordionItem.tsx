@@ -1,11 +1,6 @@
 import { exifIfdGetName, ExifTagInfo, type ExifContent } from "libexif-wasm";
 
 import { formatPlural } from "#utils/formatPlural";
-import {
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@exifi/ui/components/Accordion";
 import { Badge } from "@exifi/ui/components/Badge";
 import {
   DataList,
@@ -18,6 +13,11 @@ import {
   TooltipContent,
   Tooltip,
 } from "@exifi/ui/components/Tooltip";
+import {
+  AccordionItem,
+  AccordionHeader,
+  AccordionPanel,
+} from "@exifi/ui/components2/Accordion";
 
 const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
   const ifdName = exifContent.ifd;
@@ -28,9 +28,9 @@ const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
   const isEmpty = exifContent.count === 0;
 
   return (
-    <AccordionItem key={ifdName} value={ifdName} disabled={isEmpty}>
-      <AccordionTrigger>
-        <div className="flex gap-2">
+    <AccordionItem id={ifdName} isDisabled={isEmpty}>
+      <AccordionHeader>
+        <div className="flex gap-2 text-sm in-data-[disabled=true]:opacity-50">
           {exifIfdGetName(ifdName)}
           <Badge>
             {formatPlural(exifContent.count, {
@@ -39,10 +39,10 @@ const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
             })}
           </Badge>
         </div>
-      </AccordionTrigger>
+      </AccordionHeader>
 
       {!isEmpty && (
-        <AccordionContent>
+        <AccordionPanel>
           <DataList variant="bold">
             {exifContent.entries
               .filter((entry) => entry.tag !== null)
@@ -74,7 +74,7 @@ const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
                 );
               })}
           </DataList>
-        </AccordionContent>
+        </AccordionPanel>
       )}
     </AccordionItem>
   );
