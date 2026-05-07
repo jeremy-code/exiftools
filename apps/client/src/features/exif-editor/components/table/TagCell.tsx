@@ -3,9 +3,9 @@ import { ExifTagInfo } from "libexif-wasm";
 
 import {
   Tooltip,
-  TooltipContent,
   TooltipTrigger,
-} from "@exifi/ui/components/Tooltip";
+  TooltipTarget,
+} from "@exifi/ui/components2/Tooltip";
 
 import type { ExifTableRow } from "./columns";
 
@@ -17,14 +17,16 @@ const TagCell = ({ row }: TagCellProps) => {
   }
 
   return (
-    <Tooltip>
-      <TooltipTrigger className="text-left">
-        {ExifTagInfo.getTitleInIfd(row.original.tag, row.original.ifd)}
-      </TooltipTrigger>
-      <TooltipContent>
+    <TooltipTrigger>
+      <TooltipTarget>
+        <span role="button">
+          {ExifTagInfo.getTitleInIfd(row.original.tag, row.original.ifd)}
+        </span>
+      </TooltipTarget>
+      <Tooltip>
         {ExifTagInfo.getDescriptionInIfd(row.original.tag, row.original.ifd)}
-      </TooltipContent>
-    </Tooltip>
+      </Tooltip>
+    </TooltipTrigger>
   );
 };
 

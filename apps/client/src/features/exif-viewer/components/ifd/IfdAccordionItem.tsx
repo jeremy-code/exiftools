@@ -9,15 +9,15 @@ import {
   DataListItemValue,
 } from "@exifi/ui/components/DataList";
 import {
-  TooltipTrigger,
-  TooltipContent,
-  Tooltip,
-} from "@exifi/ui/components/Tooltip";
-import {
   AccordionItem,
   AccordionHeader,
   AccordionPanel,
 } from "@exifi/ui/components2/Accordion";
+import {
+  TooltipTrigger,
+  TooltipTarget,
+  Tooltip,
+} from "@exifi/ui/components2/Tooltip";
 
 const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
   const ifdName = exifContent.ifd;
@@ -59,12 +59,12 @@ const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
                     <DataListItemLabel className="md:w-1/3">
                       {/* Some tags (e.g. RECOMMENDED_EXPOSURE_INDEX) don't have a description in ExifTagTable[] */}
                       {description !== null && description !== "" ?
-                        <Tooltip>
-                          <TooltipTrigger className="select-auto">
-                            {title}
-                          </TooltipTrigger>
-                          <TooltipContent>{description}</TooltipContent>
-                        </Tooltip>
+                        <TooltipTrigger>
+                          <TooltipTarget>
+                            <span role="button">{title}</span>
+                          </TooltipTarget>
+                          <Tooltip>{description}</Tooltip>
+                        </TooltipTrigger>
                       : title}
                     </DataListItemLabel>
                     <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-muted-foreground before:content-['=']">

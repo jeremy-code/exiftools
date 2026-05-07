@@ -33,9 +33,9 @@ import {
 } from "@exifi/ui/components/Table";
 import {
   Tooltip,
-  TooltipContent,
+  TooltipTarget,
   TooltipTrigger,
-} from "@exifi/ui/components/Tooltip";
+} from "@exifi/ui/components2/Tooltip";
 
 const exifTagTable = getExifTagTable();
 
@@ -82,10 +82,12 @@ const columns = [
       }
 
       return (
-        <Tooltip>
-          <TooltipTrigger className="text-left">{name}</TooltipTrigger>
-          <TooltipContent>{row.original.description}</TooltipContent>
-        </Tooltip>
+        <TooltipTrigger>
+          <TooltipTarget>
+            <span role="button">{name}</span>
+          </TooltipTarget>
+          <Tooltip>{row.original.description}</Tooltip>
+        </TooltipTrigger>
       );
     },
   }),
