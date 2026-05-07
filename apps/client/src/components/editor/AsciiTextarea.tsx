@@ -2,12 +2,15 @@ import { useMemo } from "react";
 
 import { decodeStringFromUtf8 } from "#utils/decodeStringFromUtf8";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
-import { Textarea, type TextareaProps } from "@exifi/ui/components/Textarea";
+import {
+  TextArea,
+  type TextAreaProps,
+} from "@exifi/ui/components2/form/TextArea";
 
 type AsciiTextareaProps = {
   value: number[];
   onValueChange: (value: number[]) => void;
-} & Omit<TextareaProps, "value">;
+} & Omit<TextAreaProps, "value">;
 
 const AsciiTextarea = ({
   value,
@@ -20,7 +23,7 @@ const AsciiTextarea = ({
   );
 
   return (
-    <Textarea
+    <TextArea
       {...props}
       value={asciiValue}
       onChange={(event) => {
