@@ -9,7 +9,7 @@ import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { tv } from "tailwind-variants";
 
 const modalOverlayVariants = tv({
-  base: "absolute top-0 left-0 isolate z-1500 h-(--page-height) w-(--page-width) bg-black/50 text-center backdrop-blur-lg",
+  base: "absolute top-0 left-0 isolate z-1500 h-(--page-height) w-full bg-black/50 text-center backdrop-blur-lg",
   variants: {
     isEntering: {
       true: "animate-in duration-200 ease-out fade-in-0",
@@ -41,7 +41,8 @@ const ModalWrapper = ({ className, ...props }: ModalWrapperProps) => (
 
 const modalVariants = tv({
   base: [
-    "max-h-[calc(var(--visual-viewport-height)*0.9)] w-full max-w-[min(calc(100%-2rem),--spacing(320))] rounded-md border border-border bg-surface bg-clip-padding text-left align-middle text-fg-bold shadow-2xl backdrop-blur-sm",
+    "max-h-[min(calc(var(--visual-viewport-height)-2rem),--spacing(320))] max-w-[min(calc(var(--visual-viewport-width)-2rem),--spacing(320))]",
+    "w-full rounded-md border border-border bg-surface bg-clip-padding text-left align-middle text-fg-bold shadow-2xl backdrop-blur-sm",
     "forced-colors:bg-[Canvas]",
   ],
   variants: {
@@ -69,6 +70,7 @@ const Modal = ({
     <ModalOverlay {...props}>
       <ModalWrapper {...modalWrapperProps}>
         <AriaModal
+          {...props}
           {...modalProps}
           className={composeRenderProps(
             modalProps?.className,

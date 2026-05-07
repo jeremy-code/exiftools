@@ -96,12 +96,7 @@ const DialogFooter = ({
 type DialogDescriptionProps = ComponentPropsWithRef<"div">;
 
 const DialogDescription = ({ className, ...props }: DialogDescriptionProps) => {
-  return (
-    <div
-      className={cn("text-sm text-muted-foreground", className)}
-      {...props}
-    />
-  );
+  return <div className={cn("text-sm text-fg-muted", className)} {...props} />;
 };
 
 export {

@@ -1,9 +1,14 @@
 import {
   FieldError as AriaFieldError,
   type FieldErrorProps,
+  type FieldErrorRenderProps,
 } from "react-aria-components/FieldError";
 
 import { composeTailwindRenderProps } from "../../utils/composeTailwindRenderProps";
+
+type FieldErrorMessage =
+  | string
+  | ((validation: FieldErrorRenderProps) => string);
 
 const FieldError = ({ className, ...props }: FieldErrorProps) => {
   return (
@@ -17,4 +22,4 @@ const FieldError = ({ className, ...props }: FieldErrorProps) => {
   );
 };
 
-export { FieldError, type FieldErrorProps };
+export { FieldError, type FieldErrorProps, type FieldErrorMessage };

@@ -76,7 +76,7 @@ const Select = <
     >
       {label && <Label>{label}</Label>}
       <Button className={selectVariants}>
-        <SelectValue className="basis-content line-clamp-1 shrink-0 text-sm">
+        <SelectValue className="basis-content line-clamp-1 shrink-0 text-sm data-[placeholder=true]:text-fg-muted">
           {({ selectedText, defaultChildren }) =>
             selectedText || defaultChildren
           }
@@ -94,7 +94,10 @@ const Select = <
       <Popover containerPadding={0}>
         <ListBox
           items={items}
-          className="max-h-[inherit] overflow-auto p-1 outline-hidden"
+          className={composeTailwindRenderProps(
+            listboxProps?.className,
+            "max-h-[inherit] overflow-auto p-1 outline-hidden",
+          )}
           {...listboxProps}
         >
           {children}

@@ -6,7 +6,6 @@ import {
   type ComboBoxProps as AriaComboBoxProps,
   ComboBoxValue,
   ListBox,
-  type ValidationResult,
 } from "react-aria-components/ComboBox";
 
 import { FieldButton } from "./FieldButton";
@@ -18,23 +17,27 @@ import {
   type ListBoxProps,
 } from "./ListBox";
 import { Popover, type PopoverProps } from "./Popover";
-import { Description, FieldError, FieldGroup, Input, Label } from "./form";
+import {
+  Description,
+  FieldError,
+  FieldGroup,
+  Input,
+  Label,
+  type FieldErrorMessage,
+} from "./form";
 import { composeTailwindRenderProps } from "../utils/composeTailwindRenderProps";
 
 type SelectionMode = "single" | "multiple";
 
-type ComboBoxProps<T extends object, M extends SelectionMode> = Omit<
-  AriaComboBoxProps<T, M>,
-  "children"
-> & {
+type ComboBoxProps<T extends object, M extends SelectionMode> = {
   children: ReactNode | ((item: T) => ReactNode);
   placeholder?: string;
   label?: string;
   description?: string | null;
-  errorMessage?: string | ((validation: ValidationResult) => string);
+  errorMessage?: FieldErrorMessage;
   popoverProps?: PopoverProps;
   listBoxProps?: Omit<ListBoxProps<T>, "items" | "children">;
-};
+} & Omit<AriaComboBoxProps<T, M>, "children">;
 
 const ComboBox = <T extends object, M extends SelectionMode = "single">({
   label,
@@ -64,7 +67,7 @@ const ComboBox = <T extends object, M extends SelectionMode = "single">({
       {props.selectionMode === "multiple" && (
         <ComboBoxValue
           placeholder="No items selected"
-          className="text-xs text-neutral-600 dark:text-neutral-300"
+          className="text-xs text-fg-muted"
         />
       )}
       {description && <Description>{description}</Description>}

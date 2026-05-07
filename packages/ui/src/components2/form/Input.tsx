@@ -7,17 +7,11 @@ import { tv } from "tailwind-variants";
 
 const inputVariants = tv({
   base: [
-    "flex h-9 w-full appearance-none rounded border-0 border-border bg-surface px-3 py-1 text-start text-sm outline-0 transition-opacity",
+    "[-webkit-tap-highlight-color:transparent]' flex h-9 w-full appearance-none rounded border-0 border-border bg-surface px-3 py-1 text-start text-sm outline-0 transition-opacity",
     "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-    "placeholder:text-solid",
+    "placeholder:text-fg-muted",
   ],
   variants: {
-    isHovered: {
-      true: "border-fg-subtle",
-    },
-    isFocused: {
-      true: "border-fg-muted",
-    },
     size: {
       xs: "h-8 min-w-8 px-2 text-xs/4",
       sm: "h-9 min-w-9 px-2.5 text-sm/5",
@@ -25,10 +19,11 @@ const inputVariants = tv({
       lg: "h-11 min-w-11 px-4 text-base/6",
     },
     isDisabled: {
-      true: "cursor-not-allowed bg-bg-muted opacity-80",
-    },
-    isInvalid: {
-      true: "border-destructive",
+      true: [
+        "cursor-not-allowed",
+        "text-neutral-200 placeholder:text-neutral-200",
+        "dark:text-neutral-600 dark:placeholder:text-neutral-600",
+      ],
     },
   },
   defaultVariants: {
