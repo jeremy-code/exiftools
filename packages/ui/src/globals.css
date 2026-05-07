@@ -1,7 +1,6 @@
 @import "tailwindcss" source("../../..");
 @import "tw-animate-css";
-
-@source "src/";
+@plugin "tailwindcss-react-aria-components";
 
 @utility container {
   margin-inline: auto;

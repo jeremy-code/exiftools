@@ -40,7 +40,7 @@ const listBoxItemVariants = tv({
   variants: {
     isSelected: {
       false:
-        "pressed:bg-border text-fg-bold -outline-offset-2 hover:bg-bg-muted",
+        "text-fg-bold -outline-offset-2 hover:bg-bg-muted pressed:bg-border",
       true: [
         // Outline-white! to override focusRing style
         "bg-accent text-white -outline-offset-4 outline-white! forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:outline-[HighlightText]",
@@ -67,7 +67,7 @@ const ListBoxItem = (props: ListBoxItemProps) => {
     >
       {composeRenderProps(props.children, (children) => (
         <>
-          <Check className="group-selected/list-box-item:visible group-selected/list-box-item:opacity-100 invisible size-4 opacity-0" />
+          <Check className="invisible size-4 opacity-0 group-selected/list-box-item:visible group-selected/list-box-item:opacity-100" />
           {children}
         </>
       ))}
