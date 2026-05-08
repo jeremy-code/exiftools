@@ -17,8 +17,7 @@ const updateLatLng = (exifDataGpsIfd: ExifContent, latLng: LatLng) => {
   if (exifDataGpsIfd.getEntry("VERSION_ID") === null) {
     const versionIdEntry = getOrInsertEntry(exifDataGpsIfd, "VERSION_ID");
     versionIdEntry.format = "BYTE";
-    versionIdEntry.data = new Uint8Array([0x02, 0x02, 0x00, 0x00]);
-    versionIdEntry.components = 4;
+    versionIdEntry.fromTypedArray(new Uint8Array([0x02, 0x02, 0x00, 0x00]));
   }
 
   const latitude = decimalDegreesToDms(latLng.lat, "lat");

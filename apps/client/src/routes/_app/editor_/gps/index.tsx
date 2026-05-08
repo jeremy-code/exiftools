@@ -10,7 +10,7 @@ import { Map } from "#components/map/Map";
 import { useFileStore } from "#hooks/useFileStore";
 import { useGeoSearchLocation } from "#hooks/useGeoSearchLocation";
 import { updateLatLng } from "#lib/exif/gps/updateLatLng";
-import { createViewbox } from "#utils/createViewbox";
+import { formatLatLng } from "#lib/leaflet/formatLatLng";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { saveFile } from "#utils/saveFile";
 import { seo } from "#utils/seo";
@@ -24,13 +24,10 @@ const getOsmProvider = (currentPositionLatLng: LatLng | null) => {
   if (currentPositionLatLng === null) {
     return defaultOsmProvider;
   }
-  const viewbox = createViewbox(
-    currentPositionLatLng.lat,
-    currentPositionLatLng.lng,
-  );
+  const currentPositionLatLngBounds = currentPositionLatLng.toBounds(15_000);
   return new OpenStreetMapProvider({
     params: {
-      viewbox: `${viewbox[0]},${viewbox[1]},${viewbox[2]},${viewbox[3]}`,
+      viewbox: currentPositionLatLngBounds.toBBoxString(),
     },
   });
 };
@@ -62,7 +59,7 @@ const EditorGpsApp = ({
       >
         <GeoSearchControl provider={osmProvider} />
       </Map>
-      {latLng?.toString()}
+      {latLng !== null ? formatLatLng(latLng) : "Location not found"}
       <Button
         onClick={async (e) => {
           e.preventDefault();
