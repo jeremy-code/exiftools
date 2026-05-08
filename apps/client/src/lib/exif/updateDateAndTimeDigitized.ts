@@ -26,10 +26,6 @@ const updateDateAndTimeDigitized = (exifDataExifIfd: ExifContent) => {
   offsetTimeDigitizedEntry.fromTypedArray(
     encodeStringToUtf8(currentDate.format("Z")),
   );
-  console.log(
-    dateTimeDigitizedEntry.toString(),
-    offsetTimeDigitizedEntry.toString(),
-  );
 };
 
 export { updateDateAndTimeDigitized };
