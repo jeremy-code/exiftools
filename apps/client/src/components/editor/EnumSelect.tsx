@@ -6,7 +6,10 @@ type EnumSelectProps = {
   value: string;
   values: string[];
   onValueChange: (value: string) => void;
-} & Omit<ComponentPropsWithRef<typeof Select>, "onValueChange" | "children">;
+} & Omit<
+  ComponentPropsWithRef<typeof Select>,
+  "value" | "onChange" | "children"
+>;
 
 const EnumSelect = ({
   value,
@@ -33,4 +36,4 @@ const EnumSelect = ({
   );
 };
 
-export { EnumSelect };
+export { EnumSelect, type EnumSelectProps };

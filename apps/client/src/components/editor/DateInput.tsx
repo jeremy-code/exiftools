@@ -10,7 +10,7 @@ import {
 type DateInputProps = {
   value: Dayjs;
   onValueChange: (date: Dayjs) => void;
-} & Omit<DateFieldProps<CalendarDate>, "value">;
+} & Omit<DateFieldProps<CalendarDate>, "value" | "onChange">;
 
 const DateInput = ({ value, onValueChange, ...props }: DateInputProps) => {
   return (
@@ -18,10 +18,14 @@ const DateInput = ({ value, onValueChange, ...props }: DateInputProps) => {
       {...props}
       value={new CalendarDate(value.year(), value.month() + 1, value.date())}
       onChange={(value) => {
-        onValueChange?.(dayjs(value?.toString()));
+        if (value !== null) {
+          onValueChange?.(
+            dayjs({ year: value.year, month: value.month - 1, day: value.day }),
+          );
+        }
       }}
     />
   );
 };
 
-export { DateInput };
+export { DateInput, type DateInputProps };

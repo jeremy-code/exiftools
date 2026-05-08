@@ -12,10 +12,10 @@ import {
 type RationalInputProps = {
   initialRational?: RationalObject | undefined;
   setRational?: (rational: RationalObject) => void;
-  numeratorInputProps?: NumberFieldProps;
-  denominatorInputProps?: NumberFieldProps;
-  decimalInputProps?: NumberFieldProps;
-} & NumberFieldProps;
+  numeratorInputProps?: Omit<NumberFieldProps, "value" | "onChange">;
+  denominatorInputProps?: Omit<NumberFieldProps, "value" | "onChange">;
+  decimalInputProps?: Omit<NumberFieldProps, "value" | "onChange">;
+} & Omit<NumberFieldProps, "value" | "onChange">;
 
 const RationalInput = ({
   initialRational,
@@ -77,4 +77,4 @@ const RationalInput = ({
   );
 };
 
-export { RationalInput };
+export { RationalInput, type RationalInputProps };

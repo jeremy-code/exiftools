@@ -10,7 +10,7 @@ import {
 type TimeStampInputProps = {
   value: RationalObject[];
   onValueChange: (value: RationalObject[]) => void;
-} & Omit<TimeFieldProps<Time>, "value">;
+} & Omit<TimeFieldProps<Time>, "value" | "onChange">;
 
 const MAX_UINT32_VALUE = 0xffffffff;
 
@@ -54,4 +54,4 @@ const TimeStampInput = ({
   );
 };
 
-export { TimeStampInput };
+export { TimeStampInput, type TimeStampInputProps };

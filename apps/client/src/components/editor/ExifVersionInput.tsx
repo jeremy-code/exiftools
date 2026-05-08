@@ -13,7 +13,7 @@ const textEncoder = new TextEncoder();
 type ExifVersionInputProps = {
   value: number[];
   onValueChange: (value: number[]) => void;
-  inputProps?: Omit<NumberFieldProps, "value">;
+  inputProps?: Omit<NumberFieldProps, "value" | "onChange">;
 } & ComponentPropsWithRef<"div">;
 
 const ExifVersionInput = ({

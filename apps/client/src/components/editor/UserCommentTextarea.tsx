@@ -9,7 +9,7 @@ import {
 type UserCommentTextareaProps = {
   value: number[];
   onValueChange: (value: number[]) => void;
-} & Omit<TextAreaFieldProps, "value">;
+} & Omit<TextAreaFieldProps, "value" | "onChange">;
 
 const textEncoder = new TextEncoder();
 
@@ -34,4 +34,4 @@ const UserCommentTextarea = ({
   );
 };
 
-export { UserCommentTextarea };
+export { UserCommentTextarea, type UserCommentTextareaProps };

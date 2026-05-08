@@ -10,7 +10,7 @@ import {
 type DatetimeLocalInputProps = {
   value?: Dayjs;
   onValueChange?: (datetimeLocal: Dayjs) => void;
-} & Omit<DatePickerProps<CalendarDateTime>, "value">;
+} & Omit<DatePickerProps<CalendarDateTime>, "value" | "onChange">;
 
 const DatetimeLocalInput = ({
   value,
@@ -36,7 +36,15 @@ const DatetimeLocalInput = ({
       }
       onChange={(value) => {
         if (value !== null) {
-          const dateTimeLocal = dayjs(value.toString());
+          const dateTimeLocal = dayjs({
+            year: value.year,
+            month: value.month - 1,
+            day: value.day,
+            hour: value.hour,
+            minute: value.minute,
+            second: value.second,
+            millisecond: value.millisecond,
+          });
 
           if (!dateTimeLocal.isValid()) {
             throw new Error(

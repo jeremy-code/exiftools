@@ -11,7 +11,7 @@ import {
 type GpsTagVersionInputProps = {
   value: number[];
   onValueChange: (value: number[]) => void;
-  inputProps?: NumberFieldProps;
+  inputProps?: Omit<NumberFieldProps, "value" | "onChange">;
 } & ComponentPropsWithRef<"div">;
 
 const GpsTagVersionInput = ({
