@@ -12,12 +12,11 @@ import { IFD_NAMES } from "libexif-wasm/constants";
 
 import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
-import { Input } from "@exifi/ui/components/Input";
-import { Label } from "@exifi/ui/components/Label";
 import { Spinner } from "@exifi/ui/components/Spinner";
 import { Button } from "@exifi/ui/components2/Button";
 import { ComboBox, ComboBoxItem } from "@exifi/ui/components2/ComboBox";
 import { Select, SelectItem } from "@exifi/ui/components2/Select";
+import { TextField } from "@exifi/ui/components2/TextField";
 
 type FieldValues = {
   ifd: Ifd;
@@ -147,11 +146,11 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
           name="value"
           children={(field) => (
             <>
-              <Label>Value</Label>
-              <Input
+              <TextField
+                label="Value"
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
+                onChange={(value) => field.handleChange(value)}
               />
             </>
           )}

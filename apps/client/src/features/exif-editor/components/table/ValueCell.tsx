@@ -10,7 +10,7 @@ import { NumberInput } from "#components/editor/NumberInput";
 import { TimeStampInput } from "#components/editor/TimeStampInput";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
-import { Input } from "@exifi/ui/components/Input";
+import { TextField } from "@exifi/ui/components2/TextField";
 
 import type { ExifTableRow } from "./columns";
 import { getExifQuickEditor } from "../../editors/quick/getExifQuickEditor";
@@ -34,7 +34,6 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
   if (quickEditor === null) {
     return getValue() ?? "";
   }
-  const className = "focus:border-border focus:bg-background";
   const title = ExifTagInfo.getTitleInIfd(originalRow.tag, originalRow.ifd);
 
   switch (quickEditor.kind) {
@@ -48,38 +47,29 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
         />
       );
     case "dateStamp":
-      return <DateInput className={className} {...quickEditor} />;
+      return <DateInput {...quickEditor} />;
     case "versionId":
       return (
         <GpsTagVersionInput
           inputProps={{ "aria-label": title }}
-          className={className}
           {...quickEditor}
         />
       );
     case "datetime":
-      return <DatetimeLocalInput className={className} {...quickEditor} />;
+      return <DatetimeLocalInput {...quickEditor} />;
     case "timeStamp":
-      return <TimeStampInput className={className} {...quickEditor} />;
+      return <TimeStampInput {...quickEditor} />;
     case "ascii":
       return (
-        <Input
-          className={className}
-          type="text"
+        <TextField
           {...quickEditor}
-          onChange={(e) => quickEditor.onValueChange(e.target.value)}
+          onChange={(value) => quickEditor.onValueChange(value)}
         />
       );
     case "exifVersion":
-      return <ExifVersionInput className={className} {...quickEditor} />;
+      return <ExifVersionInput {...quickEditor} />;
     case "simpleNumeric":
-      return (
-        <NumberInput
-          aria-label={title}
-          className={className}
-          {...quickEditor}
-        />
-      );
+      return <NumberInput aria-label={title} {...quickEditor} />;
     default:
       assertNever(quickEditor);
   }

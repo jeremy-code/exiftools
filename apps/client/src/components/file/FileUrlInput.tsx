@@ -5,13 +5,16 @@ import { useMutation } from "@tanstack/react-query";
 
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { getFileFromResponse } from "#utils/getFileFromResponse";
-import { Input, type InputProps } from "@exifi/ui/components/Input";
 import { Spinner } from "@exifi/ui/components/Spinner";
 import { Button, type ButtonProps } from "@exifi/ui/components2/Button";
+import {
+  TextField,
+  type TextFieldProps,
+} from "@exifi/ui/components2/TextField";
 import { toast } from "@exifi/ui/hooks/useToast";
 
 type FileUrlInputProps = {
-  inputProps?: InputProps;
+  inputProps?: TextFieldProps;
   buttonProps?: ButtonProps;
   onSuccess?: (file: File) => void;
 } & ComponentPropsWithRef<"form">;
@@ -67,15 +70,19 @@ const FileUrlInput = ({
               !URL.canParse(value) ? "Please enter a URL." : undefined,
           }}
           children={(field) => (
-            <Input
-              required
+            <TextField
+              isRequired={true}
               type="url"
-              className="rounded-r-none border-r-0"
+              inputProps={{
+                className: "rounded-r-none border-r-0",
+              }}
+              className="flex-1"
               {...inputProps}
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
+              onChange={(value) => field.handleChange(value)}
+              aria-label={field.name}
             />
           )}
         />
