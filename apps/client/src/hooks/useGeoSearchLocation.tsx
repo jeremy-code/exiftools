@@ -38,8 +38,8 @@ const useGeoSearchLocation = (
         }
         setLabel(event.location.label);
         const newBounds = new LatLngBounds(
-          new LatLng(event.location.bounds[0][0], event.location.bounds[0][1]),
-          new LatLng(event.location.bounds[1][0], event.location.bounds[1][1]),
+          new LatLng(...event.location.bounds[0]),
+          new LatLng(...event.location.bounds[1]),
         );
         if (bounds === null || !bounds.equals(newBounds)) {
           setBounds(newBounds);

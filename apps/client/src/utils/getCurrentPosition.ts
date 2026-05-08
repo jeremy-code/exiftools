@@ -5,7 +5,7 @@ const getCurrentPosition = (options?: PositionOptions) => {
     });
   } else {
     return new Promise<GeolocationPosition>((_resolve, reject) => {
-      reject(new Error("Geolocation is supported in this browser"));
+      reject(new Error("Geolocation API is not supported in this browser"));
     });
   }
 };

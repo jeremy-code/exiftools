@@ -17,13 +17,13 @@ const getFileFromResponse = async (response: Response) => {
       contentDisposition?.type === "attachment" &&
       "filename" in contentDisposition.parameters
     ) ?
-      contentDisposition.parameters["filename"]
+      contentDisposition.parameters.filename
     : basename(responseUrlObject.pathname); // Otherwise, default to basename of Response;
   const contentType = response.headers.get("Content-Type");
   const lastModified = response.headers.get("Last-Modified");
 
-  const blob = await response.blob();
-  const file = new File([blob], fileName, {
+  const arrayBuffer = await response.arrayBuffer();
+  const file = new File([arrayBuffer], fileName, {
     type: contentType ?? undefined,
     lastModified: lastModified !== null ? Date.parse(lastModified) : undefined,
   });
