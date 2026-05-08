@@ -15,7 +15,13 @@ const Devtools =
     await import("./Devtools").then((mod) => mod.Devtools)
   : () => null;
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    },
+  },
+});
 
 /**
  * Provides global application context.
