@@ -6,10 +6,10 @@ import { DatetimeLocalInput } from "#components/editor/DatetimeLocalInput";
 import { EnumSelect } from "#components/editor/EnumSelect";
 import { ExifVersionInput } from "#components/editor/ExifVersionInput";
 import { GpsTagVersionInput } from "#components/editor/GpsTagVersionInput";
-import { NumberInput } from "#components/editor/NumberInput";
 import { TimeStampInput } from "#components/editor/TimeStampInput";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
+import { NumberField } from "@exifi/ui/components2/NumberField";
 import { TextField } from "@exifi/ui/components2/TextField";
 
 import type { ExifTableRow } from "./columns";
@@ -69,7 +69,13 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
     case "exifVersion":
       return <ExifVersionInput {...quickEditor} />;
     case "simpleNumeric":
-      return <NumberInput aria-label={title} {...quickEditor} />;
+      return (
+        <NumberField
+          aria-label={title}
+          {...quickEditor}
+          onChange={(value) => quickEditor.onValueChange(value)}
+        />
+      );
     default:
       assertNever(quickEditor);
   }

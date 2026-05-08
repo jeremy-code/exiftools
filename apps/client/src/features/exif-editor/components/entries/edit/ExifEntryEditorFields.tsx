@@ -1,11 +1,11 @@
 import { type Dispatch, type SetStateAction } from "react";
 
-import { NumberInput } from "#components/editor/NumberInput";
 import { RationalInput } from "#components/editor/RationalInput";
 import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
 import { getExifAdvancedEditor } from "#features/exif-editor/editors/advanced/getExifAdvancedEditor";
 import { type ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
+import { NumberField } from "@exifi/ui/components2/NumberField";
 import { TextAreaField } from "@exifi/ui/components2/TextAreaField";
 
 type ExifEntryEditorFieldsProps = {
@@ -49,12 +49,10 @@ const ExifEntryEditorFields = ({
       );
     case "numeric":
       return exifAdvancedEditor.values.map((value, index) => (
-        <NumberInput
+        <NumberField
           key={index}
           value={value}
-          onValueChange={(value) =>
-            exifAdvancedEditor.onValueChange(value, index)
-          }
+          onChange={(value) => exifAdvancedEditor.onValueChange(value, index)}
         />
       ));
     case "userComment":
