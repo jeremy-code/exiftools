@@ -19,7 +19,7 @@ const parseTimeStampValue = (timeStampValue: RationalObject[]) => {
     );
   }
 
-  return dayjs({ hours, minutes, seconds });
+  return dayjs.utc({ hours, minutes, seconds });
 };
 
 type TimeStampInputProps = {

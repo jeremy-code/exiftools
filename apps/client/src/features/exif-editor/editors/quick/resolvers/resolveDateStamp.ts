@@ -17,7 +17,10 @@ const resolveDateStamp: QuickEditorResolver = (
     return {
       kind: "dateStamp",
       exifEntryObject,
-      value: dayjs(exifEntryObject.formattedValue ?? "", EXIF_DATESTAMP_FORMAT),
+      value: dayjs.utc(
+        exifEntryObject.formattedValue ?? "",
+        EXIF_DATESTAMP_FORMAT,
+      ),
       onValueChange: (value) =>
         onValueChange(value.format(EXIF_DATESTAMP_FORMAT)),
     };

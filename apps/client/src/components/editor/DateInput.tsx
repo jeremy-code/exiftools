@@ -1,4 +1,4 @@
-import { Dayjs } from "dayjs";
+import type { Dayjs } from "dayjs";
 
 import { dayjs } from "#utils/date";
 import { Input, type InputProps } from "@exifi/ui/components/Input";
@@ -16,7 +16,7 @@ const DateInput = ({ value, onValueChange, ...props }: DateInputProps) => {
       value={value.format("YYYY-MM-DD")}
       onChange={(event) => {
         if (event.target.value !== "" && event.target.valueAsDate !== null) {
-          onValueChange?.(dayjs(event.target.valueAsDate));
+          onValueChange?.(dayjs.utc(event.target.valueAsDate));
         }
       }}
     />

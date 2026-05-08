@@ -1,10 +1,10 @@
 import { Suspense, use, useMemo, type ComponentPropsWithRef } from "react";
 
-import dayjs from "dayjs";
 import { cn } from "tailwind-variants";
 
 import { useFileHash } from "#hooks/useFileHash";
 import { useObjectUrl } from "#hooks/useObjectUrl";
+import { dayjs } from "#utils/date";
 import { formatBytes } from "#utils/formatBytes";
 import { getImageDimensions } from "#utils/getImageDimensions";
 import { Badge } from "@exifi/ui/components/Badge";

@@ -37,7 +37,7 @@ const DatetimeLocalInput = ({
       value={memoizedValue}
       onChange={(e) => {
         if (e.target.value !== "") {
-          const dateTimeLocal = dayjs(e.target.value);
+          const dateTimeLocal = dayjs.utc(e.target.value);
 
           if (!dateTimeLocal.isValid()) {
             throw new Error(

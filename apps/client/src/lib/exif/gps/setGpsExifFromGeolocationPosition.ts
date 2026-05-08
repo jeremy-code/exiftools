@@ -1,8 +1,8 @@
-import dayjs from "dayjs";
 import { LatLng } from "leaflet";
 import { mapRationalFromObject, type ExifContent } from "libexif-wasm";
 
 import { approximateRational } from "#lib/math/approximateRational";
+import { dayjs } from "#utils/date";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
 import { getOrInsertEntry } from "../getOrInsertEntry";
@@ -21,7 +21,7 @@ const setGpsExifFromGeolocationPosition = (
   geolocationPosition: GeolocationPosition,
 ) => {
   const { timestamp, coords } = geolocationPosition;
-  const utcDate = dayjs(timestamp).utc();
+  const utcDate = dayjs.utc(timestamp);
 
   const dateStampEntry = getOrInsertEntry(exifDataGpsIfd, "DATE_STAMP");
   dateStampEntry.format = "ASCII";
