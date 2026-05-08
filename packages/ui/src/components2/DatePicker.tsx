@@ -47,7 +47,7 @@ const DatePicker = <T extends DateValue>({
       </FieldGroup>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
-      <Popover className="p-2">
+      <Popover className="min-w-[unset] p-2">
         <Calendar />
       </Popover>
     </AriaDatePicker>

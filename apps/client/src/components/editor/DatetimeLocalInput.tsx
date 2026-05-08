@@ -1,43 +1,42 @@
-import { useMemo } from "react";
-
+import { CalendarDateTime } from "@internationalized/date";
 import type { Dayjs } from "dayjs";
 
 import { dayjs } from "#utils/date";
-import { Input, type InputProps } from "@exifi/ui/components/Input";
-
-// https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Date_and_time_formats#local_date_and_time_strings
-const formatDayjsAsDatetimeLocal = (dayjs: Dayjs) => {
-  if (dayjs.second() !== 0 && dayjs.millisecond() !== 0) {
-    return dayjs.format("YYYY-MM-DDTHH:mm:ss.SSS");
-  } else if (dayjs.second() !== 0 && dayjs.millisecond() === 0) {
-    return dayjs.format("YYYY-MM-DDTHH:mm:ss");
-  }
-  return dayjs.format("YYYY-MM-DDTHH:mm");
-};
+import {
+  DatePicker,
+  type DatePickerProps,
+} from "@exifi/ui/components2/DatePicker";
 
 type DatetimeLocalInputProps = {
   value?: Dayjs;
   onValueChange?: (datetimeLocal: Dayjs) => void;
-} & Omit<InputProps, "value">;
+} & Omit<DatePickerProps<CalendarDateTime>, "value">;
 
 const DatetimeLocalInput = ({
   value,
   onValueChange,
   ...props
 }: DatetimeLocalInputProps) => {
-  const memoizedValue = useMemo(
-    () => (value !== undefined ? formatDayjsAsDatetimeLocal(value) : undefined),
-    [value],
-  );
-
   return (
-    <Input
+    <DatePicker
       {...props}
-      type="datetime-local"
-      value={memoizedValue}
-      onChange={(e) => {
-        if (e.target.value !== "") {
-          const dateTimeLocal = dayjs(e.target.value);
+      granularity="second"
+      value={
+        value === undefined ? undefined : (
+          new CalendarDateTime(
+            value.year(),
+            value.month() + 1,
+            value.date(),
+            value.hour(),
+            value.minute(),
+            value.second(),
+            value.millisecond(),
+          )
+        )
+      }
+      onChange={(value) => {
+        if (value !== null) {
+          const dateTimeLocal = dayjs(value.toString());
 
           if (!dateTimeLocal.isValid()) {
             throw new Error(
@@ -50,4 +49,4 @@ const DatetimeLocalInput = ({
     />
   );
 };
-export { DatetimeLocalInput };
+export { DatetimeLocalInput, type DatetimeLocalInputProps };
