@@ -22,20 +22,28 @@ const saveFile = async (file: File) => {
        * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/DOMException#aborterror}
        */
       if (error instanceof DOMException && error.name === "AbortError") {
+        console.error(error);
         return;
       }
       throw error;
     }
   } else {
-    // Fallback to using Blob URLs
+    /**
+     * Fallback to using Blob URLs
+     *
+     * @see {@link https://caniuse.com/mdn-api_htmlanchorelement_download}
+     */
     const blobUrl = URL.createObjectURL(file);
     const anchorElement = document.createElement("a");
     anchorElement.href = blobUrl;
     anchorElement.download = file.name;
+    anchorElement.style.display = "none";
     document.body.appendChild(anchorElement);
     anchorElement.click();
-    document.body.removeChild(anchorElement);
-    URL.revokeObjectURL(blobUrl);
+    setTimeout(() => {
+      URL.revokeObjectURL(blobUrl);
+      anchorElement.remove();
+    }, 1000);
   }
 };
 
