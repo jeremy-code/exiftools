@@ -4,6 +4,24 @@ import { approximateRational } from "#lib/math/approximateRational";
 import { dayjs } from "#utils/date";
 import { Input, type InputProps } from "@exifi/ui/components/Input";
 
+const parseTimeStampValue = (timeStampValue: RationalObject[]) => {
+  if (timeStampValue.length !== 3) {
+    throw new Error(
+      `Unexpected number of inputs for tag TIME_STAMP, expected 3, got ${timeStampValue.length}`,
+    );
+  }
+  const [hours, minutes, seconds] = timeStampValue.map(
+    (rational) => rational.numerator / rational.denominator,
+  );
+  if (hours === undefined || minutes === undefined || seconds === undefined) {
+    throw new Error(
+      "Hours, minutes, and seconds are required for tag TIME_STAMP",
+    );
+  }
+
+  return dayjs({ hours, minutes, seconds });
+};
+
 type TimeStampInputProps = {
   value: RationalObject[];
   onValueChange: (value: RationalObject[]) => void;
@@ -16,26 +34,13 @@ const TimeStampInput = ({
   onValueChange,
   ...props
 }: TimeStampInputProps) => {
-  const [hoursRational, minutesRational, secondsRational] = value;
-
-  if (!hoursRational || !minutesRational || !secondsRational) {
-    throw new Error("Invalid number of inputs for tag TIME_STAMP");
-  }
-
-  const hours = hoursRational.numerator / hoursRational.denominator;
-  const minutes = minutesRational.numerator / minutesRational.denominator;
-  const seconds = secondsRational.numerator / secondsRational.denominator;
-  const date = dayjs({
-    hours,
-    minutes,
-    seconds,
-  });
+  const timeStamp = parseTimeStampValue(value);
 
   return (
     <Input
       {...props}
       type="time"
-      value={date.format("HH:mm:ss")}
+      value={timeStamp.format("HH:mm:ss")}
       onChange={(event) => {
         if (event.target.valueAsDate) {
           const newDate = dayjs.utc(event.target.valueAsDate);
@@ -57,4 +62,4 @@ const TimeStampInput = ({
   );
 };
 
-export { TimeStampInput };
+export { TimeStampInput, type TimeStampInputProps };
