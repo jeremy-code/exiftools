@@ -6,7 +6,7 @@ import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
 import { getExifAdvancedEditor } from "#features/exif-editor/editors/advanced/getExifAdvancedEditor";
 import { type ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
-import { Textarea } from "@exifi/ui/components/Textarea";
+import { TextAreaField } from "@exifi/ui/components2/TextAreaField";
 
 type ExifEntryEditorFieldsProps = {
   exifEntryObject: ExifEntryObject;
@@ -42,9 +42,9 @@ const ExifEntryEditorFields = ({
       ));
     case "ascii":
       return (
-        <Textarea
+        <TextAreaField
           {...exifAdvancedEditor}
-          onChange={(e) => exifAdvancedEditor.onValueChange(e.target.value)}
+          onChange={(value) => exifAdvancedEditor.onValueChange(value)}
         />
       );
     case "numeric":
