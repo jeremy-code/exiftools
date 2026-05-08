@@ -1,6 +1,7 @@
 import { createContext, use, useState } from "react";
 
 import { arrayMove } from "@dnd-kit/helpers";
+import { v4 as uuidv4 } from "uuid";
 import { create, useStore } from "zustand";
 
 type FileTab = {
@@ -24,7 +25,7 @@ type FileTabsStoreActions = {
 type FileTabsStore = FileTabsStoreState & FileTabsStoreActions;
 
 const createFileTab = (file: File | null): FileTab => ({
-  id: crypto.randomUUID(),
+  id: uuidv4(),
   file,
 });
 
