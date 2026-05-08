@@ -3,14 +3,17 @@ import { useMemo, type ComponentPropsWithRef } from "react";
 import { cn } from "tailwind-variants";
 
 import { decodeStringFromUtf8 } from "#utils/decodeStringFromUtf8";
-import { Input, type InputProps } from "@exifi/ui/components/Input";
+import {
+  NumberField,
+  type NumberFieldProps,
+} from "@exifi/ui/components2/NumberField";
 
 const textEncoder = new TextEncoder();
 
 type ExifVersionInputProps = {
   value: number[];
   onValueChange: (value: number[]) => void;
-  inputProps?: Omit<InputProps, "value">;
+  inputProps?: Omit<NumberFieldProps, "value">;
 } & ComponentPropsWithRef<"div">;
 
 const ExifVersionInput = ({
@@ -31,42 +34,38 @@ const ExifVersionInput = ({
 
   return (
     <div className={cn("flex items-baseline gap-2", className)} {...props}>
-      <Input
+      <NumberField
         {...inputProps}
-        type="number"
-        min={1}
-        max={2}
+        minValue={1}
+        maxValue={2}
         value={major}
+        aria-label="Exif Version (major)"
         onChange={(event) => {
-          if (!Number.isNaN(event.target.valueAsNumber)) {
-            onValueChange(
-              Array.from(
-                textEncoder.encode(
-                  event.target.valueAsNumber.toString().padStart(2, "0") +
-                    minor.toString().padStart(2, "0"),
-                ),
+          onValueChange(
+            Array.from(
+              textEncoder.encode(
+                event.toString().padStart(2, "0") +
+                  minor.toString().padStart(2, "0"),
               ),
-            );
-          }
+            ),
+          );
         }}
       />
       .
-      <Input
+      <NumberField
         {...inputProps}
-        type="number"
-        min={0}
+        minValue={0}
         value={minor}
+        aria-label="Exif Version (minor)"
         onChange={(event) => {
-          if (!Number.isNaN(event.target.valueAsNumber)) {
-            onValueChange(
-              Array.from(
-                textEncoder.encode(
-                  major.toString().padStart(2, "0") +
-                    event.target.valueAsNumber.toString().padStart(2, "0"),
-                ),
+          onValueChange(
+            Array.from(
+              textEncoder.encode(
+                major.toString().padStart(2, "0") +
+                  event.toString().padStart(2, "0"),
               ),
-            );
-          }
+            ),
+          );
         }}
       />
     </div>

@@ -3,12 +3,15 @@ import type { ComponentPropsWithRef } from "react";
 import { Fragment } from "react/jsx-runtime";
 
 import { useBreakpoint } from "#hooks/useBreakpoint";
-import { Input, type InputProps } from "@exifi/ui/components/Input";
+import {
+  NumberField,
+  type NumberFieldProps,
+} from "@exifi/ui/components2/NumberField";
 
 type GpsTagVersionInputProps = {
   value: number[];
   onValueChange: (value: number[]) => void;
-  inputProps?: InputProps;
+  inputProps?: NumberFieldProps;
 } & ComponentPropsWithRef<"div">;
 
 const GpsTagVersionInput = ({
@@ -29,15 +32,15 @@ const GpsTagVersionInput = ({
     <div className="flex items-baseline gap-1" {...props}>
       {value.map((byte, index) => (
         <Fragment key={index}>
-          <Input
+          <NumberField
             {...inputProps}
+            aria-label={
+              inputProps?.["aria-label"] ?? "GPS Tag Version" + " " + index
+            }
             size="xs"
-            type="number"
             value={byte}
-            onChange={(e) => {
-              if (!Number.isNaN(e.target.valueAsNumber)) {
-                onValueChange(value.with(index, e.target.valueAsNumber));
-              }
+            onChange={(number) => {
+              onValueChange(value.with(index, number));
             }}
           />
           {index !== value.length - 1 && <span>.</span>}

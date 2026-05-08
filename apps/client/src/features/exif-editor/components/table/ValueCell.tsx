@@ -50,7 +50,13 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
     case "dateStamp":
       return <DateInput className={className} {...quickEditor} />;
     case "versionId":
-      return <GpsTagVersionInput className={className} {...quickEditor} />;
+      return (
+        <GpsTagVersionInput
+          inputProps={{ "aria-label": title }}
+          className={className}
+          {...quickEditor}
+        />
+      );
     case "datetime":
       return <DatetimeLocalInput className={className} {...quickEditor} />;
     case "timeStamp":
@@ -67,7 +73,13 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
     case "exifVersion":
       return <ExifVersionInput className={className} {...quickEditor} />;
     case "simpleNumeric":
-      return <NumberInput className={className} {...quickEditor} />;
+      return (
+        <NumberInput
+          aria-label={title}
+          className={className}
+          {...quickEditor}
+        />
+      );
     default:
       assertNever(quickEditor);
   }

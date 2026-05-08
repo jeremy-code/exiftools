@@ -4,15 +4,18 @@ import { Decimal } from "decimal.js";
 import type { RationalObject } from "libexif-wasm";
 
 import { approximateRational } from "#lib/math/approximateRational";
-import { Input, type InputProps } from "@exifi/ui/components/Input";
+import {
+  NumberField,
+  type NumberFieldProps,
+} from "@exifi/ui/components2/NumberField";
 
 type RationalInputProps = {
   initialRational?: RationalObject | undefined;
   setRational?: (rational: RationalObject) => void;
-  numeratorInputProps?: InputProps;
-  denominatorInputProps?: InputProps;
-  decimalInputProps?: InputProps;
-} & InputProps;
+  numeratorInputProps?: NumberFieldProps;
+  denominatorInputProps?: NumberFieldProps;
+  decimalInputProps?: NumberFieldProps;
+} & NumberFieldProps;
 
 const RationalInput = ({
   initialRational,
@@ -36,51 +39,38 @@ const RationalInput = ({
 
   return (
     <div className="flex items-center gap-2">
-      <Input
+      <NumberField
         {...sharedProps}
         {...numeratorInputProps}
-        type="number"
         value={numerator}
-        onChange={(e) => {
-          if (!Number.isNaN(e.target.valueAsNumber)) {
-            setNumerator(e.target.valueAsNumber);
-            setRational?.({ numerator: e.target.valueAsNumber, denominator });
-          } else {
-            setNumerator(0);
-            setRational?.({ numerator: 0, denominator });
-          }
+        onChange={(value) => {
+          setNumerator(value);
+          setRational?.({ numerator: value, denominator });
         }}
       />
       /
-      <Input
+      <NumberField
         {...sharedProps}
         {...denominatorInputProps}
-        type="number"
         value={denominator}
-        onChange={(e) => {
-          if (!Number.isNaN(e.target.valueAsNumber)) {
-            setDenominator(e.target.valueAsNumber);
-            setRational?.({ numerator, denominator: e.target.valueAsNumber });
-          } else {
-            setDenominator(0);
-            setRational?.({ numerator, denominator: 0 });
-          }
+        onChange={(value) => {
+          setDenominator(value);
+          setRational?.({
+            numerator,
+            denominator: value,
+          });
         }}
       />
       =
-      <Input
+      <NumberField
         {...sharedProps}
         {...decimalInputProps}
-        type="number"
-        step="any"
         value={decimal}
-        onChange={(e) => {
-          if (!Number.isNaN(e.target.valueAsNumber)) {
-            const rational = approximateRational(e.target.valueAsNumber);
-            setNumerator(rational.numerator);
-            setDenominator(rational.denominator);
-            setRational?.(rational);
-          }
+        onChange={(value) => {
+          const rational = approximateRational(value);
+          setNumerator(rational.numerator);
+          setDenominator(rational.denominator);
+          setRational?.(rational);
         }}
       />
     </div>
