@@ -8,7 +8,7 @@ import {
   DataListItemLabel,
   DataListItemValue,
 } from "@exifi/ui/components/DataList";
-import { Link } from "@exifi/ui/components/Link";
+import { Link } from "@exifi/ui/components2/Link";
 
 const StatusComponent = () => {
   return (

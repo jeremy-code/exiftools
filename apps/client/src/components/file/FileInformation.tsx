@@ -21,8 +21,8 @@ import {
   DataListItemValue,
   type DataListItemValueProps,
 } from "@exifi/ui/components/DataList";
-import { Link } from "@exifi/ui/components/Link";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
+import { Link } from "@exifi/ui/components2/Link";
 
 const FileDimensionsInformation = ({
   fileDimensionsPromise,

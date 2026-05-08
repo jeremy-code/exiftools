@@ -12,8 +12,8 @@ import { useShallow } from "zustand/react/shallow";
 
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { formatBytes } from "#utils/formatBytes";
-import { Link } from "@exifi/ui/components/Link";
 import { Button } from "@exifi/ui/components2/Button";
+import { linkVariants } from "@exifi/ui/components2/Link";
 
 type AcceptedFileProps = {
   file: File;
@@ -128,15 +128,17 @@ const Dropzone = ({
           "Drop a file here"
         : <div>
             {"Drag a file here or "}
-            <Link color="link" underline="hover" asChild>
-              <button
-                type="button"
-                className="cursor-pointer appearance-none select-text"
-                onClick={open}
-              >
-                upload a file
-              </button>
-            </Link>
+            <button
+              type="button"
+              className={linkVariants({
+                underline: "hover",
+                color: "link",
+                className: "cursor-pointer appearance-none select-text",
+              })}
+              onClick={open}
+            >
+              upload a file
+            </button>
           </div>
         }
       </div>

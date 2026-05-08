@@ -18,8 +18,8 @@ import {
   DataListItemLabel,
   DataListItemValue,
 } from "@exifi/ui/components/DataList";
-import { Link } from "@exifi/ui/components/Link";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
+import { Link } from "@exifi/ui/components2/Link";
 
 import { ImageDimensions } from "./ImageDimensions";
 

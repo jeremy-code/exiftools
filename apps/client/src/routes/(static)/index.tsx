@@ -7,7 +7,7 @@ import { Slot } from "radix-ui";
 import { Button } from "@exifi/ui/components/Button";
 import { Card } from "@exifi/ui/components/Card";
 import { Heading } from "@exifi/ui/components/Heading";
-import { Link } from "@exifi/ui/components/Link";
+import { Link } from "@exifi/ui/components2/Link";
 
 type FeatureCardProps = {
   icon: ReactNode;

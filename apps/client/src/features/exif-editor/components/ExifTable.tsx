@@ -20,7 +20,6 @@ import {
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { formatPlural } from "#utils/formatPlural";
 import { Badge } from "@exifi/ui/components/Badge";
-import { Link } from "@exifi/ui/components/Link";
 import {
   Table,
   TableHead,
@@ -30,6 +29,7 @@ import {
   TableBody,
   type TableProps,
 } from "@exifi/ui/components/Table";
+import { linkVariants } from "@exifi/ui/components2/Link";
 
 import { SelectionBar } from "./table/SelectionBar";
 import { columns } from "./table/columns";
@@ -101,15 +101,14 @@ const ExifTable = (props: ExifTableProps) => {
     return (
       <div>
         {"There doesn't seem to be any Exif entries. "}
-        <Link color="blue" underline asChild>
-          <button
-            onClick={() => {
-              exifEditorStoreActions.fix();
-            }}
-          >
-            Initialize with default entries?
-          </button>
-        </Link>
+        <button
+          className={linkVariants({ color: "blue", underline: true })}
+          onClick={() => {
+            exifEditorStoreActions.fix();
+          }}
+        >
+          Initialize with default entries?
+        </button>
       </div>
     );
   }
