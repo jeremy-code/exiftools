@@ -57,7 +57,7 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
       >
         {/* Offset by height of Navbar */}
         <div className="sticky top-[--spacing(20)] z-50 container p-4">
-          <div className="grid grid-cols-[1fr_auto] items-center gap-[4px] overflow-x-auto rounded-md border border-border bg-bg-muted shadow">
+          <div className="grid grid-cols-[1fr_auto] items-center gap-1 overflow-x-auto rounded-md border border-border bg-bg-muted shadow">
             <TabList
               ref={fileTabsListRef}
               fitted

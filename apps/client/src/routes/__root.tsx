@@ -51,7 +51,7 @@ const RootComponent = () => {
     <RootDocument>
       <AppProvider>
         <Navbar />
-        <main className="grid">
+        <main>
           <Outlet />
         </main>
         <Footer />
