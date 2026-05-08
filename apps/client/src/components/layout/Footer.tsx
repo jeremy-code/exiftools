@@ -3,7 +3,7 @@ import type { ComponentPropsWithRef } from "react";
 import { Code } from "lucide-react";
 import { cn } from "tailwind-variants";
 
-import { Button } from "@exifi/ui/components/Button";
+import { buttonVariants } from "@exifi/ui/components2/Button";
 import { Link } from "@exifi/ui/components2/Link";
 
 export const Footer = ({
@@ -24,12 +24,13 @@ export const Footer = ({
             Jeremy Nguyen
           </Link>
         </span>
-        <Button asChild>
-          <Link href="https://github.com/jeremy-code/exifi">
-            <Code />
-            Source code
-          </Link>
-        </Button>
+        <Link
+          className={buttonVariants()}
+          href="https://github.com/jeremy-code/exifi"
+        >
+          <Code />
+          Source code
+        </Link>
       </div>
     </footer>
   );

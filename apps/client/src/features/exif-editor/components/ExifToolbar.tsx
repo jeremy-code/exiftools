@@ -6,7 +6,7 @@ import { useFileStore } from "#hooks/useFileStore";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { saveFile } from "#utils/saveFile";
 import { writeExifData } from "@exifi/exif-utils";
-import { Button } from "@exifi/ui/components/Button";
+import { Button } from "@exifi/ui/components2/Button";
 
 import { useExifEditorContext } from "../hooks/useExifEditorContext";
 import { AddEntryDialog } from "./dialogs/AddEntryDialog";
@@ -35,7 +35,7 @@ const ExifToolbar = () => {
   return (
     <div className="flex flex-wrap gap-2">
       <Button
-        onClick={() => {
+        onPress={() => {
           const generateFile = async () => {
             const newFileInBytes = writeExifData(
               new Uint8Array(await file.arrayBuffer()),
@@ -79,19 +79,19 @@ const ExifToolbar = () => {
         <Save size={16} />
         Save
       </Button>
-      <Button onClick={() => fix()}>Fix</Button>
-      <Button onClick={() => addImageDimensions(file)}>
+      <Button onPress={() => fix()}>Fix</Button>
+      <Button onPress={() => addImageDimensions(file)}>
         Add image dimensions
       </Button>
       <Button
-        onClick={async () => {
+        onPress={async () => {
           const currentPosition = await getCurrentPosition();
           setGpsExifFromGeolocationPosition(currentPosition);
         }}
       >
         Set Exif to current GPS position
       </Button>
-      <Button onClick={() => updateDateAndTimeDigitized()}>
+      <Button onPress={() => updateDateAndTimeDigitized()}>
         Set Date and Time Digitized to current time
       </Button>
       <AddEntryDialog />

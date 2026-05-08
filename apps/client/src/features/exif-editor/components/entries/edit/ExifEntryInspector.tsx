@@ -4,7 +4,7 @@ import { cn } from "tailwind-variants";
 
 import { useExifEntryDraft } from "#features/exif-editor/hooks/useExifEntryDraft";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
-import { Button } from "@exifi/ui/components/Button";
+import { Button } from "@exifi/ui/components2/Button";
 
 import { ExifEntryEditor } from "./ExifEntryEditor";
 import { ExifEntryMetadata } from "./ExifEntryMetadata";
@@ -36,7 +36,7 @@ const ExifEntryInspector = ({
           <ExifEntryValidity exifEntryObject={exifEntryObject} draft={draft} />
         : <span className="text-muted-foreground italic">no changes</span>}
       </div>
-      <Button disabled={!isChanged} onClick={() => save()}>
+      <Button isDisabled={!isChanged} onPress={() => save()}>
         {isChanged ? "Save changes" : "Saved"}
       </Button>
     </div>
