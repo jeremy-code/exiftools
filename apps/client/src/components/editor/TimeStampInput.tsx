@@ -1,13 +1,16 @@
+import { Time } from "@internationalized/date";
 import type { RationalObject } from "libexif-wasm";
 
 import { approximateRational } from "#lib/math/approximateRational";
-import { dayjs } from "#utils/date";
-import { Input, type InputProps } from "@exifi/ui/components/Input";
+import {
+  TimeField,
+  type TimeFieldProps,
+} from "@exifi/ui/components2/TimeField";
 
 type TimeStampInputProps = {
   value: RationalObject[];
   onValueChange: (value: RationalObject[]) => void;
-} & Omit<InputProps, "value">;
+} & Omit<TimeFieldProps<Time>, "value">;
 
 const MAX_UINT32_VALUE = 0xffffffff;
 
@@ -25,25 +28,19 @@ const TimeStampInput = ({
   const hours = hoursRational.numerator / hoursRational.denominator;
   const minutes = minutesRational.numerator / minutesRational.denominator;
   const seconds = secondsRational.numerator / secondsRational.denominator;
-  const date = dayjs({
-    hours,
-    minutes,
-    seconds,
-  });
+  const date = new Time(hours, minutes, seconds);
 
   return (
-    <Input
+    <TimeField
       {...props}
-      type="time"
-      value={date.format("HH:mm:ss")}
-      onChange={(event) => {
-        if (event.target.valueAsDate) {
-          const newDate = dayjs.utc(event.target.valueAsDate);
-
+      granularity="second"
+      value={date}
+      onChange={(value) => {
+        if (value !== null) {
           onValueChange(
-            [newDate.hour(), newDate.minute(), newDate.second()].map((value) =>
+            [value.hour, value.minute, value.second].map((timeComponent) =>
               approximateRational(
-                value,
+                timeComponent,
                 undefined,
                 undefined,
                 MAX_UINT32_VALUE,

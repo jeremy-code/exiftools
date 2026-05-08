@@ -52,6 +52,9 @@ importers:
       "@exifi/ui":
         specifier: workspace:*
         version: link:../../packages/ui
+      "@internationalized/date":
+        specifier: ^3.12.1
+        version: 3.12.1
       "@react-leaflet/core":
         specifier: ^3.0.0
         version: 3.0.0(leaflet@1.9.4)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)

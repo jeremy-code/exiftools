@@ -25,6 +25,7 @@
     "@dnd-kit/react": "^0.4.0",
     "@exifi/exif-utils": "workspace:*",
     "@exifi/ui": "workspace:*",
+    "@internationalized/date": "^3.12.1",
     "@react-leaflet/core": "^3.0.0",
     "@std/path": "npm:@jsr/std__path@^1.1.4",
     "@tanstack/react-form": "^1.29.1",

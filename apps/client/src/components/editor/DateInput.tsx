@@ -1,23 +1,24 @@
+import { CalendarDate } from "@internationalized/date";
 import { Dayjs } from "dayjs";
 
 import { dayjs } from "#utils/date";
-import { Input, type InputProps } from "@exifi/ui/components/Input";
+import {
+  DateField,
+  type DateFieldProps,
+} from "@exifi/ui/components2/DateField";
 
 type DateInputProps = {
   value: Dayjs;
   onValueChange: (date: Dayjs) => void;
-} & Omit<InputProps, "value">;
+} & Omit<DateFieldProps<CalendarDate>, "value">;
 
 const DateInput = ({ value, onValueChange, ...props }: DateInputProps) => {
   return (
-    <Input
+    <DateField
       {...props}
-      type="date"
-      value={value.format("YYYY-MM-DD")}
-      onChange={(event) => {
-        if (event.target.value !== "" && event.target.valueAsDate !== null) {
-          onValueChange?.(dayjs(event.target.valueAsDate));
-        }
+      value={new CalendarDate(value.year(), value.month() + 1, value.date())}
+      onChange={(value) => {
+        onValueChange?.(dayjs(value?.toString()));
       }}
     />
   );
