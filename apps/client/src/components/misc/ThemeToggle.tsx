@@ -2,19 +2,21 @@
 
 import { Moon, RefreshCw, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { AccessibleIcon } from "radix-ui";
+import { composeRenderProps } from "react-aria-components";
+import { Switch as AriaSwitch } from "react-aria-components/Switch";
 import { cn } from "tailwind-variants";
 
 import { useIsMounted } from "#hooks/useIsMounted";
 import {
-  SwitchRoot,
-  SwitchThumb,
-  type SwitchRootProps,
-} from "@exifi/ui/components/Switch";
+  SwitchTrack,
+  SwitchHandle,
+  switchVariants,
+  type SwitchProps,
+} from "@exifi/ui/components2/Switch";
 
-type ThemeToggleProps = SwitchRootProps;
+type ThemeToggleProps = SwitchProps;
 
-const ThemeToggle = (props: ThemeToggleProps) => {
+const ThemeToggle = ({ size, ...props }: ThemeToggleProps) => {
   // Prevent hydration error and layout shift as theme must be resolved from
   // `localStorage`
   const isMounted = useIsMounted();
@@ -28,24 +30,27 @@ const ThemeToggle = (props: ThemeToggleProps) => {
     : [RefreshCw, "Loading"];
 
   return (
-    <SwitchRoot
+    <AriaSwitch
       // Light mode = checked, Dark mode or not mounted = unchecked
-      checked={isMounted && isLight}
-      onCheckedChange={(checked) => {
-        setTheme(checked ? "light" : "dark");
-      }}
-      disabled={!isMounted}
+      isSelected={isMounted && isLight}
+      onChange={(isSelected) => setTheme(isSelected ? "light" : "dark")}
+      isDisabled={!isMounted}
+      aria-label={`Toggle ${themeIconLabel}`}
       {...props}
+      className={composeRenderProps(props.className, (className, renderProps) =>
+        switchVariants({ className, size, ...renderProps }),
+      )}
     >
-      <SwitchThumb>
-        <AccessibleIcon.Root label={themeIconLabel}>
+      <SwitchTrack>
+        <SwitchHandle>
           <ThemeIcon
+            aria-hidden
             size={16} // spacing.4 (1rem)
             className={cn({ "animate-spin": !isMounted })}
           />
-        </AccessibleIcon.Root>
-      </SwitchThumb>
-    </SwitchRoot>
+        </SwitchHandle>
+      </SwitchTrack>
+    </AriaSwitch>
   );
 };
 
