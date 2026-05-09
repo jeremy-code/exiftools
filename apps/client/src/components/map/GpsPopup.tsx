@@ -11,7 +11,7 @@ import {
   HorizontalList,
   HorizontalListItem,
 } from "@exifi/ui/components/HorizontalList";
-import { Skeleton } from "@exifi/ui/components/Skeleton";
+import { Skeleton } from "@exifi/ui/components2/Skeleton";
 
 const GpsPopupLabel = ({ coordinate }: { coordinate: LatLng }) => {
   const feature = useNominatimApiReverse(coordinate);

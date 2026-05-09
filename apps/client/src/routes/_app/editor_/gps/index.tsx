@@ -15,8 +15,8 @@ import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { saveFile } from "#utils/saveFile";
 import { seo } from "#utils/seo";
 import { writeExifData } from "@exifi/exif-utils";
-import { Skeleton } from "@exifi/ui/components/Skeleton";
 import { Button } from "@exifi/ui/components2/Button";
+import { Skeleton } from "@exifi/ui/components2/Skeleton";
 
 const defaultOsmProvider = new OpenStreetMapProvider();
 

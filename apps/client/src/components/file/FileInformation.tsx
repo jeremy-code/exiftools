@@ -14,7 +14,6 @@ import {
   DataListItemValue,
   type DataListItemValueProps,
 } from "@exifi/ui/components/DataList";
-import { Skeleton } from "@exifi/ui/components/Skeleton";
 import { Badge } from "@exifi/ui/components2/Badge";
 import {
   Card,
@@ -23,6 +22,7 @@ import {
   CardTitle,
 } from "@exifi/ui/components2/Card";
 import { Link } from "@exifi/ui/components2/Link";
+import { Skeleton } from "@exifi/ui/components2/Skeleton";
 
 const FileDimensionsInformation = ({
   fileDimensionsPromise,
