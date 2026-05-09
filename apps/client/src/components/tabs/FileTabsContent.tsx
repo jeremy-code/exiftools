@@ -4,7 +4,7 @@ import { Dropzone } from "#components/file/Dropzone";
 import { FileUrlInput } from "#components/file/FileUrlInput";
 import { DropzoneStoreProvider } from "#hooks/useDropzoneStore";
 import { FileStoreProvider } from "#hooks/useFileStore";
-import { Heading } from "@exifi/ui/components/Heading";
+import { Heading } from "@exifi/ui/components2/Heading";
 import { TabPanel } from "@exifi/ui/components2/Tabs";
 
 type FileTabsContentProps = {
@@ -26,7 +26,7 @@ const FileTabsContent = ({
       <DropzoneStoreProvider>
         {file === null ?
           <div className="flex flex-col gap-2">
-            <Heading as="h1" size="2xl" className="mb-4">
+            <Heading level={1} size="2xl" className="mb-4">
               Upload file to view Exif metadata
             </Heading>
 

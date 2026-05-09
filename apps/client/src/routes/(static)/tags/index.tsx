@@ -22,7 +22,6 @@ import { formatPlural } from "#utils/formatPlural";
 import { seo } from "#utils/seo";
 import { titlecase } from "#utils/titlecase";
 import { Badge } from "@exifi/ui/components/Badge";
-import { Heading } from "@exifi/ui/components/Heading";
 import {
   Table,
   TableHead,
@@ -31,6 +30,7 @@ import {
   TableCell,
   TableBody,
 } from "@exifi/ui/components/Table";
+import { Heading } from "@exifi/ui/components2/Heading";
 import {
   Tooltip,
   TooltipTarget,
@@ -148,7 +148,7 @@ const TagsComponent = () => {
 
   return (
     <div className="container py-8">
-      <Heading as="h1" size="2xl" className="mb-4">
+      <Heading level={1} size="2xl" className="mb-4">
         Exif tags
       </Heading>
       <Table

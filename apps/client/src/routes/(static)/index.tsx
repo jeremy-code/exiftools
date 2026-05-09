@@ -5,8 +5,8 @@ import { ClipboardCheck, Lock, Wrench } from "lucide-react";
 import { Slot } from "radix-ui";
 
 import { Card } from "@exifi/ui/components/Card";
-import { Heading } from "@exifi/ui/components/Heading";
 import { buttonVariants } from "@exifi/ui/components2/Button";
+import { Heading } from "@exifi/ui/components2/Heading";
 import { Link } from "@exifi/ui/components2/Link";
 
 type FeatureCardProps = {
@@ -68,7 +68,7 @@ const HomeComponent = () => {
   return (
     <div className="container py-8">
       <div className="grid max-h-dvh min-h-80 place-content-center gap-8">
-        <Heading as="h1" size="4xl">
+        <Heading level={1} size="4xl">
           View and edit Exif data locally
         </Heading>
         <div className="flex items-center justify-start gap-2 md:justify-center">
@@ -88,7 +88,7 @@ const HomeComponent = () => {
       </div>
       <div className="pt-16">
         <div className="text-center">
-          <Heading as="h2" size="3xl">
+          <Heading level={2} size="3xl">
             Features
           </Heading>
         </div>
