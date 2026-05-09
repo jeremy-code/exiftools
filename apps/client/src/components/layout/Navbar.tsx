@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react";
 
-import { Link as RouterLink } from "@tanstack/react-router";
+import { ClientOnly, Link as RouterLink } from "@tanstack/react-router";
 import { cn } from "tailwind-variants";
 
 import { ThemeToggle } from "#components/misc/ThemeToggle";
@@ -43,7 +43,9 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
             </NavigationMenuList>
           </NavigationMenu>
           <ThemeToggle size="lg" />
-          <MobileNav />
+          <ClientOnly>
+            <MobileNav />
+          </ClientOnly>
         </div>
       </div>
     </header>
