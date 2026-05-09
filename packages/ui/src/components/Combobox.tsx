@@ -2,6 +2,7 @@ import type { ComponentPropsWithRef } from "react";
 
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
 import { Check, ChevronDown, X } from "lucide-react";
+import { RemoveScroll } from "react-remove-scroll";
 import { cn } from "tailwind-variants";
 
 const {
@@ -83,13 +84,16 @@ const ComboboxList = ({
   ...props
 }: ComboboxPrimitive.List.Props) => {
   return (
-    <ComboboxPrimitive.List
-      className={cn(
-        "max-h-[min(--spacing(92),var(--available-height))] scroll-py-2 overflow-y-auto overscroll-contain py-2 outline-0 data-empty:p-0",
-        className,
-      )}
-      {...props}
-    />
+    <RemoveScroll>
+      <ComboboxPrimitive.List
+        className={cn(
+          "max-h-[min(--spacing(92),var(--available-height))] scroll-py-2 overflow-y-auto overscroll-contain py-2 outline-0 data-empty:p-0",
+          RemoveScroll.classNames.zeroRight,
+          className,
+        )}
+        {...props}
+      />
+    </RemoveScroll>
   );
 };
 

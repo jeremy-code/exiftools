@@ -298,6 +298,9 @@ importers:
       react-dom:
         specifier: ^19.2.0
         version: 19.2.6(react@19.2.6)
+      react-remove-scroll:
+        specifier: ^2.7.2
+        version: 2.7.2(@types/react@19.2.14)(react@19.2.6)
       tailwind-merge:
         specifier: ^3.5.0
         version: 3.5.0
