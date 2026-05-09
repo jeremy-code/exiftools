@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 
 import { useDisposeQueryCache } from "#hooks/useDisposeQueryCache";
-import { Toaster } from "@exifi/ui/components/Toaster";
 import { TooltipProvider } from "@exifi/ui/components/Tooltip";
+import { ToastRegion } from "@exifi/ui/components2/Toast";
 import { usePreventScrollLock } from "@exifi/ui/hooks/usePreventScrollLock";
 
 const Devtools =
@@ -31,7 +31,7 @@ const AppProvider = ({ children }: { children: Readonly<ReactNode> }) => {
         <TooltipProvider delayDuration={0}>
           {children}
           <Devtools />
-          <Toaster />
+          <ToastRegion />
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>

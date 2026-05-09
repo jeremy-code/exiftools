@@ -11,7 +11,7 @@ import {
   TextField,
   type TextFieldProps,
 } from "@exifi/ui/components2/TextField";
-import { toast } from "@exifi/ui/hooks/useToast";
+import { toastQueue } from "@exifi/ui/components2/Toast";
 
 type FileUrlInputProps = {
   inputProps?: TextFieldProps;
@@ -40,10 +40,12 @@ const FileUrlInput = ({
       onSuccess?.(data);
     },
     onError: (error, variables) => {
-      toast({
+      toastQueue.add({
         title: "Fetching from URL failed",
         description: `Fetching ${variables} failed with error ${error.message}.`,
-        variant: "destructive",
+        toastProps: {
+          color: "destructive",
+        },
       });
     },
   });
