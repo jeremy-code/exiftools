@@ -1,22 +1,23 @@
-import type { ComponentPropsWithRef, Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import { Minus, Plus } from "lucide-react";
+import {
+  Disclosure,
+  type DisclosureProps,
+  DisclosurePanel,
+  Heading,
+} from "react-aria-components/Disclosure";
 
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
-import { Button } from "@exifi/ui/components/Button";
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from "@exifi/ui/components/Collapsible";
+import { Button } from "@exifi/ui/components2/Button";
 import { NumberField } from "@exifi/ui/components2/NumberField";
 
 type ExifEntryEditorProps = {
   exifEntryObject: ExifEntryObject;
   draft: number[];
   setDraft: Dispatch<SetStateAction<number[]>>;
-} & ComponentPropsWithRef<typeof Collapsible>;
+} & DisclosureProps;
 
 const ExifEntryByteEditor = ({
   exifEntryObject,
@@ -32,9 +33,13 @@ const ExifEntryByteEditor = ({
     (exifEntryObject.format === "ASCII" ||
       isRationalOrSRational ||
       exifEntryObject.tag === "USER_COMMENT") && (
-      <Collapsible {...props}>
-        <CollapsibleTrigger asChild>
-          <Button className="group/collapsible-trigger" variant="outline">
+      <Disclosure {...props}>
+        <Heading>
+          <Button
+            slot="trigger"
+            className="group/collapsible-trigger"
+            variant="outline"
+          >
             <span className="group-data-[state=closed]/collapsible-trigger:hidden">
               Close byte editor
             </span>
@@ -42,8 +47,8 @@ const ExifEntryByteEditor = ({
               Open byte editor
             </span>
           </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="mt-4">
+        </Heading>
+        <DisclosurePanel className="mt-4">
           <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
             {draft.map((value, index) => (
               <NumberField
@@ -85,8 +90,8 @@ const ExifEntryByteEditor = ({
                 </Button>
               )}
           </div>
-        </CollapsibleContent>
-      </Collapsible>
+        </DisclosurePanel>
+      </Disclosure>
     )
   );
 };
