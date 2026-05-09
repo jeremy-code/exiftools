@@ -4,8 +4,8 @@ import { createFileRoute, Link as RouterLink } from "@tanstack/react-router";
 import { ClipboardCheck, Lock, Wrench } from "lucide-react";
 import { Slot } from "radix-ui";
 
-import { Card } from "@exifi/ui/components/Card";
 import { buttonVariants } from "@exifi/ui/components2/Button";
+import { Card } from "@exifi/ui/components2/Card";
 import { Heading } from "@exifi/ui/components2/Heading";
 import { Link } from "@exifi/ui/components2/Link";
 

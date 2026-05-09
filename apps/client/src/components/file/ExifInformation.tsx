@@ -7,18 +7,18 @@ import { assertNever } from "#utils/assertNever";
 import { formatPlural } from "#utils/formatPlural";
 import { getImageDimensions } from "#utils/getImageDimensions";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@exifi/ui/components/Card";
-import {
   DataList,
   DataListItem,
   DataListItemLabel,
   DataListItemValue,
 } from "@exifi/ui/components/DataList";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@exifi/ui/components2/Card";
 import { Link } from "@exifi/ui/components2/Link";
 
 import { ImageDimensions } from "./ImageDimensions";

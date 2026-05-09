@@ -9,12 +9,6 @@ import { formatBytes } from "#utils/formatBytes";
 import { getImageDimensions } from "#utils/getImageDimensions";
 import { Badge } from "@exifi/ui/components/Badge";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@exifi/ui/components/Card";
-import {
   DataList,
   DataListItem,
   DataListItemLabel,
@@ -22,6 +16,12 @@ import {
   type DataListItemValueProps,
 } from "@exifi/ui/components/DataList";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@exifi/ui/components2/Card";
 import { Link } from "@exifi/ui/components2/Link";
 
 const FileDimensionsInformation = ({

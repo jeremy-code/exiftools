@@ -7,13 +7,13 @@ import {
 } from "@tanstack/react-router";
 import { ChevronLeft, TriangleAlert } from "lucide-react";
 
+import { Button, buttonVariants } from "@exifi/ui/components2/Button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "@exifi/ui/components/Card";
-import { Button, buttonVariants } from "@exifi/ui/components2/Button";
+} from "@exifi/ui/components2/Card";
 import { Heading } from "@exifi/ui/components2/Heading";
 
 const CatchBoundary = ({ error, reset }: ErrorComponentProps) => {
