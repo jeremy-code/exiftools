@@ -12,10 +12,10 @@ import { IFD_NAMES } from "libexif-wasm/constants";
 
 import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
-import { Spinner } from "@exifi/ui/components/Spinner";
 import { Button } from "@exifi/ui/components2/Button";
 import { ComboBox, ComboBoxItem } from "@exifi/ui/components2/ComboBox";
 import { Select, SelectItem } from "@exifi/ui/components2/Select";
+import { Spinner } from "@exifi/ui/components2/Spinner";
 import { TextField } from "@exifi/ui/components2/TextField";
 
 type FieldValues = {

@@ -5,8 +5,8 @@ import { useMutation } from "@tanstack/react-query";
 
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { getFileFromResponse } from "#utils/getFileFromResponse";
-import { Spinner } from "@exifi/ui/components/Spinner";
 import { Button, type ButtonProps } from "@exifi/ui/components2/Button";
+import { Spinner } from "@exifi/ui/components2/Spinner";
 import {
   TextField,
   type TextFieldProps,

@@ -5,9 +5,9 @@ import { LatLng } from "leaflet";
 
 import { useExifEntryAddGpsFormOptions } from "#features/exif-editor/hooks/useExifEntryAddGpsFormOptions";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
-import { Spinner } from "@exifi/ui/components/Spinner";
 import { Button } from "@exifi/ui/components2/Button";
 import { NumberField } from "@exifi/ui/components2/NumberField";
+import { Spinner } from "@exifi/ui/components2/Spinner";
 
 import { ExifGpsMap } from "../../gps/ExifGpsMap";
 
