@@ -27,7 +27,7 @@ const EnumSelect = ({
       {...props}
       value={value}
       onValueChange={(value) => {
-        if (value in values) {
+        if (values.includes(value)) {
           onValueChange?.(value);
         }
       }}
