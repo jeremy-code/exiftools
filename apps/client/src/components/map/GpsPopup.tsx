@@ -10,7 +10,7 @@ import { formatLatLngAsGeoUri } from "#lib/leaflet/formatLatLngAsGeoUri";
 import {
   HorizontalList,
   HorizontalListItem,
-} from "@exifi/ui/components/HorizontalList";
+} from "@exifi/ui/components2/HorizontalList";
 import { Skeleton } from "@exifi/ui/components2/Skeleton";
 
 const GpsPopupLabel = ({ coordinate }: { coordinate: LatLng }) => {
