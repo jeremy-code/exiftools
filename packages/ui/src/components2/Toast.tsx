@@ -38,7 +38,9 @@ const toastQueue = new ToastQueue<ToastInfo>({
 
 const toastRegionVariants = tv({
   extend: focusRing,
-  base: ["fixed right-4 bottom-4 flex flex-col-reverse gap-2 rounded-lg"],
+  base: [
+    "fixed inset-x-4 bottom-4 flex flex-col-reverse gap-2 rounded-lg sm:justify-self-end",
+  ],
 });
 
 type ToastRegionProps = Omit<
@@ -62,7 +64,7 @@ const ToastRegion = ({ className, ...props }: ToastRegionProps) => {
 
 const closeToastButtonVariants = tv({
   base: [
-    "flex size-8 flex-none appearance-none items-center justify-center rounded-sm border-none bg-transparent p-0 outline-none [-webkit-tap-highlight-color:transparent]",
+    "flex size-8 flex-none appearance-none items-center justify-center rounded-sm bg-transparent outline-none [-webkit-tap-highlight-color:transparent]",
   ],
   variants: {
     isHovered: {
@@ -72,7 +74,7 @@ const closeToastButtonVariants = tv({
       true: "bg-white/20",
     },
     isFocusVisible: {
-      true: "outline-2 outline-offset-2 outline-current outline-solid",
+      true: "outline-2 outline-offset-2 outline-current outline-solid forced-colors:outline-[Highlight]",
     },
   },
 });
@@ -95,7 +97,7 @@ const CloseToastButton = ({ className, ...props }: ButtonProps) => {
 const toastRootVariants = tv({
   extend: focusRing,
   base: [
-    "flex w-57.5 items-center gap-4 rounded-lg px-4 py-3",
+    "flex items-center gap-4 rounded-lg px-4 py-3 sm:w-100",
     "[view-transition-class:toast]",
     "forced-colors:outline",
   ],
