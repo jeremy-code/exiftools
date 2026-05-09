@@ -1,7 +1,6 @@
 import { exifIfdGetName, ExifTagInfo, type ExifContent } from "libexif-wasm";
 
 import { formatPlural } from "#utils/formatPlural";
-import { Badge } from "@exifi/ui/components/Badge";
 import {
   DataList,
   DataListItem,
@@ -13,6 +12,7 @@ import {
   AccordionHeader,
   AccordionPanel,
 } from "@exifi/ui/components2/Accordion";
+import { Badge } from "@exifi/ui/components2/Badge";
 import {
   TooltipTrigger,
   TooltipTarget,

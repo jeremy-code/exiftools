@@ -19,7 +19,6 @@ import {
 } from "#features/exif-editor/hooks/useExifEditor";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { formatPlural } from "#utils/formatPlural";
-import { Badge } from "@exifi/ui/components/Badge";
 import {
   Table,
   TableHead,
@@ -29,6 +28,7 @@ import {
   TableBody,
   type TableProps,
 } from "@exifi/ui/components/Table";
+import { Badge } from "@exifi/ui/components2/Badge";
 import { linkVariants } from "@exifi/ui/components2/Link";
 
 import { SelectionBar } from "./table/SelectionBar";

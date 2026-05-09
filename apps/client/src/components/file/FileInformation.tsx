@@ -7,7 +7,6 @@ import { useFileHash } from "#hooks/useFileHash";
 import { useObjectUrl } from "#hooks/useObjectUrl";
 import { formatBytes } from "#utils/formatBytes";
 import { getImageDimensions } from "#utils/getImageDimensions";
-import { Badge } from "@exifi/ui/components/Badge";
 import {
   DataList,
   DataListItem,
@@ -16,6 +15,7 @@ import {
   type DataListItemValueProps,
 } from "@exifi/ui/components/DataList";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
+import { Badge } from "@exifi/ui/components2/Badge";
 import {
   Card,
   CardContent,

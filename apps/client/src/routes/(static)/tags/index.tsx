@@ -21,7 +21,6 @@ import { SortingHandlerToggle } from "#components/table/SortingHandlerToggle";
 import { formatPlural } from "#utils/formatPlural";
 import { seo } from "#utils/seo";
 import { titlecase } from "#utils/titlecase";
-import { Badge } from "@exifi/ui/components/Badge";
 import {
   Table,
   TableHead,
@@ -30,6 +29,7 @@ import {
   TableCell,
   TableBody,
 } from "@exifi/ui/components/Table";
+import { Badge } from "@exifi/ui/components2/Badge";
 import { Heading } from "@exifi/ui/components2/Heading";
 import {
   Tooltip,
