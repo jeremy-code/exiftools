@@ -1,5 +1,3 @@
-import { type MouseEvent } from "react";
-
 import {
   ErrorComponent,
   type ErrorComponentProps,
@@ -9,13 +7,13 @@ import {
 } from "@tanstack/react-router";
 import { ChevronLeft, TriangleAlert } from "lucide-react";
 
-import { Button } from "@exifi/ui/components/Button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "@exifi/ui/components/Card";
+import { Button, buttonVariants } from "@exifi/ui/components2/Button";
 import { Heading } from "@exifi/ui/components2/Heading";
 
 const CatchBoundary = ({ error, reset }: ErrorComponentProps) => {
@@ -48,16 +46,10 @@ const CatchBoundary = ({ error, reset }: ErrorComponentProps) => {
             Try Again
           </Button>
           {isRoot ?
-            <Button variant="ghost" asChild>
-              <Link to="/">Home</Link>
-            </Button>
-          : <Button
-              variant="ghost"
-              onClick={(e: MouseEvent) => {
-                e.preventDefault();
-                window.history.back();
-              }}
-            >
+            <Link className={buttonVariants({ variant: "ghost" })} to="/">
+              Home
+            </Link>
+          : <Button variant="ghost" onPress={() => window.history.back()}>
               <ChevronLeft size={16} />
               Go Back
             </Button>

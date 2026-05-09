@@ -5,8 +5,8 @@ import { LatLng } from "leaflet";
 
 import { useExifEntryAddGpsFormOptions } from "#features/exif-editor/hooks/useExifEntryAddGpsFormOptions";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
-import { Button } from "@exifi/ui/components/Button";
 import { Spinner } from "@exifi/ui/components/Spinner";
+import { Button } from "@exifi/ui/components2/Button";
 import { NumberField } from "@exifi/ui/components2/NumberField";
 
 import { ExifGpsMap } from "../../gps/ExifGpsMap";
@@ -33,7 +33,7 @@ const ExifEntryAddGpsForm = (props: ExifEntryAddGpsFormProps) => {
     <div {...props}>
       <Button
         type="button"
-        onClick={async () => {
+        onPress={async () => {
           const currentPosition = await getCurrentPosition();
           setGpsForm(
             new LatLng(
@@ -117,7 +117,7 @@ const ExifEntryAddGpsForm = (props: ExifEntryAddGpsFormProps) => {
           <gpsForm.Subscribe
             selector={(state) => state.isSubmitting}
             children={(isSubmitting) => (
-              <Button type="submit" variant="surface" disabled={isSubmitting}>
+              <Button type="submit" variant="surface" isDisabled={isSubmitting}>
                 {isSubmitting && <Spinner className="absolute" />}
                 <span
                   className="data-[pending=true]:invisible"

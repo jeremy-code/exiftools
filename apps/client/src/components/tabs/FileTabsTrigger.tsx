@@ -1,9 +1,8 @@
 import { useSortable } from "@dnd-kit/react/sortable";
 import { X } from "lucide-react";
-import { AccessibleIcon } from "radix-ui";
 import { cn } from "tailwind-variants";
 
-import { Button } from "@exifi/ui/components/Button";
+import { Button } from "@exifi/ui/components2/Button";
 import { Tab, type TabProps } from "@exifi/ui/components2/Tabs";
 
 type FileTabsTriggerProps = {
@@ -47,15 +46,10 @@ const FileTabsTrigger = ({
         className="absolute right-1 group-data-[state=inactive]/tabs-trigger:hover:bg-border"
         variant="ghost"
         size="icon-xs"
-        onPointerDown={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        onClick={() => removeTab()}
+        onPress={() => removeTab()}
+        aria-label="Close tab"
       >
-        <AccessibleIcon.Root label="Close tab">
-          <X size={16} />
-        </AccessibleIcon.Root>
+        <X size={16} />
       </Button>
     </Tab>
   );
