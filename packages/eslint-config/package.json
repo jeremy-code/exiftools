@@ -21,7 +21,7 @@
     "eslint-plugin-promise": "^7.3.0",
     "eslint-plugin-react-compiler": "19.1.0-rc.2",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-turbo": "^2.9.10",
+    "eslint-plugin-turbo": "^2.9.12",
     "globals": "^17.6.0",
     "typescript-eslint": "^8.59.2"
   }
