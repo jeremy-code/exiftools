@@ -2,6 +2,7 @@ import type { ComponentPropsWithRef } from "react";
 
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
 
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { getFileFromResponse } from "#utils/getFileFromResponse";
@@ -46,6 +47,11 @@ const FileUrlInput = ({
   });
   const form = useForm({
     defaultValues: { fileUrl: "" },
+    validators: {
+      onChange: z.strictObject({
+        fileUrl: z.httpUrl(),
+      }),
+    },
     // Using mutateAsync so form.isSubmitting is true while fetching
     onSubmit: ({ value }) => mutation.mutateAsync(value.fileUrl),
   });
@@ -62,10 +68,6 @@ const FileUrlInput = ({
       <div className="flex">
         <form.Field
           name="fileUrl"
-          validators={{
-            onChange: ({ value }) =>
-              !URL.canParse(value) ? "Please enter a URL." : undefined,
-          }}
           children={(field) => (
             <Input
               required
