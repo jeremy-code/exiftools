@@ -34,38 +34,41 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
   if (quickEditor === null) {
     return getValue() ?? "";
   }
-  const className = "focus:border-border focus:bg-background";
+
+  const title = ExifTagInfo.getTitleInIfd(originalRow.tag, originalRow.ifd);
+  const label = title !== "" ? title : originalRow.tag;
 
   switch (quickEditor.kind) {
     case "enum":
     case "enumAscii":
       return (
         <EnumSelect
-          placeholder={`Select a value for ${ExifTagInfo.getTitleInIfd(originalRow.tag, originalRow.ifd)}`}
+          placeholder={`Select a value for ${label}`}
+          aria-label={label}
           {...quickEditor}
         />
       );
     case "dateStamp":
-      return <DateInput className={className} {...quickEditor} />;
+      return <DateInput aria-label={label} {...quickEditor} />;
     case "versionId":
-      return <GpsTagVersionInput className={className} {...quickEditor} />;
+      return <GpsTagVersionInput aria-label={label} {...quickEditor} />;
     case "datetime":
-      return <DatetimeLocalInput className={className} {...quickEditor} />;
+      return <DatetimeLocalInput aria-label={label} {...quickEditor} />;
     case "timeStamp":
-      return <TimeStampInput className={className} {...quickEditor} />;
+      return <TimeStampInput aria-label={label} {...quickEditor} />;
     case "ascii":
       return (
         <Input
-          className={className}
           type="text"
+          aria-label={label}
           {...quickEditor}
           onChange={(e) => quickEditor.onValueChange(e.target.value)}
         />
       );
     case "exifVersion":
-      return <ExifVersionInput className={className} {...quickEditor} />;
+      return <ExifVersionInput aria-label={label} {...quickEditor} />;
     case "simpleNumeric":
-      return <NumberInput className={className} {...quickEditor} />;
+      return <NumberInput aria-label={label} {...quickEditor} />;
     default:
       assertNever(quickEditor);
   }
