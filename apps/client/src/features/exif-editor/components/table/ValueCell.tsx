@@ -6,11 +6,11 @@ import { DatetimeLocalInput } from "#components/editor/DatetimeLocalInput";
 import { EnumSelect } from "#components/editor/EnumSelect";
 import { ExifVersionInput } from "#components/editor/ExifVersionInput";
 import { GpsTagVersionInput } from "#components/editor/GpsTagVersionInput";
-import { TimeStampInput } from "#components/editor/TimeStampInput";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
 import { NumberField } from "@exifi/ui/components2/NumberField";
 import { TextField } from "@exifi/ui/components2/TextField";
+import { TimeField } from "@exifi/ui/components2/TimeField";
 
 import type { ExifTableRow } from "./columns";
 import { getExifQuickEditor } from "../../editors/quick/getExifQuickEditor";
@@ -58,7 +58,17 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
     case "datetime":
       return <DatetimeLocalInput {...quickEditor} />;
     case "timeStamp":
-      return <TimeStampInput {...quickEditor} />;
+      return (
+        <TimeField
+          granularity="second"
+          {...quickEditor}
+          onChange={(value) => {
+            if (value !== null) {
+              quickEditor.onValueChange(value);
+            }
+          }}
+        />
+      );
     case "ascii":
       return (
         <TextField
