@@ -14,6 +14,11 @@ type ResolvedQuickEditor<T> = {
   onValueChange: (value: T) => void;
 };
 
+type ExifVersion = {
+  major: number;
+  minor: number;
+};
+
 type QuickEditor =
   | ({ kind: "enum" } & ResolvedQuickEditor<string> & { values: string[] })
   | ({
@@ -23,8 +28,8 @@ type QuickEditor =
   | ({ kind: "versionId" } & ResolvedQuickEditor<number[]>)
   | ({ kind: "datetime" } & ResolvedQuickEditor<Dayjs>)
   | ({ kind: "ascii" } & ResolvedQuickEditor<string>)
-  | ({ kind: "exifVersion" } & ResolvedQuickEditor<number[]>)
+  | ({ kind: "exifVersion" } & ResolvedQuickEditor<ExifVersion>)
   | ({ kind: "simpleNumeric" } & ResolvedQuickEditor<number>)
   | ({ kind: "timeStamp" } & ResolvedQuickEditor<RationalObject[]>);
 
-export type { QuickEditorResolver, QuickEditor };
+export type { ExifVersion, QuickEditorResolver, QuickEditor };
