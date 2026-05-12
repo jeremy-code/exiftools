@@ -38,13 +38,7 @@ const updateLatLng = (exifDataGpsIfd: ExifContent, latLng: LatLng) => {
   latitudeEntry.fromTypedArray(
     mapRationalFromObject(
       [latitude.degrees, latitude.minutes, latitude.seconds].map((value) =>
-        approximateRational(
-          Math.abs(value),
-          undefined,
-          undefined,
-          MAX_UINT32_VALUE,
-          MAX_UINT32_VALUE,
-        ),
+        approximateRational(Math.abs(value), MAX_UINT32_VALUE),
       ),
       "RATIONAL",
     ),
@@ -52,13 +46,7 @@ const updateLatLng = (exifDataGpsIfd: ExifContent, latLng: LatLng) => {
   longitudeEntry.fromTypedArray(
     mapRationalFromObject(
       [longitude.degrees, longitude.minutes, longitude.seconds].map((value) =>
-        approximateRational(
-          Math.abs(value),
-          undefined,
-          undefined,
-          MAX_UINT32_VALUE,
-          MAX_UINT32_VALUE,
-        ),
+        approximateRational(Math.abs(value), MAX_UINT32_VALUE),
       ),
       "RATIONAL",
     ),
@@ -71,15 +59,7 @@ const updateLatLng = (exifDataGpsIfd: ExifContent, latLng: LatLng) => {
     altitudeRefEntry.format = "BYTE"; // For some reason, Altitude is BYTE and not ASCII
     altitudeEntry.fromTypedArray(
       mapRationalFromObject(
-        [
-          approximateRational(
-            Math.abs(latLng.alt),
-            undefined,
-            undefined,
-            MAX_UINT32_VALUE,
-            MAX_UINT32_VALUE,
-          ),
-        ],
+        [approximateRational(Math.abs(latLng.alt), MAX_UINT32_VALUE)],
         "RATIONAL",
       ),
     );

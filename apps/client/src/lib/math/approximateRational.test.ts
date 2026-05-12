@@ -1,16 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  approximateRational,
-  getContinuedFraction,
-} from "./approximateRational";
-
-describe("getContinuedFraction", () => {
-  test("get continued fraction", () => {
-    expect(getContinuedFraction(3.245)).toEqual([3, 4, 12, 4]);
-    expect(getContinuedFraction(2.875)).toEqual([2, 1, 7]);
-  });
-});
+import { approximateRational } from "./approximateRational";
 
 const RATIONAL_CASES = [
   { value: 3.245, expectedValue: { numerator: 649, denominator: 200 } },
@@ -31,6 +21,11 @@ const RATIONAL_CASES = [
   { value: 0, expectedValue: { numerator: 0, denominator: 1 } },
   /* ALTITUDE (1) */
   { value: 0, expectedValue: { numerator: 0, denominator: 1 } },
+  /* APERTURE_VALUE (1.53 EV (f/1.7)) */
+  {
+    value: 1.531069,
+    expectedValue: { numerator: 1_531_069, denominator: 1_000_000 },
+  },
 ];
 
 /**
@@ -38,15 +33,6 @@ const RATIONAL_CASES = [
  * math, `approximateRational` does not produce the correct rational
  */
 const MISC_RATIONAL_CASES = [
-  /* APERTURE_VALUE (1.53 EV (f/1.7)) */
-  {
-    value: 1.531069,
-    unexpectedValue: {
-      denominator: 2591,
-      numerator: 3967,
-    },
-    expectedValue: { numerator: 1_531_069, denominator: 1_000_000 },
-  },
   /* FOCAL_LENGTH (4.2 mm) */
   {
     value: 4.2,

@@ -36,15 +36,7 @@ const setGpsExifFromGeolocationPosition = (
         utcDate.hour(),
         utcDate.minute(),
         utcDate.second() + utcDate.millisecond() / MILLISECONDS_IN_SECOND,
-      ].map((value) =>
-        approximateRational(
-          value,
-          undefined,
-          undefined,
-          MAX_UINT32_VALUE,
-          MAX_UINT32_VALUE,
-        ),
-      ),
+      ].map((value) => approximateRational(value, MAX_UINT32_VALUE)),
     ),
   );
 
@@ -60,13 +52,7 @@ const setGpsExifFromGeolocationPosition = (
   hPositioningErrorEntry.format = "RATIONAL";
   hPositioningErrorEntry.fromTypedArray(
     mapRationalFromObject([
-      approximateRational(
-        coords.accuracy,
-        undefined,
-        undefined,
-        MAX_UINT32_VALUE,
-        MAX_UINT32_VALUE,
-      ),
+      approximateRational(coords.accuracy, MAX_UINT32_VALUE),
     ]),
   );
 
@@ -77,9 +63,6 @@ const setGpsExifFromGeolocationPosition = (
       mapRationalFromObject([
         approximateRational(
           coords.speed * (METERS_IN_KILOMETERS / SECONDS_IN_HOUR),
-          undefined,
-          undefined,
-          MAX_UINT32_VALUE,
           MAX_UINT32_VALUE,
         ),
       ]),
@@ -94,13 +77,7 @@ const setGpsExifFromGeolocationPosition = (
     imgDirectionEntry.format = "RATIONAL";
     imgDirectionEntry.fromTypedArray(
       mapRationalFromObject([
-        approximateRational(
-          coords.heading,
-          undefined,
-          undefined,
-          MAX_UINT32_VALUE,
-          MAX_UINT32_VALUE,
-        ),
+        approximateRational(coords.heading, MAX_UINT32_VALUE),
       ]),
     );
     const imgDirectionRefEntry = getOrInsertEntry(

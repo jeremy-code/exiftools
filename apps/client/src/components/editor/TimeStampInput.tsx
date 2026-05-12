@@ -47,13 +47,7 @@ const TimeStampInput = ({
 
           onValueChange(
             [newDate.hour(), newDate.minute(), newDate.second()].map((value) =>
-              approximateRational(
-                value,
-                undefined,
-                undefined,
-                MAX_UINT32_VALUE,
-                MAX_UINT32_VALUE,
-              ),
+              approximateRational(value, MAX_UINT32_VALUE),
             ),
           );
         }
