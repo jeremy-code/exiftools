@@ -1,6 +1,6 @@
 import type { QuickEditorResolver } from "../types";
 
-const resolveVerisonId: QuickEditorResolver = (
+const resolveVersionId: QuickEditorResolver = (
   exifEntryObject,
   onValueChange,
 ) => {
@@ -20,4 +20,4 @@ const resolveVerisonId: QuickEditorResolver = (
   return null;
 };
 
-export { resolveVerisonId };
+export { resolveVersionId };

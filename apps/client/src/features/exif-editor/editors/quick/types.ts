@@ -19,15 +19,13 @@ type ExifVersion = {
   minor: number;
 };
 
-type GpsVersionId = [number, number, number, number];
-
 type QuickEditor =
   | ({ kind: "enum" } & ResolvedQuickEditor<string> & { values: string[] })
   | ({
       kind: "enumAscii";
     } & ResolvedQuickEditor<string> & { values: string[] })
   | ({ kind: "dateStamp" } & ResolvedQuickEditor<Dayjs>)
-  | ({ kind: "versionId" } & ResolvedQuickEditor<GpsVersionId>)
+  | ({ kind: "versionId" } & ResolvedQuickEditor<number[]>)
   | ({ kind: "datetime" } & ResolvedQuickEditor<Dayjs>)
   | ({ kind: "ascii" } & ResolvedQuickEditor<string>)
   | ({ kind: "exifVersion" } & ResolvedQuickEditor<ExifVersion>)
