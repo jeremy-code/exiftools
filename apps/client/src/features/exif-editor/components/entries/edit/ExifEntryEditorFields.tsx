@@ -1,5 +1,7 @@
 import { type Dispatch, type SetStateAction } from "react";
 
+import { ExifTagInfo } from "libexif-wasm";
+
 import { RationalInput } from "#components/editor/RationalInput";
 import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
 import { getExifAdvancedEditor } from "#features/exif-editor/editors/advanced/getExifAdvancedEditor";
@@ -29,10 +31,17 @@ const ExifEntryEditorFields = ({
     return null;
   }
 
+  const title = ExifTagInfo.getTitleInIfd(
+    exifEntryObject.tag,
+    exifEntryObject.ifd,
+  );
+  const label = title !== "" ? title : exifEntryObject.tag;
+
   switch (exifAdvancedEditor.kind) {
     case "rational":
       return exifAdvancedEditor.values.map((value, index) => (
         <RationalInput
+          aria-label={`${label} ${index + 1}`}
           key={index}
           initialRational={value}
           setRational={(rational) =>
@@ -43,6 +52,7 @@ const ExifEntryEditorFields = ({
     case "ascii":
       return (
         <TextAreaField
+          aria-label={label}
           {...exifAdvancedEditor}
           onChange={(value) => exifAdvancedEditor.onValueChange(value)}
         />
@@ -50,6 +60,7 @@ const ExifEntryEditorFields = ({
     case "numeric":
       return exifAdvancedEditor.values.map((value, index) => (
         <NumberField
+          aria-label={`${label} ${index + 1}`}
           key={index}
           value={value}
           onChange={(value) => exifAdvancedEditor.onValueChange(value, index)}
