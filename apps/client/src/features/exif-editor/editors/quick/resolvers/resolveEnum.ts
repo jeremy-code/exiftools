@@ -24,9 +24,8 @@ const resolveEnum: QuickEditorResolver = (entry, onValueChange) => {
     value: entry.formattedValue,
     values: Object.keys(values),
     onValueChange: (value) => {
-      const next = values[value];
-      if (next !== undefined) {
-        onValueChange(newTypedArrayInFormat([next], entry.format));
+      if (value in values && values[value] !== undefined) {
+        onValueChange(newTypedArrayInFormat([values[value]], entry.format));
       }
     },
   };

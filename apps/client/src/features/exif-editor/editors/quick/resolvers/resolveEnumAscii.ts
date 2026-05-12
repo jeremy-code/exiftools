@@ -34,9 +34,8 @@ const resolveEnumAscii: QuickEditorResolver = (
     value: asciiEntry[0],
     values: Object.keys(asciiValues),
     onValueChange: (value) => {
-      const next = asciiValues[value];
-      if (next !== undefined) {
-        onValueChange(encodeStringToUtf8(next));
+      if (value in asciiValues && asciiValues[value] !== undefined) {
+        onValueChange(encodeStringToUtf8(asciiValues[value]));
       }
     },
   };
