@@ -18,6 +18,14 @@ const updateDateAndTimeDigitized = (exifDataExifIfd: ExifContent) => {
   dateTimeDigitizedEntry.fromTypedArray(
     encodeStringToUtf8(currentDate.format(EXIF_TIMESTAMP_FORMAT)),
   );
+  const subSecTimeDigitizedEntry = getOrInsertEntry(
+    exifDataExifIfd,
+    "SUB_SEC_TIME_DIGITIZED",
+  );
+  subSecTimeDigitizedEntry.format = "ASCII";
+  subSecTimeDigitizedEntry.fromTypedArray(
+    encodeStringToUtf8(currentDate.format("SSS")),
+  );
   const offsetTimeDigitizedEntry = getOrInsertEntry(
     exifDataExifIfd,
     "OFFSET_TIME_DIGITIZED",
