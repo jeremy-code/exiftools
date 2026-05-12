@@ -1,6 +1,6 @@
 import { Suspense, useMemo, type ComponentPropsWithRef } from "react";
 
-import type { DataType, ExifData } from "libexif-wasm";
+import { type DataType, type ExifData } from "libexif-wasm";
 
 import { useObjectUrl } from "#hooks/useObjectUrl";
 import { assertNever } from "#utils/assertNever";
@@ -21,6 +21,7 @@ import {
 import { Link } from "@exifi/ui/components/Link";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
 
+import { ExifDateTimeInformation } from "./ExifDateTimeInformation";
 import { ImageDimensions } from "./ImageDimensions";
 
 const dataTypeMap: Record<DataType, string> = {
@@ -130,6 +131,7 @@ const ExifInformation = ({
               )}
             </DataListItemValue>
           </DataListItem>
+          <ExifDateTimeInformation exifData={exifData} />
         </DataList>
       </CardContent>
     </Card>
