@@ -1,5 +1,5 @@
 import type { Dayjs } from "dayjs";
-import type { RationalObject, ValidTypedArray } from "libexif-wasm";
+import type { ValidTypedArray } from "libexif-wasm";
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 
@@ -19,17 +19,19 @@ type ExifVersion = {
   minor: number;
 };
 
+type GpsVersionId = [number, number, number, number];
+
 type QuickEditor =
   | ({ kind: "enum" } & ResolvedQuickEditor<string> & { values: string[] })
   | ({
       kind: "enumAscii";
     } & ResolvedQuickEditor<string> & { values: string[] })
   | ({ kind: "dateStamp" } & ResolvedQuickEditor<Dayjs>)
-  | ({ kind: "versionId" } & ResolvedQuickEditor<number[]>)
+  | ({ kind: "versionId" } & ResolvedQuickEditor<GpsVersionId>)
   | ({ kind: "datetime" } & ResolvedQuickEditor<Dayjs>)
   | ({ kind: "ascii" } & ResolvedQuickEditor<string>)
   | ({ kind: "exifVersion" } & ResolvedQuickEditor<ExifVersion>)
   | ({ kind: "simpleNumeric" } & ResolvedQuickEditor<number>)
-  | ({ kind: "timeStamp" } & ResolvedQuickEditor<RationalObject[]>);
+  | ({ kind: "timeStamp" } & ResolvedQuickEditor<Dayjs>);
 
 export type { ExifVersion, QuickEditorResolver, QuickEditor };

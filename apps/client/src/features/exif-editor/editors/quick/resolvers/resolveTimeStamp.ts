@@ -1,3 +1,4 @@
+import { Decimal } from "decimal.js";
 import {
   exifFormatGetSize,
   mapRationalFromObject,
@@ -5,9 +6,34 @@ import {
 } from "libexif-wasm";
 
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
+import { approximateRational } from "#lib/math/approximateRational";
+import { dayjs } from "#utils/date";
 
 import type { QuickEditorResolver } from "../types";
 
+const MAX_UINT32_VALUE = 0xffffffff;
+
+const parseTimeStampValue = (value: number[]) => {
+  const timeStampValue = mapRationalToObject(
+    newTypedArrayInFormat(value, "RATIONAL"),
+  );
+
+  if (timeStampValue.length !== 3) {
+    throw new Error(
+      `Unexpected number of inputs for tag TIME_STAMP, expected 3, got ${timeStampValue.length}`,
+    );
+  }
+  const [hours, minutes, seconds] = timeStampValue.map((rational) =>
+    Decimal(rational.numerator).div(rational.denominator).toNumber(),
+  );
+  if (hours === undefined || minutes === undefined || seconds === undefined) {
+    throw new Error(
+      "Hours, minutes, and seconds are required for tag TIME_STAMP",
+    );
+  }
+
+  return dayjs.utc({ hours, minutes, seconds });
+};
 const resolveTimeStamp: QuickEditorResolver = (
   exifEntryObject,
   onValueChange,
@@ -23,11 +49,17 @@ const resolveTimeStamp: QuickEditorResolver = (
     return {
       kind: "timeStamp",
       exifEntryObject,
-      value: mapRationalToObject(
-        newTypedArrayInFormat(exifEntryObject.value, "RATIONAL"),
-      ),
+      value: parseTimeStampValue(exifEntryObject.value),
       onValueChange: (value) =>
-        onValueChange(mapRationalFromObject(value, "RATIONAL")),
+        onValueChange(
+          mapRationalFromObject(
+            [value.hour(), value.minute(), value.second()].map(
+              (timeComponent) =>
+                approximateRational(timeComponent, MAX_UINT32_VALUE),
+            ),
+            "RATIONAL",
+          ),
+        ),
     };
   }
 
