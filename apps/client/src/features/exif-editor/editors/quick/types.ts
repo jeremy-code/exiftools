@@ -1,5 +1,6 @@
 import type { Dayjs } from "dayjs";
 import type { ValidTypedArray } from "libexif-wasm";
+import { Temporal } from "temporal-polyfill";
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 
@@ -30,6 +31,6 @@ type QuickEditor =
   | ({ kind: "ascii" } & ResolvedQuickEditor<string>)
   | ({ kind: "exifVersion" } & ResolvedQuickEditor<ExifVersion>)
   | ({ kind: "simpleNumeric" } & ResolvedQuickEditor<number>)
-  | ({ kind: "timeStamp" } & ResolvedQuickEditor<Dayjs>);
+  | ({ kind: "timeStamp" } & ResolvedQuickEditor<Temporal.PlainTime>);
 
 export type { ExifVersion, QuickEditorResolver, QuickEditor };

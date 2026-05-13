@@ -79,6 +79,9 @@ importers:
       content-disposition:
         specifier: ^1.1.0
         version: 1.1.0
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       dayjs:
         specifier: ^1.11.20
         version: 1.11.20
@@ -136,6 +139,9 @@ importers:
       tailwind-variants:
         specifier: ^3.2.2
         version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.3.0)
+      temporal-polyfill:
+        specifier: ^0.3.2
+        version: 0.3.2
       uuid:
         specifier: ^14.0.0
         version: 14.0.0
@@ -288,7 +294,7 @@ importers:
     dependencies:
       "@base-ui/react":
         specifier: ^1.4.1
-        version: 1.4.1(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 1.4.1(@types/react@19.2.14)(date-fns@4.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       lucide-react:
         specifier: ^1.14.0
         version: 1.14.0(react@19.2.6)
@@ -4013,6 +4019,12 @@ packages:
         integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==,
       }
 
+  date-fns@4.1.0:
+    resolution:
+      {
+        integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==,
+      }
+
   dayjs@1.11.20:
     resolution:
       {
@@ -5941,6 +5953,18 @@ packages:
       }
     engines: { node: ">=6" }
 
+  temporal-polyfill@0.3.2:
+    resolution:
+      {
+        integrity: sha512-TzHthD/heRK947GNiSu3Y5gSPpeUDH34+LESnfsq8bqpFhsB79HFBX8+Z834IVX68P3EUyRPZK5bL/1fh437Eg==,
+      }
+
+  temporal-spec@0.3.1:
+    resolution:
+      {
+        integrity: sha512-B4TUhezh9knfSIMwt7RVggApDRJZo73uZdj8AacL2mZ8RP5KtLianh2MXxL06GN9ESYiIsiuoLQhgVfwe55Yhw==,
+      }
+
   tiny-inflate@1.0.3:
     resolution:
       {
@@ -6723,7 +6747,7 @@ snapshots:
       "@babel/helper-string-parser": 7.27.1
       "@babel/helper-validator-identifier": 7.28.5
 
-  "@base-ui/react@1.4.1(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)":
+  "@base-ui/react@1.4.1(@types/react@19.2.14)(date-fns@4.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)":
     dependencies:
       "@babel/runtime": 7.29.2
       "@base-ui/utils": 0.2.8(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -6734,6 +6758,7 @@ snapshots:
       use-sync-external-store: 1.6.0(react@19.2.6)
     optionalDependencies:
       "@types/react": 19.2.14
+      date-fns: 4.1.0
 
   "@base-ui/utils@0.2.8(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)":
     dependencies:
@@ -9153,6 +9178,8 @@ snapshots:
 
   csstype@3.2.3: {}
 
+  date-fns@4.1.0: {}
+
   dayjs@1.11.20: {}
 
   debug@4.4.3(supports-color@10.2.2):
@@ -10344,6 +10371,12 @@ snapshots:
   tailwindcss@4.3.0: {}
 
   tapable@2.3.3: {}
+
+  temporal-polyfill@0.3.2:
+    dependencies:
+      temporal-spec: 0.3.1
+
+  temporal-spec@0.3.1: {}
 
   tiny-inflate@1.0.3: {}
 

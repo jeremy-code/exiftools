@@ -4,10 +4,10 @@ import {
   mapRationalFromObject,
   mapRationalToObject,
 } from "libexif-wasm";
+import { Temporal } from "temporal-polyfill";
 
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import { approximateRational } from "#lib/math/approximateRational";
-import { dayjs } from "#utils/date";
 
 import type { QuickEditorResolver } from "../types";
 
@@ -32,7 +32,11 @@ const parseTimeStampValue = (value: number[]) => {
     );
   }
 
-  return dayjs.utc({ hours, minutes, seconds });
+  return Temporal.PlainTime.from({
+    hour: hours,
+    minute: minutes,
+    second: seconds,
+  });
 };
 const resolveTimeStamp: QuickEditorResolver = (
   exifEntryObject,
@@ -53,9 +57,8 @@ const resolveTimeStamp: QuickEditorResolver = (
       onValueChange: (value) =>
         onValueChange(
           mapRationalFromObject(
-            [value.hour(), value.minute(), value.second()].map(
-              (timeComponent) =>
-                approximateRational(timeComponent, MAX_UINT32_VALUE),
+            [value.hour, value.minute, value.second].map((timeComponent) =>
+              approximateRational(timeComponent, MAX_UINT32_VALUE),
             ),
             "RATIONAL",
           ),

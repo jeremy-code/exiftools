@@ -1,11 +1,10 @@
-import type { Dayjs } from "dayjs";
+import { Temporal } from "temporal-polyfill";
 
-import { dayjs } from "#utils/date";
 import { Input, type InputProps } from "@exifi/ui/components/Input";
 
 type TimeStampInputProps = {
-  value: Dayjs;
-  onValueChange: (value: Dayjs) => void;
+  value: Temporal.PlainTime;
+  onValueChange: (value: Temporal.PlainTime) => void;
 } & Omit<InputProps, "value">;
 
 const TimeStampInput = ({
@@ -17,10 +16,10 @@ const TimeStampInput = ({
     <Input
       {...props}
       type="time"
-      value={value.format("HH:mm:ss")}
+      value={value.toString({ smallestUnit: "second" })}
       onChange={(event) => {
-        if (event.target.valueAsDate) {
-          onValueChange(dayjs.utc(event.target.valueAsDate));
+        if (event.target.value !== "") {
+          onValueChange(Temporal.PlainTime.from(event.target.value));
         }
       }}
     />
