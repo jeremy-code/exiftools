@@ -9,27 +9,13 @@ import {
 } from "@exifi/ui/components/Select";
 
 type EnumSelectProps = {
-  value: string;
   values: string[];
-  onValueChange: (value: string) => void;
   placeholder?: ReactNode;
-} & Omit<ComponentPropsWithRef<typeof Select>, "onValueChange">;
+} & ComponentPropsWithRef<typeof Select>;
 
-const EnumSelect = ({
-  value,
-  values,
-  onValueChange,
-  placeholder,
-  ...props
-}: EnumSelectProps) => {
+const EnumSelect = ({ values, placeholder, ...props }: EnumSelectProps) => {
   return (
-    <Select
-      {...props}
-      value={value}
-      onValueChange={(value) => {
-        onValueChange?.(value);
-      }}
-    >
+    <Select {...props}>
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

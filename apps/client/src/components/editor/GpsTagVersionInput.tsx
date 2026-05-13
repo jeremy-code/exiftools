@@ -6,8 +6,8 @@ import { useBreakpoint } from "#hooks/useBreakpoint";
 import { Input, type InputProps } from "@exifi/ui/components/Input";
 
 type GpsTagVersionInputProps = {
-  value: number[];
-  onValueChange: (value: number[]) => void;
+  value?: number[];
+  onValueChange?: (value: number[]) => void;
   inputProps?: InputProps;
 } & ComponentPropsWithRef<"div">;
 
@@ -22,12 +22,12 @@ const GpsTagVersionInput = ({
 
   // There really isn't enough room to edit four values in one line
   if (breakpoint) {
-    return value.join(".");
+    return value?.join(".") ?? "Unknown";
   }
 
   return (
     <div className="flex items-baseline gap-1" {...props}>
-      {value.map((byte, index) => (
+      {value?.map((byte, index) => (
         <Fragment key={index}>
           <Input
             {...inputProps}
@@ -36,7 +36,7 @@ const GpsTagVersionInput = ({
             value={byte}
             onChange={(e) => {
               if (!Number.isNaN(e.target.valueAsNumber)) {
-                onValueChange(value.with(index, e.target.valueAsNumber));
+                onValueChange?.(value.with(index, e.target.valueAsNumber));
               }
             }}
           />

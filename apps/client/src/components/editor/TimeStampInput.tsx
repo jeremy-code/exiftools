@@ -1,8 +1,8 @@
 import { Input, type InputProps } from "@exifi/ui/components/Input";
 
 type TimeStampInputProps = {
-  value: Temporal.PlainTime;
-  onValueChange: (value: Temporal.PlainTime) => void;
+  value?: Temporal.PlainTime;
+  onValueChange?: (value: Temporal.PlainTime) => void;
 } & Omit<InputProps, "value">;
 
 const TimeStampInput = ({
@@ -14,10 +14,10 @@ const TimeStampInput = ({
     <Input
       {...props}
       type="time"
-      value={value.toString({ smallestUnit: "second" })}
+      value={value?.toString({ smallestUnit: "second" })}
       onChange={(event) => {
         if (event.target.value !== "") {
-          onValueChange(Temporal.PlainTime.from(event.target.value));
+          onValueChange?.(Temporal.PlainTime.from(event.target.value));
         }
       }}
     />

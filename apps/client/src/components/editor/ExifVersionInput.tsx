@@ -6,8 +6,8 @@ import type { ExifVersion } from "#features/exif-editor/editors/quick/types";
 import { Input, type InputProps } from "@exifi/ui/components/Input";
 
 type ExifVersionInputProps = {
-  value: ExifVersion;
-  onValueChange: (value: ExifVersion) => void;
+  value?: ExifVersion;
+  onValueChange?: (value: ExifVersion) => void;
   inputProps?: Omit<InputProps, "value">;
 } & ComponentPropsWithRef<"div">;
 
@@ -25,10 +25,13 @@ const ExifVersionInput = ({
         type="number"
         min={1}
         max={2}
-        value={value.major}
+        value={value?.major}
         onChange={(event) => {
-          if (!Number.isNaN(event.target.valueAsNumber)) {
-            onValueChange({
+          if (
+            value !== undefined &&
+            !Number.isNaN(event.target.valueAsNumber)
+          ) {
+            onValueChange?.({
               major: event.target.valueAsNumber,
               minor: value.minor,
             });
@@ -40,10 +43,13 @@ const ExifVersionInput = ({
         {...inputProps}
         type="number"
         min={0}
-        value={value.minor}
+        value={value?.minor}
         onChange={(event) => {
-          if (!Number.isNaN(event.target.valueAsNumber)) {
-            onValueChange({
+          if (
+            value !== undefined &&
+            !Number.isNaN(event.target.valueAsNumber)
+          ) {
+            onValueChange?.({
               major: value.major,
               minor: event.target.valueAsNumber,
             });
