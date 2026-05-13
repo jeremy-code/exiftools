@@ -1,13 +1,11 @@
 const getCurrentPosition = (options?: PositionOptions) => {
-  if ("geolocation" in navigator) {
-    return new Promise<GeolocationPosition>((resolve, reject) => {
+  return new Promise<GeolocationPosition>((resolve, reject) => {
+    if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(resolve, reject, options);
-    });
-  } else {
-    return new Promise<GeolocationPosition>((_resolve, reject) => {
+    } else {
       reject(new Error("Geolocation API is not supported in this browser"));
-    });
-  }
+    }
+  });
 };
 
 export { getCurrentPosition };
