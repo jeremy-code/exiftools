@@ -43,6 +43,7 @@ const EditorGpsApp = ({
       new LatLng(
         currentPosition.coords.latitude,
         currentPosition.coords.longitude,
+        currentPosition.coords.altitude ?? undefined,
       )
     : null;
   const osmProvider = getOsmProvider(currentPositionLatLng);
