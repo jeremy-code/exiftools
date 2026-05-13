@@ -11,6 +11,8 @@ type ExifDateTimeInformationProps = {
   exifData: ExifData;
 };
 
+type DateTimeItem = { label: string; value: Temporal.ZonedDateTime };
+
 const ExifDateTimeInformation = ({
   exifData,
 }: ExifDateTimeInformationProps) => {
@@ -46,40 +48,29 @@ const ExifDateTimeInformation = ({
       )
     : null;
 
-  return (
-    <>
-      {dateTime !== null && (
-        <DataListItem>
-          <DataListItemLabel>Date and Time</DataListItemLabel>
-          <DataListItemValue>
-            <time dateTime={dateTime.toString()}>
-              {dateTime.toInstant().toLocaleString()}
-            </time>
-          </DataListItemValue>
-        </DataListItem>
-      )}
-      {dateTimeOriginal !== null && (
-        <DataListItem>
-          <DataListItemLabel>Date and Time (Original)</DataListItemLabel>
-          <DataListItemValue>
-            <time dateTime={dateTimeOriginal.toString()}>
-              {dateTimeOriginal.toInstant().toLocaleString()}
-            </time>
-          </DataListItemValue>
-        </DataListItem>
-      )}
-      {dateTimeDigitized !== null && (
-        <DataListItem>
-          <DataListItemLabel>Date and Time (Digitized)</DataListItemLabel>
-          <DataListItemValue>
-            <time dateTime={dateTimeDigitized.toString()}>
-              {dateTimeDigitized.toInstant().toLocaleString()}
-            </time>
-          </DataListItemValue>
-        </DataListItem>
-      )}
-    </>
+  const dateTimeItems = Array.from(
+    // Use Map to deduplicate by .toString() of Temporal.ZonedDateTime
+    new Map(
+      [
+        { label: "Date and Time", value: dateTime },
+        { label: "Date and Time (Original)", value: dateTimeOriginal },
+        { label: "Date and Time (Digitized)", value: dateTimeDigitized },
+      ]
+        .filter((value): value is DateTimeItem => value !== null)
+        .map((dateTimeItem) => [dateTimeItem.value.toString(), dateTimeItem]),
+    ).values(),
   );
+
+  return dateTimeItems.map(({ label, value }) => (
+    <DataListItem key={label}>
+      <DataListItemLabel>{label}</DataListItemLabel>
+      <DataListItemValue>
+        <time dateTime={value.toString()}>
+          {value.toInstant().toLocaleString()}
+        </time>
+      </DataListItemValue>
+    </DataListItem>
+  ));
 };
 
 export { ExifDateTimeInformation, type ExifDateTimeInformationProps };
