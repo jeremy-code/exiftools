@@ -1,8 +1,11 @@
-import { dayjs } from "#utils/date";
+import { format } from "date-fns/format";
+import { parse } from "date-fns/parse";
+import { parseISO } from "date-fns/parseISO";
+import { Temporal } from "temporal-polyfill";
 
 import type { QuickEditorResolver } from "../types";
 
-const EXIF_DATESTAMP_FORMAT = "YYYY:MM:DD";
+const EXIF_DATESTAMP_FORMAT = "yyyy:MM:dd";
 
 const resolveDateStamp: QuickEditorResolver = (
   exifEntryObject,
@@ -14,15 +17,23 @@ const resolveDateStamp: QuickEditorResolver = (
     exifEntryObject.components === EXIF_DATESTAMP_FORMAT.length + 1 &&
     exifEntryObject.size === EXIF_DATESTAMP_FORMAT.length + 1
   ) {
+    const parsedValue = parse(
+      exifEntryObject.formattedValue ?? "",
+      EXIF_DATESTAMP_FORMAT,
+      new Date(),
+    );
     return {
       kind: "dateStamp",
       exifEntryObject,
-      value: dayjs.utc(
-        exifEntryObject.formattedValue ?? "",
-        EXIF_DATESTAMP_FORMAT,
-      ),
+      value: Temporal.PlainDate.from({
+        year: parsedValue.getFullYear(),
+        month: parsedValue.getMonth() + 1,
+        day: parsedValue.getDate(),
+      }),
       onValueChange: (value) =>
-        onValueChange(value.format(EXIF_DATESTAMP_FORMAT)),
+        onValueChange(
+          format(parseISO(value.toString()), EXIF_DATESTAMP_FORMAT),
+        ),
     };
   }
 

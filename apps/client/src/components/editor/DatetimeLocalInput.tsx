@@ -1,23 +1,10 @@
-import { useMemo } from "react";
+import { Temporal } from "temporal-polyfill";
 
-import type { Dayjs } from "dayjs";
-
-import { dayjs } from "#utils/date";
 import { Input, type InputProps } from "@exifi/ui/components/Input";
 
-// https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Date_and_time_formats#local_date_and_time_strings
-const formatDayjsAsDatetimeLocal = (dayjs: Dayjs) => {
-  if (dayjs.second() !== 0 && dayjs.millisecond() !== 0) {
-    return dayjs.format("YYYY-MM-DDTHH:mm:ss.SSS");
-  } else if (dayjs.second() !== 0 && dayjs.millisecond() === 0) {
-    return dayjs.format("YYYY-MM-DDTHH:mm:ss");
-  }
-  return dayjs.format("YYYY-MM-DDTHH:mm");
-};
-
 type DatetimeLocalInputProps = {
-  value?: Dayjs;
-  onValueChange?: (datetimeLocal: Dayjs) => void;
+  value?: Temporal.PlainDateTime;
+  onValueChange?: (datetimeLocal: Temporal.PlainDateTime) => void;
 } & Omit<InputProps, "value">;
 
 const DatetimeLocalInput = ({
@@ -25,26 +12,14 @@ const DatetimeLocalInput = ({
   onValueChange,
   ...props
 }: DatetimeLocalInputProps) => {
-  const memoizedValue = useMemo(
-    () => (value !== undefined ? formatDayjsAsDatetimeLocal(value) : undefined),
-    [value],
-  );
-
   return (
     <Input
       {...props}
       type="datetime-local"
-      value={memoizedValue}
+      value={value?.toString()}
       onChange={(e) => {
         if (e.target.value !== "") {
-          const dateTimeLocal = dayjs.utc(e.target.value);
-
-          if (!dateTimeLocal.isValid()) {
-            throw new Error(
-              "An error occurred in DatetimeLocalInput, expected a valid date time.",
-            );
-          }
-          onValueChange?.(dateTimeLocal);
+          onValueChange?.(Temporal.PlainDateTime.from(e.target.value));
         }
       }}
     />
