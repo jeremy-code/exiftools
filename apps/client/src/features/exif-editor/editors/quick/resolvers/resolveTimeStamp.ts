@@ -6,12 +6,11 @@ import {
   mapRationalToObject,
 } from "libexif-wasm";
 
+import { MAX_UINT32_VALUE } from "#lib/exif/constants";
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import { approximateRational } from "#lib/math/approximateRational";
 
 import type { QuickEditorResolver } from "../types";
-
-const MAX_UINT32_VALUE = 0xffffffff;
 
 const parseTimeStampValue = (value: number[]) => {
   const timeStampValue = mapRationalToObject(

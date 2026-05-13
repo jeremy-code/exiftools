@@ -13,4 +13,9 @@ const EXIF_DATESTAMP_FORMAT = "yyyy:MM:dd";
  */
 const EXIF_TIMESTAMP_FORMAT = "yyyy:MM:dd HH:mm:ss";
 
-export { EXIF_DATESTAMP_FORMAT, EXIF_TIMESTAMP_FORMAT };
+/**
+ * Maximum value of a 32-bit unsigned integer
+ */
+const MAX_UINT32_VALUE = 0xffffffff;
+
+export { EXIF_DATESTAMP_FORMAT, EXIF_TIMESTAMP_FORMAT, MAX_UINT32_VALUE };

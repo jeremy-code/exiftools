@@ -5,9 +5,8 @@ import { decimalDegreesToDms } from "#lib/leaflet/decimalDegreesToDms";
 import { approximateRational } from "#lib/math/approximateRational";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
+import { MAX_UINT32_VALUE } from "../constants";
 import { getOrInsertEntry } from "../getOrInsertEntry";
-
-const MAX_UINT32_VALUE = 0xffffffff;
 
 const updateLatLng = (exifDataGpsIfd: ExifContent, latLng: LatLng) => {
   /**
