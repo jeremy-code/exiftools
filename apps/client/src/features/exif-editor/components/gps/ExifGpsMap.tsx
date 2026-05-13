@@ -52,7 +52,7 @@ const ExifGpsMap = ({
 
   return (
     <Map
-      className={cn("h-80 rounded", className)}
+      className={cn("h-65 rounded", className)}
       center={coordinate}
       ref={setMap}
       {...props}

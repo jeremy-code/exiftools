@@ -40,7 +40,7 @@ const AddEntryDialog = (props: AddEntryDialogProps) => {
             Add an Exif entry here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <DialogBody className="isolation-auto">
+        <DialogBody>
           <ExifEntryAddForm />
         </DialogBody>
       </DialogContent>

@@ -2,6 +2,7 @@ import { useCallback, type ComponentPropsWithRef } from "react";
 
 import { useForm } from "@tanstack/react-form";
 import { LatLng } from "leaflet";
+import { cn } from "tailwind-variants";
 
 import { useExifEntryAddGpsFormOptions } from "#features/exif-editor/hooks/useExifEntryAddGpsFormOptions";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
@@ -14,7 +15,10 @@ import { ExifGpsMap } from "../../gps/ExifGpsMap";
 
 type ExifEntryAddGpsFormProps = ComponentPropsWithRef<"div">;
 
-const ExifEntryAddGpsForm = (props: ExifEntryAddGpsFormProps) => {
+const ExifEntryAddGpsForm = ({
+  className,
+  ...props
+}: ExifEntryAddGpsFormProps) => {
   const gpsForm = useForm(useExifEntryAddGpsFormOptions());
 
   const setGpsForm = useCallback(
@@ -31,8 +35,9 @@ const ExifEntryAddGpsForm = (props: ExifEntryAddGpsFormProps) => {
   );
 
   return (
-    <div {...props}>
+    <div className={cn("flex flex-col gap-4", className)} {...props}>
       <Button
+        className="max-w-sm"
         type="button"
         onClick={async () => {
           const currentPosition = await getCurrentPosition();
@@ -47,6 +52,12 @@ const ExifEntryAddGpsForm = (props: ExifEntryAddGpsFormProps) => {
       >
         Set latitude/longitude to current position
       </Button>
+      <gpsForm.Subscribe
+        selector={(state) => state.values}
+        children={(values) => (
+          <ExifGpsMap {...values} setCoordinate={setGpsForm} />
+        )}
+      />
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -113,12 +124,6 @@ const ExifEntryAddGpsForm = (props: ExifEntryAddGpsFormProps) => {
                   }}
                 />
               </>
-            )}
-          />
-          <gpsForm.Subscribe
-            selector={(state) => state.values}
-            children={(values) => (
-              <ExifGpsMap {...values} setCoordinate={setGpsForm} />
             )}
           />
           <gpsForm.Subscribe

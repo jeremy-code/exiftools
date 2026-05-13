@@ -37,10 +37,10 @@ const AddGpsEntriesDialog = (props: AddGpsEntriesDialogProps) => {
         <DialogHeader>
           <DialogTitle>Add GPS Exif entries</DialogTitle>
           <DialogDescription>
-            Add GPS Exif entries here. Click save when you&apos;re done.
+            Add GPS Exif entries here. Click submit when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <DialogBody className="isolation-auto">
+        <DialogBody>
           <ExifEntryAddGpsForm />
         </DialogBody>
       </DialogContent>
