@@ -1,11 +1,11 @@
 import { Suspense, useMemo, type ComponentPropsWithRef } from "react";
 
+import { imageDimensionsFromStream } from "image-dimensions";
 import { type DataType, type ExifData } from "libexif-wasm";
 
 import { useObjectUrl } from "#hooks/useObjectUrl";
 import { assertNever } from "#utils/assertNever";
 import { formatPlural } from "#utils/formatPlural";
-import { getImageDimensions } from "#utils/getImageDimensions";
 import {
   Card,
   CardContent,
@@ -39,7 +39,7 @@ const ExifThumbnailInformation = ({ thumbnail }: { thumbnail: Uint8Array }) => {
   );
   const blobUrl = useObjectUrl(blob);
   const imageDimensionsPromise = useMemo(
-    () => getImageDimensions(blob),
+    () => imageDimensionsFromStream(blob.stream()),
     [blob],
   );
 

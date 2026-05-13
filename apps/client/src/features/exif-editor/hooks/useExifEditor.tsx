@@ -1,5 +1,6 @@
 import { createContext, use, useMemo } from "react";
 
+import { imageDimensionsFromStream } from "image-dimensions";
 import type { LatLng } from "leaflet";
 import { ExifIfd, type ExifData, type ValidTypedArray } from "libexif-wasm";
 import { create, useStore } from "zustand";
@@ -14,7 +15,6 @@ import {
 } from "#lib/exif/serializeExifData";
 import { updateDateAndTimeDigitized } from "#lib/exif/updateDateAndTimeDigitized";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
-import { getImageDimensions } from "#utils/getImageDimensions";
 import { isTypedArray } from "#utils/isTypedArray";
 
 const getExifEntryFromExifEntryObject = (
@@ -156,7 +156,14 @@ const useExifEditor = (exifData: ExifData) => {
           });
         },
         addImageDimensions: async (file: File) => {
-          const imageDimensions = await getImageDimensions(file);
+          const imageDimensions = await imageDimensionsFromStream(
+            file.stream(),
+          );
+
+          if (imageDimensions === undefined) {
+            console.error("Failed to get image dimensions");
+            return;
+          }
 
           set(() => {
             if (exifData === null) {

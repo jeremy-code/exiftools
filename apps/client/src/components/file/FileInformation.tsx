@@ -1,12 +1,12 @@
-import { Suspense, use, useMemo, type ComponentPropsWithRef } from "react";
+import { Suspense, useMemo, type ComponentPropsWithRef } from "react";
 
+import { imageDimensionsFromStream } from "image-dimensions";
 import { cn } from "tailwind-variants";
 
 import { useFileHash } from "#hooks/useFileHash";
 import { useObjectUrl } from "#hooks/useObjectUrl";
 import { dayjs } from "#utils/date";
 import { formatBytes } from "#utils/formatBytes";
-import { getImageDimensions } from "#utils/getImageDimensions";
 import { Badge } from "@exifi/ui/components/Badge";
 import {
   Card,
@@ -24,22 +24,7 @@ import {
 import { Link } from "@exifi/ui/components/Link";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
 
-const FileDimensionsInformation = ({
-  fileDimensionsPromise,
-  ...props
-}: {
-  fileDimensionsPromise: Promise<{ width: number; height: number }>;
-} & DataListItemValueProps) => {
-  const fileDimensions = use(fileDimensionsPromise);
-
-  return (
-    <DataListItemValue {...props}>
-      {fileDimensions.width !== 0 && fileDimensions.height !== 0 ?
-        `${fileDimensions?.width}px \u00d7 ${fileDimensions?.height}px`
-      : "Unknown"}
-    </DataListItemValue>
-  );
-};
+import { ImageDimensions } from "./ImageDimensions";
 
 const FileHashInformation = ({
   file,
@@ -59,7 +44,10 @@ const FileInformation = ({
   ...props
 }: FileInformationProps) => {
   const objectUrl = useObjectUrl(file);
-  const fileDimensionsPromise = useMemo(() => getImageDimensions(file), [file]);
+  const fileDimensionsPromise = useMemo(
+    () => imageDimensionsFromStream(file.stream()),
+    [file],
+  );
 
   return (
     <div
@@ -120,11 +108,13 @@ const FileInformation = ({
             </DataListItem>
             <DataListItem>
               <DataListItemLabel>Dimensions</DataListItemLabel>
-              <Suspense fallback={<Skeleton className="h-5 w-20" />}>
-                <FileDimensionsInformation
-                  fileDimensionsPromise={fileDimensionsPromise}
-                />
-              </Suspense>
+              <DataListItemValue {...props}>
+                <Suspense fallback={<Skeleton className="h-5 w-20" />}>
+                  <ImageDimensions
+                    imageDimensionsPromise={fileDimensionsPromise}
+                  />
+                </Suspense>
+              </DataListItemValue>
             </DataListItem>
             <DataListItem>
               <DataListItemLabel>File hash (SHA-256)</DataListItemLabel>

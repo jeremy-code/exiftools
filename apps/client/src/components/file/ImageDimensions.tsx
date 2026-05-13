@@ -1,7 +1,11 @@
 import { use } from "react";
 
+import type { ImageType } from "image-dimensions";
+
 type ImageDimensionsPromise = {
-  imageDimensionsPromise: Promise<{ width: number; height: number }>;
+  imageDimensionsPromise: Promise<
+    { width: number; height: number; type: ImageType } | undefined
+  >;
 };
 
 const ImageDimensions = ({
@@ -9,9 +13,11 @@ const ImageDimensions = ({
 }: ImageDimensionsPromise) => {
   const imageDimensions = use(imageDimensionsPromise);
 
-  return imageDimensions.width !== 0 && imageDimensions.height !== 0 ?
-      `${imageDimensions?.width}px \u00d7 ${imageDimensions?.height}px`
-    : "Unknown";
+  if (imageDimensions === undefined) {
+    return "Unknown";
+  }
+
+  return `${imageDimensions.width}px \u00d7 ${imageDimensions.height}px`;
 };
 
 export { ImageDimensions };
