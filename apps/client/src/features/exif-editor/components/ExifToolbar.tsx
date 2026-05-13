@@ -84,10 +84,7 @@ const ExifToolbar = () => {
         Add image dimensions
       </Button>
       <Button
-        onClick={async () => {
-          const currentPosition = await getCurrentPosition();
-          updateGeolocationPosition(currentPosition);
-        }}
+        onClick={() => getCurrentPosition().then(updateGeolocationPosition)}
       >
         Set Exif to current GPS position
       </Button>
