@@ -7,7 +7,7 @@ import { isSortable } from "@dnd-kit/react/sortable";
 type SortableListProps = {
   onSortEnd?: (event: { initialIndex: number; index: number }) => void;
   children: ReactNode;
-  containerRef?: RefObject<HTMLElement | null>;
+  containerRef?: RefObject<Element | null>;
 };
 
 const SortableList = ({
@@ -35,7 +35,7 @@ const SortableList = ({
       modifiers={(defaults) => [
         ...defaults,
         ...(containerRef ?
-          [RestrictToElement.configure({ element: () => containerRef.current })]
+          [RestrictToElement.configure({ element: containerRef.current })]
         : []),
       ]}
       onDragEnd={handleDragEnd}
