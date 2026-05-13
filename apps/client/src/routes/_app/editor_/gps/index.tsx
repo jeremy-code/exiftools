@@ -3,7 +3,7 @@ import { Suspense, use, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { LatLng, type Map as LeafletMap } from "leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
-import { ExifData, ExifIfd } from "libexif-wasm";
+import { ExifData } from "libexif-wasm";
 
 import { GeoSearchControl } from "#components/map/GeoSearchControl";
 import { Map } from "#components/map/Map";
@@ -70,7 +70,7 @@ const EditorGpsApp = ({
           const fileInBytes = new Uint8Array(await file.arrayBuffer());
 
           const exifData = ExifData.from(fileInBytes.buffer);
-          updateLatLng(exifData.ifd[ExifIfd.GPS], latLng);
+          updateLatLng(exifData, latLng);
 
           const newFileInBytes = writeExifData(
             fileInBytes,
