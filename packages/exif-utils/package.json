@@ -20,6 +20,6 @@
   "devDependencies": {
     "@exifi/eslint-config": "workspace:*",
     "@exifi/tsconfig": "workspace:*",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.6"
   }
 }
