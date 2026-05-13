@@ -7,6 +7,7 @@ import { Popup } from "react-leaflet";
 import { useNominatimApiReverse } from "#hooks/useNominatimApiReverse";
 import { formatLatLng } from "#lib/leaflet/formatLatLng";
 import { formatLatLngAsGeoUri } from "#lib/leaflet/formatLatLngAsGeoUri";
+import { formatLatLngAsOsmUrl } from "#lib/leaflet/formatLatLngAsOsmUrl";
 import {
   HorizontalList,
   HorizontalListItem,
@@ -42,10 +43,7 @@ const GpsPopup = ({ coordinate, label, ...props }: GpsPopupProps) => {
         <div>
           <HorizontalList>
             <HorizontalListItem>
-              <a
-                href={`https://www.openstreetmap.org/#map=18/${coordinate.lat}/${coordinate.lng}`}
-                target="_blank"
-              >
+              <a href={formatLatLngAsOsmUrl(coordinate).href} target="_blank">
                 OpenStreetMap
               </a>
             </HorizontalListItem>
