@@ -38,7 +38,7 @@ declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- All declarations of 'TableMeta' must have identical type parameters.
   interface TableMeta<TData extends RowData> extends Pick<
     ExifEditorStoreActions,
-    "removeExifEntry" | "updateExifEntry" | "fix"
+    "removeExifEntry" | "updateExifEntry"
   > {}
 }
 
@@ -61,9 +61,9 @@ const ExifTable = (props: ExifTableProps) => {
     useShallow((state) => ({
       updateExifEntry: state.updateExifEntry,
       removeExifEntry: state.removeExifEntry,
-      fix: state.fix,
     })),
   );
+  const fix = useExifEditorStoreContext((state) => state.fix);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const table = useReactTable({
     columns,
@@ -102,11 +102,7 @@ const ExifTable = (props: ExifTableProps) => {
       <div>
         {"There doesn't seem to be any Exif entries. "}
         <Link color="blue" underline asChild>
-          <button
-            onClick={() => {
-              exifEditorStoreActions.fix();
-            }}
-          >
+          <button onClick={() => fix()}>
             Initialize with default entries?
           </button>
         </Link>
