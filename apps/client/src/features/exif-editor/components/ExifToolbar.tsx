@@ -20,14 +20,14 @@ const ExifToolbar = () => {
   const exifData = useExifEditorContext();
   const [
     fix,
-    addImageDimensions,
-    setGpsExifFromGeolocationPosition,
+    updatePixelDimensions,
+    updateGeolocationPosition,
     updateDateAndTimeDigitized,
   ] = useExifEditorStoreContext(
     useShallow((state) => [
       state.fix,
-      state.addImageDimensions,
-      state.setGpsExifFromGeolocationPosition,
+      state.updatePixelDimensions,
+      state.updateGeolocationPosition,
       state.updateDateAndTimeDigitized,
     ]),
   );
@@ -80,13 +80,13 @@ const ExifToolbar = () => {
         Save
       </Button>
       <Button onClick={() => fix()}>Fix</Button>
-      <Button onClick={() => addImageDimensions(file)}>
+      <Button onClick={() => updatePixelDimensions(file)}>
         Add image dimensions
       </Button>
       <Button
         onClick={async () => {
           const currentPosition = await getCurrentPosition();
-          setGpsExifFromGeolocationPosition(currentPosition);
+          updateGeolocationPosition(currentPosition);
         }}
       >
         Set Exif to current GPS position

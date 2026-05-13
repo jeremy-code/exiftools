@@ -1,5 +1,5 @@
 import type { LatLng } from "leaflet";
-import { mapRationalFromObject, type ExifContent } from "libexif-wasm";
+import { ExifIfd, mapRationalFromObject, type ExifData } from "libexif-wasm";
 
 import { decimalDegreesToDms } from "#lib/leaflet/decimalDegreesToDms";
 import { approximateRational } from "#lib/math/approximateRational";
@@ -8,7 +8,9 @@ import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { MAX_UINT32_VALUE } from "../constants";
 import { getOrInsertEntry } from "../getOrInsertEntry";
 
-const updateLatLng = (exifDataGpsIfd: ExifContent, latLng: LatLng) => {
+const updateLatLng = (exifData: ExifData, latLng: LatLng) => {
+  const exifDataGpsIfd = exifData.ifd[ExifIfd.GPS];
+
   /**
    * If it doesn't already exist, add the GPS VERSION_ID tag and initialize it
    * with value 2.2.0.0

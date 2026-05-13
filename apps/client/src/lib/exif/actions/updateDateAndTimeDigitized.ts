@@ -1,12 +1,14 @@
 import { format } from "date-fns/format";
-import { type ExifContent } from "libexif-wasm";
+import { ExifIfd, type ExifData } from "libexif-wasm";
 
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
-import { EXIF_TIMESTAMP_FORMAT } from "./constants";
-import { getOrInsertEntry } from "./getOrInsertEntry";
+import { EXIF_TIMESTAMP_FORMAT } from "../constants";
+import { getOrInsertEntry } from "../getOrInsertEntry";
 
-const updateDateAndTimeDigitized = (exifDataExifIfd: ExifContent) => {
+const updateDateAndTimeDigitized = (exifData: ExifData) => {
+  const exifDataExifIfd = exifData.ifd[ExifIfd.EXIF];
+
   const currentDate = new Date();
 
   const dateTimeDigitizedEntry = getOrInsertEntry(

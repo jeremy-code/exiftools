@@ -1,7 +1,7 @@
 import { secondsInHour, millisecondsInSecond } from "date-fns/constants";
 import { format } from "date-fns/format";
 import { LatLng } from "leaflet";
-import { mapRationalFromObject, type ExifContent } from "libexif-wasm";
+import { ExifIfd, mapRationalFromObject, type ExifData } from "libexif-wasm";
 
 import { approximateRational } from "#lib/math/approximateRational";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
@@ -12,10 +12,11 @@ import { EXIF_DATESTAMP_FORMAT, MAX_UINT32_VALUE } from "../constants";
 
 const METERS_IN_KILOMETERS = 1000;
 
-const setGpsExifFromGeolocationPosition = (
-  exifDataGpsIfd: ExifContent,
+const updateGeolocationPosition = (
+  exifData: ExifData,
   geolocationPosition: GeolocationPosition,
 ) => {
+  const exifDataGpsIfd = exifData.ifd[ExifIfd.GPS];
   const { timestamp, coords } = geolocationPosition;
   const zonedDateTime =
     Temporal.Instant.fromEpochMilliseconds(timestamp).toZonedDateTimeISO("UTC");
@@ -47,7 +48,7 @@ const setGpsExifFromGeolocationPosition = (
   );
 
   updateLatLng(
-    exifDataGpsIfd,
+    exifData,
     new LatLng(coords.latitude, coords.longitude, coords.altitude ?? undefined),
   );
 
@@ -96,4 +97,4 @@ const setGpsExifFromGeolocationPosition = (
   }
 };
 
-export { setGpsExifFromGeolocationPosition };
+export { updateGeolocationPosition };

@@ -5,15 +5,16 @@ import type { LatLng } from "leaflet";
 import { ExifIfd, type ExifData, type ValidTypedArray } from "libexif-wasm";
 import { create, useStore } from "zustand";
 
+import { updateDateAndTimeDigitized } from "#lib/exif/actions/updateDateAndTimeDigitized";
+import { updateGeolocationPosition } from "#lib/exif/actions/updateGeolocationPosition";
+import { updateLatLng } from "#lib/exif/actions/updateLatLng";
+import { updatePixelDimensions } from "#lib/exif/actions/updatePixelDimensions";
 import { getOrInsertEntry } from "#lib/exif/getOrInsertEntry";
-import { setGpsExifFromGeolocationPosition } from "#lib/exif/gps/setGpsExifFromGeolocationPosition";
-import { updateLatLng } from "#lib/exif/gps/updateLatLng";
 import {
   serializeExifData,
   type ExifDataObject,
   type ExifEntryObject,
 } from "#lib/exif/serializeExifData";
-import { updateDateAndTimeDigitized } from "#lib/exif/updateDateAndTimeDigitized";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { isTypedArray } from "#utils/isTypedArray";
 
@@ -52,11 +53,9 @@ type ExifEditorStoreActions = {
     value: string | ValidTypedArray,
   ) => void;
   fix: () => void;
-  addImageDimensions: (file: File) => Promise<void>;
+  updatePixelDimensions: (file: File) => Promise<void>;
   updateLatLng: (latLng: LatLng) => void;
-  setGpsExifFromGeolocationPosition: (
-    geoLocationPosition: GeolocationPosition,
-  ) => void;
+  updateGeolocationPosition: (geoLocationPosition: GeolocationPosition) => void;
   updateDateAndTimeDigitized: () => void;
 };
 
@@ -155,7 +154,7 @@ const useExifEditor = (exifData: ExifData) => {
             return { exifDataObject: serializeExifData(exifData) };
           });
         },
-        addImageDimensions: async (file: File) => {
+        updatePixelDimensions: async (file: File) => {
           const imageDimensions = await imageDimensionsFromStream(
             file.stream(),
           );
@@ -166,52 +165,26 @@ const useExifEditor = (exifData: ExifData) => {
           }
 
           set(() => {
-            if (exifData === null) {
-              throw new Error("Reference to ExifData instance not found");
-            }
-            const exifIfd = exifData.ifd[ExifIfd.EXIF];
-
-            const imageWidthEntry = getOrInsertEntry(
-              exifIfd,
-              "PIXEL_X_DIMENSION",
-            );
-            const imageHeightEntry = getOrInsertEntry(
-              exifIfd,
-              "PIXEL_Y_DIMENSION",
-            );
-
-            imageWidthEntry.format = "SHORT";
-            imageHeightEntry.format = "SHORT";
-
-            imageWidthEntry.fromTypedArray(
-              new Uint16Array([imageDimensions.width]),
-            );
-            imageHeightEntry.fromTypedArray(
-              new Uint16Array([imageDimensions.height]),
-            );
+            updatePixelDimensions(exifData, imageDimensions);
 
             return { exifDataObject: serializeExifData(exifData) };
           });
         },
         updateLatLng: (latLng: LatLng) => {
           set(() => {
-            updateLatLng(exifData.ifd[ExifIfd.GPS], latLng);
-
+            updateLatLng(exifData, latLng);
             return { exifDataObject: serializeExifData(exifData) };
           });
         },
-        setGpsExifFromGeolocationPosition: (geoLocationPosition) => {
+        updateGeolocationPosition: (geoLocationPosition) => {
           set(() => {
-            setGpsExifFromGeolocationPosition(
-              exifData.ifd[ExifIfd.GPS],
-              geoLocationPosition,
-            );
+            updateGeolocationPosition(exifData, geoLocationPosition);
             return { exifDataObject: serializeExifData(exifData) };
           });
         },
         updateDateAndTimeDigitized: () => {
           set(() => {
-            updateDateAndTimeDigitized(exifData.ifd[ExifIfd.EXIF]);
+            updateDateAndTimeDigitized(exifData);
             return { exifDataObject: serializeExifData(exifData) };
           });
         },

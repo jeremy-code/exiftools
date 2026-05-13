@@ -9,7 +9,7 @@ import { GeoSearchControl } from "#components/map/GeoSearchControl";
 import { Map } from "#components/map/Map";
 import { useFileStore } from "#hooks/useFileStore";
 import { useGeoSearchLocation } from "#hooks/useGeoSearchLocation";
-import { updateLatLng } from "#lib/exif/gps/updateLatLng";
+import { updateLatLng } from "#lib/exif/actions/updateLatLng";
 import { formatLatLng } from "#lib/leaflet/formatLatLng";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { saveFile } from "#utils/saveFile";
