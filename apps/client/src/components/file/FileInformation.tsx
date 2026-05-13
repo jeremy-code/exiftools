@@ -5,7 +5,6 @@ import { cn } from "tailwind-variants";
 
 import { useFileHash } from "#hooks/useFileHash";
 import { useObjectUrl } from "#hooks/useObjectUrl";
-import { dayjs } from "#utils/date";
 import { formatBytes } from "#utils/formatBytes";
 import { Badge } from "@exifi/ui/components/Badge";
 import {
@@ -47,6 +46,9 @@ const FileInformation = ({
   const fileDimensionsPromise = useMemo(
     () => imageDimensionsFromStream(file.stream()),
     [file],
+  );
+  const lastModified = Temporal.Instant.fromEpochMilliseconds(
+    file.lastModified,
   );
 
   return (
@@ -101,8 +103,8 @@ const FileInformation = ({
             <DataListItem>
               <DataListItemLabel>Last modified</DataListItemLabel>
               <DataListItemValue>
-                <time dateTime={dayjs(file.lastModified).toISOString()}>
-                  {dayjs(file.lastModified).format("YYYY MMM D, h:mmA")}
+                <time dateTime={lastModified.toString()}>
+                  {lastModified.toLocaleString()}
                 </time>
               </DataListItemValue>
             </DataListItem>

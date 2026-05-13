@@ -1,23 +1,27 @@
-import { dayjs } from "#utils/date";
+import { parse } from "date-fns/parse";
 
-const EXIF_TIMESTAMP_FORMAT = "YYYY:MM:DD HH:mm:ss";
+const EXIF_TIMESTAMP_FORMAT = "yyyy:MM:dd HH:mm:ss";
 
 const parseDateTimeEntries = (
   dateTime: string,
   offsetTime: string | undefined,
   subSecTime: string | undefined,
 ) => {
-  const dateTimeDayjs = dayjs.tz(
-    dateTime,
-    EXIF_TIMESTAMP_FORMAT,
-    offsetTime ?? "UTC",
-  );
+  const dateTimeDate = parse(dateTime, EXIF_TIMESTAMP_FORMAT, new Date());
 
-  if (subSecTime !== undefined && !Number.isNaN(Number(subSecTime))) {
-    return dateTimeDayjs.add(Number(subSecTime), "millisecond");
-  }
-
-  return dateTimeDayjs;
+  return Temporal.ZonedDateTime.from({
+    year: dateTimeDate.getFullYear(),
+    month: dateTimeDate.getMonth() + 1,
+    day: dateTimeDate.getDate(),
+    hour: dateTimeDate.getHours(),
+    minute: dateTimeDate.getMinutes(),
+    second: dateTimeDate.getSeconds(),
+    millisecond:
+      subSecTime !== undefined && !Number.isNaN(Number(subSecTime)) ?
+        Number(subSecTime)
+      : 0,
+    timeZone: offsetTime ?? "UTC",
+  });
 };
 
 export { parseDateTimeEntries };

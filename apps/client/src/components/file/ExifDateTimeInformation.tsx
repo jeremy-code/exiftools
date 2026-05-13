@@ -42,10 +42,8 @@ const ExifDateTimeInformation = ({
         <DataListItem>
           <DataListItemLabel>Date and Time (Original)</DataListItemLabel>
           <DataListItemValue>
-            <time
-              dateTime={dateTimeOriginal.format("YYYY-MM-DDTHH:mm:ss:SSSZ")}
-            >
-              {dateTimeOriginal.local().format("YYYY MMM D, h:mmA z")}
+            <time dateTime={dateTimeOriginal.toString()}>
+              {dateTimeOriginal.toInstant().toLocaleString()}
             </time>
           </DataListItemValue>
         </DataListItem>
@@ -54,10 +52,8 @@ const ExifDateTimeInformation = ({
         <DataListItem>
           <DataListItemLabel>Date and Time (Digitized)</DataListItemLabel>
           <DataListItemValue>
-            <time
-              dateTime={dateTimeDigitized.format("YYYY-MM-DDTHH:mm:ss:SSSZ")}
-            >
-              {dateTimeDigitized.local().format("YYYY MMM D, h:mmA z")}
+            <time dateTime={dateTimeDigitized.toString()}>
+              {dateTimeDigitized.toInstant().toLocaleString()}
             </time>
           </DataListItemValue>
         </DataListItem>

@@ -1,8 +1,9 @@
+import { secondsInHour, millisecondsInSecond } from "date-fns/constants";
+import { format } from "date-fns/format";
 import { LatLng } from "leaflet";
 import { mapRationalFromObject, type ExifContent } from "libexif-wasm";
 
 import { approximateRational } from "#lib/math/approximateRational";
-import { dayjs } from "#utils/date";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
 import { getOrInsertEntry } from "../getOrInsertEntry";
@@ -11,31 +12,39 @@ import { updateLatLng } from "./updateLatLng";
 const MAX_UINT32_VALUE = 0xffffffff;
 
 const METERS_IN_KILOMETERS = 1000;
-const SECONDS_IN_HOUR = 3600;
-const MILLISECONDS_IN_SECOND = 1000;
 
-const EXIF_DATESTAMP_FORMAT = "YYYY:MM:DD";
+const EXIF_DATESTAMP_FORMAT = "yyyy:MM:dd";
 
 const setGpsExifFromGeolocationPosition = (
   exifDataGpsIfd: ExifContent,
   geolocationPosition: GeolocationPosition,
 ) => {
   const { timestamp, coords } = geolocationPosition;
-  const utcDate = dayjs.utc(timestamp);
+  const zonedDateTime =
+    Temporal.Instant.fromEpochMilliseconds(timestamp).toZonedDateTimeISO("UTC");
 
   const dateStampEntry = getOrInsertEntry(exifDataGpsIfd, "DATE_STAMP");
   dateStampEntry.format = "ASCII";
   dateStampEntry.fromTypedArray(
-    encodeStringToUtf8(utcDate.format(EXIF_DATESTAMP_FORMAT)),
+    encodeStringToUtf8(
+      format(
+        new Date(
+          zonedDateTime.year,
+          zonedDateTime.month - 1,
+          zonedDateTime.day,
+        ),
+        EXIF_DATESTAMP_FORMAT,
+      ),
+    ),
   );
   const timeStampEntry = getOrInsertEntry(exifDataGpsIfd, "TIME_STAMP");
   timeStampEntry.format = "RATIONAL";
   timeStampEntry.fromTypedArray(
     mapRationalFromObject(
       [
-        utcDate.hour(),
-        utcDate.minute(),
-        utcDate.second() + utcDate.millisecond() / MILLISECONDS_IN_SECOND,
+        zonedDateTime.hour,
+        zonedDateTime.minute,
+        zonedDateTime.second + zonedDateTime.millisecond / millisecondsInSecond,
       ].map((value) => approximateRational(value, MAX_UINT32_VALUE)),
     ),
   );
@@ -62,7 +71,7 @@ const setGpsExifFromGeolocationPosition = (
     speedEntry.fromTypedArray(
       mapRationalFromObject([
         approximateRational(
-          coords.speed * (METERS_IN_KILOMETERS / SECONDS_IN_HOUR),
+          coords.speed * (METERS_IN_KILOMETERS / secondsInHour),
           MAX_UINT32_VALUE,
         ),
       ]),

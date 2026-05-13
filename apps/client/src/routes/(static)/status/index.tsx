@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { dayjs } from "#utils/date";
 import { seo } from "#utils/seo";
 import {
   DataList,
@@ -17,7 +16,9 @@ const StatusComponent = () => {
         <DataListItem className="max-sm:flex-col!">
           <DataListItemLabel className="min-w-40">Build time</DataListItemLabel>
           <DataListItemValue>
-            {dayjs(__BUILD_TIMESTAMP__).format("dddd, D MMMM YYYY, h:mmA z")}
+            {Temporal.Instant.fromEpochMilliseconds(
+              __BUILD_TIMESTAMP__,
+            ).toLocaleString()}
           </DataListItemValue>
         </DataListItem>
         <DataListItem className="max-sm:flex-col!">

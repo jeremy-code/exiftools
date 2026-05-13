@@ -1,11 +1,10 @@
-import { secondsToMilliseconds } from "date-fns/secondsToMilliseconds";
+import { millisecondsInSecond } from "date-fns/constants";
 import { Decimal } from "decimal.js";
 import {
   exifFormatGetSize,
   mapRationalFromObject,
   mapRationalToObject,
 } from "libexif-wasm";
-import { Temporal } from "temporal-polyfill";
 
 import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import { approximateRational } from "#lib/math/approximateRational";
@@ -13,8 +12,6 @@ import { approximateRational } from "#lib/math/approximateRational";
 import type { QuickEditorResolver } from "../types";
 
 const MAX_UINT32_VALUE = 0xffffffff;
-
-const MILLISECONDS_IN_SECOND = 1000;
 
 const parseTimeStampValue = (value: number[]) => {
   const timeStampValue = mapRationalToObject(
@@ -34,7 +31,7 @@ const parseTimeStampValue = (value: number[]) => {
       "Hours, minutes, and seconds are required for tag TIME_STAMP",
     );
   }
-  const milliseconds = secondsToMilliseconds(seconds.mod(1).toNumber());
+  const milliseconds = seconds.mod(1).mul(millisecondsInSecond).toNumber();
 
   return Temporal.PlainTime.from({
     hour: hours.toNumber(),
@@ -66,7 +63,7 @@ const resolveTimeStamp: QuickEditorResolver = (
               value.hour,
               value.minute,
               new Decimal(value.second).plus(
-                new Decimal(value.millisecond).div(MILLISECONDS_IN_SECOND),
+                new Decimal(value.millisecond).div(millisecondsInSecond),
               ),
             ].map((timeComponent) =>
               approximateRational(timeComponent, MAX_UINT32_VALUE),

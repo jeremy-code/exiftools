@@ -1,5 +1,3 @@
-import { Temporal } from "temporal-polyfill";
-
 import { Input, type InputProps } from "@exifi/ui/components/Input";
 
 type DatetimeLocalInputProps = {

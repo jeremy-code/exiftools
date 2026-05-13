@@ -1,14 +1,14 @@
+import { format } from "date-fns/format";
 import { type ExifContent } from "libexif-wasm";
 
-import { dayjs } from "#utils/date";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
 import { getOrInsertEntry } from "./getOrInsertEntry";
 
-const EXIF_TIMESTAMP_FORMAT = "YYYY:MM:DD HH:mm:ss";
+const EXIF_TIMESTAMP_FORMAT = "yyyy:MM:dd HH:mm:ss";
 
 const updateDateAndTimeDigitized = (exifDataExifIfd: ExifContent) => {
-  const currentDate = dayjs.utc().local();
+  const currentDate = new Date();
 
   const dateTimeDigitizedEntry = getOrInsertEntry(
     exifDataExifIfd,
@@ -16,7 +16,7 @@ const updateDateAndTimeDigitized = (exifDataExifIfd: ExifContent) => {
   );
   dateTimeDigitizedEntry.format = "ASCII";
   dateTimeDigitizedEntry.fromTypedArray(
-    encodeStringToUtf8(currentDate.format(EXIF_TIMESTAMP_FORMAT)),
+    encodeStringToUtf8(format(currentDate, EXIF_TIMESTAMP_FORMAT)),
   );
   const subSecTimeDigitizedEntry = getOrInsertEntry(
     exifDataExifIfd,
@@ -24,7 +24,7 @@ const updateDateAndTimeDigitized = (exifDataExifIfd: ExifContent) => {
   );
   subSecTimeDigitizedEntry.format = "ASCII";
   subSecTimeDigitizedEntry.fromTypedArray(
-    encodeStringToUtf8(currentDate.format("SSS")),
+    encodeStringToUtf8(format(currentDate, "SSS")),
   );
   const offsetTimeDigitizedEntry = getOrInsertEntry(
     exifDataExifIfd,
@@ -32,7 +32,7 @@ const updateDateAndTimeDigitized = (exifDataExifIfd: ExifContent) => {
   );
   offsetTimeDigitizedEntry.format = "ASCII";
   offsetTimeDigitizedEntry.fromTypedArray(
-    encodeStringToUtf8(currentDate.format("Z")),
+    encodeStringToUtf8(format(currentDate, "xxx")),
   );
 };
 

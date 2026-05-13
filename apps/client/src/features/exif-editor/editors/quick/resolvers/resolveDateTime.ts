@@ -1,7 +1,7 @@
+import { getLocalTimeZone } from "@internationalized/date";
 import { format } from "date-fns/format";
 import { parse } from "date-fns/parse";
 import { parseISO } from "date-fns/parseISO";
-import { Temporal } from "temporal-polyfill";
 
 import type { QuickEditorResolver } from "../types";
 
@@ -23,22 +23,17 @@ const resolveDateTime: QuickEditorResolver = (
     exifEntryObject.components === EXIF_TIMESTAMP_FORMAT.length + 1 &&
     exifEntryObject.size === EXIF_TIMESTAMP_FORMAT.length + 1
   ) {
-    const parsedValue = parse(
-      exifEntryObject.formattedValue ?? "",
-      EXIF_TIMESTAMP_FORMAT,
-      new Date(),
-    );
     return {
       kind: "datetime",
       exifEntryObject,
-      value: Temporal.PlainDateTime.from({
-        year: parsedValue.getFullYear(),
-        month: parsedValue.getMonth() + 1,
-        day: parsedValue.getDate(),
-        hour: parsedValue.getHours(),
-        minute: parsedValue.getMinutes(),
-        second: parsedValue.getSeconds(),
-      }),
+      value: parse(
+        exifEntryObject.formattedValue ?? "",
+        EXIF_TIMESTAMP_FORMAT,
+        new Date(),
+      )
+        .toTemporalInstant()
+        .toZonedDateTimeISO(getLocalTimeZone())
+        .toPlainDateTime(),
       onValueChange: (value) =>
         onValueChange(
           format(parseISO(value.toString()), EXIF_TIMESTAMP_FORMAT),

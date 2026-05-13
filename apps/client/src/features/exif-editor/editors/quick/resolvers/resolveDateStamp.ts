@@ -1,7 +1,6 @@
 import { format } from "date-fns/format";
 import { parse } from "date-fns/parse";
 import { parseISO } from "date-fns/parseISO";
-import { Temporal } from "temporal-polyfill";
 
 import type { QuickEditorResolver } from "../types";
 
