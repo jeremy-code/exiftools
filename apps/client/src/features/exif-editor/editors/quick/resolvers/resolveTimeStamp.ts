@@ -1,3 +1,4 @@
+import { secondsToMilliseconds } from "date-fns/secondsToMilliseconds";
 import { Decimal } from "decimal.js";
 import {
   exifFormatGetSize,
@@ -13,6 +14,8 @@ import type { QuickEditorResolver } from "../types";
 
 const MAX_UINT32_VALUE = 0xffffffff;
 
+const MILLISECONDS_IN_SECOND = 1000;
+
 const parseTimeStampValue = (value: number[]) => {
   const timeStampValue = mapRationalToObject(
     newTypedArrayInFormat(value, "RATIONAL"),
@@ -24,18 +27,20 @@ const parseTimeStampValue = (value: number[]) => {
     );
   }
   const [hours, minutes, seconds] = timeStampValue.map((rational) =>
-    Decimal(rational.numerator).div(rational.denominator).toNumber(),
+    Decimal(rational.numerator).div(rational.denominator),
   );
   if (hours === undefined || minutes === undefined || seconds === undefined) {
     throw new Error(
       "Hours, minutes, and seconds are required for tag TIME_STAMP",
     );
   }
+  const milliseconds = secondsToMilliseconds(seconds.mod(1).toNumber());
 
   return Temporal.PlainTime.from({
-    hour: hours,
-    minute: minutes,
-    second: seconds,
+    hour: hours.toNumber(),
+    minute: minutes.toNumber(),
+    second: seconds.toNumber(),
+    millisecond: milliseconds,
   });
 };
 const resolveTimeStamp: QuickEditorResolver = (
@@ -57,7 +62,13 @@ const resolveTimeStamp: QuickEditorResolver = (
       onValueChange: (value) =>
         onValueChange(
           mapRationalFromObject(
-            [value.hour, value.minute, value.second].map((timeComponent) =>
+            [
+              value.hour,
+              value.minute,
+              new Decimal(value.second).plus(
+                new Decimal(value.millisecond).div(MILLISECONDS_IN_SECOND),
+              ),
+            ].map((timeComponent) =>
               approximateRational(timeComponent, MAX_UINT32_VALUE),
             ),
             "RATIONAL",
