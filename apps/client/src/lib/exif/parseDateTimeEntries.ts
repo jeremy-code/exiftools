@@ -1,6 +1,6 @@
 import { parse } from "date-fns/parse";
 
-const EXIF_TIMESTAMP_FORMAT = "yyyy:MM:dd HH:mm:ss";
+import { EXIF_TIMESTAMP_FORMAT } from "./constants";
 
 const parseDateTimeEntries = (
   dateTime: string,

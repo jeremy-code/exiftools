@@ -3,6 +3,8 @@ import { format } from "date-fns/format";
 import { parse } from "date-fns/parse";
 import { parseISO } from "date-fns/parseISO";
 
+import { EXIF_TIMESTAMP_FORMAT } from "#lib/exif/constants";
+
 import type { QuickEditorResolver } from "../types";
 
 // https://github.com/libexif/libexif/blob/b9b7f3c08c1b6812ad3b9d62227ad9527ab9385a/libexif/exif-entry.c#L1718
@@ -11,8 +13,6 @@ const DATETIME_TAGS = [
   "DATE_TIME_ORIGINAL",
   "DATE_TIME_DIGITIZED",
 ];
-
-const EXIF_TIMESTAMP_FORMAT = "yyyy:MM:dd HH:mm:ss";
 
 const resolveDateTime: QuickEditorResolver = (
   exifEntryObject,

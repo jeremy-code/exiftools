@@ -3,9 +3,8 @@ import { type ExifContent } from "libexif-wasm";
 
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
+import { EXIF_TIMESTAMP_FORMAT } from "./constants";
 import { getOrInsertEntry } from "./getOrInsertEntry";
-
-const EXIF_TIMESTAMP_FORMAT = "yyyy:MM:dd HH:mm:ss";
 
 const updateDateAndTimeDigitized = (exifDataExifIfd: ExifContent) => {
   const currentDate = new Date();

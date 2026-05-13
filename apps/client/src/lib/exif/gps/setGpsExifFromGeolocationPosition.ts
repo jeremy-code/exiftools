@@ -8,12 +8,11 @@ import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
 import { getOrInsertEntry } from "../getOrInsertEntry";
 import { updateLatLng } from "./updateLatLng";
+import { EXIF_DATESTAMP_FORMAT } from "../constants";
 
 const MAX_UINT32_VALUE = 0xffffffff;
 
 const METERS_IN_KILOMETERS = 1000;
-
-const EXIF_DATESTAMP_FORMAT = "yyyy:MM:dd";
 
 const setGpsExifFromGeolocationPosition = (
   exifDataGpsIfd: ExifContent,

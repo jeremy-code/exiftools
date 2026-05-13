@@ -2,9 +2,9 @@ import { format } from "date-fns/format";
 import { parse } from "date-fns/parse";
 import { parseISO } from "date-fns/parseISO";
 
-import type { QuickEditorResolver } from "../types";
+import { EXIF_DATESTAMP_FORMAT } from "#lib/exif/constants";
 
-const EXIF_DATESTAMP_FORMAT = "yyyy:MM:dd";
+import type { QuickEditorResolver } from "../types";
 
 const resolveDateStamp: QuickEditorResolver = (
   exifEntryObject,
