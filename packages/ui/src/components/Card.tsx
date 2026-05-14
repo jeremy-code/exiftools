@@ -1,18 +1,22 @@
-import { Slot } from "radix-ui";
-import type { PrimitivePropsWithRef } from "radix-ui/internal";
+import type { ComponentPropsWithRef } from "react";
+
+import {
+  Heading,
+  type HeadingProps as CardTitleProps,
+} from "react-aria-components/Heading";
+import {
+  Text,
+  type TextProps as CardDescriptionProps,
+} from "react-aria-components/Text";
 import { cn } from "tailwind-variants";
 
-const Card = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"div">) => {
-  const Comp = asChild ? Slot.Root : "div";
+type CardProps = ComponentPropsWithRef<"div">;
 
+const Card = ({ className, ...props }: CardProps) => {
   return (
-    <Comp
+    <div
       className={cn(
-        "rounded-lg border bg-surface text-foreground shadow-sm",
+        "rounded-lg border bg-surface text-fg shadow-sm",
         className,
       )}
       {...props}
@@ -20,78 +24,61 @@ const Card = ({
   );
 };
 
-const CardHeader = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"div">) => {
-  const Comp = asChild ? Slot.Root : "div";
+type CardHeaderProps = ComponentPropsWithRef<"div">;
 
+const CardHeader = ({ className, ...props }: CardHeaderProps) => {
   return (
-    <Comp
+    <div
       className={cn("flex flex-col space-y-1.5 p-6", className)}
       {...props}
     />
   );
 };
 
-const CardTitle = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"h3">) => {
-  const Comp = asChild ? Slot.Root : "h1";
-
+const CardTitle = ({ className, level = 2, ...props }: CardTitleProps) => {
   return (
-    <Comp
+    <Heading
+      level={level}
       className={cn("text-lg/none font-semibold tracking-tight", className)}
       {...props}
     />
   );
 };
 
-const CardDescription = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"p">) => {
-  const Comp = asChild ? Slot.Root : "p";
-
+const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
   return (
-    <Comp
+    <Text
       className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
   );
 };
 
-const CardContent = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"div">) => {
-  const Comp = asChild ? Slot.Root : "div";
+type CardContentProps = ComponentPropsWithRef<"div">;
 
-  return <Comp className={cn("p-6 pt-0", className)} {...props} />;
+const CardContent = ({ className, ...props }: CardContentProps) => {
+  return <div className={cn("p-6 pt-0", className)} {...props} />;
 };
 
-const CardFooter = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"div">) => {
-  const Comp = asChild ? Slot.Root : "div";
+type CardFooterProps = ComponentPropsWithRef<"div">;
 
+const CardFooter = ({ className, ...props }: CardFooterProps) => {
   return (
-    <Comp className={cn("flex items-center p-6 pt-0", className)} {...props} />
+    <div className={cn("flex items-center p-6 pt-0", className)} {...props} />
   );
 };
 
 export {
   Card,
+  type CardProps,
   CardHeader,
+  type CardHeaderProps,
   CardTitle,
+  type CardTitleProps,
   CardDescription,
+  type CardDescriptionProps,
   CardContent,
+  type CardContentProps,
   CardFooter,
+  type CardFooterProps,
 };
