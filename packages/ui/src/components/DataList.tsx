@@ -1,5 +1,5 @@
-import { Slot } from "radix-ui";
-import type { PrimitivePropsWithRef } from "radix-ui/internal";
+import type { ComponentPropsWithRef } from "react";
+
 import { cn, tv, type VariantProps } from "tailwind-variants";
 
 const dataListVariants = tv({
@@ -17,21 +17,18 @@ const dataListVariants = tv({
   },
 });
 
-type DataListProps = PrimitivePropsWithRef<"dl"> &
+type DataListProps = ComponentPropsWithRef<"dl"> &
   VariantProps<typeof dataListVariants>;
 
 const DataList = ({
-  asChild,
   className,
   orientation = "horizontal",
   size = "md",
   variant = "subtle",
   ...props
 }: DataListProps) => {
-  const Comp = asChild ? Slot.Root : "dl";
-
   return (
-    <Comp
+    <dl
       data-orientation={orientation}
       data-size={size}
       data-variant={variant}
@@ -41,16 +38,14 @@ const DataList = ({
   );
 };
 
-type DataListItemProps = PrimitivePropsWithRef<"div">;
+type DataListItemProps = ComponentPropsWithRef<"div">;
 
-const DataListItem = ({ asChild, className, ...props }: DataListItemProps) => {
-  const Comp = asChild ? Slot.Root : "div";
-
+const DataListItem = ({ className, ...props }: DataListItemProps) => {
   return (
-    <Comp
+    <div
       className={cn(
         "inline-flex gap-1",
-        "group-data-[orientation=horizontal]/data-list:flex-row group-data-[orientation=vertical]/data-list:flex-col",
+        "group-orientation-horizontal/data-list:flex-row group-orientation-vertical/data-list:flex-col",
         "group-data-[size=sm]/data-list:text-xs/4",
         "group-data-[size=md]/data-list:text-sm/5",
         "group-data-[size=lg]/data-list:text-md/6",
@@ -61,17 +56,11 @@ const DataListItem = ({ asChild, className, ...props }: DataListItemProps) => {
   );
 };
 
-type DataListItemLabelProps = PrimitivePropsWithRef<"dt">;
+type DataListItemLabelProps = ComponentPropsWithRef<"dt">;
 
-const DataListItemLabel = ({
-  asChild,
-  className,
-  ...props
-}: DataListItemLabelProps) => {
-  const Comp = asChild ? Slot.Root : "dt";
-
+const DataListItemLabel = ({ className, ...props }: DataListItemLabelProps) => {
   return (
-    <Comp
+    <dt
       className={cn(
         "flex min-w-30 items-start gap-1 text-muted-foreground",
         "group-data-[variant=bold]/data-list:font-medium",
@@ -82,16 +71,10 @@ const DataListItemLabel = ({
   );
 };
 
-type DataListItemValueProps = PrimitivePropsWithRef<"dd">;
+type DataListItemValueProps = ComponentPropsWithRef<"dd">;
 
-const DataListItemValue = ({
-  asChild,
-  className,
-  ...props
-}: DataListItemValueProps) => {
-  const Comp = asChild ? Slot.Root : "dd";
-
-  return <Comp className={cn("flex min-w-0 flex-1", className)} {...props} />;
+const DataListItemValue = ({ className, ...props }: DataListItemValueProps) => {
+  return <dd className={cn("flex min-w-0 flex-1", className)} {...props} />;
 };
 
 export {
