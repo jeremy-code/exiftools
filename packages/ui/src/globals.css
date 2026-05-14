@@ -55,6 +55,24 @@
   );
   --color-destructive-foreground: var(--color-red-50);
   --color-unsubtle: light-dark(var(--color-gray-900), var(--color-gray-100));
+  --color-bg: light-dark(var(--color-gray-50), var(--color-gray-950));
+  --color-bg-subtle: light-dark(var(--color-gray-100), var(--color-gray-900));
+  --color-bg-muted: light-dark(var(--color-gray-200), var(--color-gray-800));
+  --color-fg-subtle: light-dark(var(--color-gray-400), var(--color-gray-600));
+  --color-neutral: var(--color-gray-500);
+  --color-fg-muted: light-dark(var(--color-gray-600), var(--color-gray-400));
+  --color-fg-bold: light-dark(var(--color-gray-700), var(--color-gray-300));
+  --color-fg-bolder: light-dark(var(--color-gray-800), var(--color-gray-200));
+  --color-fg-boldest: light-dark(var(--color-gray-900), var(--color-gray-100));
+  --color-fg: light-dark(var(--color-gray-950), var(--color-gray-50));
+
+  --color-destructive-fg: var(--color-red-50);
+
+  --color-accent-pressed: light-dark(
+    var(--color-blue-800),
+    var(--color-blue-400)
+  );
+  --color-accent-fg: var(--color-blue-50);
 }
 
 @layer base {
@@ -71,7 +89,7 @@
   }
 
   body {
-    @apply flex min-h-svh flex-col bg-background text-foreground;
+    @apply flex min-h-svh flex-col bg-bg text-fg;
 
     & > :is(main, aside) {
       @apply flex-[1_0_auto];
@@ -91,3 +109,33 @@
 
 /* https://tailwindcss.com/docs/dark-mode#using-a-data-attribute */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+::view-transition-group(.toast) {
+  z-index: 1;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-new(.toast):only-child {
+    animation: toast-slide-in 350ms;
+  }
+
+  ::view-transition-old(.toast):only-child {
+    animation: toast-slide-out 350ms;
+    animation-fill-mode: forwards;
+  }
+}
+
+@keyframes toast-slide-in {
+  from {
+    translate: 100% 0;
+    opacity: 0;
+  }
+}
+
+@keyframes toast-slide-out {
+  to {
+    translate: 100% 0;
+    opacity: 0;
+  }
+}
