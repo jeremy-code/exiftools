@@ -1,3 +1,6 @@
+import { formatUserComment } from "#lib/exif/userComment/formatUserComment";
+import { parseUserComment } from "#lib/exif/userComment/parseUserComment";
+
 import type { AdvancedEditorResolver } from "../types";
 
 const resolveUserComment: AdvancedEditorResolver = (
@@ -9,8 +12,9 @@ const resolveUserComment: AdvancedEditorResolver = (
     return {
       kind: "userComment",
       exifEntryObject,
-      value,
-      onValueChange: (value) => onValueChange(value),
+      value: parseUserComment(value),
+      onValueChange: (value) =>
+        onValueChange(Array.from(formatUserComment(value))),
     };
   }
 

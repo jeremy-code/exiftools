@@ -1,35 +1,26 @@
-import { useMemo } from "react";
-
-import { parseUserComment } from "#lib/exif/parseUserComment";
+import type { UserComment } from "#lib/exif/userComment/interfaces";
 import { Textarea, type TextareaProps } from "@exifi/ui/components/Textarea";
 
 type UserCommentTextareaProps = {
-  value?: number[];
-  onValueChange?: (value: number[]) => void;
+  value?: UserComment;
+  onValueChange?: (value: UserComment) => void;
 } & Omit<TextareaProps, "value">;
-
-const textEncoder = new TextEncoder();
 
 const UserCommentTextarea = ({
   value,
   onValueChange,
   ...props
 }: UserCommentTextareaProps) => {
-  const textareaValue = useMemo(
-    () => (value !== undefined ? parseUserComment(value) : value),
-    [value],
-  );
-
   return (
     <Textarea
       {...props}
-      value={textareaValue}
+      value={value?.value}
       onChange={(event) => {
         if (value !== undefined) {
-          onValueChange?.([
-            ...value.slice(0, 8),
-            ...Array.from(textEncoder.encode(event.target.value)),
-          ]);
+          onValueChange?.({
+            ...value,
+            value: event.target.value,
+          });
         }
       }}
     />

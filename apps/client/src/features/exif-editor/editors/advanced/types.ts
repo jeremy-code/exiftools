@@ -1,6 +1,7 @@
 import type { RationalObject } from "libexif-wasm";
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import type { UserComment } from "#lib/exif/userComment/interfaces";
 
 type AdvancedEditorResolver = (
   entry: ExifEntryObject,
@@ -18,8 +19,8 @@ type AdvancedEditor =
   | {
       kind: "userComment";
       exifEntryObject: ExifEntryObject;
-      value: number[];
-      onValueChange: (value: number[]) => void;
+      value: UserComment;
+      onValueChange: (value: UserComment) => void;
     }
   | ({ kind: "rational" } & ResolvedAdvancedEditor<RationalObject>)
   | {
