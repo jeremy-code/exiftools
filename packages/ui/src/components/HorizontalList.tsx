@@ -1,32 +1,21 @@
-import { Slot } from "radix-ui";
-import type { PrimitivePropsWithRef } from "radix-ui/internal";
+import type { ComponentPropsWithRef } from "react";
+
 import { cn } from "tailwind-variants";
 
-type HorizontalListProps = PrimitivePropsWithRef<"ul">;
+type HorizontalListProps = ComponentPropsWithRef<"ul">;
 
-const HorizontalList = ({
-  className,
-  asChild,
-  ...props
-}: HorizontalListProps) => {
-  const Comp = asChild ? Slot.Root : "ul";
-
-  return (
-    <Comp className={cn("inline-block list-none", className)} {...props} />
-  );
+const HorizontalList = ({ className, ...props }: HorizontalListProps) => {
+  return <ul className={cn("inline-block list-none", className)} {...props} />;
 };
 
-type HorizontalListItemProps = PrimitivePropsWithRef<"li">;
+type HorizontalListItemProps = ComponentPropsWithRef<"li">;
 
 const HorizontalListItem = ({
-  asChild,
   className,
   ...props
 }: HorizontalListItemProps) => {
-  const Comp = asChild ? Slot.Root : "li";
-
   return (
-    <Comp
+    <li
       /**
        * Since JSX strips backslashes in HTML, `String.raw` is necessary for
        * correct CSS output

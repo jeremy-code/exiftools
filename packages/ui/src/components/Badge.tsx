@@ -1,5 +1,5 @@
-import { Slot } from "radix-ui";
-import { type PrimitivePropsWithRef } from "radix-ui/internal";
+import type { ComponentPropsWithRef } from "react";
+
 import { tv, type VariantProps } from "tailwind-variants";
 
 const badgeVariants = tv({
@@ -25,12 +25,11 @@ const badgeVariants = tv({
   },
 });
 
-type BadgeProps = PrimitivePropsWithRef<"div"> &
+type BadgeProps = ComponentPropsWithRef<"div"> &
   VariantProps<typeof badgeVariants>;
 
-const Badge = ({ asChild, className, color, ...props }: BadgeProps) => {
-  const Comp = asChild ? Slot.Root : "div";
-  return <Comp className={badgeVariants({ className, color })} {...props} />;
+const Badge = ({ className, color, ...props }: BadgeProps) => {
+  return <div className={badgeVariants({ className, color })} {...props} />;
 };
 
-export { Badge, type BadgeProps };
+export { Badge, type BadgeProps, badgeVariants };
