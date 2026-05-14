@@ -1,10 +1,13 @@
 import type { UserComment } from "#lib/exif/userComment/interfaces";
-import { Textarea, type TextareaProps } from "@exifi/ui/components/Textarea";
+import {
+  TextAreaField,
+  type TextAreaFieldProps,
+} from "@exifi/ui/components/TextAreaField";
 
 type UserCommentTextareaProps = {
   value?: UserComment;
   onValueChange?: (value: UserComment) => void;
-} & Omit<TextareaProps, "value" | "onChange">;
+} & Omit<TextAreaFieldProps, "value" | "onChange">;
 
 const UserCommentTextarea = ({
   value,
@@ -12,14 +15,14 @@ const UserCommentTextarea = ({
   ...props
 }: UserCommentTextareaProps) => {
   return (
-    <Textarea
+    <TextAreaField
       {...props}
       value={value?.value}
-      onChange={(event) => {
+      onChange={(target) => {
         if (value !== undefined) {
           onValueChange?.({
             ...value,
-            value: event.target.value,
+            value: target,
           });
         }
       }}
