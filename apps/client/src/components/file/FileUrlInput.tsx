@@ -7,12 +7,12 @@ import { z } from "zod";
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { getFileFromResponse } from "#utils/getFileFromResponse";
 import { Button, type ButtonProps } from "@exifi/ui/components/Button";
-import { Input, type InputProps } from "@exifi/ui/components/Input";
 import { Spinner } from "@exifi/ui/components/Spinner";
+import { TextField, type TextFieldProps } from "@exifi/ui/components/TextField";
 import { toastQueue } from "@exifi/ui/components/Toast";
 
 type FileUrlInputProps = {
-  inputProps?: InputProps;
+  inputProps?: TextFieldProps;
   buttonProps?: ButtonProps;
   onSuccess?: (file: File) => void;
 } & ComponentPropsWithRef<"form">;
@@ -71,15 +71,19 @@ const FileUrlInput = ({
         <form.Field
           name="fileUrl"
           children={(field) => (
-            <Input
-              required
+            <TextField
+              isRequired={true}
               type="url"
-              className="rounded-r-none border-r-0"
+              inputProps={{
+                className: "rounded-r-none border-r-0",
+              }}
+              className="flex-1"
               {...inputProps}
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
+              onChange={(value) => field.handleChange(value)}
+              aria-label={field.name}
             />
           )}
         />

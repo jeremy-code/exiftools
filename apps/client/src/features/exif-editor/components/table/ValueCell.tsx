@@ -9,7 +9,7 @@ import { NumberInput } from "#components/editor/NumberInput";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
 import { DateField } from "@exifi/ui/components/DateField";
-import { Input } from "@exifi/ui/components/Input";
+import { TextField } from "@exifi/ui/components/TextField";
 import { TimeField } from "@exifi/ui/components/TimeField";
 
 import type { ExifTableRow } from "./columns";
@@ -79,11 +79,10 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
       );
     case "ascii":
       return (
-        <Input
-          type="text"
+        <TextField
           aria-label={label}
           {...quickEditor}
-          onChange={(e) => quickEditor.onValueChange(e.target.value)}
+          onChange={(value) => quickEditor.onValueChange(value)}
         />
       );
     case "exifVersion":

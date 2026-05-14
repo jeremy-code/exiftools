@@ -22,7 +22,6 @@ import {
   ComboboxPortal,
   ComboboxList,
 } from "@exifi/ui/components/Combobox";
-import { Input } from "@exifi/ui/components/Input";
 import { Label } from "@exifi/ui/components/Label";
 import {
   Select,
@@ -32,6 +31,7 @@ import {
   SelectValue,
 } from "@exifi/ui/components/Select";
 import { Spinner } from "@exifi/ui/components/Spinner";
+import { TextField } from "@exifi/ui/components/TextField";
 
 type FieldValues = {
   ifd: Ifd;
@@ -183,14 +183,12 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
         <form.Field
           name="value"
           children={(field) => (
-            <>
-              <Label>Value</Label>
-              <Input
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </>
+            <TextField
+              label="Value"
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(value) => field.handleChange(value)}
+            />
           )}
         />
         <form.Subscribe
