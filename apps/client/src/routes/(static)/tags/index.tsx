@@ -148,7 +148,7 @@ const TagsComponent = () => {
 
   return (
     <div className="container py-8">
-      <Heading as="h1" size="2xl" className="mb-4">
+      <Heading level={1} size="2xl" className="mb-4">
         Exif tags
       </Heading>
       <Table

@@ -33,7 +33,7 @@ const CatchBoundary = ({ error, reset }: ErrorComponentProps) => {
           <div className="grid size-13 place-content-center rounded-lg border bg-muted">
             <TriangleAlert className="size-8" />
           </div>
-          <Heading as="h1" size="2xl">
+          <Heading level={1} size="2xl">
             An error occurred!
           </Heading>
           <p>An unexpected error occurred while the application was running.</p>
