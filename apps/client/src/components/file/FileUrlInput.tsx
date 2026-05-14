@@ -9,7 +9,7 @@ import { getFileFromResponse } from "#utils/getFileFromResponse";
 import { Button, type ButtonProps } from "@exifi/ui/components/Button";
 import { Input, type InputProps } from "@exifi/ui/components/Input";
 import { Spinner } from "@exifi/ui/components/Spinner";
-import { toast } from "@exifi/ui/hooks/useToast";
+import { toastQueue } from "@exifi/ui/components/Toast";
 
 type FileUrlInputProps = {
   inputProps?: InputProps;
@@ -38,10 +38,12 @@ const FileUrlInput = ({
       onSuccess?.(data);
     },
     onError: (error, variables) => {
-      toast({
+      toastQueue.add({
         title: "Fetching from URL failed",
         description: `Fetching ${variables} failed with error ${error.message}.`,
-        variant: "destructive",
+        toastProps: {
+          color: "destructive",
+        },
       });
     },
   });
