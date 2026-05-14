@@ -13,18 +13,9 @@ import { IFD_NAMES } from "libexif-wasm/constants";
 import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { Button } from "@exifi/ui/components/Button";
-import {
-  Combobox,
-  ComboboxItem,
-  ComboboxPopup,
-  ComboboxInput,
-  ComboboxEmpty,
-  ComboboxPortal,
-  ComboboxList,
-} from "@exifi/ui/components/Combobox";
-import { Label } from "@exifi/ui/components/Label";
 import { Spinner } from "@exifi/ui/components/Spinner";
 import { TextField } from "@exifi/ui/components/TextField";
+import { ComboBox, ComboBoxItem } from "@exifi/ui/components/v2/ComboBox";
 import { Select, SelectItem } from "@exifi/ui/components/v2/Select";
 
 type FieldValues = {
@@ -75,36 +66,27 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               value === null ? "Tag must be defined" : undefined,
           }}
           children={(field) => (
-            <Combobox
+            <ComboBox
               items={EXIF_TAG_TABLE}
-              itemToStringLabel={(item) => {
-                return item.name;
+              value={field.state.value?.tag}
+              onChange={(value) => {
+                const tagEntry = EXIF_TAG_TABLE.find(
+                  (item) => item.tag === value,
+                );
+
+                if (tagEntry !== undefined) {
+                  field.handleChange(tagEntry);
+                }
               }}
-              value={field.state.value}
-              onValueChange={(value) => {
-                field.handleChange(value);
-              }}
+              label="Tag"
+              placeholder="ImageDescription"
             >
-              <Label>Tag</Label>
-              <ComboboxInput
-                inputProps={{
-                  onBlur: field.handleBlur,
-                  placeholder: "ImageDescription",
-                }}
-              />
-              <ComboboxPortal>
-                <ComboboxPopup>
-                  <ComboboxEmpty />
-                  <ComboboxList>
-                    {(item: TagEntry) => (
-                      <ComboboxItem key={item.tag} value={item}>
-                        {item.name}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxPopup>
-              </ComboboxPortal>
-            </Combobox>
+              {(item: TagEntry) => (
+                <ComboBoxItem key={item.tag} id={item.tag} value={item}>
+                  {item.name}
+                </ComboBoxItem>
+              )}
+            </ComboBox>
           )}
         />
         <form.Field
