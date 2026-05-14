@@ -2,7 +2,6 @@ import type { ComponentPropsWithRef, Dispatch, SetStateAction } from "react";
 
 import { Minus, Plus } from "lucide-react";
 
-import { NumberInput } from "#components/editor/NumberInput";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Button } from "@exifi/ui/components/Button";
@@ -11,6 +10,7 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@exifi/ui/components/Collapsible";
+import { NumberField } from "@exifi/ui/components/NumberField";
 
 type ExifEntryEditorProps = {
   exifEntryObject: ExifEntryObject;
@@ -46,10 +46,10 @@ const ExifEntryByteEditor = ({
         <CollapsibleContent className="mt-4">
           <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
             {draft.map((value, index) => (
-              <NumberInput
+              <NumberField
                 key={index}
                 value={value}
-                onValueChange={(newValue) =>
+                onChange={(newValue) =>
                   setDraft((prevValue) => prevValue.with(index, newValue))
                 }
               />

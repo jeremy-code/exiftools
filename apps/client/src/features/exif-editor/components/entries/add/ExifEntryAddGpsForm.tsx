@@ -7,8 +7,7 @@ import { cn } from "tailwind-variants";
 import { useExifEntryAddGpsFormOptions } from "#features/exif-editor/hooks/useExifEntryAddGpsFormOptions";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { Button } from "@exifi/ui/components/Button";
-import { Input } from "@exifi/ui/components/Input";
-import { Label } from "@exifi/ui/components/Label";
+import { NumberField } from "@exifi/ui/components/NumberField";
 import { Spinner } from "@exifi/ui/components/Spinner";
 
 import { ExifGpsMap } from "../../gps/ExifGpsMap";
@@ -69,61 +68,49 @@ const ExifEntryAddGpsForm = ({
           <gpsForm.Field
             name="latitude"
             children={(field) => (
-              <>
-                <Label>Latitude</Label>
-                <Input
-                  type="number"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => {
-                    if (e.target.value === "") {
-                      field.handleChange(undefined);
-                    } else if (!Number.isNaN(e.target.valueAsNumber)) {
-                      field.handleChange(e.target.valueAsNumber);
-                    }
-                  }}
-                />
-              </>
+              <NumberField
+                label="Latitude"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                minValue={-90}
+                maxValue={90}
+                onChange={(value) => field.handleChange(value)}
+                formatOptions={{
+                  style: "decimal",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 6,
+                }}
+              />
             )}
           />
           <gpsForm.Field
             name="longitude"
             children={(field) => (
-              <>
-                <Label>Longitude</Label>
-                <Input
-                  type="number"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => {
-                    if (e.target.value === "") {
-                      field.handleChange(undefined);
-                    } else if (!Number.isNaN(e.target.valueAsNumber)) {
-                      field.handleChange(e.target.valueAsNumber);
-                    }
-                  }}
-                />
-              </>
+              <NumberField
+                label="Longitude"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(value) => field.handleChange(value)}
+                minValue={-180}
+                maxValue={180}
+                formatOptions={{
+                  style: "decimal",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 6,
+                }}
+              />
             )}
           />
           <gpsForm.Field
             name="altitude"
             children={(field) => (
-              <>
-                <Label>Altitude</Label>
-                <Input
-                  type="number"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => {
-                    if (e.target.value === "") {
-                      field.handleChange(undefined);
-                    } else if (!Number.isNaN(e.target.valueAsNumber)) {
-                      field.handleChange(e.target.valueAsNumber);
-                    }
-                  }}
-                />
-              </>
+              <NumberField
+                label="Altitude"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(value) => field.handleChange(value)}
+                formatOptions={{ style: "unit", unit: "meter" }}
+              />
             )}
           />
           <gpsForm.Subscribe
