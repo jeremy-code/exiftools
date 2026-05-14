@@ -7,7 +7,6 @@ import { ThemeProvider } from "next-themes";
 
 import { useDisposeQueryCache } from "#hooks/useDisposeQueryCache";
 import { ToastRegion } from "@exifi/ui/components/Toast";
-import { TooltipProvider } from "@exifi/ui/components/Tooltip";
 
 const Devtools =
   import.meta.env.DEV ?
@@ -31,12 +30,9 @@ const AppProvider = ({ children }: { children: Readonly<ReactNode> }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        {/* Defaults to 700 */}
-        <TooltipProvider delayDuration={0}>
-          {children}
-          <Devtools />
-          <ToastRegion />
-        </TooltipProvider>
+        {children}
+        <Devtools />
+        <ToastRegion />
       </ThemeProvider>
     </QueryClientProvider>
   );

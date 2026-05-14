@@ -16,7 +16,7 @@ import {
 } from "@exifi/ui/components/DataList";
 import {
   TooltipTrigger,
-  TooltipContent,
+  TooltipTarget,
   Tooltip,
 } from "@exifi/ui/components/Tooltip";
 
@@ -59,12 +59,12 @@ const MakerNoteAccordion = ({ exifData }: { exifData: ExifData }) => {
                     mnoteDatum.description !== null &&
                     mnoteDatum.description !== ""
                   ) ?
-                    <Tooltip>
-                      <TooltipTrigger className="select-auto">
-                        {mnoteDatum.title}
-                      </TooltipTrigger>
-                      <TooltipContent>{mnoteDatum.description}</TooltipContent>
-                    </Tooltip>
+                    <TooltipTrigger>
+                      <TooltipTarget>
+                        <span role="button">{mnoteDatum.title}</span>
+                      </TooltipTarget>
+                      <Tooltip>{mnoteDatum.description}</Tooltip>
+                    </TooltipTrigger>
                   : (mnoteDatum.title ??
                     mnoteDatum.name ??
                     `ID ${mnoteDatum.id} (${index})`)

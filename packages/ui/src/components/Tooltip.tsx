@@ -1,67 +1,71 @@
 import type { ComponentPropsWithRef } from "react";
 
-import { Slot, Tooltip as TooltipPrimitive } from "radix-ui";
-import { tv, type VariantProps } from "tailwind-variants";
+import {
+  TooltipTrigger,
+  type TooltipTriggerComponentProps as TooltipTriggerProps,
+  Tooltip as AriaTooltip,
+  type TooltipProps,
+  Focusable as TooltipTarget,
+} from "react-aria-components/Tooltip";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
+import { tv } from "tailwind-variants";
 
-const {
-  Provider: TooltipProvider,
-  Root: Tooltip,
-  Trigger: TooltipTrigger,
-} = TooltipPrimitive;
+import { OverlayArrow } from "./OverlayArrow";
 
-const tooltipContentVariants = tv({
-  slots: {
-    base: [
-      "z-[calc(infinity)] max-w-xs origin-(--radix-tooltip-content-transform-origin) rounded-sm px-2.5 py-1 text-xs/4 font-medium shadow-md",
-      "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
-      "data-[state=instant-open]:animate-in data-[state=instant-open]:fade-in-0 data-[state=instant-open]:zoom-in-95",
-      "data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95",
-      "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-    ],
-    arrow: "z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-xs",
-  },
+const tooltipVariants = tv({
+  base: [
+    "max-w-xs origin-(--trigger-anchor-point) rounded-sm border border-border bg-surface px-2.5 py-1 text-xs/4 font-medium",
+  ],
   variants: {
-    color: {
-      foreground: {
-        base: "bg-foreground text-background",
-        arrow: "bg-foreground fill-foreground",
-      },
-      surface: {
-        base: "bg-surface text-foreground",
-        arrow: "bg-surface fill-surface",
-      },
+    isEntering: {
+      true: "animate-in fade-in-0 zoom-in-95",
     },
-  },
-  defaultVariants: {
-    color: "foreground",
+    isExiting: {
+      true: "animate-out fade-out-0 zoom-out-95",
+    },
+    placement: {
+      left: "slide-in-from-right-2",
+      right: "slide-in-from-left-2",
+      top: "slide-in-from-bottom-2",
+      bottom: "slide-in-from-top-2",
+      center: null,
+    },
   },
 });
 
-type TooltipContentProps = {
-  portalProps?: ComponentPropsWithRef<typeof TooltipPrimitive.Content>;
-} & ComponentPropsWithRef<typeof TooltipPrimitive.Content> &
-  VariantProps<typeof tooltipContentVariants>;
-
-const TooltipContent = ({
-  color,
-  className,
-  children,
-  portalProps,
-  ...props
-}: TooltipContentProps) => {
-  const { base, arrow } = tooltipContentVariants({ color });
-
+const Tooltip = ({ children, offset = 10, ...props }: TooltipProps) => {
   return (
-    <TooltipPrimitive.Portal {...portalProps}>
-      <TooltipPrimitive.Content
-        className={base({ className, color })}
-        {...props}
-      >
-        <Slot.Slottable>{children}</Slot.Slottable>
-        <TooltipPrimitive.Arrow className={arrow({ color })} />
-      </TooltipPrimitive.Content>
-    </TooltipPrimitive.Portal>
+    <AriaTooltip
+      {...props}
+      offset={offset}
+      className={composeRenderProps(
+        props.className,
+        (className, { placement, ...renderProps }) =>
+          tooltipVariants({
+            ...renderProps,
+            placement: placement ?? undefined,
+            className,
+          }),
+      )}
+    >
+      {composeRenderProps(children, (children) => (
+        <>
+          <OverlayArrow className="size-2" />
+          {children}
+        </>
+      ))}
+    </AriaTooltip>
   );
 };
 
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
+type TooltipTargetProps = ComponentPropsWithRef<typeof TooltipTarget>;
+
+export {
+  TooltipTrigger,
+  type TooltipTriggerProps,
+  Tooltip,
+  type TooltipProps,
+  tooltipVariants,
+  TooltipTarget,
+  type TooltipTargetProps,
+};
