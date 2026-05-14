@@ -9,6 +9,7 @@ import {
   type RowSelectionState,
 } from "@tanstack/react-table";
 import type { Ifd } from "libexif-wasm";
+import { Button as AriaButton } from "react-aria-components/Button";
 import { useShallow } from "zustand/react/shallow";
 
 import { ColumnResizer } from "#components/table/ColumnResizer";
@@ -20,7 +21,7 @@ import {
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { formatPlural } from "#utils/formatPlural";
 import { Badge } from "@exifi/ui/components/Badge";
-import { Link } from "@exifi/ui/components/Link";
+import { linkVariants } from "@exifi/ui/components/Link";
 import {
   Table,
   TableHead,
@@ -101,11 +102,12 @@ const ExifTable = (props: ExifTableProps) => {
     return (
       <div>
         {"There doesn't seem to be any Exif entries. "}
-        <Link color="blue" underline asChild>
-          <button onClick={() => fix()}>
-            Initialize with default entries?
-          </button>
-        </Link>
+        <AriaButton
+          className={linkVariants({ color: "blue", underline: true })}
+          onPress={() => fix()}
+        >
+          Initialize with default entries?
+        </AriaButton>
       </div>
     );
   }

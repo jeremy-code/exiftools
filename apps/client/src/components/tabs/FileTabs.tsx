@@ -1,7 +1,6 @@
 import { useRef, type ReactNode } from "react";
 
 import { Plus } from "lucide-react";
-import { AccessibleIcon } from "radix-ui";
 import { useShallow } from "zustand/react/shallow";
 
 import { SortableList } from "#components/dnd/SortableList";
@@ -72,11 +71,10 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
                   className="text-muted-foreground"
                   size="icon"
                   variant="muted"
-                  onClick={() => createNewTab()}
+                  aria-label="New tab"
+                  onPress={() => createNewTab()}
                 >
-                  <AccessibleIcon.Root label="New tab">
-                    <Plus size={16} />
-                  </AccessibleIcon.Root>
+                  <Plus size={16} />
                 </Button>
               </div>
             </TabsList>

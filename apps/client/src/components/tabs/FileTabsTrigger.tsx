@@ -2,7 +2,6 @@ import type { ComponentPropsWithRef } from "react";
 
 import { useSortable } from "@dnd-kit/react/sortable";
 import { X } from "lucide-react";
-import { AccessibleIcon } from "radix-ui";
 import { cn } from "tailwind-variants";
 
 import { Button } from "@exifi/ui/components/Button";
@@ -53,11 +52,10 @@ const FileTabsTrigger = ({
           e.preventDefault();
           e.stopPropagation();
         }}
-        onClick={() => removeTab()}
+        onPress={() => removeTab()}
+        aria-label="Close tab"
       >
-        <AccessibleIcon.Root label="Close tab">
-          <X size={16} />
-        </AccessibleIcon.Root>
+        <X size={16} />
       </Button>
     </TabsTrigger>
   );

@@ -17,9 +17,9 @@ import { useLocale } from "react-aria-components/I18nProvider";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { cn, tv } from "tailwind-variants";
 
-import { Button } from "./Button";
 import { composeTailwindRenderProps } from "../../utils/composeTailwindRenderProps";
 import { focusRing } from "../../utils/focusRing";
+import { Button } from "../Button";
 import { ErrorMessage } from "../form";
 
 const calendarCellVariants = tv({

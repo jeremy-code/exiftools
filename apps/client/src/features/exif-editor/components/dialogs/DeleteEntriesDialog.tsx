@@ -1,6 +1,7 @@
 import { Trash2 } from "lucide-react";
 
 import { formatPlural } from "#utils/formatPlural";
+import { Button } from "@exifi/ui/components/Button";
 import {
   Dialog,
   DialogTrigger,
@@ -11,7 +12,6 @@ import {
   DialogFooter,
 } from "@exifi/ui/components/Dialog";
 import { Modal } from "@exifi/ui/components/Modal";
-import { Button } from "@exifi/ui/components/v2/Button";
 
 type DeleteEntriesDialogProps = {
   rows: string[];
@@ -46,7 +46,7 @@ const DeleteEntriesDialog = ({
             })}`}
           </DialogBody>
           <DialogFooter closeButton>
-            <Button onClick={() => deleteRows()} className="ml-3">
+            <Button onPress={() => deleteRows()} className="ml-3">
               Delete
             </Button>
           </DialogFooter>

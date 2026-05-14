@@ -2,6 +2,7 @@ import type { CellContext } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
 import { AccessibleIcon } from "radix-ui";
 
+import { Button } from "@exifi/ui/components/Button";
 import {
   Dialog,
   DialogTrigger,
@@ -11,7 +12,6 @@ import {
   DialogDescription,
 } from "@exifi/ui/components/Dialog";
 import { Modal } from "@exifi/ui/components/Modal";
-import { Button } from "@exifi/ui/components/v2/Button";
 
 import { ExifEntryInspector } from "../entries/edit/ExifEntryInspector";
 import type { ExifTableRow } from "../table/columns";

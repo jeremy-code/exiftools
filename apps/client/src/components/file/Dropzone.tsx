@@ -2,6 +2,7 @@ import type { ComponentPropsWithRef, RefObject } from "react";
 
 import { Clapperboard, File, FileUp, Image, Music, X } from "lucide-react";
 import { AccessibleIcon } from "radix-ui";
+import { Button as AriaButton } from "react-aria-components/Button";
 import {
   useDropzone,
   type DropzoneInputProps,
@@ -13,7 +14,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { formatBytes } from "#utils/formatBytes";
 import { Button } from "@exifi/ui/components/Button";
-import { Link } from "@exifi/ui/components/Link";
+import { linkVariants } from "@exifi/ui/components/Link";
 
 type AcceptedFileProps = {
   file: File;
@@ -57,13 +58,10 @@ const AcceptedFile = ({
       <div className="grid aspect-square place-content-center">
         <Button
           size="icon"
-          onClick={() => {
-            removeFile();
-          }}
+          onPress={() => removeFile()}
+          aria-label="Remove file"
         >
-          <AccessibleIcon.Root label="Remove file">
-            <X className="size-4" />
-          </AccessibleIcon.Root>
+          <X className="size-4" />
         </Button>
       </div>
     </li>
@@ -131,15 +129,17 @@ const Dropzone = ({
           "Drop a file here"
         : <div>
             {"Drag a file here or "}
-            <Link color="link" underline="hover" asChild>
-              <button
-                type="button"
-                className="cursor-pointer appearance-none select-text"
-                onClick={open}
-              >
-                upload a file
-              </button>
-            </Link>
+            <AriaButton
+              type="button"
+              className={linkVariants({
+                underline: "hover",
+                color: "link",
+                className: "cursor-pointer appearance-none select-text",
+              })}
+              onPress={open}
+            >
+              upload a file
+            </AriaButton>
           </div>
         }
       </div>

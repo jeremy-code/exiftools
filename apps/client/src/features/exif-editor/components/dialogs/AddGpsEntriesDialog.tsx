@@ -1,5 +1,6 @@
 import { MapPin } from "lucide-react";
 
+import { Button } from "@exifi/ui/components/Button";
 import {
   Dialog,
   DialogTrigger,
@@ -10,7 +11,6 @@ import {
   DialogDescription,
 } from "@exifi/ui/components/Dialog";
 import { Modal } from "@exifi/ui/components/Modal";
-import { Button } from "@exifi/ui/components/v2/Button";
 
 import { ExifEntryAddGpsForm } from "../entries/add/ExifEntryAddGpsForm";
 

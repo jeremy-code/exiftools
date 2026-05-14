@@ -38,7 +38,7 @@ const ExifEntryAddGpsForm = ({
       <Button
         className="max-w-sm"
         type="button"
-        onClick={async () => {
+        onPress={async () => {
           const currentPosition = await getCurrentPosition();
           setGpsForm(
             new LatLng(
@@ -116,7 +116,7 @@ const ExifEntryAddGpsForm = ({
           <gpsForm.Subscribe
             selector={(state) => state.isSubmitting}
             children={(isSubmitting) => (
-              <Button type="submit" variant="surface" disabled={isSubmitting}>
+              <Button type="submit" variant="surface" isDisabled={isSubmitting}>
                 {isSubmitting && <Spinner className="absolute" />}
                 <span
                   className="data-[pending=true]:invisible"

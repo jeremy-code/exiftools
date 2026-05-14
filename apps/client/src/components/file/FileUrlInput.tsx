@@ -10,6 +10,7 @@ import { Button, type ButtonProps } from "@exifi/ui/components/Button";
 import { Spinner } from "@exifi/ui/components/Spinner";
 import { TextField, type TextFieldProps } from "@exifi/ui/components/TextField";
 import { toastQueue } from "@exifi/ui/components/Toast";
+import { composeTailwindRenderProps } from "@exifi/ui/utils/composeTailwindRenderProps";
 
 type FileUrlInputProps = {
   inputProps?: TextFieldProps;
@@ -93,9 +94,12 @@ const FileUrlInput = ({
             <Button
               type="submit"
               variant="surface"
-              className="rounded-l-none"
-              disabled={isSubmitting}
+              isDisabled={isSubmitting}
               {...buttonProps}
+              className={composeTailwindRenderProps(
+                buttonProps?.className,
+                "rounded-l-none",
+              )}
             >
               {isSubmitting && <Spinner className="absolute" />}
               <span

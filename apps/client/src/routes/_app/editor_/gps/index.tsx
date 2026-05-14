@@ -62,8 +62,7 @@ const EditorGpsApp = ({
       </Map>
       {latLng !== null ? formatLatLng(latLng) : "Location not found"}
       <Button
-        onClick={async (e) => {
-          e.preventDefault();
+        onPress={async () => {
           if (latLng === null) {
             return;
           }

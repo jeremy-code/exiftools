@@ -60,11 +60,12 @@ const ExifEntryByteEditor = ({
               exifEntryObject.format !== "ASCII" && (
                 <Button
                   size="icon"
-                  onClick={() =>
+                  onPress={() =>
                     setDraft((prev) =>
                       prev.slice(0, isRationalOrSRational ? -2 : -1),
                     )
                   }
+                  aria-label="Remove component"
                 >
                   <Minus size={16} />
                 </Button>
@@ -75,11 +76,12 @@ const ExifEntryByteEditor = ({
               exifEntryObject.format !== "ASCII" && (
                 <Button
                   size="icon"
-                  onClick={() => {
+                  onPress={() => {
                     setDraft((prev) =>
                       prev.concat(isRationalOrSRational ? [0, 1] : [0]),
                     );
                   }}
+                  aria-label="Add component"
                 >
                   <Plus size={16} />
                 </Button>

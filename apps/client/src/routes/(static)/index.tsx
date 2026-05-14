@@ -4,7 +4,7 @@ import { createFileRoute, Link as RouterLink } from "@tanstack/react-router";
 import { ClipboardCheck, Lock, Wrench } from "lucide-react";
 import { Slot } from "radix-ui";
 
-import { Button } from "@exifi/ui/components/Button";
+import { buttonVariants } from "@exifi/ui/components/Button";
 import { Card } from "@exifi/ui/components/Card";
 import { Heading } from "@exifi/ui/components/Heading";
 import { Link } from "@exifi/ui/components/Link";
@@ -72,12 +72,18 @@ const HomeComponent = () => {
           View and edit Exif data locally
         </Heading>
         <div className="flex items-center justify-start gap-2 md:justify-center">
-          <Button color="accent" asChild>
-            <RouterLink to="/viewer">View</RouterLink>
-          </Button>
-          <Button variant="ghost" asChild>
-            <RouterLink to="/editor">Edit</RouterLink>
-          </Button>
+          <RouterLink
+            className={buttonVariants({ color: "accent" })}
+            to="/viewer"
+          >
+            View
+          </RouterLink>
+          <RouterLink
+            className={buttonVariants({ variant: "ghost" })}
+            to="/editor"
+          >
+            Edit
+          </RouterLink>
         </div>
       </div>
       <div className="pt-16">

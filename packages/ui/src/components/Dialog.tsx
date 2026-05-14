@@ -12,11 +12,8 @@ import {
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { cn, tv } from "tailwind-variants";
 
+import { Button, type ButtonProps as DialogCloseButtonProps } from "./Button";
 import { composeTailwindRenderProps } from "../utils/composeTailwindRenderProps";
-import {
-  Button,
-  type ButtonProps as DialogCloseButtonProps,
-} from "./v2/Button";
 
 const dialogVariants = tv({
   base: ["relative max-h-[inherit] overflow-auto outline-0"],

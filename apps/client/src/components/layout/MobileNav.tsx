@@ -2,7 +2,6 @@ import type { ComponentPropsWithRef } from "react";
 
 import { Link as RouterLink } from "@tanstack/react-router";
 import { VisuallyHidden } from "radix-ui";
-import { cn } from "tailwind-variants";
 
 import { Button, type ButtonProps } from "@exifi/ui/components/Button";
 import { navigationMenuTriggerVariants } from "@exifi/ui/components/NavigationMenu";
@@ -12,13 +11,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@exifi/ui/components/Popover";
+import { composeTailwindRenderProps } from "@exifi/ui/utils/composeTailwindRenderProps";
 
 import { NAVIGATION_ITEMS } from "./constants";
 
 const MobileNavButton = ({ className, ...props }: ButtonProps) => {
   return (
     <Button
-      className={cn("group/navbar", className)}
+      className={composeTailwindRenderProps(className, "group/navbar")}
       variant="ghost"
       size="icon"
       {...props}
