@@ -1,6 +1,9 @@
-import type { CalendarDate, Time } from "@internationalized/date";
+import type {
+  CalendarDate,
+  CalendarDateTime,
+  Time,
+} from "@internationalized/date";
 import type { ValidTypedArray } from "libexif-wasm";
-import { Temporal } from "temporal-polyfill";
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 
@@ -27,7 +30,7 @@ type QuickEditor =
     } & ResolvedQuickEditor<string> & { values: string[] })
   | ({ kind: "dateStamp" } & ResolvedQuickEditor<CalendarDate>)
   | ({ kind: "versionId" } & ResolvedQuickEditor<number[]>)
-  | ({ kind: "datetime" } & ResolvedQuickEditor<Temporal.PlainDateTime>)
+  | ({ kind: "datetime" } & ResolvedQuickEditor<CalendarDateTime>)
   | ({ kind: "ascii" } & ResolvedQuickEditor<string>)
   | ({ kind: "exifVersion" } & ResolvedQuickEditor<ExifVersion>)
   | ({ kind: "simpleNumeric" } & ResolvedQuickEditor<number>)
