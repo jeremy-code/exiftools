@@ -3,9 +3,9 @@ import type { ExifData } from "libexif-wasm";
 import { formatPlural } from "#utils/formatPlural";
 import {
   Accordion,
-  AccordionContent,
+  AccordionPanel,
   AccordionItem,
-  AccordionTrigger,
+  AccordionHeader,
 } from "@exifi/ui/components/Accordion";
 import { Badge } from "@exifi/ui/components/Badge";
 import {
@@ -29,14 +29,14 @@ const MakerNoteAccordion = ({ exifData }: { exifData: ExifData }) => {
 
   return (
     <Accordion
-      defaultValue={["MAKERNOTE"]}
+      expandedKeys={["MAKERNOTE"]}
       variant="enclosed"
-      type="multiple"
+      allowsMultipleExpanded
       size="lg"
       className="shadow-sm"
     >
-      <AccordionItem value="MAKERNOTE">
-        <AccordionTrigger>
+      <AccordionItem id="MAKERNOTE">
+        <AccordionHeader>
           <div className="flex gap-2">
             Makernote
             <Badge>
@@ -46,8 +46,8 @@ const MakerNoteAccordion = ({ exifData }: { exifData: ExifData }) => {
               })}
             </Badge>
           </div>
-        </AccordionTrigger>
-        <AccordionContent>
+        </AccordionHeader>
+        <AccordionPanel>
           <DataList variant="bold">
             {mnoteData.data.map((mnoteDatum, index) => (
               <DataListItem
@@ -76,7 +76,7 @@ const MakerNoteAccordion = ({ exifData }: { exifData: ExifData }) => {
               </DataListItem>
             ))}
           </DataList>
-        </AccordionContent>
+        </AccordionPanel>
       </AccordionItem>
     </Accordion>
   );

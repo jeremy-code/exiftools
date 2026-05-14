@@ -8,12 +8,12 @@ const IfdAccordion = ({ exifData }: { exifData: ExifData }) => {
   return (
     <Accordion
       // Expand all nonempty IFDs
-      defaultValue={exifData.ifd
+      defaultExpandedKeys={exifData.ifd
         .filter((ifd) => ifd.count !== 0)
         .map((ifd) => ifd.ifd)
         .filter((ifd) => ifd !== null)}
       variant="enclosed"
-      type="multiple"
+      allowsMultipleExpanded
       size="lg"
       className="shadow-sm"
     >
