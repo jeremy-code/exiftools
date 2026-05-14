@@ -1,33 +1,43 @@
-import type { ComponentPropsWithRef, ReactNode } from "react";
-
 import {
   Select,
-  SelectContent,
+  type SelectProps,
   SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@exifi/ui/components/Select";
+} from "@exifi/ui/components/v2/Select";
+
+type EnumItem = {
+  id: string;
+  value: string;
+};
 
 type EnumSelectProps = {
+  value: string;
   values: string[];
-  placeholder?: ReactNode;
-} & ComponentPropsWithRef<typeof Select>;
+  onValueChange: (value: string) => void;
+} & Omit<
+  SelectProps<EnumItem, "single">,
+  "value" | "onChange" | "children" | "items"
+>;
 
-const EnumSelect = ({ values, placeholder, ...props }: EnumSelectProps) => {
+const EnumSelect = ({
+  value,
+  values,
+  onValueChange,
+  ...props
+}: EnumSelectProps) => {
   return (
-    <Select {...props}>
-      <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {values.map((value) => (
-          <SelectItem key={value} value={value}>
-            {value}
-          </SelectItem>
-        ))}
-      </SelectContent>
+    <Select
+      {...props}
+      value={value}
+      items={values.map((value) => ({ id: value, value }))}
+      onChange={(value) => {
+        if (typeof value === "string") {
+          onValueChange?.(value);
+        }
+      }}
+    >
+      {(item) => <SelectItem id={item.id}>{item.value}</SelectItem>}
     </Select>
   );
 };
 
-export { EnumSelect };
+export { EnumSelect, type EnumSelectProps };
