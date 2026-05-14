@@ -1,3 +1,4 @@
+import type { Time } from "@internationalized/date";
 import type { ValidTypedArray } from "libexif-wasm";
 import { Temporal } from "temporal-polyfill";
 
@@ -30,6 +31,6 @@ type QuickEditor =
   | ({ kind: "ascii" } & ResolvedQuickEditor<string>)
   | ({ kind: "exifVersion" } & ResolvedQuickEditor<ExifVersion>)
   | ({ kind: "simpleNumeric" } & ResolvedQuickEditor<number>)
-  | ({ kind: "timeStamp" } & ResolvedQuickEditor<Temporal.PlainTime>);
+  | ({ kind: "timeStamp" } & ResolvedQuickEditor<Time>);
 
 export type { ExifVersion, QuickEditorResolver, QuickEditor };
