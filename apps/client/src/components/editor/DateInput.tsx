@@ -3,7 +3,7 @@ import { Input, type InputProps } from "@exifi/ui/components/Input";
 type DateInputProps = {
   value?: Temporal.PlainDate;
   onValueChange?: (date: Temporal.PlainDate) => void;
-} & Omit<InputProps, "value">;
+} & Omit<InputProps, "value" | "onChange">;
 
 const DateInput = ({ value, onValueChange, ...props }: DateInputProps) => {
   return (

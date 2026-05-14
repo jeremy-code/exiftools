@@ -3,7 +3,7 @@ import { Input, type InputProps } from "@exifi/ui/components/Input";
 type NumberInputProps = {
   value?: number;
   onValueChange?: (value: number) => void;
-} & Omit<InputProps, "value">;
+} & Omit<InputProps, "value" | "onChange">;
 
 const NumberInput = ({ value, onValueChange, ...props }: NumberInputProps) => {
   return (

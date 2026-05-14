@@ -9,10 +9,10 @@ import { Input, type InputProps } from "@exifi/ui/components/Input";
 type RationalInputProps = {
   initialRational?: RationalObject | undefined;
   setRational?: (rational: RationalObject) => void;
-  numeratorInputProps?: InputProps;
-  denominatorInputProps?: InputProps;
-  decimalInputProps?: InputProps;
-} & InputProps;
+  numeratorInputProps?: Omit<InputProps, "value" | "onChange">;
+  denominatorInputProps?: Omit<InputProps, "value" | "onChange">;
+  decimalInputProps?: Omit<InputProps, "value" | "onChange">;
+} & Omit<InputProps, "value" | "onChange">;
 
 const RationalInput = ({
   initialRational,

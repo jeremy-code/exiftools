@@ -8,7 +8,7 @@ import { Input, type InputProps } from "@exifi/ui/components/Input";
 type ExifVersionInputProps = {
   value?: ExifVersion;
   onValueChange?: (value: ExifVersion) => void;
-  inputProps?: Omit<InputProps, "value">;
+  inputProps?: Omit<InputProps, "value" | "onChange">;
 } & ComponentPropsWithRef<"div">;
 
 const ExifVersionInput = ({

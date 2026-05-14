@@ -4,7 +4,7 @@ import { Textarea, type TextareaProps } from "@exifi/ui/components/Textarea";
 type UserCommentTextareaProps = {
   value?: UserComment;
   onValueChange?: (value: UserComment) => void;
-} & Omit<TextareaProps, "value">;
+} & Omit<TextareaProps, "value" | "onChange">;
 
 const UserCommentTextarea = ({
   value,

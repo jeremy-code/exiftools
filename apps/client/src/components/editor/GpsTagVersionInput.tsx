@@ -8,7 +8,7 @@ import { Input, type InputProps } from "@exifi/ui/components/Input";
 type GpsTagVersionInputProps = {
   value?: number[];
   onValueChange?: (value: number[]) => void;
-  inputProps?: InputProps;
+  inputProps?: Omit<InputProps, "value" | "onChange">;
 } & ComponentPropsWithRef<"div">;
 
 const GpsTagVersionInput = ({
