@@ -1,9 +1,10 @@
 import { Suspense, useMemo, type ComponentPropsWithRef } from "react";
 
 import { imageDimensionsFromStream } from "image-dimensions";
-import { type DataType, type ExifData } from "libexif-wasm";
+import { type ExifData } from "libexif-wasm";
 
 import { useObjectUrl } from "#hooks/useObjectUrl";
+import { DATA_TYPE_MAP } from "#lib/exif/constants";
 import { assertNever } from "#utils/assertNever";
 import { formatPlural } from "#utils/formatPlural";
 import {
@@ -23,14 +24,6 @@ import { Skeleton } from "@exifi/ui/components/Skeleton";
 
 import { ExifDateTimeInformation } from "./ExifDateTimeInformation";
 import { ImageDimensions } from "./ImageDimensions";
-
-const dataTypeMap: Record<DataType, string> = {
-  UNCOMPRESSED_CHUNKY: "Uncompressed chunky",
-  UNCOMPRESSED_PLANAR: "Uncompressed planar",
-  UNCOMPRESSED_YCC: "Uncompress YCC",
-  COMPRESSED: "Compressed",
-  UNKNOWN: "Unknown",
-};
 
 const ExifThumbnailInformation = ({ thumbnail }: { thumbnail: Uint8Array }) => {
   const blob = useMemo(
@@ -92,12 +85,12 @@ const ExifInformation = ({
               Data type
             </DataListItemLabel>
             <DataListItemValue>
-              {dataTypeMap[exifData.dataType]}
+              {DATA_TYPE_MAP[exifData.dataType]}
             </DataListItemValue>
           </DataListItem>
           <DataListItem>
             <DataListItemLabel className="min-w-unset">
-              Makernote data
+              Makernote
             </DataListItemLabel>
             <DataListItemValue>
               {exifData.mnoteData !== null ?

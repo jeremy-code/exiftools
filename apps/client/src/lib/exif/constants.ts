@@ -1,3 +1,5 @@
+import type { DataType } from "libexif-wasm";
+
 /**
  * Date format for Exif GPS tag DATE_STAMP
  *
@@ -18,4 +20,17 @@ const EXIF_TIMESTAMP_FORMAT = "yyyy:MM:dd HH:mm:ss";
  */
 const MAX_UINT32_VALUE = 0xffffffff;
 
-export { EXIF_DATESTAMP_FORMAT, EXIF_TIMESTAMP_FORMAT, MAX_UINT32_VALUE };
+const DATA_TYPE_MAP: Record<DataType, string> = {
+  UNCOMPRESSED_CHUNKY: "Uncompressed chunky",
+  UNCOMPRESSED_PLANAR: "Uncompressed planar",
+  UNCOMPRESSED_YCC: "Uncompress YCC",
+  COMPRESSED: "Compressed",
+  UNKNOWN: "Unknown",
+};
+
+export {
+  EXIF_DATESTAMP_FORMAT,
+  EXIF_TIMESTAMP_FORMAT,
+  MAX_UINT32_VALUE,
+  DATA_TYPE_MAP,
+};
