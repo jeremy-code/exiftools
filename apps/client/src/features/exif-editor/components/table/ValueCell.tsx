@@ -1,7 +1,6 @@
 import type { CellContext } from "@tanstack/react-table";
 import { ExifTagInfo } from "libexif-wasm";
 
-import { DateInput } from "#components/editor/DateInput";
 import { DatetimeLocalInput } from "#components/editor/DatetimeLocalInput";
 import { EnumSelect } from "#components/editor/EnumSelect";
 import { ExifVersionInput } from "#components/editor/ExifVersionInput";
@@ -9,6 +8,7 @@ import { GpsTagVersionInput } from "#components/editor/GpsTagVersionInput";
 import { NumberInput } from "#components/editor/NumberInput";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
+import { DateField } from "@exifi/ui/components/DateField";
 import { Input } from "@exifi/ui/components/Input";
 import { TimeField } from "@exifi/ui/components/TimeField";
 
@@ -49,7 +49,17 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
         />
       );
     case "dateStamp":
-      return <DateInput aria-label={label} {...quickEditor} />;
+      return (
+        <DateField
+          {...quickEditor}
+          aria-label={label}
+          onChange={(value) => {
+            if (value !== null) {
+              quickEditor.onValueChange(value);
+            }
+          }}
+        />
+      );
     case "versionId":
       return <GpsTagVersionInput aria-label={label} {...quickEditor} />;
     case "datetime":

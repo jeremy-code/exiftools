@@ -1,4 +1,4 @@
-import type { Time } from "@internationalized/date";
+import type { CalendarDate, Time } from "@internationalized/date";
 import type { ValidTypedArray } from "libexif-wasm";
 import { Temporal } from "temporal-polyfill";
 
@@ -25,7 +25,7 @@ type QuickEditor =
   | ({
       kind: "enumAscii";
     } & ResolvedQuickEditor<string> & { values: string[] })
-  | ({ kind: "dateStamp" } & ResolvedQuickEditor<Temporal.PlainDate>)
+  | ({ kind: "dateStamp" } & ResolvedQuickEditor<CalendarDate>)
   | ({ kind: "versionId" } & ResolvedQuickEditor<number[]>)
   | ({ kind: "datetime" } & ResolvedQuickEditor<Temporal.PlainDateTime>)
   | ({ kind: "ascii" } & ResolvedQuickEditor<string>)
