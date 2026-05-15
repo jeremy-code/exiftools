@@ -7,10 +7,10 @@ import { GpsTagVersionInput } from "#components/editor/GpsTagVersionInput";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { assertNever } from "#utils/assertNever";
 import { DateField } from "@exifi/ui/components/DateField";
+import { DatePicker } from "@exifi/ui/components/DatePicker";
 import { NumberField } from "@exifi/ui/components/NumberField";
 import { TextField } from "@exifi/ui/components/TextField";
 import { TimeField } from "@exifi/ui/components/TimeField";
-import { DatePicker } from "@exifi/ui/components/v2/DatePicker";
 
 import type { ExifTableRow } from "./columns";
 import { getExifQuickEditor } from "../../editors/quick/getExifQuickEditor";

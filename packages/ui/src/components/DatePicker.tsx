@@ -6,17 +6,17 @@ import {
 } from "react-aria-components/DatePicker";
 
 import { Calendar } from "./Calendar";
-import { DateInput } from "../DateInput";
+import { DateInput } from "./DateInput";
 import { FieldButton } from "./FieldButton";
-import { Popover } from "./Popover";
-import { composeTailwindRenderProps } from "../../utils/composeTailwindRenderProps";
 import {
   Description,
   FieldError,
   FieldGroup,
   Label,
   type FieldErrorMessage,
-} from "../form";
+} from "./form";
+import { composeTailwindRenderProps } from "../utils/composeTailwindRenderProps";
+import { Popover } from "./v2/Popover";
 
 type DatePickerProps<T extends DateValue> = {
   label?: string;

@@ -16,8 +16,8 @@ import {
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { cn, tv } from "tailwind-variants";
 
-import { composeTailwindRenderProps } from "../../utils/composeTailwindRenderProps";
-import { focusRing } from "../../utils/focusRing";
+import { composeTailwindRenderProps } from "../utils/composeTailwindRenderProps";
+import { focusRing } from "../utils/focusRing";
 
 const ListBox = <T extends object>({
   className,

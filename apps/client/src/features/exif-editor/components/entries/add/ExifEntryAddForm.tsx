@@ -13,10 +13,10 @@ import { IFD_NAMES } from "libexif-wasm/constants";
 import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { Button } from "@exifi/ui/components/Button";
+import { ComboBox, ComboBoxItem } from "@exifi/ui/components/ComboBox";
+import { Select, SelectItem } from "@exifi/ui/components/Select";
 import { Spinner } from "@exifi/ui/components/Spinner";
 import { TextField } from "@exifi/ui/components/TextField";
-import { ComboBox, ComboBoxItem } from "@exifi/ui/components/v2/ComboBox";
-import { Select, SelectItem } from "@exifi/ui/components/v2/Select";
 
 type FieldValues = {
   ifd: Ifd;

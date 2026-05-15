@@ -5,7 +5,7 @@ import {
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { tv } from "tailwind-variants";
 
-import { focusRing } from "../../utils/focusRing";
+import { focusRing } from "../utils/focusRing";
 
 const fieldButtonVariants = tv({
   extend: focusRing,

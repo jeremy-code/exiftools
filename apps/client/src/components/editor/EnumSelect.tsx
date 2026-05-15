@@ -2,7 +2,7 @@ import {
   Select,
   type SelectProps,
   SelectItem,
-} from "@exifi/ui/components/v2/Select";
+} from "@exifi/ui/components/Select";
 
 type EnumItem = {
   id: string;
