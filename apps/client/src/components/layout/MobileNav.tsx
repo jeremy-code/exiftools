@@ -20,7 +20,7 @@ const MobileNavButton = ({ className, ...props }: ButtonProps) => {
         aria-hidden="true"
         viewBox="0 0 24 24"
         strokeLinecap="round"
-        className="size-4 stroke-foreground stroke-2"
+        className="size-4 stroke-fg stroke-2"
       >
         {/**
          * The following paths are lines of width 18px and height 2px

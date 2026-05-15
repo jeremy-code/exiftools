@@ -35,13 +35,13 @@ const AcceptedFile = ({
   return (
     <li
       className={cn(
-        "flex max-w-full justify-between gap-3 rounded border bg-muted p-3 text-muted-foreground",
+        "flex max-w-full justify-between gap-3 rounded border bg-bg-muted p-3 text-fg-muted",
         className,
       )}
       {...props}
     >
       <div
-        className="grid aspect-square place-content-center rounded border bg-subtle"
+        className="grid aspect-square place-content-center rounded border bg-bg-subtle"
         aria-hidden={true}
       >
         <AcceptedFileIcon className="size-[1.25em]" />
@@ -50,7 +50,7 @@ const AcceptedFile = ({
         <p className="line-clamp-1 font-mono text-sm font-semibold text-ellipsis">
           {file.name}
         </p>
-        <p className="text-xs text-subtle-foreground">
+        <p className="text-xs text-fg-subtle">
           {formatBytes(file.size, undefined, { maximumFractionDigits: 2 })}
         </p>
       </div>
@@ -111,7 +111,7 @@ const Dropzone = ({
       {...getRootProps({
         ...rootProps,
         className: cn(
-          "flex flex-col items-center gap-6 rounded border border-dashed p-6 text-muted-foreground",
+          "flex flex-col items-center gap-6 rounded border border-dashed p-6 text-fg-muted",
           {
             "border-destructive bg-destructive/10": fileRejections.length > 0,
             "border-accent bg-accent/10": isDragAccept,

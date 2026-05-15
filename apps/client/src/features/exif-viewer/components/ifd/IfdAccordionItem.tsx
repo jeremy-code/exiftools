@@ -67,7 +67,7 @@ const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
                         </TooltipTrigger>
                       : title}
                     </DataListItemLabel>
-                    <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-muted-foreground before:content-['=']">
+                    <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-fg-muted before:content-['=']">
                       {entry.toString()}
                     </DataListItemValue>
                   </DataListItem>

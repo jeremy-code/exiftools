@@ -46,12 +46,7 @@ const CardTitle = ({ className, level = 2, ...props }: CardTitleProps) => {
 };
 
 const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
-  return (
-    <Text
-      className={cn("text-sm text-muted-foreground", className)}
-      {...props}
-    />
-  );
+  return <Text className={cn("text-sm text-fg-muted", className)} {...props} />;
 };
 
 type CardContentProps = ComponentPropsWithRef<"div">;

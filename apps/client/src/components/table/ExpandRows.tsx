@@ -26,7 +26,7 @@ const ExpandRows = <TData extends RowData>({
         cn(
           "flex flex-row items-center gap-2",
           { "cursor-pointer": row.getCanExpand() },
-          { "cursor-not-allowed text-muted-foreground": !row.getCanExpand() },
+          { "cursor-not-allowed text-fg-muted": !row.getCanExpand() },
         ),
       )}
       data-state={row.getIsExpanded() ? "open" : "closed"}

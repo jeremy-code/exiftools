@@ -23,7 +23,7 @@ const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
         </div>
         {title}
       </dt>
-      <dd className="mt-4 text-muted-foreground">{description}</dd>
+      <dd className="mt-4 text-fg-muted">{description}</dd>
     </Card>
   );
 };

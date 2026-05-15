@@ -45,9 +45,7 @@ const SupportLevelCell = (props: CellContext<TagEntry, SupportLevel>) => {
   const value = props.getValue();
 
   if (value === "UNKNOWN") {
-    return (
-      <span className="text-muted-foreground italic">{titlecase(value)}</span>
-    );
+    return <span className="text-fg-muted italic">{titlecase(value)}</span>;
   }
 
   return (
@@ -201,7 +199,7 @@ const TagsComponent = () => {
         </TableHead>
         <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <TableRow className="has-focus:bg-subtle" key={row.id}>
+            <TableRow className="has-focus:bg-bg-subtle" key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <TableCell
                   key={cell.id}

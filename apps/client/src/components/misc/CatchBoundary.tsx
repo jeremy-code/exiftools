@@ -28,7 +28,7 @@ const CatchBoundary = ({ error, reset }: ErrorComponentProps) => {
     <div className="container my-auto">
       <Card>
         <CardHeader>
-          <div className="grid size-13 place-content-center rounded-lg border bg-muted">
+          <div className="grid size-13 place-content-center rounded-lg border bg-bg-muted">
             <TriangleAlert className="size-8" />
           </div>
           <Heading level={1} size="2xl">
@@ -37,7 +37,7 @@ const CatchBoundary = ({ error, reset }: ErrorComponentProps) => {
           <p>An unexpected error occurred while the application was running.</p>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border bg-muted">
+          <div className="rounded-md border bg-bg-muted">
             <ErrorComponent error={error} />
           </div>
         </CardContent>

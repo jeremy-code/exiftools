@@ -110,7 +110,7 @@ const TableHeader = ({ className, ...props }: ComponentPropsWithRef<"th">) => {
   return (
     <th
       className={cn(
-        "px-(--table-padding-x) py-(--table-padding-y) text-start font-medium text-foreground",
+        "px-(--table-padding-x) py-(--table-padding-y) text-start font-medium text-fg",
         "group-data-[show-column-border=true]/table:not-last:border-r",
         className,
       )}
@@ -124,7 +124,7 @@ const TableHead = ({ className, ...props }: ComponentPropsWithRef<"thead">) => {
     <thead
       className={cn(
         "table-header-group",
-        "group-data-[variant=outline]/table:bg-muted",
+        "group-data-[variant=outline]/table:bg-bg-muted",
         className,
       )}
       {...props}
@@ -137,8 +137,8 @@ const TableRow = ({ className, ...props }: ComponentPropsWithRef<"tr">) => {
     <tr
       className={cn(
         "table-row",
-        "group-data-[striped=true]/table:odd:[&>td]:bg-muted",
-        "group-data-[interactive=true]/table:not-disabled:hover:bg-muted",
+        "group-data-[striped=true]/table:odd:[&>td]:bg-bg-muted",
+        "group-data-[interactive=true]/table:not-disabled:hover:bg-bg-muted",
         className,
       )}
       {...props}

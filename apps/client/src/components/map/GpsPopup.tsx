@@ -29,17 +29,17 @@ const GpsPopup = ({ coordinate, label, ...props }: GpsPopupProps) => {
   return (
     <Popup {...props}>
       <div className="grid grid-cols-[auto_1fr] gap-2">
-        <MapPin className="size-4 text-muted-foreground" />
+        <MapPin className="size-4 text-fg-muted" />
         {label ?? (
           <Suspense fallback={<Skeleton className="h-[1em] w-full" />}>
             <GpsPopupLabel coordinate={coordinate} />
           </Suspense>
         )}
 
-        <LocateFixed className="size-4 text-muted-foreground" />
+        <LocateFixed className="size-4 text-fg-muted" />
         <div>{`${formatLatLng(coordinate)}`}</div>
 
-        <Link className="size-4 text-muted-foreground" />
+        <Link className="size-4 text-fg-muted" />
         <div>
           <HorizontalList>
             <HorizontalListItem>

@@ -34,7 +34,7 @@ const ExifEntryInspector = ({
         {"Expected change: "}
         {isChanged ?
           <ExifEntryValidity exifEntryObject={exifEntryObject} draft={draft} />
-        : <span className="text-muted-foreground italic">no changes</span>}
+        : <span className="text-fg-muted italic">no changes</span>}
       </div>
       <Button isDisabled={!isChanged} onPress={() => save()}>
         {isChanged ? "Save changes" : "Saved"}

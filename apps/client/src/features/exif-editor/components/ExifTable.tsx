@@ -152,7 +152,7 @@ const ExifTable = (props: ExifTableProps) => {
         <TableBody>
           {table.getRowModel().rows.map((row) => (
             <TableRow
-              className="hover:bg-subtle/50 has-focus:bg-subtle data-[selected=true]:bg-subtle"
+              className="hover:bg-bg-subtle/50 has-focus:bg-bg-subtle data-[selected=true]:bg-bg-subtle"
               data-selected={row.getIsSelected()}
               key={row.id}
             >
