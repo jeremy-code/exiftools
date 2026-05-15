@@ -71,18 +71,30 @@ const HomeComponent = () => {
           View and edit Exif data locally
         </Heading>
         <div className="flex items-center justify-start gap-2 md:justify-center">
-          <RouterLink
-            className={buttonVariants({ color: "accent" })}
-            to="/viewer"
+          <Link
+            render={(props, renderProps) => (
+              // @ts-expect-error -- TODO: I believe React Aria's types are wrong since they omit elementType prop
+              <RouterLink
+                {...props}
+                to="/viewer"
+                className={buttonVariants({ color: "accent", ...renderProps })}
+              />
+            )}
           >
             View
-          </RouterLink>
-          <RouterLink
-            className={buttonVariants({ variant: "ghost" })}
-            to="/editor"
+          </Link>
+          <Link
+            render={(props, renderProps) => (
+              // @ts-expect-error -- TODO: I believe React Aria's types are wrong since they omit elementType prop
+              <RouterLink
+                {...props}
+                to="/editor"
+                className={buttonVariants({ variant: "ghost", ...renderProps })}
+              />
+            )}
           >
             Edit
-          </RouterLink>
+          </Link>
         </div>
       </div>
       <div className="pt-16">

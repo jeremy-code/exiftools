@@ -128,11 +128,14 @@ const Dropzone = ({
             {"Drag a file here or "}
             <AriaButton
               type="button"
-              className={linkVariants({
-                underline: "hover",
-                color: "link",
-                className: "cursor-pointer appearance-none select-text",
-              })}
+              className={(renderProps) =>
+                linkVariants({
+                  ...renderProps,
+                  underline: "hover",
+                  color: "link",
+                  className: "cursor-pointer appearance-none select-text",
+                })
+              }
               onPress={open}
             >
               upload a file

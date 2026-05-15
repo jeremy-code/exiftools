@@ -103,7 +103,9 @@ const ExifTable = (props: ExifTableProps) => {
       <div>
         {"There doesn't seem to be any Exif entries. "}
         <AriaButton
-          className={linkVariants({ color: "blue", underline: true })}
+          className={(renderProps) =>
+            linkVariants({ ...renderProps, color: "blue", underline: true })
+          }
           onPress={() => fix()}
         >
           Initialize with default entries?
