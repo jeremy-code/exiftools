@@ -17,8 +17,7 @@
     "lucide-react": "^1.14.0",
     "react-aria-components": "^1.17.0",
     "tailwind-merge": "^3.6.0",
-    "tailwind-variants": "^3.2.2",
-    "zustand": "^5.0.13"
+    "tailwind-variants": "^3.2.2"
   },
   "devDependencies": {
     "@exifi/eslint-config": "workspace:*",
