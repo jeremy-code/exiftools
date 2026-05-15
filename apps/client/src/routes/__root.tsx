@@ -11,6 +11,7 @@ import {
   Scripts,
   useLocation,
 } from "@tanstack/react-router";
+import { useLocale } from "react-aria/I18nProvider";
 
 import { Footer } from "#components/layout/Footer";
 import { Navbar } from "#components/layout/Navbar";
@@ -22,6 +23,7 @@ import uiCss from "@exifi/ui/globals.css?url";
 const RootDocument = ({ children }: Readonly<{ children: ReactNode }>) => {
   const pathname = useLocation({ select: (location) => location.pathname });
   const canonicalUrl = new URL(pathname, getBaseUrl()).toString();
+  const { locale, direction } = useLocale();
 
   return (
     /**
@@ -32,7 +34,7 @@ const RootDocument = ({ children }: Readonly<{ children: ReactNode }>) => {
      *
      * @see {@link https://react.dev/reference/react-dom/client/hydrateRoot#suppressing-unavoidable-hydration-mismatch-errors}
      */
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} dir={direction} suppressHydrationWarning>
       <head>
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:url" content={canonicalUrl} />
