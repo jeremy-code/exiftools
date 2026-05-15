@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react";
 
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check, Minus } from "lucide-react";
-import { Checkbox as CheckboxPrimitive } from "radix-ui";
 import { cn } from "tailwind-variants";
 
 type CheckboxProps = Omit<
