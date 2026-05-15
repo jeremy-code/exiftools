@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef, RefObject } from "react";
 
 import { Clapperboard, File, FileUp, Image, Music, X } from "lucide-react";
-import { AccessibleIcon } from "radix-ui";
+import { Button as AriaButton } from "react-aria-components/Button";
 import {
   useDropzone,
   type DropzoneInputProps,
@@ -13,7 +13,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
 import { formatBytes } from "#utils/formatBytes";
 import { Button } from "@exifi/ui/components/Button";
-import { Link } from "@exifi/ui/components/Link";
+import { linkVariants } from "@exifi/ui/components/Link";
 
 type AcceptedFileProps = {
   file: File;
@@ -35,13 +35,13 @@ const AcceptedFile = ({
   return (
     <li
       className={cn(
-        "flex max-w-full justify-between gap-3 rounded border bg-muted p-3 text-muted-foreground",
+        "flex max-w-full justify-between gap-3 rounded border bg-bg-muted p-3 text-fg-muted",
         className,
       )}
       {...props}
     >
       <div
-        className="grid aspect-square place-content-center rounded border bg-subtle"
+        className="grid aspect-square place-content-center rounded border bg-bg-subtle"
         aria-hidden={true}
       >
         <AcceptedFileIcon className="size-[1.25em]" />
@@ -50,20 +50,17 @@ const AcceptedFile = ({
         <p className="line-clamp-1 font-mono text-sm font-semibold text-ellipsis">
           {file.name}
         </p>
-        <p className="text-xs text-subtle-foreground">
+        <p className="text-xs text-fg-subtle">
           {formatBytes(file.size, undefined, { maximumFractionDigits: 2 })}
         </p>
       </div>
       <div className="grid aspect-square place-content-center">
         <Button
           size="icon"
-          onClick={() => {
-            removeFile();
-          }}
+          onPress={() => removeFile()}
+          aria-label="Remove file"
         >
-          <AccessibleIcon.Root label="Remove file">
-            <X className="size-4" />
-          </AccessibleIcon.Root>
+          <X className="size-4" />
         </Button>
       </div>
     </li>
@@ -114,7 +111,7 @@ const Dropzone = ({
       {...getRootProps({
         ...rootProps,
         className: cn(
-          "flex flex-col items-center gap-6 rounded border border-dashed p-6 text-muted-foreground",
+          "flex flex-col items-center gap-6 rounded border border-dashed p-6 text-fg-muted",
           {
             "border-destructive bg-destructive/10": fileRejections.length > 0,
             "border-accent bg-accent/10": isDragAccept,
@@ -124,22 +121,25 @@ const Dropzone = ({
       })}
     >
       <div className="inline-flex grow flex-row items-center justify-normal gap-2 max-sm:text-sm">
-        <AccessibleIcon.Root label="Upload file">
-          <FileUp />
-        </AccessibleIcon.Root>
+        <FileUp aria-label="Upload file" />
         {isDragActive ?
           "Drop a file here"
         : <div>
             {"Drag a file here or "}
-            <Link color="link" underline="hover" asChild>
-              <button
-                type="button"
-                className="cursor-pointer appearance-none select-text"
-                onClick={open}
-              >
-                upload a file
-              </button>
-            </Link>
+            <AriaButton
+              type="button"
+              className={(renderProps) =>
+                linkVariants({
+                  ...renderProps,
+                  underline: "hover",
+                  color: "link",
+                  className: "cursor-pointer appearance-none select-text",
+                })
+              }
+              onPress={open}
+            >
+              upload a file
+            </AriaButton>
           </div>
         }
       </div>

@@ -1,28 +1,28 @@
 import { ExternalLink } from "lucide-react";
-import { Slot } from "radix-ui";
-import { type PrimitivePropsWithRef } from "radix-ui/internal";
+import {
+  Link as AriaLink,
+  type LinkProps as AriaLinkProps,
+} from "react-aria-components/Link";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { tv, type VariantProps } from "tailwind-variants";
 
+import { focusRing } from "../utils/focusRing";
+
 const linkVariants = tv({
-  base: "inline-flex items-center gap-1 decoration-from-font underline-offset-1 transition-colors transition-discrete",
+  extend: focusRing,
+  base: [
+    "inline-flex items-center gap-1 decoration-from-font underline-offset-1 transition-colors transition-discrete [-webkit-tap-highlight-color:transparent]",
+    "disabled:cursor-default disabled:no-underline forced-colors:disabled:text-[GrayText]",
+  ],
   variants: {
-    variant: {
-      anchor: [
-        "inline",
-        // `margin-top` values will depend on font and `line-height`
-        "after:absolute after:mt-[.35em] after:text-[.75em] after:text-muted-foreground",
-        "before:absolute before:mt-[.35em] before:text-[.75em] before:text-muted-foreground",
-        "md:before:ml-[-.8em] md:before:pr-[.8em] md:before:content-['#']",
-        "max-md:pr-[1.1ch] max-md:after:ml-[.25em] max-md:after:content-['#']",
-        "not-[:hover,:focus]:before:invisible not-[:hover,:focus]:after:invisible",
-      ],
+    underline: {
+      true: "underline decoration-current/50 hover:decoration-current/80",
+      false: "no-underline",
+      hover:
+        "decoration-transparent hover:underline hover:decoration-current/80",
     },
     color: {
-      blue: "text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400",
-      /**
-       * Styling colors based on system colors (LinkText, VisitedText). This
-       * passes AA contrast ratio (light: 5.17, Dark: 5.57).
-       */
+      blue: "text-blue-600 dark:text-blue-500",
       link: [
         "text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400",
         /**
@@ -33,21 +33,13 @@ const linkVariants = tv({
          */
         "visited:text-purple-600 visited:hover:text-purple-700 dark:visited:text-purple-500 dark:visited:hover:text-purple-400",
       ],
-    },
-    underline: {
-      true: "underline decoration-[hsl(from_currentcolor_h_s_l/50%)] hover:decoration-[hsl(from_currentcolor_h_s_l/80%)]",
-      false: "no-underline",
-      hover:
-        "decoration-transparent hover:underline hover:decoration-[hsl(from_currentcolor_h_s_l/80%)]",
+      default: "text-fg-bold",
     },
   },
-  /**
-   * WCAG standards technically state that links within text should have a
-   * non-color visual distinction. While the default variant does not
-   * underline for flexibility, it should be set to underline if there is no
-   * other easily element to distinguish links within text.
-   */
-  defaultVariants: { underline: false },
+  defaultVariants: {
+    underline: "hover",
+    color: "default",
+  },
 });
 
 type LinkProps = {
@@ -55,32 +47,35 @@ type LinkProps = {
    * Opens link in new tab and adds an {@link ExternalLink} icon.
    */
   isExternal?: boolean;
-} & PrimitivePropsWithRef<"a"> &
+} & AriaLinkProps &
   VariantProps<typeof linkVariants>;
 
 const Link = ({
-  asChild,
-  className,
   isExternal,
-  children,
-  variant,
-  color,
+  className,
   underline,
+  color,
   ...props
 }: LinkProps) => {
-  const Comp = asChild ? Slot.Root : "a";
-
   return (
-    <Comp
-      className={linkVariants({ className, variant, color, underline })}
+    <AriaLink
       // target="_blank" implies rel="noopener": https://caniuse.com/mdn-html_elements_a_implicit_noopener
       {...(isExternal && { target: "_blank" })}
       {...props}
+      className={composeRenderProps(className, (className, renderProps) =>
+        linkVariants({ ...renderProps, className, underline, color }),
+      )}
     >
-      <Slot.Slottable>{children}</Slot.Slottable>
-      {isExternal && <ExternalLink className="size-[1em] flex-none" />}
-    </Comp>
+      {composeRenderProps(props.children, (children) =>
+        isExternal ?
+          <>
+            {children}
+            <ExternalLink className="size-[1em] flex-none" />
+          </>
+        : children,
+      )}
+    </AriaLink>
   );
 };
 
-export { Link, type LinkProps };
+export { Link, type LinkProps, linkVariants };

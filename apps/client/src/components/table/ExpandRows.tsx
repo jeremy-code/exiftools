@@ -1,39 +1,46 @@
 import type { Row, RowData } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-import { AccessibleIcon, Slot } from "radix-ui";
-import type { PrimitivePropsWithRef } from "radix-ui/internal";
+import {
+  Button as AriaButton,
+  type ButtonProps as AriaButtonProps,
+} from "react-aria-components/Button";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { cn } from "tailwind-variants";
+
+import { composeTailwindRenderProps } from "@exifi/ui/utils/composeTailwindRenderProps";
 
 type ExpandRowsProps<TData extends RowData> = {
   row: Row<TData>;
-} & PrimitivePropsWithRef<"button">;
+} & AriaButtonProps;
 
 const ExpandRows = <TData extends RowData>({
-  asChild,
   row,
   children,
   className,
   ...props
 }: ExpandRowsProps<TData>) => {
-  const Comp = asChild ? Slot.Root : "button";
-
   return (
-    <Comp
-      className={cn(
-        "flex flex-row items-center gap-2",
-        { "cursor-pointer": row.getCanExpand() },
-        { "cursor-not-allowed text-muted-foreground": !row.getCanExpand() },
+    <AriaButton
+      className={composeTailwindRenderProps(
         className,
+        cn(
+          "flex flex-row items-center gap-2",
+          { "cursor-pointer": row.getCanExpand() },
+          { "cursor-not-allowed text-fg-muted": !row.getCanExpand() },
+        ),
       )}
       data-state={row.getIsExpanded() ? "open" : "closed"}
-      onClick={row.getToggleExpandedHandler()}
+      onPress={row.getToggleExpandedHandler()}
+      aria-label={row.getIsExpanded() ? "Collapse" : "Expand"}
       {...props}
     >
-      <AccessibleIcon.Root label={row.getIsExpanded() ? "Collapse" : "Expand"}>
-        <ChevronRight className="size-3 transition-transform in-data-[state=open]:rotate-90" />
-      </AccessibleIcon.Root>
-      <Slot.Slottable>{children}</Slot.Slottable>
-    </Comp>
+      {composeRenderProps(children, (children) => (
+        <>
+          <ChevronRight className="size-3 transition-transform in-data-[state=open]:rotate-90" />
+          {children}
+        </>
+      ))}
+    </AriaButton>
   );
 };
 export { ExpandRows, type ExpandRowsProps };

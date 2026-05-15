@@ -35,7 +35,7 @@ const ExifToolbar = () => {
   return (
     <div className="flex flex-wrap gap-2">
       <Button
-        onClick={() => {
+        onPress={() => {
           const generateFile = async () => {
             const newFileInBytes = writeExifData(
               new Uint8Array(await file.arrayBuffer()),
@@ -79,16 +79,16 @@ const ExifToolbar = () => {
         <Save size={16} />
         Save
       </Button>
-      <Button onClick={() => fix()}>Fix</Button>
-      <Button onClick={() => updatePixelDimensions(file)}>
+      <Button onPress={() => fix()}>Fix</Button>
+      <Button onPress={() => updatePixelDimensions(file)}>
         Add image dimensions
       </Button>
       <Button
-        onClick={() => getCurrentPosition().then(updateGeolocationPosition)}
+        onPress={() => getCurrentPosition().then(updateGeolocationPosition)}
       >
         Set Exif to current GPS position
       </Button>
-      <Button onClick={() => updateDateAndTimeDigitized()}>
+      <Button onPress={() => updateDateAndTimeDigitized()}>
         Set Date and Time Digitized to current time
       </Button>
       <AddEntryDialog />

@@ -1,17 +1,10 @@
-import type { ComponentPropsWithRef } from "react";
+import { useId, useState, type ComponentPropsWithRef } from "react";
 
 import { Link as RouterLink } from "@tanstack/react-router";
-import { VisuallyHidden } from "radix-ui";
 import { cn } from "tailwind-variants";
 
 import { Button, type ButtonProps } from "@exifi/ui/components/Button";
 import { navigationMenuTriggerVariants } from "@exifi/ui/components/NavigationMenu";
-import {
-  Popover,
-  PopoverAnchor,
-  PopoverContent,
-  PopoverTrigger,
-} from "@exifi/ui/components/Popover";
 
 import { NAVIGATION_ITEMS } from "./constants";
 
@@ -23,17 +16,11 @@ const MobileNavButton = ({ className, ...props }: ButtonProps) => {
       size="icon"
       {...props}
     >
-      <VisuallyHidden.Root className="group-data-[state=open]/navbar:hidden">
-        Open menu
-      </VisuallyHidden.Root>
-      <VisuallyHidden.Root className="group-data-[state=closed]/navbar:hidden">
-        Close menu
-      </VisuallyHidden.Root>
       <svg
         aria-hidden="true"
         viewBox="0 0 24 24"
         strokeLinecap="round"
-        className="size-4 stroke-foreground stroke-2"
+        className="size-4 stroke-fg stroke-2"
       >
         {/**
          * The following paths are lines of width 18px and height 2px
@@ -67,34 +54,27 @@ const MobileNavButton = ({ className, ...props }: ButtonProps) => {
   );
 };
 
-type MobileNavProps = ComponentPropsWithRef<typeof Popover>;
+type MobileNavProps = ComponentPropsWithRef<"div">;
 
-/**
- * While <Popover> is not the ideal component for a mobile navigation menu,
- * using the <NavigationMenu> component would require significant changes (e.g.
- * the default behavior is opening the menu on hover, close on `mouseleave`,
- * etc.). In regards to accessibility, <Popover> does initially trap focus
- * inside <PopoverContent>.
- */
-const MobileNav = (props: MobileNavProps) => {
+const MobileNav = (props: Omit<MobileNavProps, "children">) => {
+  const mobileNavigationMenuId = useId();
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Popover {...props}>
-      <nav className="sm:hidden">
-        <PopoverTrigger asChild>
-          <MobileNavButton />
-        </PopoverTrigger>
-
-        <PopoverAnchor asChild>
-          {/* Anchor is set to element that is size of <Navbar /> */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-          />
-        </PopoverAnchor>
-        <PopoverContent
-          hideWhenDetached={true} // If window size changes, hide content
-          onInteractOutside={(e) => e.preventDefault()}
-          className="w-(--radix-popover-content-available-width) rounded-t-none bg-background"
+    <div className="sm:hidden" {...props}>
+      <MobileNavButton
+        onPress={() => setIsOpen((prev) => !prev)}
+        data-state={isOpen ? "open" : "closed"}
+        aria-label={isOpen ? "Close menu" : "Open menu"}
+        aria-expanded={isOpen}
+        aria-controls={mobileNavigationMenuId}
+      />
+      {isOpen && (
+        <nav
+          id={mobileNavigationMenuId}
+          role="navigation"
+          // Height includes the border-bottom of the navbar (1px)
+          className="absolute inset-x-0 top-[calc(100%+1px)] animate-in border-b bg-bg p-3 text-fg fade-in-50"
         >
           <ul className="space-y-0.5">
             {NAVIGATION_ITEMS.map((item) => (
@@ -112,9 +92,9 @@ const MobileNav = (props: MobileNavProps) => {
               </li>
             ))}
           </ul>
-        </PopoverContent>
-      </nav>
-    </Popover>
+        </nav>
+      )}
+    </div>
   );
 };
 

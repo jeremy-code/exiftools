@@ -1,10 +1,16 @@
-import { Slot } from "radix-ui";
-import { type PrimitivePropsWithRef } from "radix-ui/internal";
+import {
+  Button as AriaButton,
+  type ButtonProps as AriaButtonProps,
+} from "react-aria-components/Button";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { tv, type VariantProps } from "tailwind-variants";
 
+import { focusRing } from "../utils/focusRing";
+
 const buttonVariants = tv({
+  extend: focusRing,
   base: [
-    "relative inline-flex cursor-pointer items-center justify-center rounded align-middle font-medium transition select-none",
+    "relative inline-flex items-center justify-center rounded align-middle font-medium transition select-none",
     "shrink-0", // If inside a flex container, don't let the button shrink
     "disabled:cursor-not-allowed disabled:opacity-50",
   ],
@@ -33,7 +39,7 @@ const buttonVariants = tv({
     {
       color: "default",
       variant: "muted",
-      className: "bg-muted hover:bg-border",
+      className: "bg-bg-muted hover:bg-border",
     },
     {
       color: "accent",
@@ -43,17 +49,22 @@ const buttonVariants = tv({
     {
       color: "default",
       variant: "surface",
-      className: "border-border bg-muted hover:bg-border",
+      className: "border-border bg-bg-muted hover:bg-border",
     },
     {
       color: "default",
       variant: "ghost",
-      className: "bg-transparent hover:bg-muted",
+      className: "bg-transparent hover:bg-bg-muted",
+    },
+    {
+      color: "accent",
+      variant: "ghost",
+      className: "bg-transparent hover:bg-accent hover:text-accent-fg",
     },
     {
       color: "default",
       variant: "outline",
-      className: "border-border bg-transparent hover:bg-muted",
+      className: "border-border bg-transparent hover:bg-bg-muted",
     },
   ],
   defaultVariants: {
@@ -63,24 +74,17 @@ const buttonVariants = tv({
   },
 });
 
-type ButtonProps = PrimitivePropsWithRef<"button"> &
-  VariantProps<typeof buttonVariants>;
+type ButtonProps = AriaButtonProps & VariantProps<typeof buttonVariants>;
 
-const Button = ({
-  asChild,
-  className,
-  color,
-  variant,
-  size,
-  ...props
-}: ButtonProps) => {
-  const Comp = asChild ? Slot.Root : "button";
+const Button = ({ className, variant, color, size, ...props }: ButtonProps) => {
   return (
-    <Comp
-      className={buttonVariants({ className, color, variant, size })}
+    <AriaButton
+      className={composeRenderProps(className, (className, renderProps) =>
+        buttonVariants({ variant, size, color, className, ...renderProps }),
+      )}
       {...props}
     />
   );
 };
 
-export { buttonVariants, Button, type ButtonProps };
+export { Button, type ButtonProps, buttonVariants };

@@ -1,118 +1,200 @@
-import type { ComponentPropsWithRef } from "react";
+import { createContext, use, type ComponentPropsWithRef } from "react";
 
 import { ChevronDown } from "lucide-react";
-import { Accordion as AccordionPrimitive, Slot } from "radix-ui";
+import {
+  DisclosureGroup,
+  Disclosure,
+  type DisclosureProps as AccordionItemProps,
+  type DisclosureGroupProps,
+  Heading,
+  Button,
+  type HeadingProps,
+  type ButtonProps,
+  type DisclosurePanelProps,
+  DisclosurePanel,
+} from "react-aria-components/DisclosureGroup";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { cn, tv, type VariantProps } from "tailwind-variants";
 
+import { focusRing } from "../utils/focusRing";
+
 const accordionVariants = tv({
-  base: ["group/accordion flex w-full flex-col"],
+  slots: {
+    base: "w-full [--accordion-radius:var(--radius-sm)]",
+    item: "[overflow-anchor:none]",
+    header: [
+      "flex w-full items-center justify-between gap-3 rounded-(--accordion-radius) py-(--accordion-padding-y) text-start font-medium",
+    ],
+    panel:
+      "h-(--disclosure-panel-height) overflow-hidden rounded-(--accordion-radius) motion-safe:transition-[height]",
+    panelBody:
+      "pt-(--accordion-padding-y) pb-[calc(var(--accordion-padding-y)*2)]",
+  },
   variants: {
     variant: {
-      outline: null,
-      enclosed: "overflow-hidden rounded-sm border bg-surface",
+      outline: {
+        item: "border-b border-b-border",
+      },
+      subtle: {
+        header: "px-(--accordion-padding-x)",
+        panel: "px-(--accordion-padding-x)",
+        item: "rounded-(--accordion-radius) expanded:bg-bg-subtle",
+      },
+      enclosed: {
+        base: "rounded-sm border border-border bg-surface",
+        item: "not-last:border-b not-last:border-b-border",
+        header: "px-(--accordion-padding-x)",
+        panel: "px-(--accordion-padding-x)",
+      },
+      plain: null,
     },
     size: {
-      sm: "[--accordion-padding-x:--spacing(3)] [--accordion-padding-y:--spacing(2)]",
-      md: "[--accordion-padding-x:--spacing(4)] [--accordion-padding-y:--spacing(2)]",
-      lg: "[--accordion-padding-x:--spacing(4.5)] [--accordion-padding-y:--spacing(3)]",
+      sm: {
+        base: "[--accordion-padding-x:--spacing(3)] [--accordion-padding-y:--spacing(2)]",
+        header: "text-sm",
+      },
+      md: {
+        base: "[--accordion-padding-x:--spacing(4)] [--accordion-padding-y:--spacing(2)]",
+        header: "text-md",
+      },
+      lg: {
+        base: "[--accordion-padding-x:--spacing(4.5)] [--accordion-padding-y:--spacing(3)]",
+        header: "text-lg",
+      },
     },
   },
-  defaultVariants: { variant: "outline", size: "md" },
+  defaultVariants: {
+    variant: "outline",
+    size: "md",
+  },
 });
 
-const Accordion = ({
-  variant,
-  size,
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof AccordionPrimitive.Root> &
-  VariantProps<typeof accordionVariants>) => {
+const AccordionContext = createContext<ReturnType<
+  typeof accordionVariants
+> | null>(null);
+
+const useAccordionContext = () => {
+  const accordionContext = use(AccordionContext);
+
+  if (accordionContext === null) {
+    throw new Error("useAccordionContext must be used within an Accordion");
+  }
+
+  return accordionContext;
+};
+
+type AccordionProps = DisclosureGroupProps &
+  VariantProps<typeof accordionVariants>;
+
+const Accordion = ({ variant, size, className, ...props }: AccordionProps) => {
+  const computedAccordionVariants = accordionVariants({
+    variant,
+    size,
+  });
+
   return (
-    <AccordionPrimitive.Root
-      data-variant={variant}
-      className={accordionVariants({ variant, size, className })}
-      {...props}
-    />
+    <AccordionContext value={computedAccordionVariants}>
+      <DisclosureGroup
+        data-variant={variant}
+        className={composeRenderProps(className, (className, renderProps) =>
+          computedAccordionVariants.base({ ...renderProps, className }),
+        )}
+        {...props}
+      />
+    </AccordionContext>
   );
 };
 
-const AccordionItem = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof AccordionPrimitive.Item>) => {
+const AccordionItem = ({ className, ...props }: AccordionItemProps) => {
+  const { item } = useAccordionContext();
+
   return (
-    <AccordionPrimitive.Item
-      className={cn(
-        "[overflow-anchor:none] group-data-[variant=enclosed]/accordion:not-last:border-b",
-        className,
+    <Disclosure
+      className={composeRenderProps(className, (className, renderProps) =>
+        item({ className, ...renderProps }),
       )}
       {...props}
     />
   );
 };
 
-type AccordionTriggerProps = {
-  headerProps?: ComponentPropsWithRef<typeof AccordionPrimitive.Header>;
-} & ComponentPropsWithRef<typeof AccordionPrimitive.Trigger>;
+type AccordionHeaderProps = {
+  buttonProps?: ButtonProps;
+} & HeadingProps;
 
-const AccordionTrigger = ({
+const AccordionHeader = ({
   className,
-  headerProps,
+  buttonProps,
   children,
   ...props
-}: AccordionTriggerProps) => {
+}: AccordionHeaderProps) => {
+  const { header } = useAccordionContext();
+
   return (
-    <AccordionPrimitive.Header {...headerProps}>
-      <AccordionPrimitive.Trigger
-        className={cn(
-          "group/accordion-trigger text-md/6 flex w-full items-center justify-between gap-3 rounded-sm px-(--accordion-padding-x) py-(--accordion-padding-y) text-start font-medium transition-opacity",
-          "disabled:pointer-events-none disabled:opacity-50",
-          className,
+    <Heading {...props}>
+      <Button
+        slot="trigger"
+        className={composeRenderProps(
+          buttonProps?.className,
+          (className, renderProps) =>
+            cn(
+              header({ className, ...renderProps }),
+              focusRing({ ...renderProps }),
+            ) ?? "",
         )}
-        {...props}
+        {...buttonProps}
       >
-        {children}
-        <ChevronDown
-          aria-hidden={true}
-          className="size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]/accordion-trigger:rotate-180"
-        />
-      </AccordionPrimitive.Trigger>
-    </AccordionPrimitive.Header>
+        {composeRenderProps(children, (children) => (
+          <>
+            {children}
+            <ChevronDown
+              aria-hidden={true}
+              className="size-4 shrink-0 text-fg-muted transition-transform group-expanded/accordion-item:rotate-180"
+            />
+          </>
+        ))}
+      </Button>
+    </Heading>
   );
 };
 
-type AccordionContentProps = {
+type AccordionPanelProps = {
   bodyProps?: ComponentPropsWithRef<"div">;
-} & ComponentPropsWithRef<typeof AccordionPrimitive.Content>;
+} & DisclosurePanelProps;
 
-const AccordionContent = ({
-  asChild,
+const AccordionPanel = ({
   className,
   bodyProps,
   children,
   ...props
-}: AccordionContentProps) => {
-  const Comp = asChild ? Slot.Root : "div";
+}: AccordionPanelProps) => {
+  const { panel, panelBody } = useAccordionContext();
 
   return (
-    <AccordionPrimitive.Content
-      className={cn(
-        "overflow-hidden rounded-sm px-(--accordion-padding-x) data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
-        className,
+    <DisclosurePanel
+      className={composeRenderProps(className, (className, renderProps) =>
+        panel({ className, ...renderProps }),
       )}
       {...props}
     >
-      <Comp
+      <div
         {...bodyProps}
-        className={cn(
-          "pt-(--accordion-padding-y) pb-[calc(var(--accordion-padding-y)*2)] text-sm",
-          bodyProps?.className,
-        )}
+        className={panelBody({ className: bodyProps?.className })}
       >
         {children}
-      </Comp>
-    </AccordionPrimitive.Content>
+      </div>
+    </DisclosurePanel>
   );
 };
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export {
+  Accordion,
+  type AccordionProps,
+  accordionVariants,
+  AccordionItem,
+  type AccordionItemProps,
+  AccordionHeader,
+  type AccordionHeaderProps,
+  AccordionPanel,
+  type AccordionPanelProps,
+};

@@ -1,4 +1,4 @@
-import { getLocalTimeZone } from "@internationalized/date";
+import { CalendarDateTime } from "@internationalized/date";
 import { format } from "date-fns/format";
 import { parse } from "date-fns/parse";
 import { parseISO } from "date-fns/parseISO";
@@ -23,17 +23,23 @@ const resolveDateTime: QuickEditorResolver = (
     exifEntryObject.components === EXIF_TIMESTAMP_FORMAT.length + 1 &&
     exifEntryObject.size === EXIF_TIMESTAMP_FORMAT.length + 1
   ) {
+    const parsedValue = parse(
+      exifEntryObject.formattedValue ?? "",
+      EXIF_TIMESTAMP_FORMAT,
+      new Date(),
+    );
+
     return {
       kind: "datetime",
       exifEntryObject,
-      value: parse(
-        exifEntryObject.formattedValue ?? "",
-        EXIF_TIMESTAMP_FORMAT,
-        new Date(),
-      )
-        .toTemporalInstant()
-        .toZonedDateTimeISO(getLocalTimeZone())
-        .toPlainDateTime(),
+      value: new CalendarDateTime(
+        parsedValue.getFullYear(),
+        parsedValue.getMonth() + 1,
+        parsedValue.getDate(),
+        parsedValue.getHours(),
+        parsedValue.getMinutes(),
+        parsedValue.getSeconds(),
+      ),
       onValueChange: (value) =>
         onValueChange(
           format(parseISO(value.toString()), EXIF_TIMESTAMP_FORMAT),

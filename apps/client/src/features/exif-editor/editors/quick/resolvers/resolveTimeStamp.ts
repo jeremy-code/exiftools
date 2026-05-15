@@ -1,3 +1,4 @@
+import { Time } from "@internationalized/date";
 import { millisecondsInSecond } from "date-fns/constants";
 import { Decimal } from "decimal.js";
 import { exifFormatGetSize, mapRationalFromObject } from "libexif-wasm";
@@ -27,12 +28,7 @@ const parseTimeStampValue = (value: number[]) => {
     .mul(millisecondsInSecond)
     .toNumber();
 
-  return Temporal.PlainTime.from({
-    hour,
-    minute,
-    second: Math.floor(second),
-    millisecond,
-  });
+  return new Time(hour, minute, Math.floor(second), millisecond);
 };
 const resolveTimeStamp: QuickEditorResolver = (
   exifEntryObject,

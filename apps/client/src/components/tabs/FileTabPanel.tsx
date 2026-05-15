@@ -5,28 +5,28 @@ import { FileUrlInput } from "#components/file/FileUrlInput";
 import { DropzoneStoreProvider } from "#hooks/useDropzoneStore";
 import { FileStoreProvider } from "#hooks/useFileStore";
 import { Heading } from "@exifi/ui/components/Heading";
-import { TabsContent } from "@exifi/ui/components/Tabs";
+import { TabPanel } from "@exifi/ui/components/Tabs";
 
-type FileTabsContentProps = {
+type FileTabPanelProps = {
   file: File | null;
   id: string;
   updateFile: (file: File) => void;
   children: ReactNode;
-} & Omit<ComponentPropsWithRef<typeof TabsContent>, "value">;
+} & Omit<ComponentPropsWithRef<typeof TabPanel>, "id">;
 
-const FileTabsContent = ({
+const FileTabPanel = ({
   children,
   id,
   file,
   updateFile,
   ...props
-}: FileTabsContentProps) => {
+}: FileTabPanelProps) => {
   return (
-    <TabsContent {...props} value={id}>
+    <TabPanel {...props} id={id}>
       <DropzoneStoreProvider>
         {file === null ?
           <div className="flex flex-col gap-2">
-            <Heading as="h1" size="2xl" className="mb-4">
+            <Heading level={1} size="2xl" className="mb-4">
               Upload file to view Exif metadata
             </Heading>
 
@@ -42,7 +42,7 @@ const FileTabsContent = ({
               rootProps={{ className: "min-h-25" }}
             />
 
-            <div className="flex items-center gap-4 text-muted-foreground before:h-px before:grow before:bg-muted after:h-px after:grow after:bg-muted">
+            <div className="flex items-center gap-4 text-fg-muted before:h-px before:grow before:bg-bg-muted after:h-px after:grow after:bg-bg-muted">
               OR
             </div>
             <FileUrlInput
@@ -61,8 +61,8 @@ const FileTabsContent = ({
           </FileStoreProvider>
         }
       </DropzoneStoreProvider>
-    </TabsContent>
+    </TabPanel>
   );
 };
 
-export { FileTabsContent, type FileTabsContentProps };
+export { FileTabPanel, type FileTabPanelProps };

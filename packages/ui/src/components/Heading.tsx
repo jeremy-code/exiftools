@@ -1,14 +1,11 @@
-import type { HTMLElementType } from "react";
-
-import { Slot } from "radix-ui";
-import type { PrimitivePropsWithRef } from "radix-ui/internal";
-import { twMerge } from "tailwind-merge";
+import {
+  Heading as AriaHeading,
+  type HeadingProps as AriaHeadingProps,
+} from "react-aria-components/Heading";
 import { tv, type VariantProps } from "tailwind-variants";
 
-type HTMLHeadingElementType = Extract<HTMLElementType, `h${number}`>;
-
 const headingVariants = tv({
-  base: "text-foreground",
+  base: "text-fg",
   variants: {
     fontWeight: {
       thin: "font-thin",
@@ -41,27 +38,12 @@ const headingVariants = tv({
   defaultVariants: { size: "md", fontWeight: "semibold" },
 });
 
-type HeadingProps = {
-  as?: HTMLHeadingElementType;
-} & PrimitivePropsWithRef<HTMLHeadingElementType> &
-  VariantProps<typeof headingVariants>;
+type HeadingProps = AriaHeadingProps & VariantProps<typeof headingVariants>;
 
-const Heading = ({
-  as,
-  asChild,
-  className,
-  size,
-  fontWeight,
-  ...props
-}: HeadingProps) => {
-  const Comp = asChild ? Slot.Root : (as ?? "h1");
-
+const Heading = ({ className, size, fontWeight, ...props }: HeadingProps) => {
   return (
-    <Comp
-      className={twMerge(headingVariants({ className, size, fontWeight }))}
-      {...(asChild ?
-        { role: "heading", "aria-level": as === undefined ? 1 : Number(as[1]) }
-      : {})}
+    <AriaHeading
+      className={headingVariants({ className, size, fontWeight })}
       {...props}
     />
   );

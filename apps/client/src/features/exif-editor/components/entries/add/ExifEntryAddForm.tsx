@@ -13,25 +13,10 @@ import { IFD_NAMES } from "libexif-wasm/constants";
 import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { Button } from "@exifi/ui/components/Button";
-import {
-  Combobox,
-  ComboboxItem,
-  ComboboxPopup,
-  ComboboxInput,
-  ComboboxEmpty,
-  ComboboxPortal,
-  ComboboxList,
-} from "@exifi/ui/components/Combobox";
-import { Input } from "@exifi/ui/components/Input";
-import { Label } from "@exifi/ui/components/Label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@exifi/ui/components/Select";
+import { ComboBox, ComboBoxItem } from "@exifi/ui/components/ComboBox";
+import { Select, SelectItem } from "@exifi/ui/components/Select";
 import { Spinner } from "@exifi/ui/components/Spinner";
+import { TextField } from "@exifi/ui/components/TextField";
 
 type FieldValues = {
   ifd: Ifd;
@@ -81,122 +66,102 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               value === null ? "Tag must be defined" : undefined,
           }}
           children={(field) => (
-            <Combobox
+            <ComboBox
               items={EXIF_TAG_TABLE}
-              itemToStringLabel={(item) => {
-                return item.name;
+              value={field.state.value?.tag}
+              onChange={(value) => {
+                const tagEntry = EXIF_TAG_TABLE.find(
+                  (item) => item.tag === value,
+                );
+
+                if (tagEntry !== undefined) {
+                  field.handleChange(tagEntry);
+                }
               }}
-              value={field.state.value}
-              onValueChange={(value) => {
-                field.handleChange(value);
-              }}
+              label="Tag"
+              placeholder="ImageDescription"
             >
-              <Label>Tag</Label>
-              <ComboboxInput
-                inputProps={{
-                  onBlur: field.handleBlur,
-                  placeholder: "ImageDescription",
-                }}
-              />
-              <ComboboxPortal>
-                <ComboboxPopup>
-                  <ComboboxEmpty />
-                  <ComboboxList>
-                    {(item: TagEntry) => (
-                      <ComboboxItem key={item.tag} value={item}>
-                        {item.name}
-                      </ComboboxItem>
-                    )}
-                  </ComboboxList>
-                </ComboboxPopup>
-              </ComboboxPortal>
-            </Combobox>
+              {(item: TagEntry) => (
+                <ComboBoxItem key={item.tag} id={item.tag} value={item}>
+                  {item.name}
+                </ComboBoxItem>
+              )}
+            </ComboBox>
           )}
         />
         <form.Field
           name="ifd"
           children={(field) => (
-            <>
-              <Label>Image File Domain</Label>
-              <Select
-                value={field.state.value}
-                onValueChange={(value) => {
-                  field.handleChange(value as FieldValues["ifd"]);
-                }}
-              >
-                <SelectTrigger onBlur={field.handleBlur}>
-                  <SelectValue placeholder="Select an IFD" />
-                </SelectTrigger>
-                <SelectContent>
-                  {IFD_NAMES.map((ifdName) => (
-                    <SelectItem key={ifdName} value={ifdName}>
-                      {ifdName}{" "}
-                      <form.Subscribe
-                        selector={(state) => state.values.tagEntry?.esl}
-                      >
-                        {(esl) => (esl === undefined ? null : esl[ifdName])}
-                      </form.Subscribe>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </>
+            <Select
+              label="Image File Domain"
+              value={field.state.value}
+              onChange={(value) => {
+                if (
+                  typeof value === "string" &&
+                  IFD_NAMES.includes(value as Ifd)
+                ) {
+                  field.handleChange(value as Ifd);
+                }
+              }}
+              placeholder="Select an IFD"
+            >
+              {IFD_NAMES.map((ifdName) => (
+                <SelectItem key={ifdName} textValue={ifdName}>
+                  {ifdName}{" "}
+                  <form.Subscribe
+                    selector={(state) => state.values.tagEntry?.esl}
+                  >
+                    {(esl) => (esl === undefined ? null : esl[ifdName])}
+                  </form.Subscribe>
+                </SelectItem>
+              ))}
+            </Select>
           )}
         />
         <form.Field
           name="format"
           children={(field) => (
-            <>
-              <Label>Format</Label>
-              <Select
-                value={field.state.value}
-                onValueChange={(value) => {
-                  field.handleChange(value as FieldValues["format"]);
-                }}
-              >
-                <SelectTrigger onBlur={field.handleBlur}>
-                  <SelectValue placeholder="Select a format" />
-                </SelectTrigger>
-                <SelectContent>
-                  <form.Subscribe
-                    selector={(state) => state.values.tagEntry?.tag}
-                  >
-                    {(tag) =>
-                      typeof tag === "string" && tag in EXIF_TAG_MAP ?
-                        EXIF_TAG_MAP[tag]?.format.map((format) => (
-                          <SelectItem key={format} value={format}>
-                            {format}
-                          </SelectItem>
-                        ))
-                      : Array.from(ExifFormat).map(([format]) => (
-                          <SelectItem key={format} value={format}>
-                            {format}
-                          </SelectItem>
-                        ))
-                    }
-                  </form.Subscribe>
-                </SelectContent>
-              </Select>
-            </>
+            <Select
+              label="Format"
+              value={field.state.value}
+              placeholder="Select a format"
+              onChange={(value) => {
+                field.handleChange(value as FieldValues["format"]);
+              }}
+            >
+              <form.Subscribe selector={(state) => state.values.tagEntry?.tag}>
+                {(tag) =>
+                  typeof tag === "string" && tag in EXIF_TAG_MAP ?
+                    EXIF_TAG_MAP[tag]?.format.map((format) => (
+                      <SelectItem key={format} textValue={format}>
+                        {format}
+                      </SelectItem>
+                    ))
+                  : Array.from(ExifFormat).map(([format]) => (
+                      <SelectItem key={format} textValue={format}>
+                        {format}
+                      </SelectItem>
+                    ))
+                }
+              </form.Subscribe>
+            </Select>
           )}
         />
         <form.Field
           name="value"
           children={(field) => (
-            <>
-              <Label>Value</Label>
-              <Input
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            </>
+            <TextField
+              label="Value"
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(value) => field.handleChange(value)}
+            />
           )}
         />
         <form.Subscribe
           selector={(state) => state.isSubmitting}
           children={(isSubmitting) => (
-            <Button type="submit" variant="surface" disabled={isSubmitting}>
+            <Button type="submit" variant="surface" isDisabled={isSubmitting}>
               {isSubmitting && <Spinner className="absolute" />}
               <span
                 className="data-[pending=true]:invisible"

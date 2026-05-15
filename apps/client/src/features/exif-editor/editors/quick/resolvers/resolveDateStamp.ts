@@ -1,3 +1,4 @@
+import { CalendarDate } from "@internationalized/date";
 import { format } from "date-fns/format";
 import { parse } from "date-fns/parse";
 import { parseISO } from "date-fns/parseISO";
@@ -24,11 +25,11 @@ const resolveDateStamp: QuickEditorResolver = (
     return {
       kind: "dateStamp",
       exifEntryObject,
-      value: Temporal.PlainDate.from({
-        year: parsedValue.getFullYear(),
-        month: parsedValue.getMonth() + 1,
-        day: parsedValue.getDate(),
-      }),
+      value: new CalendarDate(
+        parsedValue.getFullYear(),
+        parsedValue.getMonth() + 1,
+        parsedValue.getDate(),
+      ),
       onValueChange: (value) =>
         onValueChange(
           format(parseISO(value.toString()), EXIF_DATESTAMP_FORMAT),

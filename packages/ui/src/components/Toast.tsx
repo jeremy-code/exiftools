@@ -1,119 +1,158 @@
-import type { ComponentPropsWithRef } from "react";
+import { flushSync } from "react-dom";
 
 import { X } from "lucide-react";
-import { AccessibleIcon, Toast as ToastPrimitives } from "radix-ui";
-import { twMerge } from "tailwind-merge";
-import { cn, tv, type VariantProps } from "tailwind-variants";
+import {
+  UNSTABLE_ToastRegion as AriaToastRegion,
+  type ToastRegionProps as AriaToastRegionProps,
+  UNSTABLE_Toast as AriaToast,
+  UNSTABLE_ToastQueue as ToastQueue,
+  UNSTABLE_ToastContent as ToastContent,
+  type ToastProps as AriaToastProps,
+  Button,
+  type ButtonProps,
+  Text,
+} from "react-aria-components/Toast";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
+import { tv, type VariantProps } from "tailwind-variants";
 
-import { Button, type ButtonProps } from "./Button";
+import { focusRing } from "../utils/focusRing";
 
-const { Provider: ToastProvider } = ToastPrimitives;
+type ToastInfo = {
+  title: string;
+  description?: string;
+  toastProps?: Omit<ToastProps, "toast">;
+};
 
-const ToastViewport = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof ToastPrimitives.Viewport>) => (
-  <ToastPrimitives.Viewport
-    className={cn(
-      "fixed right-0 bottom-0 z-[calc(infinity)] flex w-full max-w-dvw flex-col gap-2 p-6 sm:w-100",
-      className,
-    )}
-    {...props}
-  />
-);
-
-const toastVariants = tv({
-  base: [
-    "flex items-center justify-between gap-4 rounded-md p-4 shadow-2xl transition-[translate,opacity] transition-discrete starting:data-[state=open]:opacity-0",
-    "data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=move]:translate-y-(--radix-toast-swipe-move-y)",
-    "data-[swipe=end]:translate-x-(--radix-toast-swipe-end-x) data-[swipe=end]:translate-y-(--radix-toast-swipe-end-y)",
-  ],
-  variants: {
-    variant: {
-      default: "border bg-background text-foreground",
-      destructive: "bg-destructive text-destructive-foreground",
-    },
+const toastQueue = new ToastQueue<ToastInfo>({
+  wrapUpdate(fn) {
+    if ("startViewTransition" in document) {
+      document.startViewTransition(() => {
+        // eslint-disable-next-line @eslint-react/dom/no-flush-sync -- Per https://developer.chrome.com/docs/web-platform/view-transitions/same-document#working_with_frameworks and Dan Abramov, this is correct for view transitions
+        flushSync(fn);
+      });
+    } else {
+      fn();
+    }
   },
-  defaultVariants: { variant: "default" },
 });
 
-type ToastProps = ComponentPropsWithRef<typeof ToastPrimitives.Root> &
-  VariantProps<typeof toastVariants>;
+const toastRegionVariants = tv({
+  extend: focusRing,
+  base: [
+    "fixed inset-x-4 bottom-4 flex flex-col-reverse gap-2 rounded-lg sm:justify-self-end",
+  ],
+});
 
-const Toast = ({ className, variant, ...props }: ToastProps) => {
+type ToastRegionProps = Omit<
+  AriaToastRegionProps<ToastInfo>,
+  "queue" | "children"
+>;
+
+const ToastRegion = ({ className, ...props }: ToastRegionProps) => {
   return (
-    <ToastPrimitives.Root
-      className={twMerge(toastVariants({ className, variant }))}
-      data-variant={variant}
+    <AriaToastRegion
+      queue={toastQueue}
+      className={composeRenderProps(className, (className, renderProps) =>
+        toastRegionVariants({ ...renderProps, className }),
+      )}
       {...props}
+    >
+      {({ toast }) => <Toast toast={toast} {...toast.content.toastProps} />}
+    </AriaToastRegion>
+  );
+};
+
+const closeToastButtonVariants = tv({
+  base: [
+    "flex size-8 flex-none appearance-none items-center justify-center rounded-sm bg-transparent outline-none [-webkit-tap-highlight-color:transparent]",
+  ],
+  variants: {
+    isHovered: {
+      true: "bg-white/15",
+    },
+    isPressed: {
+      true: "bg-white/20",
+    },
+    isFocusVisible: {
+      true: "outline-2 outline-offset-2 outline-current outline-solid forced-colors:outline-[Highlight]",
+    },
+  },
+});
+
+const CloseToastButton = ({ className, ...props }: ButtonProps) => {
+  return (
+    <Button
+      slot="close"
+      aria-label="Close"
+      className={composeRenderProps(className, (className, renderProps) =>
+        closeToastButtonVariants({ className, ...renderProps }),
+      )}
+      {...props}
+    >
+      <X aria-disabled className="size-4" />
+    </Button>
+  );
+};
+
+const toastRootVariants = tv({
+  extend: focusRing,
+  base: [
+    "flex items-center gap-4 rounded-lg px-4 py-3 sm:w-100",
+    "[view-transition-class:toast]",
+    "forced-colors:outline",
+  ],
+  variants: {
+    color: {
+      default: "bg-bg-muted text-fg",
+      accent: "bg-accent text-accent-fg",
+      destructive: "bg-destructive text-destructive-fg",
+    },
+  },
+  defaultVariants: {
+    color: "default",
+  },
+});
+
+type ToastProps = AriaToastProps<ToastInfo> &
+  VariantProps<typeof toastRootVariants>;
+
+const Toast = ({ toast, ...props }: ToastProps) => {
+  return (
+    <ToastRoot toast={toast} {...props}>
+      <ToastContent className="flex min-w-0 flex-1 flex-col">
+        <Text slot="title" className="text-sm font-semibold">
+          {toast.content.title}
+        </Text>
+        {toast.content.description && (
+          <Text slot="description" className="text-xs">
+            {toast.content.description}
+          </Text>
+        )}
+      </ToastContent>
+      <CloseToastButton />
+    </ToastRoot>
+  );
+};
+
+const ToastRoot = ({ className, color, ...props }: ToastProps) => {
+  return (
+    <AriaToast
+      {...props}
+      style={{ viewTransitionName: props.toast.key, ...props.style }}
+      className={composeRenderProps(className, (className, renderProps) =>
+        toastRootVariants({ className, color, ...renderProps }),
+      )}
     />
   );
 };
 
-const ToastTitle = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof ToastPrimitives.Title>) => (
-  <ToastPrimitives.Title
-    className={cn("text-sm font-medium", className)}
-    {...props}
-  />
-);
-
-const ToastDescription = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof ToastPrimitives.Description>) => (
-  <ToastPrimitives.Description
-    className={cn(
-      "text-sm text-muted-foreground",
-      "in-data-[variant=destructive]:text-destructive-foreground",
-      className,
-    )}
-    {...props}
-  />
-);
-
-const ToastAction = ({
-  children,
-  buttonProps,
-  ...props
-}: ComponentPropsWithRef<typeof ToastPrimitives.Action> & {
-  buttonProps: ButtonProps;
-}) => (
-  <ToastPrimitives.Action {...props}>
-    <Button {...buttonProps}>{children}</Button>
-  </ToastPrimitives.Action>
-);
-
-const ToastClose = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof ToastPrimitives.Close>) => (
-  <ToastPrimitives.Close asChild {...props}>
-    <Button
-      color="default"
-      variant="surface"
-      size="icon"
-      className={cn(
-        "in-data-[variant=destructive]:border-0 in-data-[variant=destructive]:bg-destructive in-data-[variant=destructive]:text-destructive-foreground in-data-[variant=destructive]:hover:bg-destructive-hover",
-        className,
-      )}
-    >
-      <AccessibleIcon.Root label="Close">
-        <X className="size-4" />
-      </AccessibleIcon.Root>
-    </Button>
-  </ToastPrimitives.Close>
-);
-
 export {
-  ToastProvider,
-  ToastViewport,
+  type ToastInfo,
+  toastQueue,
+  ToastRegion,
+  type ToastRegionProps,
+  toastRegionVariants,
   Toast,
   type ToastProps,
-  ToastTitle,
-  ToastDescription,
-  ToastAction,
-  ToastClose,
+  ToastRoot,
 };

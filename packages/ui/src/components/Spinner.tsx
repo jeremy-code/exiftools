@@ -4,7 +4,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 
 const spinnerVariants = tv({
   base: [
-    "inline-block animate-spin rounded-full border-2 border-foreground border-x-transparent border-b-transparent",
+    "inline-block animate-spin rounded-full border-2 border-fg border-x-transparent border-b-transparent",
   ],
   variants: {
     size: {

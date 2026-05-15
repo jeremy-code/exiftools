@@ -3,9 +3,9 @@ import type { ExifData } from "libexif-wasm";
 import { formatPlural } from "#utils/formatPlural";
 import {
   Accordion,
-  AccordionContent,
+  AccordionPanel,
   AccordionItem,
-  AccordionTrigger,
+  AccordionHeader,
 } from "@exifi/ui/components/Accordion";
 import { Badge } from "@exifi/ui/components/Badge";
 import {
@@ -16,7 +16,7 @@ import {
 } from "@exifi/ui/components/DataList";
 import {
   TooltipTrigger,
-  TooltipContent,
+  TooltipTarget,
   Tooltip,
 } from "@exifi/ui/components/Tooltip";
 
@@ -29,14 +29,14 @@ const MakerNoteAccordion = ({ exifData }: { exifData: ExifData }) => {
 
   return (
     <Accordion
-      defaultValue={["MAKERNOTE"]}
+      expandedKeys={["MAKERNOTE"]}
       variant="enclosed"
-      type="multiple"
+      allowsMultipleExpanded
       size="lg"
       className="shadow-sm"
     >
-      <AccordionItem value="MAKERNOTE">
-        <AccordionTrigger>
+      <AccordionItem id="MAKERNOTE">
+        <AccordionHeader>
           <div className="flex gap-2">
             Makernote
             <Badge>
@@ -46,8 +46,8 @@ const MakerNoteAccordion = ({ exifData }: { exifData: ExifData }) => {
               })}
             </Badge>
           </div>
-        </AccordionTrigger>
-        <AccordionContent>
+        </AccordionHeader>
+        <AccordionPanel>
           <DataList variant="bold">
             {mnoteData.data.map((mnoteDatum, index) => (
               <DataListItem
@@ -59,24 +59,24 @@ const MakerNoteAccordion = ({ exifData }: { exifData: ExifData }) => {
                     mnoteDatum.description !== null &&
                     mnoteDatum.description !== ""
                   ) ?
-                    <Tooltip>
-                      <TooltipTrigger className="select-auto">
-                        {mnoteDatum.title}
-                      </TooltipTrigger>
-                      <TooltipContent>{mnoteDatum.description}</TooltipContent>
-                    </Tooltip>
+                    <TooltipTrigger>
+                      <TooltipTarget>
+                        <span role="button">{mnoteDatum.title}</span>
+                      </TooltipTarget>
+                      <Tooltip>{mnoteDatum.description}</Tooltip>
+                    </TooltipTrigger>
                   : (mnoteDatum.title ??
                     mnoteDatum.name ??
                     `ID ${mnoteDatum.id} (${index})`)
                   }
                 </DataListItemLabel>
-                <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-muted-foreground before:content-['=']">
+                <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-fg-muted before:content-['=']">
                   {mnoteDatum.value}
                 </DataListItemValue>
               </DataListItem>
             ))}
           </DataList>
-        </AccordionContent>
+        </AccordionPanel>
       </AccordionItem>
     </Accordion>
   );

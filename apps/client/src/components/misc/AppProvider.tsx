@@ -6,8 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 
 import { useDisposeQueryCache } from "#hooks/useDisposeQueryCache";
-import { Toaster } from "@exifi/ui/components/Toaster";
-import { TooltipProvider } from "@exifi/ui/components/Tooltip";
+import { ToastRegion } from "@exifi/ui/components/Toast";
 
 const Devtools =
   import.meta.env.DEV ?
@@ -31,12 +30,9 @@ const AppProvider = ({ children }: { children: Readonly<ReactNode> }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        {/* Defaults to 700 */}
-        <TooltipProvider delayDuration={0}>
-          {children}
-          <Devtools />
-          <Toaster />
-        </TooltipProvider>
+        {children}
+        <Devtools />
+        <ToastRegion />
       </ThemeProvider>
     </QueryClientProvider>
   );

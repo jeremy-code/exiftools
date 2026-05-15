@@ -2,9 +2,8 @@ import type { ReactNode } from "react";
 
 import { createFileRoute, Link as RouterLink } from "@tanstack/react-router";
 import { ClipboardCheck, Lock, Wrench } from "lucide-react";
-import { Slot } from "radix-ui";
 
-import { Button } from "@exifi/ui/components/Button";
+import { buttonVariants } from "@exifi/ui/components/Button";
 import { Card } from "@exifi/ui/components/Card";
 import { Heading } from "@exifi/ui/components/Heading";
 import { Link } from "@exifi/ui/components/Link";
@@ -20,24 +19,24 @@ const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
     <Card className="p-6">
       <dt className="text-lg font-semibold">
         <div className="mb-4 grid size-10 place-content-center rounded-md bg-accent text-white">
-          <Slot.Root className="size-4">{icon}</Slot.Root>
+          {icon}
         </div>
         {title}
       </dt>
-      <dd className="mt-4 text-muted-foreground">{description}</dd>
+      <dd className="mt-4 text-fg-muted">{description}</dd>
     </Card>
   );
 };
 
 const FEATURES = [
   {
-    icon: <Lock />,
+    icon: <Lock className="size-4" />,
     title: "Private",
     description:
       "Images never leave your browser and are never uploaded to someone's server",
   },
   {
-    icon: <ClipboardCheck />,
+    icon: <ClipboardCheck className="size-4" />,
     title: "Standardized",
     description: (
       <>
@@ -58,7 +57,7 @@ const FEATURES = [
     ),
   },
   {
-    icon: <Wrench />,
+    icon: <Wrench className="size-4" />,
     title: "Convenient",
     description: "Read and write Exif data directly in the browser.",
   },
@@ -68,21 +67,39 @@ const HomeComponent = () => {
   return (
     <div className="container py-8">
       <div className="grid max-h-dvh min-h-80 place-content-center gap-8">
-        <Heading as="h1" size="4xl">
+        <Heading level={1} size="4xl">
           View and edit Exif data locally
         </Heading>
         <div className="flex items-center justify-start gap-2 md:justify-center">
-          <Button color="accent" asChild>
-            <RouterLink to="/viewer">View</RouterLink>
-          </Button>
-          <Button variant="ghost" asChild>
-            <RouterLink to="/editor">Edit</RouterLink>
-          </Button>
+          <Link
+            render={(props, renderProps) => (
+              // @ts-expect-error -- TODO: I believe React Aria's types are wrong since they omit elementType prop
+              <RouterLink
+                {...props}
+                to="/viewer"
+                className={buttonVariants({ color: "accent", ...renderProps })}
+              />
+            )}
+          >
+            View
+          </Link>
+          <Link
+            render={(props, renderProps) => (
+              // @ts-expect-error -- TODO: I believe React Aria's types are wrong since they omit elementType prop
+              <RouterLink
+                {...props}
+                to="/editor"
+                className={buttonVariants({ variant: "ghost", ...renderProps })}
+              />
+            )}
+          >
+            Edit
+          </Link>
         </div>
       </div>
       <div className="pt-16">
         <div className="text-center">
-          <Heading as="h2" size="3xl">
+          <Heading level={2} size="3xl">
             Features
           </Heading>
         </div>

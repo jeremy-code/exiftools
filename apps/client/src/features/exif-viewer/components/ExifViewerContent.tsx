@@ -19,7 +19,7 @@ const ExifViewerContent = ({ file }: { file: File }) => {
       {exifDataGps.count !== 0 && (
         <ErrorBoundary
           fallback={
-            <p className="text-muted-foreground">
+            <p className="text-fg-muted">
               The GPS IFD was found in the image EXIF metadata, but valid
               longitude and latitude coordinates were not found.
             </p>

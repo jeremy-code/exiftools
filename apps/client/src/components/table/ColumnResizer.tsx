@@ -1,26 +1,22 @@
-import type { CSSProperties } from "react";
+import type { ComponentPropsWithRef, CSSProperties } from "react";
 
 import { type RowData, type Header as HeaderType } from "@tanstack/react-table";
-import { Slot } from "radix-ui";
-import type { PrimitivePropsWithRef } from "radix-ui/internal";
 import { cn } from "tailwind-variants";
 
 type ColumnResizerProps<TData extends RowData, TValue> = {
   header: HeaderType<TData, TValue>;
-} & PrimitivePropsWithRef<"div">;
+} & ComponentPropsWithRef<"div">;
 
 const ColumnResizer = <TData extends RowData, TValue>({
   header,
-  asChild,
   className,
   children,
   ...props
 }: ColumnResizerProps<TData, TValue>) => {
   const { table } = header.getContext();
-  const Comp = asChild ? Slot.Root : "div";
 
   return (
-    <Comp
+    <div
       role="presentation"
       onDoubleClick={() => header.column.resetSize()}
       onMouseDown={header.getResizeHandler()}
@@ -62,8 +58,8 @@ const ColumnResizer = <TData extends RowData, TValue>({
         aria-valuetext={`${header.column.getSize()} pixels`}
         readOnly
       />
-      <Slot.Slottable>{children}</Slot.Slottable>
-    </Comp>
+      {children}
+    </div>
   );
 };
 

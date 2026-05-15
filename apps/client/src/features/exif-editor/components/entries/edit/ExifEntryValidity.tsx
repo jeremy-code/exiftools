@@ -24,10 +24,7 @@ const ExifEntryValidity = ({
 
   return (
     <span
-      className={cn(
-        { "text-muted-foreground italic": isEmptyString },
-        className,
-      )}
+      className={cn({ "text-fg-muted italic": isEmptyString }, className)}
       {...props}
     >
       {!isEmptyString ? expectedValue : "(empty)"}

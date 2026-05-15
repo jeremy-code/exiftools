@@ -3,12 +3,15 @@ import { type ComponentPropsWithRef } from "react";
 import { cn } from "tailwind-variants";
 
 import type { ExifVersion } from "#features/exif-editor/editors/quick/types";
-import { Input, type InputProps } from "@exifi/ui/components/Input";
+import {
+  NumberField,
+  type NumberFieldProps,
+} from "@exifi/ui/components/NumberField";
 
 type ExifVersionInputProps = {
   value?: ExifVersion;
   onValueChange?: (value: ExifVersion) => void;
-  inputProps?: Omit<InputProps, "value" | "onChange">;
+  inputProps?: Omit<NumberFieldProps, "value" | "onChange">;
 } & ComponentPropsWithRef<"div">;
 
 const ExifVersionInput = ({
@@ -20,38 +23,40 @@ const ExifVersionInput = ({
 }: ExifVersionInputProps) => {
   return (
     <div className={cn("flex items-baseline gap-2", className)} {...props}>
-      <Input
+      <NumberField
         {...inputProps}
-        type="number"
-        min={1}
-        max={2}
+        aria-label={
+          inputProps?.["aria-label"] !== undefined ?
+            inputProps["aria-label"] + " Major"
+          : "Major"
+        }
+        minValue={1}
+        maxValue={2}
         value={value?.major}
-        onChange={(event) => {
-          if (
-            value !== undefined &&
-            !Number.isNaN(event.target.valueAsNumber)
-          ) {
+        onChange={(target) => {
+          if (value !== undefined) {
             onValueChange?.({
-              major: event.target.valueAsNumber,
+              major: target,
               minor: value.minor,
             });
           }
         }}
       />
       .
-      <Input
+      <NumberField
         {...inputProps}
-        type="number"
-        min={0}
+        aria-label={
+          inputProps?.["aria-label"] !== undefined ?
+            inputProps["aria-label"] + " Minor"
+          : "Minor"
+        }
+        minValue={0}
         value={value?.minor}
-        onChange={(event) => {
-          if (
-            value !== undefined &&
-            !Number.isNaN(event.target.valueAsNumber)
-          ) {
+        onChange={(target) => {
+          if (value !== undefined) {
             onValueChange?.({
               major: value.major,
-              minor: event.target.valueAsNumber,
+              minor: target,
             });
           }
         }}

@@ -1,14 +1,30 @@
 import { createContext, use, type ComponentPropsWithRef } from "react";
 
-import { Tabs as TabsPrimitive } from "radix-ui";
+import {
+  Tab as AriaTab,
+  TabList as AriaTabList,
+  TabPanels as AriaTabPanels,
+  TabPanel as AriaTabPanel,
+  Tabs as AriaTabs,
+  SelectionIndicator as AriaSelectionIndicator,
+  type TabListProps,
+  type TabPanelProps,
+  type TabPanelsProps,
+  type TabProps,
+  type TabsProps,
+} from "react-aria-components/Tabs";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { cn, tv, type VariantProps } from "tailwind-variants";
 
+import { focusRing } from "../utils/focusRing";
+
 const tabsVariants = tv({
-  base: [
-    "group/tabs relative",
-    "data-[orientation=horizontal]:block data-[orientation=vertical]:flex",
-  ],
+  base: ["group/tabs relative flex"],
   variants: {
+    orientation: {
+      horizontal: "flex-col",
+      vertical: "flex-row",
+    },
     size: {
       sm: "[--tabs-content-padding:--spacing(3)] [--tabs-height:--spacing(9)]",
       md: "[--tabs-content-padding:--spacing(4)] [--tabs-height:--spacing(10)]",
@@ -20,42 +36,48 @@ const tabsVariants = tv({
   },
 });
 
-type TabsProps = ComponentPropsWithRef<typeof TabsPrimitive.Root> &
-  VariantProps<typeof tabsVariants>;
-
-const Tabs = ({ size = "md", className, ...props }: TabsProps) => {
+const Tabs = ({
+  size = "md",
+  ...props
+}: TabsProps & VariantProps<typeof tabsVariants>) => {
   return (
-    <TabsPrimitive.Root
-      data-size={size}
-      className={tabsVariants({ size, className })}
+    <AriaTabs
       {...props}
+      data-size={size}
+      className={composeRenderProps(props.className, (className, renderProps) =>
+        tabsVariants({ ...renderProps, size, className }),
+      )}
     />
   );
 };
 
-const tabsListVariants = tv({
+const tabListVariants = tv({
   slots: {
     base: [
       "relative isolate inline-flex min-h-(--tabs-height)",
-      "data-[orientation=horizontal]:flex-row",
-      "data-[orientation=vertical]:flex-col",
+      "orientation-horizontal:flex-row",
+      "orientation-vertical:flex-col",
     ],
-    trigger: [
-      "outline-0",
-      "relative flex h-(--tabs-height) min-w-(--tabs-height) cursor-[button] items-center gap-2 font-medium",
-      "focus-visible:z-1 focus-visible:outline-2 focus-visible:outline-[colorPalette.focusRing]",
-      "disabled:cursor-not-allowed disabled:opacity-50",
-      "[--tabs-trigger-radius:--spacing(1)]",
+    tab: [
+      "relative flex h-(--tabs-height) min-w-(--tabs-height) cursor-default items-center gap-2 font-medium outline-0 forced-color-adjust-none [-webkit-tap-highlight-color:transparent]",
+      "focus-visible:z-1",
+      "[--tabs-tab-radius:--spacing(1)]",
       "group-data-[size=sm]/tabs:px-3 group-data-[size=sm]/tabs:py-1 group-data-[size=sm]/tabs:text-sm/5",
       "group-data-[size=md]/tabs:px-4 group-data-[size=md]/tabs:py-2 group-data-[size=md]/tabs:text-sm/5",
       "group-data-[size=lg]/tabs:px-4.5 group-data-[size=lg]/tabs:py-2 group-data-[size=lg]/tabs:text-base/6",
+      focusRing.base,
+    ],
+    selectionIndicator: [
+      "absolute top-0 left-0 size-full",
+      "-z-1 group-disabled/tabs:bg-fg-subtle group-disabled/tabs:mix-blend-normal",
+      "motion-safe:transition-[translate,width,height]",
     ],
   },
   variants: {
     fitted: {
       true: {
         base: "flex",
-        trigger: "flex-1 justify-center text-center",
+        tab: "flex-1 justify-center text-center",
       },
     },
     justify: {
@@ -65,48 +87,63 @@ const tabsListVariants = tv({
     },
     variant: {
       line: {
-        base: "flex data-[orientation=horizontal]:border-b data-[orientation=vertical]:border-r",
-        trigger: [
-          "disabled:data-state=[active]:bg-[initial] text-muted-foreground data-[state=active]:text-foreground",
-          "data-[state=active]:after:absolute",
-          "data-[orientation=horizontal]:data-[state=active]:after:inset-x-0 data-[orientation=horizontal]:data-[state=active]:after:-bottom-px data-[orientation=horizontal]:data-[state=active]:after:h-0.5 data-[orientation=horizontal]:data-[state=active]:after:bg-foreground",
-          "data-[orientation=vertical]:data-[state=active]:after:inset-y-0 data-[orientation=vertical]:data-[state=active]:after:-right-px data-[orientation=vertical]:data-[state=active]:after:w-0.5 data-[orientation=vertical]:data-[state=active]:after:bg-foreground",
+        base: "flex border-border orientation-horizontal:border-b orientation-vertical:border-r",
+        tab: [
+          "text-fg-muted selected:text-fg disabled:selected:bg-[initial]",
+          "selected:after:absolute selected:after:bg-fg",
+          "group-orientation-horizontal/tabs:selected:after:inset-x-0 group-orientation-horizontal/tabs:selected:after:-bottom-px group-orientation-horizontal/tabs:selected:after:h-0.5",
+          "group-orientation-vertical/tabs:selected:after:inset-y-0 group-orientation-vertical/tabs:selected:after:-right-px group-orientation-vertical/tabs:selected:after:w-0.5",
         ],
       },
       subtle: {
         base: null,
-        trigger:
-          "rounded-(--tabs-trigger-radius) text-muted-foreground data-[state=active]:bg-subtle data-[state=active]:text-foreground",
+        tab: "rounded-(--tabs-tab-radius) text-fg-muted selected:text-fg",
+        selectionIndicator: "rounded-(--tabs-tab-radius) bg-bg-subtle",
       },
       muted: {
         base: null,
-        trigger:
-          "rounded-(--tabs-trigger-radius) text-muted-foreground data-[state=active]:bg-muted data-[state=active]:text-foreground",
+        tab: "rounded-(--tabs-tab-radius) text-fg-muted selected:text-fg",
+        selectionIndicator: "rounded-(--tabs-tab-radius) bg-bg-muted",
       },
       enclosed: {
-        base: "min-h-[calc(var(--tabs-height)---spacing(1))] rounded-md bg-muted p-1",
-        trigger: [
-          "justify-center rounded-(--tabs-trigger-radius) text-muted-foreground data-[state=active]:text-foreground data-[state=active]:shadow-xs",
-          "data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700",
+        base: "min-h-[calc(var(--tabs-height)-(--spacing(1)))] rounded-md bg-bg-muted p-1",
+        tab: [
+          "justify-center rounded-(--tabs-tab-radius) text-fg-muted selected:text-fg",
         ],
+        selectionIndicator:
+          "rounded-(--tabs-tab-radius) bg-white shadow-xs dark:bg-gray-700",
       },
       outline: {
         base: [
           "[--line-offset:calc(var(--line-thickness)*-1)] [--line-thickness:1px]",
           "flex border-border",
-          "data-[orientation=horizontal]:before:absolute data-[orientation=horizontal]:before:bottom-0 data-[orientation=horizontal]:before:w-full data-[orientation=horizontal]:before:[border-bottom-width:var(--line-thickness)] data-[orientation=horizontal]:before:border-b-border",
-          "data-[orientation=vertical]:before:absolute data-[orientation=vertical]:before:inset-x-(--line-offset) data-[orientation=vertical]:before:h-[calc(100%-calc(var(--line-thickness)*2))] data-[orientation=vertical]:before:[border-right-width:var(--line-thickness)] data-[orientation=vertical]:before:border-r-border",
+          "orientation-horizontal:before:absolute orientation-horizontal:before:bottom-0 orientation-horizontal:before:w-full orientation-horizontal:before:[border-bottom-width:var(--line-thickness)] orientation-horizontal:before:border-b-border",
+          "orientation-vertical:before:absolute orientation-vertical:before:inset-x-(--line-offset) orientation-vertical:before:h-[calc(100%-calc(var(--line-thickness)*2))] orientation-vertical:before:[border-right-width:var(--line-thickness)] orientation-vertical:before:border-r-border",
         ],
-        trigger: [
-          "border border-transparent text-muted-foreground data-[state=active]:bg-background data-[state=active]:text-foreground",
-          "data-[orientation=horizontal]:border-t-rounded-(--tabs-trigger-radius) data-[orientation=horizontal]:mb-(--line-offset) data-[orientation=horizontal]:not-last:mr-(--line-offset) data-[orientation=horizontal]:data-[state=active]:border-border data-[orientation=horizontal]:data-[state=active]:border-b-transparent",
-          "data-[orientation=vertical]:border-l-rounded-(--tabs-trigger-radius) data-[orientation=vertical]:mr-(--line-offset) data-[orientation=vertical]:not-last:mb-(--line-offset) data-[orientation=vertical]:data-[state=active]:border-border data-[orientation=vertical]:data-[state=active]:border-r-transparent",
+        tab: [
+          "border border-transparent text-fg-muted selected:bg-bg selected:text-fg",
+          "group-orientation-horizontal/tabs:border-t-rounded-(--tabs-tab-radius) group-orientation-horizontal/tabs:mb-(--line-offset) group-orientation-horizontal/tabs:not-last:mr-(--line-offset) group-orientation-horizontal/tabs:selected:border-border group-orientation-horizontal/tabs:selected:border-b-transparent",
+          "group-orientation-vertical/tabs:border-l-rounded-(--tabs-tab-radius) group-orientation-vertical/tabs:mr-(--line-offset) group-orientation-vertical/tabs:not-last:mb-(--line-offset) group-orientation-vertical/tabs:selected:border-border group-orientation-vertical/tabs:selected:border-r-transparent",
         ],
+        selectionIndicator: "hidden",
       },
       plain: {
         base: null,
-        trigger:
-          "rounded-(--tabs-trigger-radius) text-muted-foreground data-[state=active]:text-foreground",
+        tab: "rounded-(--tabs-tab-radius) text-fg-muted selected:text-fg",
+        selectionIndicator: "hidden",
+      },
+    },
+    isDisabled: {
+      true: {
+        tab: "cursor-not-allowed text-fg-subtle forced-colors:text-[GrayText] selected:text-fg-subtle forced-colors:selected:text-[HighlightText]",
+      },
+    },
+    isFocusVisible: {
+      true: {
+        tab: focusRing.variants.isFocusVisible.true,
+      },
+      false: {
+        tab: focusRing.variants.isFocusVisible.false,
       },
     },
   },
@@ -115,62 +152,94 @@ const tabsListVariants = tv({
   },
 });
 
-const TabsListContext = createContext<VariantProps<
-  typeof tabsListVariants
-> | null>(null);
+const TabListContext = createContext<ReturnType<typeof tabListVariants> | null>(
+  null,
+);
 
-type TabsListProps = ComponentPropsWithRef<typeof TabsPrimitive.List> &
-  VariantProps<typeof tabsListVariants>;
+const useTabListContext = () => {
+  const context = use(TabListContext);
+  if (!context) {
+    throw new Error("useTabListContext must be used within a TabListProvider");
+  }
+  return context;
+};
 
-const TabsList = ({
-  className,
+const TabList = <T extends object>({
   variant,
-  fitted,
   justify,
+  fitted,
   ...props
-}: TabsListProps) => {
-  const variants = { variant, fitted, justify };
-  const { base } = tabsListVariants({ ...variants });
+}: TabListProps<T> &
+  VariantProps<typeof tabListVariants> &
+  Pick<ComponentPropsWithRef<typeof AriaTabList>, "ref">) => {
+  const computedTabListVariants = tabListVariants({
+    variant,
+    justify,
+    fitted,
+  });
+
   return (
-    <TabsListContext value={variants}>
-      <TabsPrimitive.List
-        className={base({ className, ...variants })}
+    <TabListContext value={computedTabListVariants}>
+      <AriaTabList
         {...props}
+        className={composeRenderProps(
+          props.className,
+          (className, renderProps) =>
+            computedTabListVariants.base({ ...renderProps, className }),
+        )}
       />
-    </TabsListContext>
+    </TabListContext>
   );
 };
 
-const TabsTrigger = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof TabsPrimitive.Trigger>) => {
-  const tabsListContext = use(TabsListContext);
-  if (!tabsListContext) {
-    throw new Error("TabsTrigger must be used within a TabsList");
-  }
-  const { trigger } = tabsListVariants(tabsListContext);
+const Tab = (props: TabProps & ComponentPropsWithRef<typeof AriaTab>) => {
+  const { tab, selectionIndicator } = useTabListContext();
 
   return (
-    <TabsPrimitive.Trigger
-      className={trigger({ className, ...tabsListContext })}
+    <AriaTab
       {...props}
+      className={composeRenderProps(props.className, (className, renderProps) =>
+        tab({ ...renderProps, className }),
+      )}
+    >
+      {composeRenderProps(props.children, (children) => (
+        <>
+          {children}
+          <AriaSelectionIndicator className={selectionIndicator()} />
+        </>
+      ))}
+    </AriaTab>
+  );
+};
+
+const TabPanels = <T extends object>(props: TabPanelsProps<T>) => {
+  return (
+    <AriaTabPanels
+      {...props}
+      className={cn(
+        "relative h-(--tab-panel-height) overflow-clip motion-safe:transition-[height]",
+        props.className,
+      )}
     />
   );
 };
 
-const TabsContent = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof TabsPrimitive.Content>) => {
+const tabPanelVariants = tv({
+  extend: focusRing,
+  base: [
+    "flex-1 p-4 text-sm text-fg-boldest transition-opacity",
+    "entering:opacity-0",
+    "exiting:absolute exiting:inset-0 exiting:opacity-0",
+  ],
+});
+
+const TabPanel = (props: TabPanelProps) => {
   return (
-    <TabsPrimitive.Content
-      className={cn(
-        "data-[orientation=horizontal]:w-full data-[orientation=horizontal]:pt-(--tabs-content-padding)",
-        "data-[orientation=vertical]:h-full data-[orientation=vertical]:pl-(--tabs-content-padding)",
-        className,
-      )}
+    <AriaTabPanel
       {...props}
+      className={composeRenderProps(props.className, (className, renderProps) =>
+        tabPanelVariants({ ...renderProps, className }),
+      )}
     />
   );
 };
@@ -179,9 +248,14 @@ export {
   Tabs,
   type TabsProps,
   tabsVariants,
-  TabsList,
-  type TabsListProps,
-  tabsListVariants,
-  TabsTrigger,
-  TabsContent,
+  TabList,
+  type TabListProps,
+  tabListVariants,
+  Tab,
+  type TabProps,
+  TabPanels,
+  type TabPanelsProps,
+  TabPanel,
+  type TabPanelProps,
+  tabPanelVariants,
 };

@@ -1,11 +1,7 @@
 import type { ComponentPropsWithRef } from "react";
 
+import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import { ChevronDown } from "lucide-react";
-import {
-  AccessibleIcon,
-  NavigationMenu as NavigationMenuPrimitive,
-  Slot,
-} from "radix-ui";
 import { cn, tv, type VariantProps } from "tailwind-variants";
 
 const NavigationMenuItem = NavigationMenuPrimitive.Item;
@@ -25,7 +21,7 @@ const NavigationMenu = ({
       className={cn("relative z-10 flex grow justify-center", className)}
       {...props}
     >
-      <Slot.Slottable>{children}</Slot.Slottable>
+      {children}
       {viewport && <NavigationMenuViewport />}
     </NavigationMenuPrimitive.Root>
   );
@@ -41,7 +37,7 @@ const NavigationMenuList = ({
       className={cn("flex justify-center gap-2 rounded-md p-1", className)}
       {...props}
     >
-      <Slot.Slottable>{children}</Slot.Slottable>
+      {children}
       <NavigationMenuIndicator />
     </NavigationMenuPrimitive.List>
   );
@@ -49,9 +45,9 @@ const NavigationMenuList = ({
 
 const navigationMenuTriggerVariants = tv({
   base: [
-    "rounded px-4 py-3 text-sm/none font-medium text-foreground transition-colors select-none",
-    "hover:bg-muted hover:text-foreground",
-    "focus:bg-muted focus:text-foreground",
+    "rounded px-4 py-3 text-sm/none font-medium text-fg transition-colors select-none",
+    "hover:bg-bg-muted hover:text-fg",
+    "focus:bg-bg-muted focus:text-fg",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   variants: {
@@ -79,10 +75,11 @@ function NavigationMenuTrigger({
       )}
       {...props}
     >
-      <Slot.Slottable>{children}</Slot.Slottable>
-      <AccessibleIcon.Root label="Open menu">
-        <ChevronDown className="group-radix-state-open/navigation-menu-trigger:rotate-180 relative top-px size-3 transition-transform duration-300" />
-      </AccessibleIcon.Root>
+      {children}
+      <ChevronDown
+        aria-label="Open menu"
+        className="group-radix-state-open/navigation-menu-trigger:rotate-180 relative top-px size-3 transition-transform duration-300"
+      />
     </NavigationMenuPrimitive.Trigger>
   );
 }
@@ -133,7 +130,7 @@ const NavigationMenuIndicator = ({
         "data-[state=visible]:animate-in data-[state=visible]:fade-in",
         "data-[state=hidden]:animate-out data-[state=hidden]:fade-out",
         // arrow indicator pseudo-element
-        "after:relative after:top-1/2 after:size-2.5 after:rotate-45 after:rounded-tl-sm after:border after:bg-subtle",
+        "after:relative after:top-1/2 after:size-2.5 after:rotate-45 after:rounded-tl-sm after:border after:bg-bg-subtle",
         className,
       )}
       {...props}
@@ -149,7 +146,7 @@ const NavigationMenuViewport = ({
     <div className="absolute top-full left-0 flex w-full justify-center">
       <NavigationMenuPrimitive.Viewport
         className={cn(
-          "relative mt-2.5 origin-[top_center] overflow-hidden rounded-md bg-subtle transition-[width,height]",
+          "relative mt-2.5 origin-[top_center] overflow-hidden rounded-md bg-bg-subtle transition-[width,height]",
           // Using ring to simulate border, so it lines up with <NavigationMenuIndicator />'s arrow
           "ring-1 ring-border ring-offset-0",
           "h-(--radix-navigation-menu-viewport-height) w-full sm:w-(--radix-navigation-menu-viewport-width)",

@@ -3,8 +3,8 @@ import { exifIfdGetName, ExifTagInfo, type ExifContent } from "libexif-wasm";
 import { formatPlural } from "#utils/formatPlural";
 import {
   AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
+  AccordionHeader,
+  AccordionPanel,
 } from "@exifi/ui/components/Accordion";
 import { Badge } from "@exifi/ui/components/Badge";
 import {
@@ -15,7 +15,7 @@ import {
 } from "@exifi/ui/components/DataList";
 import {
   TooltipTrigger,
-  TooltipContent,
+  TooltipTarget,
   Tooltip,
 } from "@exifi/ui/components/Tooltip";
 
@@ -28,9 +28,9 @@ const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
   const isEmpty = exifContent.count === 0;
 
   return (
-    <AccordionItem key={ifdName} value={ifdName} disabled={isEmpty}>
-      <AccordionTrigger>
-        <div className="flex gap-2">
+    <AccordionItem id={ifdName} isDisabled={isEmpty}>
+      <AccordionHeader>
+        <div className="flex gap-2 text-sm in-data-[disabled=true]:opacity-50">
           {exifIfdGetName(ifdName)}
           <Badge>
             {formatPlural(exifContent.count, {
@@ -39,10 +39,10 @@ const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
             })}
           </Badge>
         </div>
-      </AccordionTrigger>
+      </AccordionHeader>
 
       {!isEmpty && (
-        <AccordionContent>
+        <AccordionPanel>
           <DataList variant="bold">
             {exifContent.entries
               .filter((entry) => entry.tag !== null)
@@ -59,22 +59,22 @@ const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
                     <DataListItemLabel className="md:w-1/3">
                       {/* Some tags (e.g. RECOMMENDED_EXPOSURE_INDEX) don't have a description in ExifTagTable[] */}
                       {description !== null && description !== "" ?
-                        <Tooltip>
-                          <TooltipTrigger className="select-auto">
-                            {title}
-                          </TooltipTrigger>
-                          <TooltipContent>{description}</TooltipContent>
-                        </Tooltip>
+                        <TooltipTrigger>
+                          <TooltipTarget>
+                            <span role="button">{title}</span>
+                          </TooltipTarget>
+                          <Tooltip>{description}</Tooltip>
+                        </TooltipTrigger>
                       : title}
                     </DataListItemLabel>
-                    <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-muted-foreground before:content-['=']">
+                    <DataListItemValue className="relative before:relative before:left-0 before:pr-1.5 before:text-fg-muted before:content-['=']">
                       {entry.toString()}
                     </DataListItemValue>
                   </DataListItem>
                 );
               })}
           </DataList>
-        </AccordionContent>
+        </AccordionPanel>
       )}
     </AccordionItem>
   );

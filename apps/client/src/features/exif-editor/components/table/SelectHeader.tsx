@@ -12,7 +12,7 @@ const SelectHeader = ({ table }: HeaderContext<ExifTableRow, unknown>) => {
 
   return (
     <Checkbox
-      className="mx-auto border-border bg-subtle"
+      className="mx-auto border-border bg-bg-subtle"
       checked={checked}
       onCheckedChange={(checked) => {
         if (typeof checked === "boolean") {

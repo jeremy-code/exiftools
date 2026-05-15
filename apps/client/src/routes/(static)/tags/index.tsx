@@ -33,7 +33,7 @@ import {
 } from "@exifi/ui/components/Table";
 import {
   Tooltip,
-  TooltipContent,
+  TooltipTarget,
   TooltipTrigger,
 } from "@exifi/ui/components/Tooltip";
 
@@ -45,9 +45,7 @@ const SupportLevelCell = (props: CellContext<TagEntry, SupportLevel>) => {
   const value = props.getValue();
 
   if (value === "UNKNOWN") {
-    return (
-      <span className="text-muted-foreground italic">{titlecase(value)}</span>
-    );
+    return <span className="text-fg-muted italic">{titlecase(value)}</span>;
   }
 
   return (
@@ -82,10 +80,12 @@ const columns = [
       }
 
       return (
-        <Tooltip>
-          <TooltipTrigger className="text-left">{name}</TooltipTrigger>
-          <TooltipContent>{row.original.description}</TooltipContent>
-        </Tooltip>
+        <TooltipTrigger>
+          <TooltipTarget>
+            <span role="button">{name}</span>
+          </TooltipTarget>
+          <Tooltip>{row.original.description}</Tooltip>
+        </TooltipTrigger>
       );
     },
   }),
@@ -146,7 +146,7 @@ const TagsComponent = () => {
 
   return (
     <div className="container py-8">
-      <Heading as="h1" size="2xl" className="mb-4">
+      <Heading level={1} size="2xl" className="mb-4">
         Exif tags
       </Heading>
       <Table
@@ -199,7 +199,7 @@ const TagsComponent = () => {
         </TableHead>
         <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <TableRow className="has-focus:bg-subtle" key={row.id}>
+            <TableRow className="has-focus:bg-bg-subtle" key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <TableCell
                   key={cell.id}
