@@ -57,6 +57,7 @@ const ExifEntryByteEditor = ({
                 onChange={(newValue) =>
                   setDraft((prevValue) => prevValue.with(index, newValue))
                 }
+                aria-label={`${exifEntryObject.tag} component ${index + 1}`}
               />
             ))}
           </div>

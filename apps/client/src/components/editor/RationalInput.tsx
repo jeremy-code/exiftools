@@ -42,6 +42,11 @@ const RationalInput = ({
       <NumberField
         {...sharedProps}
         {...numeratorInputProps}
+        aria-label={
+          sharedProps["aria-label"] !== undefined ?
+            sharedProps["aria-label"] + " Numerator"
+          : " Numerator"
+        }
         value={numerator}
         onChange={(value) => {
           setNumerator(value);
@@ -52,6 +57,11 @@ const RationalInput = ({
       <NumberField
         {...sharedProps}
         {...denominatorInputProps}
+        aria-label={
+          sharedProps["aria-label"] !== undefined ?
+            sharedProps["aria-label"] + " Denominator"
+          : "Denominator"
+        }
         value={denominator}
         onChange={(value) => {
           setDenominator(value);
@@ -65,6 +75,11 @@ const RationalInput = ({
       <NumberField
         {...sharedProps}
         {...decimalInputProps}
+        aria-label={
+          sharedProps["aria-label"] !== undefined ?
+            sharedProps["aria-label"] + " Decimal"
+          : "Decimal"
+        }
         value={decimal}
         onChange={(value) => {
           const rational = approximateRational(value);

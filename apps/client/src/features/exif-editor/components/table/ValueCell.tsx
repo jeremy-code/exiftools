@@ -97,7 +97,12 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
         />
       );
     case "exifVersion":
-      return <ExifVersionInput aria-label={label} {...quickEditor} />;
+      return (
+        <ExifVersionInput
+          inputProps={{ "aria-label": label }}
+          {...quickEditor}
+        />
+      );
     case "simpleNumeric":
       return (
         <NumberField

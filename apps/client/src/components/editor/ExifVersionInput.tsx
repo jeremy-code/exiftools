@@ -25,6 +25,11 @@ const ExifVersionInput = ({
     <div className={cn("flex items-baseline gap-2", className)} {...props}>
       <NumberField
         {...inputProps}
+        aria-label={
+          inputProps?.["aria-label"] !== undefined ?
+            inputProps["aria-label"] + " Major"
+          : "Major"
+        }
         minValue={1}
         maxValue={2}
         value={value?.major}
@@ -40,6 +45,11 @@ const ExifVersionInput = ({
       .
       <NumberField
         {...inputProps}
+        aria-label={
+          inputProps?.["aria-label"] !== undefined ?
+            inputProps["aria-label"] + " Minor"
+          : "Minor"
+        }
         minValue={0}
         value={value?.minor}
         onChange={(target) => {
