@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 
 import type { RowSelectionState, Table } from "@tanstack/react-table";
 import { IFD_NAMES } from "libexif-wasm";
-import { Portal } from "radix-ui";
 
 import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 
@@ -47,8 +47,9 @@ const SelectionBar = ({
     return null;
   }
 
-  return (
-    <Portal.Root className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+--spacing(4))] flex justify-center">
+  // TODO: Consider https://react-aria.adobe.com/PortalProvider
+  return createPortal(
+    <div className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+--spacing(4))] flex justify-center">
       <div className="pointer-events-auto flex items-center gap-3 rounded-[0.375rem] bg-surface px-3 py-2.5 shadow-md">
         <button className="inline-flex items-center gap-2 self-stretch rounded rounded-[0.25rem] border border-dashed px-4 py-1 text-sm">
           {selectedRowIds.length} selected
@@ -56,7 +57,8 @@ const SelectionBar = ({
         <div className="h-5 w-px bg-border" />
         <DeleteEntriesDialog rows={selectedRowIds} deleteRows={deleteRows} />
       </div>
-    </Portal.Root>
+    </div>,
+    document.body,
   );
 };
 

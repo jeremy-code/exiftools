@@ -1,7 +1,6 @@
 import type { ComponentPropsWithRef, RefObject } from "react";
 
 import { Clapperboard, File, FileUp, Image, Music, X } from "lucide-react";
-import { AccessibleIcon } from "radix-ui";
 import { Button as AriaButton } from "react-aria-components/Button";
 import {
   useDropzone,
@@ -122,9 +121,7 @@ const Dropzone = ({
       })}
     >
       <div className="inline-flex grow flex-row items-center justify-normal gap-2 max-sm:text-sm">
-        <AccessibleIcon.Root label="Upload file">
-          <FileUp />
-        </AccessibleIcon.Root>
+        <FileUp aria-label="Upload file" />
         {isDragActive ?
           "Drop a file here"
         : <div>

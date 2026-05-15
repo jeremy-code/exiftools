@@ -1,6 +1,5 @@
 import type { CellContext } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
-import { AccessibleIcon } from "radix-ui";
 
 import { Button } from "@exifi/ui/components/Button";
 import {
@@ -25,10 +24,8 @@ const EditEntryDialog = ({ row }: EditEntryDialogProps) => {
 
   return (
     <DialogTrigger>
-      <Button variant="outline" size="icon">
-        <AccessibleIcon.Root label="Edit">
-          <Pencil size="16" />
-        </AccessibleIcon.Root>
+      <Button variant="outline" size="icon" aria-label="Edit">
+        <Pencil size="16" />
       </Button>
       <Modal isDismissable>
         <Dialog aria-description="Edit Exif data dialog">
