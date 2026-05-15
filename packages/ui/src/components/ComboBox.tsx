@@ -16,6 +16,7 @@ import {
   type ListBoxSectionProps as ComboBoxSectionProps,
   type ListBoxProps,
 } from "./ListBox";
+import { Popover, type PopoverProps } from "./Popover";
 import {
   Description,
   FieldError,
@@ -24,7 +25,6 @@ import {
   Label,
   type FieldErrorMessage,
 } from "./form";
-import { Popover, type PopoverProps } from "./v2/Popover";
 import { composeTailwindRenderProps } from "../utils/composeTailwindRenderProps";
 
 type SelectionMode = "single" | "multiple";

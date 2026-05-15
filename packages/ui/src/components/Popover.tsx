@@ -1,60 +1,84 @@
-"use client";
+import {
+  DialogTrigger as PopoverTrigger,
+  type DialogTriggerProps as PopoverTriggerProps,
+  Popover as AriaPopover,
+  type PopoverProps as AriaPopoverProps,
+} from "react-aria-components/Popover";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
+import { tv, type VariantProps } from "tailwind-variants";
 
-import type { ComponentPropsWithRef } from "react";
+import { OverlayArrow } from "./OverlayArrow";
 
-import { Popover as PopoverPrimitive } from "radix-ui";
-import { cn } from "tailwind-variants";
+const popoverVariants = tv({
+  base: [
+    "min-w-(--trigger-width) origin-(--trigger-anchor-point)",
+    "rounded-md border border-border bg-surface text-fg shadow-md outline-none",
+  ],
+  variants: {
+    placement: {
+      left: "slide-in-from-right-2",
+      right: "slide-in-from-left-2",
+      top: "slide-in-from-bottom-2",
+      bottom: "slide-in-from-top-2",
+      center: null,
+    },
+    isEntering: {
+      true: "animate-in ease-out fade-in-0 zoom-in-95",
+    },
+    isExiting: {
+      true: "animate-out ease-in fade-out-0 zoom-out-95",
+    },
+    size: {
+      sm: "max-h-56",
+      md: "max-h-64",
+      lg: "max-h-80",
+    },
+  },
+});
 
-const {
-  Root: Popover,
-  Trigger: PopoverTrigger,
-  Anchor: PopoverAnchor,
-  Close: PopoverClose,
-} = PopoverPrimitive;
+type PopoverProps = AriaPopoverProps & {
+  showArrow?: boolean;
+} & VariantProps<typeof popoverVariants>;
 
-const PopoverContent = ({
+const Popover = ({
   className,
+  showArrow,
+  children,
+  offset,
+  size,
   ...props
-}: ComponentPropsWithRef<typeof PopoverPrimitive.Content>) => {
-  return (
-    <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Content
-        className={cn(
-          "text-popover-foreground z-50 flex w-72 flex-col gap-2.5 rounded-lg bg-surface p-2.5 text-sm shadow-md",
-          "ring ring-border",
-          "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
-          "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
-          "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-          "origin-(--radix-popover-content-transform-origin)",
-          className,
-        )}
-        {...props}
-      />
-    </PopoverPrimitive.Portal>
-  );
-};
+}: PopoverProps) => {
+  const defaultOffset = showArrow ? 12 : 8;
 
-const PopoverArrow = ({
-  className,
-  ...props
-}: ComponentPropsWithRef<typeof PopoverPrimitive.Arrow>) => {
   return (
-    <PopoverPrimitive.Arrow
-      className={cn(
+    <AriaPopover
+      offset={offset ?? defaultOffset}
+      className={composeRenderProps(
         className,
-        // https://gist.github.com/jeremy-code/66da292e53543e9d6c35aa85e3a2e53e
-        "fill-surface stroke-border stroke-3 [stroke-dasharray:0_30_36.0555]",
+        (className, { placement, ...renderProps }) =>
+          popoverVariants({
+            ...renderProps,
+            placement: placement ?? undefined,
+            size,
+            className,
+          }),
       )}
       {...props}
-    />
+    >
+      {composeRenderProps(children, (children) => (
+        <>
+          {showArrow && <OverlayArrow />}
+          {children}
+        </>
+      ))}
+    </AriaPopover>
   );
 };
 
 export {
   Popover,
-  PopoverAnchor,
-  PopoverContent,
+  type PopoverProps,
+  popoverVariants,
   PopoverTrigger,
-  PopoverClose,
-  PopoverArrow,
+  type PopoverTriggerProps,
 };

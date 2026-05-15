@@ -8,6 +8,7 @@ import {
 import { Calendar } from "./Calendar";
 import { DateInput } from "./DateInput";
 import { FieldButton } from "./FieldButton";
+import { Popover } from "./Popover";
 import {
   Description,
   FieldError,
@@ -16,7 +17,6 @@ import {
   type FieldErrorMessage,
 } from "./form";
 import { composeTailwindRenderProps } from "../utils/composeTailwindRenderProps";
-import { Popover } from "./v2/Popover";
 
 type DatePickerProps<T extends DateValue> = {
   label?: string;

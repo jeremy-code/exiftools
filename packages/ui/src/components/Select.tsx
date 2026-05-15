@@ -16,8 +16,8 @@ import {
   ListBoxSection as SelectSection,
   type ListBoxSectionProps as SelectSectionProps,
 } from "./ListBox";
+import { Popover } from "./Popover";
 import { Description, FieldError, Label } from "./form";
-import { Popover } from "./v2/Popover";
 import { composeTailwindRenderProps } from "../utils/composeTailwindRenderProps";
 import { focusRing } from "../utils/focusRing";
 
