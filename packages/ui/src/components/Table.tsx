@@ -1,16 +1,13 @@
-import { Slot } from "radix-ui";
-import type { PrimitivePropsWithRef } from "radix-ui/internal";
+import type { ComponentPropsWithRef } from "react";
+
 import { cn, tv, type VariantProps } from "tailwind-variants";
 
 const TableScrollArea = ({
-  asChild,
   className,
   ...props
-}: PrimitivePropsWithRef<"div">) => {
-  const Comp = asChild ? Slot.Root : "div";
-
+}: ComponentPropsWithRef<"div">) => {
   return (
-    <Comp
+    <div
       className={cn(
         "block max-w-full overflow-auto whitespace-nowrap",
         className,
@@ -47,12 +44,11 @@ const tableVariants = tv({
   },
 });
 
-type TableProps = PrimitivePropsWithRef<"table"> &
+type TableProps = ComponentPropsWithRef<"table"> &
   VariantProps<typeof tableVariants>;
 
 const Table = ({
   className,
-  asChild,
   variant,
   size,
   interactive,
@@ -61,10 +57,8 @@ const Table = ({
   showColumnBorder,
   ...props
 }: TableProps) => {
-  const Comp = asChild ? Slot.Root : "table";
-
   return (
-    <Comp
+    <table
       data-variant={variant}
       data-interactive={interactive}
       data-striped={striped}
@@ -83,25 +77,13 @@ const Table = ({
   );
 };
 
-const TableBody = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"tbody">) => {
-  const Comp = asChild ? Slot.Root : "tbody";
-
-  return <Comp className={cn("table-row-group", className)} {...props} />;
+const TableBody = ({ className, ...props }: ComponentPropsWithRef<"tbody">) => {
+  return <tbody className={cn("table-row-group", className)} {...props} />;
 };
 
-const TableCell = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"td">) => {
-  const Comp = asChild ? Slot.Root : "td";
-
+const TableCell = ({ className, ...props }: ComponentPropsWithRef<"td">) => {
   return (
-    <Comp
+    <td
       className={cn(
         "items-center px-(--table-padding-x) py-(--table-padding-y) text-start",
         "group-data-[show-column-border=true]/table:not-last:border-r",
@@ -114,28 +96,19 @@ const TableCell = ({
 
 const TableFooter = ({
   className,
-  asChild,
   ...props
-}: PrimitivePropsWithRef<"tfoot">) => {
-  const Comp = asChild ? Slot.Root : "tfoot";
-
+}: ComponentPropsWithRef<"tfoot">) => {
   return (
-    <Comp
+    <tfoot
       className={cn("table-footer-group font-medium", className)}
       {...props}
     />
   );
 };
 
-const TableHeader = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"th">) => {
-  const Comp = asChild ? Slot.Root : "th";
-
+const TableHeader = ({ className, ...props }: ComponentPropsWithRef<"th">) => {
   return (
-    <Comp
+    <th
       className={cn(
         "px-(--table-padding-x) py-(--table-padding-y) text-start font-medium text-foreground",
         "group-data-[show-column-border=true]/table:not-last:border-r",
@@ -146,15 +119,9 @@ const TableHeader = ({
   );
 };
 
-const TableHead = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"thead">) => {
-  const Comp = asChild ? Slot.Root : "thead";
-
+const TableHead = ({ className, ...props }: ComponentPropsWithRef<"thead">) => {
   return (
-    <Comp
+    <thead
       className={cn(
         "table-header-group",
         "group-data-[variant=outline]/table:bg-muted",
@@ -165,15 +132,9 @@ const TableHead = ({
   );
 };
 
-const TableRow = ({
-  className,
-  asChild,
-  ...props
-}: PrimitivePropsWithRef<"tr">) => {
-  const Comp = asChild ? Slot.Root : "tr";
-
+const TableRow = ({ className, ...props }: ComponentPropsWithRef<"tr">) => {
   return (
-    <Comp
+    <tr
       className={cn(
         "table-row",
         "group-data-[striped=true]/table:odd:[&>td]:bg-muted",
@@ -195,19 +156,12 @@ const tableCaptionVariants = tv({
   },
 });
 
-type TableCaptionProps = PrimitivePropsWithRef<"caption"> &
+type TableCaptionProps = ComponentPropsWithRef<"caption"> &
   VariantProps<typeof tableCaptionVariants>;
 
-const TableCaption = ({
-  className,
-  asChild,
-  side,
-  ...props
-}: TableCaptionProps) => {
-  const Comp = asChild ? Slot.Root : "caption";
-
+const TableCaption = ({ className, side, ...props }: TableCaptionProps) => {
   return (
-    <Comp
+    <caption
       className={tableCaptionVariants({
         className,
         side,
