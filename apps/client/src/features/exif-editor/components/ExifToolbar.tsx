@@ -1,13 +1,11 @@
 import { Save } from "lucide-react";
-import { useShallow } from "zustand/react/shallow";
 
-import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
 import { useFileStore } from "#hooks/useFileStore";
-import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { saveFile } from "#utils/saveFile";
 import { writeExifData } from "@exifi/exif-utils";
 import { Button } from "@exifi/ui/components/Button";
 
+import { ExifMenu } from "./ExifMenu";
 import { useExifEditorContext } from "../hooks/useExifEditorContext";
 import { AddEntryDialog } from "./dialogs/AddEntryDialog";
 import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
@@ -18,19 +16,6 @@ const isMobileWebKit = () => "ongesturechange" in window;
 const ExifToolbar = () => {
   const { file, setFile } = useFileStore();
   const exifData = useExifEditorContext();
-  const [
-    fix,
-    updatePixelDimensions,
-    updateGeolocationPosition,
-    updateDateAndTimeDigitized,
-  ] = useExifEditorStoreContext(
-    useShallow((state) => [
-      state.fix,
-      state.updatePixelDimensions,
-      state.updateGeolocationPosition,
-      state.updateDateAndTimeDigitized,
-    ]),
-  );
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -79,20 +64,9 @@ const ExifToolbar = () => {
         <Save size={16} />
         Save
       </Button>
-      <Button onPress={() => fix()}>Fix</Button>
-      <Button onPress={() => updatePixelDimensions(file)}>
-        Add image dimensions
-      </Button>
-      <Button
-        onPress={() => getCurrentPosition().then(updateGeolocationPosition)}
-      >
-        Set Exif to current GPS position
-      </Button>
-      <Button onPress={() => updateDateAndTimeDigitized()}>
-        Set Date and Time Digitized to current time
-      </Button>
       <AddEntryDialog />
       <AddGpsEntriesDialog />
+      <ExifMenu />
     </div>
   );
 };
