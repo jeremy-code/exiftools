@@ -23,7 +23,7 @@ const tableVariants = tv({
     variant: {
       line: "[&>*>tr]:border-b",
       outline:
-        "ring ring-border [&>*>tr]:not-last:border-b [&>tbody>tr]:first:border-t [&>tfoot>tr]:border-t",
+        "border border-border [&>*>tr]:not-last:border-b [&>tbody>tr]:first:border-t [&>tfoot>tr]:border-t",
     },
     size: {
       sm: "text-sm/5 [--table-padding-x:--spacing(2)] [--table-padding-y:--spacing(2)]",

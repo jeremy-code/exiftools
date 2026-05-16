@@ -23,6 +23,7 @@ import { formatPlural } from "#utils/formatPlural";
 import { Badge } from "@exifi/ui/components/Badge";
 import { linkVariants } from "@exifi/ui/components/Link";
 import {
+  TableScrollArea,
   Table,
   TableHead,
   TableHeader,
@@ -115,10 +116,10 @@ const ExifTable = (props: ExifTableProps) => {
   }
 
   return (
-    <>
+    <TableScrollArea>
       <Table
         variant="outline"
-        className="max-w-full min-w-(--table-width) table-fixed"
+        className="min-w-(--table-width) table-fixed"
         style={
           {
             "--table-width": `${table.getCenterTotalSize()}px`,
@@ -197,7 +198,7 @@ const ExifTable = (props: ExifTableProps) => {
         </TableBody>
       </Table>
       <SelectionBar rowSelection={rowSelection} table={table} />
-    </>
+    </TableScrollArea>
   );
 };
 

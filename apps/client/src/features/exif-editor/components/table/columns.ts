@@ -14,36 +14,39 @@ type ExifTableRow = ExifEntryObject | { ifd: Ifd; entries: ExifTableRow[] };
 
 const columnHelper = createColumnHelper<ExifTableRow>();
 
+/**
+ * Column sizes are based on a total size of 40rem (breakpoint sm) for the table
+ */
 const columns = [
   columnHelper.display({
     id: "select",
     aggregatedCell: SelectCell,
     cell: SelectCell,
     header: SelectHeader,
-    size: 24,
+    size: 40, // 2.5rem
   }),
   columnHelper.accessor("ifd", {
     id: "ifd",
     aggregatedCell: IfdCell,
     cell: IfdCell,
     header: "IFD",
-    size: 30,
+    size: 72, // 4.5rem
   }),
   columnHelper.accessor("tag", {
     id: "tag",
     header: "Tag",
-    size: 70,
     cell: TagCell,
+    size: 200, // 12.5rem
   }),
   columnHelper.accessor("formattedValue", {
     header: "Value",
     cell: ValueCell,
-    size: 90,
+    size: 272, // 17rem
   }),
   columnHelper.display({
     id: "edit",
     cell: EditEntryDialog,
-    size: 35,
+    size: 56, // 3.5rem
   }),
 ];
 
