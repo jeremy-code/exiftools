@@ -4,6 +4,7 @@ import { useFileStore } from "#hooks/useFileStore";
 import { saveFile } from "#utils/saveFile";
 import { writeExifData } from "@exifi/exif-utils";
 import { Button } from "@exifi/ui/components/Button";
+import { Toolbar, type ToolbarProps } from "@exifi/ui/components/Toolbar";
 
 import { ExifMenu } from "./ExifMenu";
 import { useExifEditorContext } from "../hooks/useExifEditorContext";
@@ -13,12 +14,14 @@ import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
 // https://evilmartians.com/chronicles/how-to-detect-safari-and-ios-versions-with-ease
 const isMobileWebKit = () => "ongesturechange" in window;
 
-const ExifToolbar = () => {
+type ExifToolbarProps = Omit<ToolbarProps, "children">;
+
+const ExifToolbar = (props: ExifToolbarProps) => {
   const { file, setFile } = useFileStore();
   const exifData = useExifEditorContext();
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <Toolbar aria-label="Exif editor toolbar" {...props}>
       <Button
         onPress={() => {
           const generateFile = async () => {
@@ -67,7 +70,7 @@ const ExifToolbar = () => {
       <AddEntryDialog />
       <AddGpsEntriesDialog />
       <ExifMenu />
-    </div>
+    </Toolbar>
   );
 };
 
