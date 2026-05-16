@@ -11,6 +11,7 @@ type FileTabPanelProps = {
   file: File | null;
   id: string;
   updateFile: (file: File) => void;
+  uploadFiles: (files: File[]) => void;
   children: ReactNode;
 } & Omit<ComponentPropsWithRef<typeof TabPanel>, "id">;
 
@@ -19,6 +20,7 @@ const FileTabPanel = ({
   id,
   file,
   updateFile,
+  uploadFiles,
   ...props
 }: FileTabPanelProps) => {
   return (
@@ -32,10 +34,17 @@ const FileTabPanel = ({
 
             <Dropzone
               dropzoneOptions={{
-                maxFiles: 1,
                 onDropAccepted: (acceptedFiles) => {
-                  if (acceptedFiles.length > 0) {
-                    updateFile(acceptedFiles[0]!);
+                  if (acceptedFiles.length === 0) {
+                    return;
+                  }
+                  const acceptedFile = acceptedFiles.at(0);
+                  if (acceptedFile) {
+                    updateFile(acceptedFile);
+                  }
+
+                  if (acceptedFiles.length > 1) {
+                    uploadFiles(acceptedFiles.slice(1));
                   }
                 },
               }}

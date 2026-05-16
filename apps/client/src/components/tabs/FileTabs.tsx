@@ -1,6 +1,7 @@
 import { useRef, type ReactNode } from "react";
 
 import { Plus } from "lucide-react";
+import { DropZone } from "react-aria-components";
 import { useShallow } from "zustand/react/shallow";
 
 import { SortableList } from "#components/dnd/SortableList";
@@ -27,6 +28,7 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
     setActiveTabId,
     removeTab,
     createNewTab,
+    createNewTabs,
     updateTab,
     reorderTabs,
   } = useFileTabsStore(
@@ -36,6 +38,7 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
       setActiveTabId: state.setActiveTabId,
       removeTab: state.removeTab,
       createNewTab: state.createNewTab,
+      createNewTabs: state.createNewTabs,
       updateTab: state.updateTab,
       reorderTabs: state.reorderTabs,
     })),
@@ -57,44 +60,57 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
       >
         {/* Offset by height of Navbar */}
         <div className="sticky top-[--spacing(20)] z-50 container p-4">
-          <div className="grid grid-cols-[1fr_auto] items-center gap-1 overflow-x-auto rounded-md border border-border bg-bg-muted shadow [scrollbar-width:thin]">
-            <TabList
-              ref={fileTabsListRef}
-              fitted
-              className="gap-1"
-              variant="enclosed"
-            >
-              {tabs.map((tab, index) => (
-                <FileTab
-                  key={tab.id}
-                  id={tab.id}
-                  index={index}
-                  file={tab.file}
-                  removeTab={() => removeTab(tab.id)}
-                />
-              ))}
-            </TabList>
-            <div className="sticky top-0 right-1">
-              <Button
-                className="text-fg-muted"
-                size="icon"
-                variant="muted"
-                onPress={() => createNewTab()}
-                aria-label="New tab"
+          <DropZone
+            onDrop={async (event) => {
+              const files = await Promise.all(
+                event.items
+                  .filter((item) => item.kind === "file")
+                  .map((item) => item.getFile()),
+              );
+
+              createNewTabs(files);
+            }}
+          >
+            <div className="grid grid-cols-[1fr_auto] items-center gap-1 overflow-x-auto rounded-md border border-border bg-bg-muted shadow [scrollbar-width:thin]">
+              <TabList
+                ref={fileTabsListRef}
+                fitted
+                className="gap-1"
+                variant="enclosed"
               >
-                <Plus size={16} />
-              </Button>
+                {tabs.map((tab, index) => (
+                  <FileTab
+                    key={tab.id}
+                    id={tab.id}
+                    index={index}
+                    file={tab.file}
+                    removeTab={() => removeTab(tab.id)}
+                  />
+                ))}
+              </TabList>
+              <div className="sticky top-0 right-1">
+                <Button
+                  className="text-fg-muted"
+                  size="icon"
+                  variant="muted"
+                  onPress={() => createNewTab()}
+                  aria-label="New tab"
+                >
+                  <Plus size={16} />
+                </Button>
+              </div>
             </div>
-          </div>
+          </DropZone>
         </div>
         <TabPanels>
           {tabs.map((tab) => (
             <FileTabPanel
-              className="container pb-8"
+              className="container pt-0 pb-8"
               key={tab.id}
               id={tab.id}
               file={tab.file}
               updateFile={(file) => updateTab(file, tab.id)}
+              uploadFiles={createNewTabs}
             >
               {children}
             </FileTabPanel>

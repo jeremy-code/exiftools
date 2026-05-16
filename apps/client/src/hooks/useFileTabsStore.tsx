@@ -17,7 +17,8 @@ type FileTabsStoreState = {
 type FileTabsStoreActions = {
   removeTab: (id: string) => void;
   updateTab: (file: File, id: string) => void;
-  createNewTab: () => void;
+  createNewTab: (file?: File) => void;
+  createNewTabs: (files?: (File | null)[]) => void;
   setActiveTabId: (id: string) => void;
   reorderTabs: (initialIndex: number, index: number) => void;
 };
@@ -70,9 +71,16 @@ const createFileTabsStore = () =>
             { tabs: state.tabs.with(tabIndex, { file, id }) }
           : {};
       }),
-    createNewTab: () =>
+    createNewTab: (file) =>
       set((state) => ({
-        tabs: [...state.tabs, createFileTab(null)],
+        tabs: [...state.tabs, createFileTab(file ?? null)],
+      })),
+    createNewTabs: (files) =>
+      set((state) => ({
+        tabs: [
+          ...state.tabs,
+          ...(files ?? [null]).map((file) => createFileTab(file)),
+        ],
       })),
     setActiveTabId: (id) => set(() => ({ activeTabId: id })),
     reorderTabs: (initialIndex, index) =>
