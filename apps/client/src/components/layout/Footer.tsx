@@ -22,7 +22,9 @@ const Footer = ({ className, ...props }: ComponentPropsWithRef<"footer">) => {
           </Link>
         </span>
         <Link
-          className={(renderProps) => buttonVariants(renderProps)}
+          className={(renderProps) =>
+            buttonVariants({ ...renderProps, className: "hover:no-underline" })
+          }
           href="https://github.com/jeremy-code/exifi"
         >
           <Github aria-hidden className="size-4" />
