@@ -21,7 +21,7 @@ const GpsTagVersionInput = ({
   inputProps,
   ...props
 }: GpsTagVersionInputProps) => {
-  const breakpoint = useBreakpoint("max-sm");
+  const breakpoint = useBreakpoint("max-md");
 
   // There really isn't enough room to edit four values in one line
   if (breakpoint) {
