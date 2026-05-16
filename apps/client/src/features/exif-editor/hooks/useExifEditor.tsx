@@ -10,6 +10,7 @@ import { updateGeolocationPosition } from "#lib/exif/actions/updateGeolocationPo
 import { updateLatLng } from "#lib/exif/actions/updateLatLng";
 import { updatePixelDimensions } from "#lib/exif/actions/updatePixelDimensions";
 import { getOrInsertEntry } from "#lib/exif/getOrInsertEntry";
+import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import {
   serializeExifData,
   type ExifDataObject,
@@ -50,7 +51,7 @@ type ExifEditorStoreActions = {
   addExifEntry: (
     exifEntryObject: Partial<ExifEntryObject> &
       Pick<ExifEntryObject, "ifd" | "tag" | "format">,
-    value: string | ValidTypedArray,
+    value: string | ValidTypedArray | number[],
   ) => void;
   fix: () => void;
   updatePixelDimensions: (file: File) => Promise<void>;
@@ -121,8 +122,8 @@ const useExifEditor = (exifData: ExifData) => {
             const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
             const prevExifEntry = exifContent.getEntry(exifEntryObject.tag);
             if (prevExifEntry !== null) {
-              throw new Error(
-                `Exif entry with tag ${exifEntryObject.tag} already exists.`,
+              console.warn(
+                `Exif entry with tag ${exifEntryObject.tag} already exists and will be overwritten.`,
               );
             }
             const exifEntry = getOrInsertEntry(
@@ -138,10 +139,16 @@ const useExifEditor = (exifData: ExifData) => {
               exifEntry.data = utf8Array;
               exifEntry.components = utf8Array.length;
             } else {
-              if (!isTypedArray(value)) {
-                throw new Error("Non-ASCII entries expect a TypedArray value");
+              if (!isTypedArray(value) && !Array.isArray(value)) {
+                throw new Error(
+                  "Non-ASCII entries expect a TypedArray or array value",
+                );
               }
-              exifEntry.fromTypedArray(value);
+              exifEntry.fromTypedArray(
+                Array.isArray(value) ?
+                  newTypedArrayInFormat(value, exifEntryObject.format)
+                : value,
+              );
             }
 
             return { exifDataObject: serializeExifData(exifData) };
