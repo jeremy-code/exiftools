@@ -6,6 +6,7 @@ import { useExifEntryDraft } from "#features/exif-editor/hooks/useExifEntryDraft
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Button } from "@exifi/ui/components/Button";
 
+import { ExifEntryByteEditor } from "./ExifEntryByteEditor";
 import { ExifEntryEditor } from "./ExifEntryEditor";
 import { ExifEntryMetadata } from "./ExifEntryMetadata";
 import { ExifEntryValidity } from "./ExifEntryValidity";
@@ -23,7 +24,7 @@ const ExifEntryInspector = ({
     useExifEntryDraft(exifEntryObject);
 
   return (
-    <div className={cn("flex flex-col gap-8", className)} {...props}>
+    <div className={cn("flex flex-col gap-4", className)} {...props}>
       <ExifEntryMetadata exifEntryObject={exifEntryObject} />
       <ExifEntryEditor
         exifEntryObject={exifEntryObject}
@@ -36,6 +37,11 @@ const ExifEntryInspector = ({
           <ExifEntryValidity exifEntryObject={exifEntryObject} draft={draft} />
         : <span className="text-fg-muted italic">no changes</span>}
       </div>
+      <ExifEntryByteEditor
+        exifEntryObject={exifEntryObject}
+        draft={draft}
+        setDraft={setDraft}
+      />
       <Button isDisabled={!isChanged} onPress={() => save()}>
         {isChanged ? "Save changes" : "Saved"}
       </Button>

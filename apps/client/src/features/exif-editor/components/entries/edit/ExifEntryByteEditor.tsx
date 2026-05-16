@@ -40,16 +40,16 @@ const ExifEntryByteEditor = ({
             className="group/collapsible-trigger"
             variant="outline"
           >
-            <span className="group-data-[state=closed]/collapsible-trigger:hidden">
+            <span className="group-aria-[expanded=false]/collapsible-trigger:hidden">
               Close byte editor
             </span>
-            <span className="group-data-[state=open]/collapsible-trigger:hidden">
+            <span className="group-aria-expanded/collapsible-trigger:hidden">
               Open byte editor
             </span>
           </Button>
         </Heading>
         <DisclosurePanel className="mt-4">
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(60px,1fr))] gap-2">
             {draft.map((value, index) => (
               <NumberField
                 key={index}
