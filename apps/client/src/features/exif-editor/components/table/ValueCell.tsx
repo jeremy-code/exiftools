@@ -32,7 +32,7 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
   );
 
   if (quickEditor === null) {
-    return getValue() ?? "";
+    return <span className="block truncate">{getValue() ?? ""}</span>;
   }
 
   const title = ExifTagInfo.getTitleInIfd(originalRow.tag, originalRow.ifd);

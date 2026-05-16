@@ -24,7 +24,7 @@ import { focusRing } from "../utils/focusRing";
 const selectVariants = tv({
   extend: focusRing,
   base: [
-    "flex min-h-9 w-full min-w-max items-center justify-between gap-1 rounded-sm border border-border bg-surface px-2.5 pr-2 text-start text-sm/5 transition-colors",
+    "flex min-h-9 w-full items-center justify-between gap-1 rounded-sm border border-border bg-surface px-2.5 pr-2 text-start text-sm/5 transition-colors",
     "[-webkit-tap-highlight-color:transparent]",
   ],
   variants: {
@@ -76,7 +76,7 @@ const Select = <
     >
       {label && <Label>{label}</Label>}
       <Button className={selectVariants}>
-        <SelectValue className="basis-content line-clamp-1 shrink-0 text-sm data-[placeholder=true]:text-fg-muted">
+        <SelectValue className="basis-content line-clamp-1 block truncate text-sm data-[placeholder=true]:text-fg-muted">
           {({ selectedText, defaultChildren }) =>
             selectedText || defaultChildren
           }

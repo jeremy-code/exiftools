@@ -36,12 +36,12 @@ const columns = [
     id: "tag",
     header: "Tag",
     cell: TagCell,
-    size: 200, // 12.5rem
+    size: 252, // 15.75rem
   }),
   columnHelper.accessor("formattedValue", {
     header: "Value",
     cell: ValueCell,
-    size: 272, // 17rem
+    size: 260, // 16.25rem
   }),
   columnHelper.display({
     id: "edit",
