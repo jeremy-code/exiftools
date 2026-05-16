@@ -5,19 +5,18 @@ import { Checkbox } from "@exifi/ui/components/Checkbox";
 import type { ExifTableRow } from "./columns";
 
 const SelectCell = ({ row }: CellContext<ExifTableRow, unknown>) => {
-  const checked =
-    row.getIsSelected() ? true
-    : row.getIsSomeSelected() ? "indeterminate"
-    : false;
+  // It seems that TanStack Table (which may be incompatible with React compiler)
+  // does not place nice with React Aria Checkbox.
+  // eslint-disable-next-line react-compiler/react-compiler
+  "use no memo";
 
   return (
     <Checkbox
-      className="mx-auto"
-      checked={checked}
-      onCheckedChange={(checked) => {
-        if (typeof checked === "boolean") {
-          row.toggleSelected(checked);
-        }
+      boxProps={{ className: "mx-auto" }}
+      isSelected={row.getIsSelected()}
+      isIndeterminate={row.getIsSomeSelected()}
+      onChange={(isSelected) => {
+        row.toggleSelected(isSelected);
       }}
     />
   );
