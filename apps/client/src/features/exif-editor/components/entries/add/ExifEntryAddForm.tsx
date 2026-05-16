@@ -78,6 +78,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
                   field.handleChange(tagEntry);
                 }
               }}
+              onBlur={field.handleBlur}
               label="Tag"
               placeholder="ImageDescription"
             >
@@ -104,6 +105,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
                 }
               }}
               placeholder="Select an IFD"
+              onBlur={field.handleBlur}
             >
               {IFD_NAMES.map((ifdName) => (
                 <SelectItem key={ifdName} textValue={ifdName}>
@@ -128,6 +130,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               onChange={(value) => {
                 field.handleChange(value as FieldValues["format"]);
               }}
+              onBlur={field.handleBlur}
             >
               <form.Subscribe selector={(state) => state.values.tagEntry?.tag}>
                 {(tag) =>
@@ -154,7 +157,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               label="Value"
               value={field.state.value}
               onBlur={field.handleBlur}
-              onChange={(value) => field.handleChange(value)}
+              onChange={field.handleChange}
             />
           )}
         />

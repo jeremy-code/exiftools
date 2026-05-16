@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
+import { formatList } from "#utils/formatList";
 import { getFileFromResponse } from "#utils/getFileFromResponse";
 import { Button, type ButtonProps } from "@exifi/ui/components/Button";
 import { Spinner } from "@exifi/ui/components/Spinner";
@@ -75,16 +76,25 @@ const FileUrlInput = ({
             <TextField
               isRequired={true}
               type="url"
-              inputProps={{
-                className: "rounded-r-none border-r-0",
-              }}
+              inputProps={{ className: "rounded-r-none border-r-0" }}
               className="flex-1"
               {...inputProps}
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
-              onChange={(value) => field.handleChange(value)}
+              onChange={field.handleChange}
               aria-label={field.name}
+              errorMessage={
+                field.state.meta.isTouched && !field.state.meta.isValid ?
+                  formatList(
+                    (field.state.meta.errors as z.core.$ZodIssue[]).map(
+                      (issue) => issue.message,
+                    ),
+                    undefined,
+                    { style: "short", type: "conjunction" },
+                  )
+                : undefined
+              }
             />
           )}
         />
