@@ -2,7 +2,6 @@ import type { ComponentPropsWithRef } from "react";
 
 import { Fragment } from "react/jsx-runtime";
 
-import { useBreakpoint } from "#hooks/useBreakpoint";
 import {
   NumberField,
   type NumberFieldProps,
@@ -21,18 +20,12 @@ const GpsTagVersionInput = ({
   inputProps,
   ...props
 }: GpsTagVersionInputProps) => {
-  const breakpoint = useBreakpoint("max-md");
-
-  // There really isn't enough room to edit four values in one line
-  if (breakpoint) {
-    return value?.join(".") ?? "Unknown";
-  }
-
   return (
     <div className="flex items-baseline gap-1" {...props}>
       {value?.map((byte, index) => (
         <Fragment key={index}>
           <NumberField
+            size="xs"
             {...inputProps}
             aria-label={`${inputProps?.["aria-label"] ?? "GPS Tag Version"}+${index + 1}`}
             value={byte}
