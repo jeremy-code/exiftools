@@ -1,6 +1,7 @@
 import { useId, useState, type ComponentPropsWithRef } from "react";
 
 import { Link as RouterLink } from "@tanstack/react-router";
+import { FocusScope } from "react-aria/FocusScope";
 import { cn } from "tailwind-variants";
 
 import { Button, type ButtonProps } from "@exifi/ui/components/Button";
@@ -70,29 +71,31 @@ const MobileNav = (props: Omit<MobileNavProps, "children">) => {
         aria-controls={mobileNavigationMenuId}
       />
       {isOpen && (
-        <nav
-          id={mobileNavigationMenuId}
-          role="navigation"
-          // Height includes the border-bottom of the navbar (1px)
-          className="absolute inset-x-0 top-[calc(100%+1px)] animate-in border-b bg-bg p-3 text-fg fade-in-50"
-        >
-          <ul className="space-y-0.5">
-            {NAVIGATION_ITEMS.map((item) => (
-              <li key={item.href}>
-                <RouterLink
-                  to={item.href}
-                  // Using <NavigationMenuLink> would error due to not being in
-                  // a <NavigationMenu>
-                  className={navigationMenuTriggerVariants({
-                    variant: "link",
-                  })}
-                >
-                  {item.name}
-                </RouterLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <FocusScope restoreFocus>
+          <nav
+            id={mobileNavigationMenuId}
+            role="navigation"
+            // Height includes the border-bottom of the navbar (1px)
+            className="absolute inset-x-0 top-[calc(100%+1px)] animate-in border-b bg-bg p-3 text-fg fade-in-50"
+          >
+            <ul className="space-y-0.5">
+              {NAVIGATION_ITEMS.map((item) => (
+                <li key={item.href}>
+                  <RouterLink
+                    to={item.href}
+                    // Using <NavigationMenuLink> would error due to not being in
+                    // a <NavigationMenu>
+                    className={navigationMenuTriggerVariants({
+                      variant: "link",
+                    })}
+                  >
+                    {item.name}
+                  </RouterLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </FocusScope>
       )}
     </div>
   );
