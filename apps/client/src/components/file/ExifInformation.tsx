@@ -66,7 +66,7 @@ const ExifInformation = ({
         <DataList
           orientation="vertical"
           variant="bold"
-          className="grid grid-cols-[repeat(auto-fit,minmax(--spacing(35),1fr))] md:max-w-250"
+          className="grid grid-cols-[repeat(auto-fit,minmax(--spacing(35),1fr))]"
         >
           <DataListItem>
             <DataListItemLabel className="min-w-unset!">
