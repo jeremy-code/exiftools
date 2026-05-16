@@ -1,3 +1,5 @@
+import { useTransition } from "react";
+
 import { Save } from "lucide-react";
 
 import { useFileStore } from "#hooks/useFileStore";
@@ -19,6 +21,7 @@ type ExifToolbarProps = Omit<ToolbarProps, "children">;
 const ExifToolbar = (props: ExifToolbarProps) => {
   const { file, setFile } = useFileStore();
   const exifData = useExifEditorContext();
+  const [isPending, startTransition] = useTransition();
 
   return (
     <Toolbar aria-label="Exif editor toolbar" {...props}>
@@ -30,16 +33,10 @@ const ExifToolbar = (props: ExifToolbarProps) => {
               exifData.saveData(),
             );
 
-            const newFile = new File(
-              [new Uint8Array(newFileInBytes)],
-              file.name,
-              {
-                type: file.type,
-                lastModified: new Date().getTime(),
-              },
-            );
-            setFile(newFile);
-            return newFile;
+            return new File([new Uint8Array(newFileInBytes)], file.name, {
+              type: file.type,
+              lastModified: new Date().getTime(),
+            });
           };
 
           // For an unfathomable reason, Mobile iOS specifically seems to have
@@ -51,21 +48,33 @@ const ExifToolbar = (props: ExifToolbarProps) => {
             // https://stackoverflow.com/a/39387533/18551960
             const windowProxy = window.open(undefined, "_blank");
 
-            void generateFile().then((file) => {
+            // https://react.dev/reference/react/useTransition#react-doesnt-treat-my-state-update-after-await-as-a-transition
+            startTransition(async () => {
+              const newFile = await generateFile();
               if (windowProxy !== null) {
                 const blobUrl = URL.createObjectURL(file);
                 windowProxy.location.assign(blobUrl);
                 URL.revokeObjectURL(blobUrl);
               }
-              return;
+              startTransition(() => {
+                setFile(newFile);
+              });
             });
-          } else {
-            void generateFile().then(saveFile);
           }
+
+          startTransition(async () => {
+            const newFile = await generateFile();
+            startTransition(() => {
+              // If I move this outside of the startTransition callback, React
+              // gets stuck on isPending for much longer than it should be.
+              void saveFile(newFile);
+              setFile(newFile);
+            });
+          });
         }}
       >
         <Save size={16} />
-        Save
+        {isPending ? "Saving..." : "Save"}
       </Button>
       <AddEntryDialog />
       <AddGpsEntriesDialog />
