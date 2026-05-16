@@ -164,7 +164,12 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
         <form.Subscribe
           selector={(state) => state.isSubmitting}
           children={(isSubmitting) => (
-            <Button type="submit" variant="surface" isDisabled={isSubmitting}>
+            <Button
+              className="mt-4 self-end px-8"
+              type="submit"
+              variant="surface"
+              isDisabled={isSubmitting}
+            >
               {isSubmitting && <Spinner className="absolute" />}
               <span
                 className="data-[pending=true]:invisible"
