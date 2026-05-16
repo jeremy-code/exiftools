@@ -1,6 +1,7 @@
 import { Suspense, useMemo, type ComponentPropsWithRef } from "react";
 
 import { imageDimensionsFromStream } from "image-dimensions";
+import { useNumberFormatter } from "react-aria";
 import { cn } from "tailwind-variants";
 
 import { useFileHash } from "#hooks/useFileHash";
@@ -22,6 +23,11 @@ import {
 } from "@exifi/ui/components/DataList";
 import { Link } from "@exifi/ui/components/Link";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
+import {
+  Tooltip,
+  TooltipTarget,
+  TooltipTrigger,
+} from "@exifi/ui/components/Tooltip";
 
 import { ImageDimensions } from "./ImageDimensions";
 
@@ -50,6 +56,7 @@ const FileInformation = ({
   const lastModified = Temporal.Instant.fromEpochMilliseconds(
     file.lastModified,
   );
+  const numberFormatter = useNumberFormatter();
 
   return (
     <div
@@ -95,9 +102,16 @@ const FileInformation = ({
             <DataListItem>
               <DataListItemLabel>File size</DataListItemLabel>
               <DataListItemValue>
-                {formatBytes(file.size, undefined, {
-                  maximumFractionDigits: 1,
-                })}
+                <TooltipTrigger>
+                  <TooltipTarget>
+                    <span role="button">
+                      {formatBytes(file.size, undefined, {
+                        maximumFractionDigits: 1,
+                      })}
+                    </span>
+                  </TooltipTarget>
+                  <Tooltip>{numberFormatter.format(file.size)} bytes</Tooltip>
+                </TooltipTrigger>
               </DataListItemValue>
             </DataListItem>
             <DataListItem>
