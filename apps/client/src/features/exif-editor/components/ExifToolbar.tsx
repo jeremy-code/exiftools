@@ -3,6 +3,7 @@ import { useTransition } from "react";
 import { Save } from "lucide-react";
 
 import { useFileStore } from "#hooks/useFileStore";
+import { isMobileWebKit } from "#utils/platform";
 import { saveFile } from "#utils/saveFile";
 import { writeExifData } from "@exifi/exif-utils";
 import { Button } from "@exifi/ui/components/Button";
@@ -12,9 +13,6 @@ import { ExifMenu } from "./ExifMenu";
 import { useExifEditorContext } from "../hooks/useExifEditorContext";
 import { AddEntryDialog } from "./dialogs/AddEntryDialog";
 import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
-
-// https://evilmartians.com/chronicles/how-to-detect-safari-and-ios-versions-with-ease
-const isMobileWebKit = () => "ongesturechange" in window;
 
 type ExifToolbarProps = Omit<ToolbarProps, "children">;
 
