@@ -13,11 +13,10 @@ const resolvers: AdvancedEditorResolver[] = [
 
 const getExifAdvancedEditor: AdvancedEditorResolver = (
   exifEntryObject,
-  value,
   onValueChange,
 ) => {
   for (const resolver of resolvers) {
-    const result = resolver(exifEntryObject, value, onValueChange);
+    const result = resolver(exifEntryObject, onValueChange);
     if (result !== null) {
       return result;
     }

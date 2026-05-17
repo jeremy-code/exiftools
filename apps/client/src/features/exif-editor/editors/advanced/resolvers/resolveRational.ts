@@ -6,7 +6,6 @@ import type { AdvancedEditorResolver } from "../types";
 
 const resolveRational: AdvancedEditorResolver = (
   exifEntryObject,
-  value,
   onValueChange,
 ) => {
   if (
@@ -17,11 +16,11 @@ const resolveRational: AdvancedEditorResolver = (
       kind: "rational",
       exifEntryObject,
       values: mapRationalToObject(
-        newTypedArrayInFormat(value, exifEntryObject.format),
+        newTypedArrayInFormat(exifEntryObject.value, exifEntryObject.format),
       ),
       onValueChange: (rationalObject, index) => {
         onValueChange(
-          value.toSpliced(
+          exifEntryObject.value.toSpliced(
             index * 2,
             2,
             rationalObject.numerator,

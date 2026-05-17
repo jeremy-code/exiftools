@@ -5,14 +5,13 @@ import type { AdvancedEditorResolver } from "../types";
 
 const resolveUserComment: AdvancedEditorResolver = (
   exifEntryObject,
-  value,
   onValueChange,
 ) => {
   if (exifEntryObject.tag === "USER_COMMENT") {
     return {
       kind: "userComment",
       exifEntryObject,
-      value: parseUserComment(value),
+      value: parseUserComment(exifEntryObject.value),
       onValueChange: (value) =>
         onValueChange(Array.from(formatUserComment(value))),
     };

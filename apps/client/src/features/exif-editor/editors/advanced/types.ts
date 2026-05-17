@@ -5,7 +5,6 @@ import type { UserComment } from "#lib/exif/userComment/interfaces";
 
 type AdvancedEditorResolver = (
   entry: ExifEntryObject,
-  value: number[],
   onValueChange: (value: number[]) => void,
 ) => AdvancedEditor | null;
 

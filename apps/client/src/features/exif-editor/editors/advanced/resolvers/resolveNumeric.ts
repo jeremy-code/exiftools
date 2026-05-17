@@ -2,7 +2,6 @@ import type { AdvancedEditorResolver } from "../types";
 
 const resolveNumeric: AdvancedEditorResolver = (
   exifEntryObject,
-  value,
   onValueChange,
 ) => {
   if (
@@ -17,9 +16,9 @@ const resolveNumeric: AdvancedEditorResolver = (
     return {
       kind: "numeric",
       exifEntryObject,
-      values: value,
+      values: exifEntryObject.value,
       onValueChange: (newValue, index) => {
-        onValueChange(value.with(index, newValue));
+        onValueChange(exifEntryObject.value.with(index, newValue));
       },
     };
   }

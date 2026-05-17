@@ -5,14 +5,13 @@ import type { AdvancedEditorResolver } from "../types";
 
 const resolveAscii: AdvancedEditorResolver = (
   exifEntryObject,
-  value,
   onValueChange,
 ) => {
   if (exifEntryObject.format === "ASCII") {
     return {
       kind: "ascii",
       exifEntryObject,
-      value: decodeStringFromUtf8(new Uint8Array(value)),
+      value: decodeStringFromUtf8(new Uint8Array(exifEntryObject.value)),
       onValueChange: (value) => {
         onValueChange(Array.from(encodeStringToUtf8(value)));
       },

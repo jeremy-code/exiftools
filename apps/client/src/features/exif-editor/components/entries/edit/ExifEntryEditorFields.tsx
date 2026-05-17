@@ -22,8 +22,7 @@ const ExifEntryEditorFields = ({
   setDraft,
 }: ExifEntryEditorFieldsProps) => {
   const exifAdvancedEditor = getExifAdvancedEditor(
-    exifEntryObject,
-    draft,
+    { ...exifEntryObject, value: draft },
     setDraft,
   );
 
