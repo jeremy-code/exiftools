@@ -14,6 +14,7 @@ import {
 } from "react-aria-components/Disclosure";
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import { getExifEntryObjectLabel } from "#lib/exif/utils/getExifEntryObjectLabel";
 import { formatPlural } from "#utils/formatPlural";
 import { Button } from "@exifi/ui/components/Button";
 import {
@@ -37,10 +38,7 @@ const ExifEntryMetadata = ({
         <DataListItem>
           <DataListItemLabel className="min-w-50">Tag</DataListItemLabel>
           <DataListItemValue>
-            {ExifTagInfo.getTitleInIfd(
-              exifEntryObject.tag,
-              exifEntryObject.ifd,
-            )}
+            {getExifEntryObjectLabel(exifEntryObject)}
           </DataListItemValue>
         </DataListItem>
         <DataListItem>

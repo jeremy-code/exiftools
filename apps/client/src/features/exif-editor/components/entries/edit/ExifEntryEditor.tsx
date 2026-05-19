@@ -1,9 +1,8 @@
-import { ExifTagInfo } from "libexif-wasm";
-
 import { RationalInput } from "#components/editor/RationalInput";
 import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
 import { getExifAdvancedEditor } from "#features/exif-editor/editors/advanced/getExifAdvancedEditor";
 import { useExifEntryDraftContext } from "#features/exif-editor/hooks/useExifEntryDraftContext";
+import { getExifEntryObjectLabel } from "#lib/exif/utils/getExifEntryObjectLabel";
 import { assertNever } from "#utils/assertNever";
 import { NumberField } from "@exifi/ui/components/NumberField";
 import { TextAreaField } from "@exifi/ui/components/TextAreaField";
@@ -18,11 +17,7 @@ const ExifEntryEditor = () => {
   if (exifAdvancedEditor === null) {
     return null;
   }
-  const title = ExifTagInfo.getTitleInIfd(
-    exifEntryObject.tag,
-    exifEntryObject.ifd,
-  );
-  const label = title !== "" ? title : exifEntryObject.tag;
+  const label = getExifEntryObjectLabel(exifEntryObject);
 
   switch (exifAdvancedEditor.kind) {
     case "rational":

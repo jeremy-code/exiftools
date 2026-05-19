@@ -58,7 +58,7 @@ const IfdAccordionItem = ({ exifContent }: { exifContent: ExifContent }) => {
                   <DataListItem className="flex-col! md:flex-row!" key={tag}>
                     <DataListItemLabel className="md:w-1/3">
                       {/* Some tags (e.g. RECOMMENDED_EXPOSURE_INDEX) don't have a description in ExifTagTable[] */}
-                      {description !== null && description !== "" ?
+                      {description !== "" ?
                         <TooltipTrigger>
                           <TooltipTarget>
                             <span role="button">{title}</span>
