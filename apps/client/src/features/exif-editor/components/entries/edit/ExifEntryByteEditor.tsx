@@ -1,5 +1,3 @@
-import type { Dispatch, SetStateAction } from "react";
-
 import { Minus, Plus } from "lucide-react";
 import {
   Disclosure,
@@ -8,23 +6,16 @@ import {
   Heading,
 } from "react-aria-components/Disclosure";
 
+import { useExifEntryDraftContext } from "#features/exif-editor/hooks/useExifEntryDraftContext";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Button } from "@exifi/ui/components/Button";
 import { NumberField } from "@exifi/ui/components/NumberField";
 
-type ExifEntryEditorProps = {
-  exifEntryObject: ExifEntryObject;
-  draft: number[];
-  setDraft: Dispatch<SetStateAction<number[]>>;
-} & DisclosureProps;
+type ExifEntryEditorProps = DisclosureProps;
 
-const ExifEntryByteEditor = ({
-  exifEntryObject,
-  draft,
-  setDraft,
-  ...props
-}: ExifEntryEditorProps) => {
+const ExifEntryByteEditor = (props: ExifEntryEditorProps) => {
+  const { exifEntryObject, draft, setDraft } = useExifEntryDraftContext();
+
   const isRationalOrSRational =
     exifEntryObject.format === "SRATIONAL" ||
     exifEntryObject.format === "RATIONAL";

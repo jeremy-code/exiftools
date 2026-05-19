@@ -3,6 +3,7 @@ import type { ComponentPropsWithRef } from "react";
 import { cn } from "tailwind-variants";
 
 import { useExifEntryDraft } from "#features/exif-editor/hooks/useExifEntryDraft";
+import { ExifEntryDraftContext } from "#features/exif-editor/hooks/useExifEntryDraftContext";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Button } from "@exifi/ui/components/Button";
 
@@ -25,26 +26,24 @@ const ExifEntryInspector = ({
 
   return (
     <div className={cn("flex flex-col gap-4", className)} {...props}>
-      <ExifEntryMetadata exifEntryObject={exifEntryObject} />
-      <ExifEntryEditor
-        exifEntryObject={exifEntryObject}
-        draft={draft}
-        setDraft={setDraft}
-      />
-      <div>
-        {"Expected change: "}
-        {isChanged ?
-          <ExifEntryValidity exifEntryObject={exifEntryObject} draft={draft} />
-        : <span className="text-fg-muted italic">no changes</span>}
-      </div>
-      <ExifEntryByteEditor
-        exifEntryObject={exifEntryObject}
-        draft={draft}
-        setDraft={setDraft}
-      />
-      <Button isDisabled={!isChanged} onPress={() => save()}>
-        {isChanged ? "Save changes" : "Saved"}
-      </Button>
+      <ExifEntryDraftContext value={{ exifEntryObject, draft, setDraft }}>
+        <ExifEntryMetadata exifEntryObject={exifEntryObject} />
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+          <ExifEntryEditor />
+        </div>
+        <div>
+          {"Expected change: "}
+          {isChanged ?
+            <ExifEntryValidity
+              exifEntryObject={{ ...exifEntryObject, value: draft }}
+            />
+          : <span className="text-fg-muted italic">no changes</span>}
+        </div>
+        <ExifEntryByteEditor />
+        <Button isDisabled={!isChanged} onPress={() => save()}>
+          {isChanged ? "Save changes" : "Saved"}
+        </Button>
+      </ExifEntryDraftContext>
     </div>
   );
 };

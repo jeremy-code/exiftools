@@ -7,19 +7,14 @@ import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 
 type ExifEntryValidityProps = {
   exifEntryObject: ExifEntryObject;
-  draft: number[];
 } & ComponentPropsWithRef<"span">;
 
 const ExifEntryValidity = ({
   className,
   exifEntryObject,
-  draft,
   ...props
 }: ExifEntryValidityProps) => {
-  const expectedValue = getValueFromExifEntryObject({
-    ...exifEntryObject,
-    value: draft,
-  });
+  const expectedValue = getValueFromExifEntryObject(exifEntryObject);
   const isEmptyString = expectedValue === "";
 
   return (

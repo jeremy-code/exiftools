@@ -1,43 +1,63 @@
-import {
-  type ComponentPropsWithRef,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { ExifTagInfo } from "libexif-wasm";
 
-import { cn } from "tailwind-variants";
+import { RationalInput } from "#components/editor/RationalInput";
+import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
+import { getExifAdvancedEditor } from "#features/exif-editor/editors/advanced/getExifAdvancedEditor";
+import { useExifEntryDraftContext } from "#features/exif-editor/hooks/useExifEntryDraftContext";
+import { assertNever } from "#utils/assertNever";
+import { NumberField } from "@exifi/ui/components/NumberField";
+import { TextAreaField } from "@exifi/ui/components/TextAreaField";
 
-import { type ExifEntryObject } from "#lib/exif/serializeExifData";
-
-import { ExifEntryEditorFields } from "./ExifEntryEditorFields";
-
-type ExifEntryEditorProps = {
-  exifEntryObject: ExifEntryObject;
-  draft: number[];
-  setDraft: Dispatch<SetStateAction<number[]>>;
-} & ComponentPropsWithRef<"div">;
-
-const ExifEntryEditor = ({
-  className,
-  exifEntryObject,
-  draft,
-  setDraft,
-  ...props
-}: ExifEntryEditorProps) => {
-  return (
-    <div
-      className={cn(
-        "grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4",
-        className,
-      )}
-      {...props}
-    >
-      <ExifEntryEditorFields
-        exifEntryObject={exifEntryObject}
-        draft={draft}
-        setDraft={setDraft}
-      />
-    </div>
+const ExifEntryEditor = () => {
+  const { exifEntryObject, draft, setDraft } = useExifEntryDraftContext();
+  const exifAdvancedEditor = getExifAdvancedEditor(
+    { ...exifEntryObject, value: draft },
+    setDraft,
   );
+
+  if (exifAdvancedEditor === null) {
+    return null;
+  }
+  const title = ExifTagInfo.getTitleInIfd(
+    exifEntryObject.tag,
+    exifEntryObject.ifd,
+  );
+  const label = title !== "" ? title : exifEntryObject.tag;
+
+  switch (exifAdvancedEditor.kind) {
+    case "rational":
+      return exifAdvancedEditor.values.map((value, index) => (
+        <RationalInput
+          key={index}
+          aria-label={`${label} ${index + 1}`}
+          initialRational={value}
+          setRational={(rational) =>
+            exifAdvancedEditor.onValueChange(rational, index)
+          }
+        />
+      ));
+    case "ascii":
+      return (
+        <TextAreaField
+          aria-label={label}
+          {...exifAdvancedEditor}
+          onChange={(target) => exifAdvancedEditor.onValueChange(target)}
+        />
+      );
+    case "numeric":
+      return exifAdvancedEditor.values.map((value, index) => (
+        <NumberField
+          aria-label={`${label} ${index + 1}`}
+          key={index}
+          value={value}
+          onChange={(value) => exifAdvancedEditor.onValueChange(value, index)}
+        />
+      ));
+    case "userComment":
+      return <UserCommentTextarea aria-label={label} {...exifAdvancedEditor} />;
+    default:
+      assertNever(exifAdvancedEditor);
+  }
 };
 
-export { ExifEntryEditor, type ExifEntryEditorProps };
+export { ExifEntryEditor };
