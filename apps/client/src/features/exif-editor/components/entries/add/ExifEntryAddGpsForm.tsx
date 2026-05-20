@@ -3,8 +3,10 @@ import { useCallback, type ComponentPropsWithRef } from "react";
 import { useForm } from "@tanstack/react-form";
 import { LatLng } from "leaflet";
 import { cn } from "tailwind-variants";
+import { useShallow } from "zustand/react/shallow";
 
-import { useExifEntryAddGpsFormOptions } from "#features/exif-editor/hooks/useExifEntryAddGpsFormOptions";
+import { addGpsEntriesFormOptions } from "#features/exif-editor/forms/addGpsEntriesForm";
+import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { Button } from "@exifi/ui/components/Button";
 import { NumberField } from "@exifi/ui/components/NumberField";
@@ -18,7 +20,22 @@ const ExifEntryAddGpsForm = ({
   className,
   ...props
 }: ExifEntryAddGpsFormProps) => {
-  const gpsForm = useForm(useExifEntryAddGpsFormOptions());
+  const { updateLatLng, exifDataObject } = useExifEditorStore(
+    useShallow((state) => ({
+      updateLatLng: state.updateLatLng,
+      exifDataObject: state.exifDataObject,
+    })),
+  );
+  const gpsForm = useForm({
+    ...addGpsEntriesFormOptions(exifDataObject),
+    onSubmit: ({ value }) => {
+      if (value.latitude !== undefined && value.longitude !== undefined) {
+        updateLatLng(
+          new LatLng(value.latitude, value.longitude, value.altitude),
+        );
+      }
+    },
+  });
 
   const setGpsForm = useCallback(
     (latLng: LatLng) => {
@@ -54,7 +71,14 @@ const ExifEntryAddGpsForm = ({
       <gpsForm.Subscribe
         selector={(state) => state.values}
         children={(values) => (
-          <ExifGpsMap {...values} setCoordinate={setGpsForm} />
+          <ExifGpsMap
+            coordinate={
+              values.latitude !== undefined && values.longitude !== undefined ?
+                new LatLng(values.latitude, values.longitude, values.altitude)
+              : undefined
+            }
+            setCoordinate={setGpsForm}
+          />
         )}
       />
       <form

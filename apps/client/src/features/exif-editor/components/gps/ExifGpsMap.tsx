@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { LatLng, type Map as LeafletMap } from "leaflet";
 import { cn } from "tailwind-variants";
@@ -10,27 +10,16 @@ import { Map, type MapProps } from "#components/map/Map";
 import { useGeoSearchLocation } from "#hooks/useGeoSearchLocation";
 
 type ExifGpsMapProps = {
-  latitude: number | undefined;
-  longitude: number | undefined;
-  altitude: number | undefined;
+  coordinate: LatLng | undefined;
   setCoordinate: (coordinate: LatLng) => void;
 } & MapProps;
 
 const ExifGpsMap = ({
   className,
-  latitude,
-  longitude,
-  altitude,
+  coordinate,
   setCoordinate,
   ...props
 }: ExifGpsMapProps) => {
-  const coordinate = useMemo(
-    () =>
-      latitude !== undefined && longitude !== undefined ?
-        new LatLng(latitude, longitude, altitude)
-      : undefined,
-    [latitude, longitude, altitude],
-  );
   const [map, setMap] = useState<LeafletMap | null>(null);
   const { label, latLng: geoSearchLocationLatLng } = useGeoSearchLocation(
     map,

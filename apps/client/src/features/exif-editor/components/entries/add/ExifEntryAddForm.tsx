@@ -1,13 +1,21 @@
 import type { ComponentPropsWithRef } from "react";
 
 import { useForm } from "@tanstack/react-form";
-import { ExifFormat, getExifTagTable, type TagEntry } from "libexif-wasm";
+import {
+  ExifFormat,
+  exifIfdGetName,
+  getExifTagTable,
+  type TagEntry,
+} from "libexif-wasm";
 import { IFD_NAMES } from "libexif-wasm/constants";
-import { z } from "zod";
 
+import {
+  addEntryFormOptions,
+  addFormSchema,
+  type AddFieldValues,
+} from "#features/exif-editor/forms/addEntryForm";
 import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
-import { FormatSchema, IfdSchema, TagEntrySchema } from "#schemas/exif";
 import { titlecase } from "#utils/titlecase";
 import { Button } from "@exifi/ui/components/Button";
 import { ComboBox, ComboBoxItem } from "@exifi/ui/components/ComboBox";
@@ -17,48 +25,20 @@ import { TextField } from "@exifi/ui/components/TextField";
 
 const textDecoder = new TextDecoder();
 
-const addFormSchema = z.strictObject({
-  ifd: IfdSchema,
-  tagEntry: TagEntrySchema,
-  format: FormatSchema,
-  editor: z.enum(["string", "array"]),
-  value: z.union([z.array(z.number()), z.string()]),
-});
-
-const _partialAddFormSchema = addFormSchema.partial();
-
-type FieldValues = z.infer<typeof _partialAddFormSchema>;
-
 const EXIF_TAG_TABLE = getExifTagTable();
-
-const DEFAULT_FORM_VALUES: FieldValues = {
-  ifd: "IFD_0",
-  tagEntry: undefined,
-  format: "UNDEFINED",
-  editor: "string",
-  value: "",
-};
 
 type ExifEntryAddFormProps = ComponentPropsWithRef<"form">;
 
 const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
   const addExifEntry = useExifEditorStore((state) => state.addExifEntry);
-  const form = useForm({
-    defaultValues: DEFAULT_FORM_VALUES,
-    validators: {
-      onSubmit: addFormSchema,
-    },
+  const addForm = useForm({
+    ...addEntryFormOptions(),
     onSubmit: ({ value }) => {
-      const parsedSchema = addFormSchema.safeParse(value);
-      if (!parsedSchema.success) {
-        throw new Error(parsedSchema.error.message);
-      }
-
       const {
         value: entryValue,
         tagEntry,
         ...exifEntryObject
-      } = parsedSchema.data;
+      } = addFormSchema.parse(value);
 
       addExifEntry({ tag: tagEntry.tag, ...exifEntryObject }, entryValue);
     },
@@ -70,24 +50,20 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        void form.handleSubmit();
+        void addForm.handleSubmit();
       }}
     >
       <div className="flex flex-col gap-2">
-        <form.Field
+        <addForm.Field
           name="tagEntry"
           children={(field) => (
             <ComboBox
               items={EXIF_TAG_TABLE}
               value={field.state.value?.tag}
               onChange={(value) => {
-                const tagEntry = EXIF_TAG_TABLE.find(
-                  (item) => item.tag === value,
+                field.handleChange(
+                  EXIF_TAG_TABLE.find((item) => item.tag === value),
                 );
-
-                if (tagEntry !== undefined) {
-                  field.handleChange(tagEntry);
-                }
               }}
               onBlur={field.handleBlur}
               label="Tag"
@@ -101,32 +77,42 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
             </ComboBox>
           )}
         />
-        <form.Field
+        <addForm.Field
           name="ifd"
           children={(field) => (
             <Select
               label="Image File Domain"
               value={field.state.value}
               onChange={(value) => {
-                field.handleChange(value as FieldValues["ifd"]);
+                field.handleChange(value as AddFieldValues["ifd"]);
               }}
               placeholder="Select an IFD"
               onBlur={field.handleBlur}
             >
               {IFD_NAMES.map((ifdName) => (
-                <SelectItem key={ifdName} textValue={ifdName}>
-                  {ifdName}{" "}
-                  <form.Subscribe
-                    selector={(state) => state.values.tagEntry?.esl}
-                  >
-                    {(esl) => (esl === undefined ? null : esl[ifdName])}
-                  </form.Subscribe>
-                </SelectItem>
+                <addForm.Subscribe
+                  key={ifdName}
+                  selector={(state) => state.values.tagEntry?.esl}
+                >
+                  {(esl) => (
+                    <SelectItem
+                      id={ifdName}
+                      isDisabled={
+                        esl !== undefined &&
+                        ["UNKNOWN", "NOT_RECORDED"].includes(esl[ifdName])
+                      }
+                    >
+                      {`${exifIfdGetName(ifdName)}${
+                        esl === undefined ? "" : ` (${titlecase(esl[ifdName])})`
+                      }`}
+                    </SelectItem>
+                  )}
+                </addForm.Subscribe>
               ))}
             </Select>
           )}
         />
-        <form.Field
+        <addForm.Field
           name="format"
           children={(field) => (
             <Select
@@ -134,30 +120,34 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               value={field.state.value}
               placeholder="Select a format"
               onChange={(value) => {
-                field.handleChange(value as FieldValues["format"]);
+                field.handleChange(value as AddFieldValues["format"]);
               }}
               onBlur={field.handleBlur}
             >
-              <form.Subscribe selector={(state) => state.values.tagEntry?.tag}>
-                {(tag) =>
-                  typeof tag === "string" && tag in EXIF_TAG_MAP ?
-                    EXIF_TAG_MAP[tag]?.format.map((format) => (
-                      <SelectItem key={format} id={format}>
-                        {format}
-                      </SelectItem>
-                    ))
-                  : Array.from(ExifFormat).map(([format]) => (
-                      <SelectItem key={format} id={format}>
-                        {format}
-                      </SelectItem>
-                    ))
-                }
-              </form.Subscribe>
+              {Array.from(ExifFormat).map(([format]) => (
+                <addForm.Subscribe
+                  key={format}
+                  selector={(state) => state.values.tagEntry?.tag}
+                >
+                  {(tag) => (
+                    <SelectItem
+                      id={format}
+                      isDisabled={
+                        tag !== undefined &&
+                        tag in EXIF_TAG_MAP &&
+                        !EXIF_TAG_MAP[tag]?.format.includes(format)
+                      }
+                    >
+                      {format}
+                    </SelectItem>
+                  )}
+                </addForm.Subscribe>
+              ))}
             </Select>
           )}
         />
 
-        <form.Field
+        <addForm.Field
           name="editor"
           children={(field) => (
             <Select
@@ -165,7 +155,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               value={field.state.value}
               placeholder="Select an editor"
               onChange={(value) => {
-                field.handleChange(value as FieldValues["editor"]);
+                field.handleChange(value as AddFieldValues["editor"]);
               }}
               onBlur={field.handleBlur}
             >
@@ -178,12 +168,12 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
           )}
         />
 
-        <form.Subscribe
+        <addForm.Subscribe
           selector={(state) => state.values.editor}
           children={(editor) => {
             if (editor === "string") {
               return (
-                <form.Field
+                <addForm.Field
                   name="value"
                   children={(field) => (
                     <TextField
@@ -206,7 +196,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
           }}
         />
 
-        <form.Subscribe
+        <addForm.Subscribe
           selector={(state) => state.isSubmitting}
           children={(isSubmitting) => (
             <Button
