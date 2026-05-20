@@ -100,7 +100,9 @@ const ExifEntryAddGpsForm = ({
                 maxValue={90}
                 onChange={(value) => field.handleChange(value)}
                 formatOptions={{
-                  style: "decimal",
+                  style: "unit",
+                  unit: "degree",
+                  unitDisplay: "narrow",
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 6,
                 }}
@@ -118,7 +120,9 @@ const ExifEntryAddGpsForm = ({
                 minValue={-180}
                 maxValue={180}
                 formatOptions={{
-                  style: "decimal",
+                  style: "unit",
+                  unit: "degree",
+                  unitDisplay: "narrow",
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 6,
                 }}
