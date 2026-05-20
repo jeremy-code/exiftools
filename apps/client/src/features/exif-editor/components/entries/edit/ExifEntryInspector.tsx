@@ -28,7 +28,7 @@ const ExifEntryInspector = ({
     <div className={cn("flex flex-col gap-4", className)} {...props}>
       <ExifEntryDraftContext value={{ exifEntryObject, draft, setDraft }}>
         <ExifEntryMetadata exifEntryObject={exifEntryObject} />
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(--spacing(18.75),1fr))] gap-4">
           <ExifEntryEditor />
         </div>
         <div>
