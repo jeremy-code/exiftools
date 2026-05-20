@@ -1,4 +1,4 @@
-import { type ComponentPropsWithRef } from "react";
+import { useState, type ComponentPropsWithRef } from "react";
 
 import { cn } from "tailwind-variants";
 
@@ -21,6 +21,11 @@ const ExifVersionInput = ({
   inputProps,
   ...props
 }: ExifVersionInputProps) => {
+  const [exifVersion, setExifVersion] = useState<{
+    major: number | undefined;
+    minor: number | undefined;
+  }>(value ?? { major: undefined, minor: undefined });
+
   return (
     <div className={cn("flex items-baseline gap-2", className)} {...props}>
       <NumberField
@@ -32,14 +37,26 @@ const ExifVersionInput = ({
         }
         minValue={1}
         maxValue={2}
-        value={value?.major}
+        value={exifVersion.major}
         onChange={(target) => {
-          if (value !== undefined) {
-            onValueChange?.({
+          setExifVersion((prev) => {
+            const nextExifVersion = {
+              ...prev,
               major: target,
-              minor: value.minor,
-            });
-          }
+            };
+
+            if (
+              nextExifVersion.major !== undefined &&
+              nextExifVersion.minor !== undefined
+            ) {
+              onValueChange?.({
+                major: nextExifVersion.major,
+                minor: nextExifVersion.minor,
+              });
+            }
+
+            return nextExifVersion;
+          });
         }}
       />
       .
@@ -51,14 +68,26 @@ const ExifVersionInput = ({
           : "Minor"
         }
         minValue={0}
-        value={value?.minor}
+        value={exifVersion.minor}
         onChange={(target) => {
-          if (value !== undefined) {
-            onValueChange?.({
-              major: value.major,
+          setExifVersion((prev) => {
+            const nextExifVersion = {
+              ...prev,
               minor: target,
-            });
-          }
+            };
+
+            if (
+              nextExifVersion.major !== undefined &&
+              nextExifVersion.minor !== undefined
+            ) {
+              onValueChange?.({
+                major: nextExifVersion.major,
+                minor: nextExifVersion.minor,
+              });
+            }
+
+            return nextExifVersion;
+          });
         }}
       />
     </div>

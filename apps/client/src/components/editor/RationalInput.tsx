@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 
 import { Decimal } from "decimal.js";
 import type { RationalObject } from "libexif-wasm";
+import { useNumberFormatter } from "react-aria";
 
 import { approximateRational } from "#lib/math/approximateRational";
 import {
@@ -10,6 +11,7 @@ import {
 } from "@exifi/ui/components/NumberField";
 
 type RationalInputProps = {
+  placeholderRational?: RationalObject | undefined;
   initialRational?: RationalObject | undefined;
   setRational?: (rational: RationalObject) => void;
   numeratorInputProps?: Omit<NumberFieldProps, "value" | "onChange">;
@@ -23,17 +25,25 @@ const RationalInput = ({
   numeratorInputProps,
   denominatorInputProps,
   decimalInputProps,
+  placeholderRational,
   ...sharedProps
 }: RationalInputProps) => {
-  const [numerator, setNumerator] = useState(initialRational?.numerator ?? 0);
-  const [denominator, setDenominator] = useState(
-    initialRational?.denominator ?? 0,
-  );
+  const numberFormatter = useNumberFormatter();
+  const [prevRational, setPrevRational] = useState(initialRational);
+  const [numerator, setNumerator] = useState(initialRational?.numerator);
+  const [denominator, setDenominator] = useState(initialRational?.denominator);
+
+  if (prevRational !== initialRational) {
+    setNumerator(initialRational?.numerator);
+    setDenominator(initialRational?.denominator);
+    setPrevRational(initialRational);
+  }
+
   const decimal = useMemo(
     () =>
       numerator !== undefined && denominator !== undefined ?
         new Decimal(numerator).div(denominator).toNumber()
-      : NaN,
+      : undefined,
     [numerator, denominator],
   );
 
@@ -42,6 +52,11 @@ const RationalInput = ({
       <NumberField
         {...sharedProps}
         {...numeratorInputProps}
+        placeholder={
+          placeholderRational !== undefined ?
+            numberFormatter.format(placeholderRational.numerator)
+          : numeratorInputProps?.placeholder
+        }
         aria-label={
           sharedProps["aria-label"] !== undefined ?
             sharedProps["aria-label"] + " Numerator"
@@ -50,7 +65,9 @@ const RationalInput = ({
         value={numerator}
         onChange={(value) => {
           setNumerator(value);
-          setRational?.({ numerator: value, denominator });
+          if (denominator !== undefined) {
+            setRational?.({ numerator: value, denominator });
+          }
         }}
       />
       /
@@ -62,19 +79,33 @@ const RationalInput = ({
             sharedProps["aria-label"] + " Denominator"
           : "Denominator"
         }
+        placeholder={
+          placeholderRational !== undefined ?
+            numberFormatter.format(placeholderRational.denominator)
+          : numeratorInputProps?.placeholder
+        }
         value={denominator}
         onChange={(value) => {
           setDenominator(value);
-          setRational?.({
-            numerator,
-            denominator: value,
-          });
+          if (numerator !== undefined) {
+            setRational?.({
+              numerator,
+              denominator: value,
+            });
+          }
         }}
       />
       =
       <NumberField
         {...sharedProps}
         {...decimalInputProps}
+        placeholder={
+          placeholderRational !== undefined ?
+            numberFormatter.format(
+              placeholderRational.numerator / placeholderRational.denominator,
+            )
+          : numeratorInputProps?.placeholder
+        }
         aria-label={
           sharedProps["aria-label"] !== undefined ?
             sharedProps["aria-label"] + " Decimal"

@@ -769,9 +769,9 @@ const EXIF_TAG_MAP: Partial<Record<Tag, ExifTagInformation>> = {
     ifd: ["GPS"],
     format: ["BYTE"],
     numberOfComponents: 4,
-    values: {
-      default: 0x02020000,
-    },
+    // values: {
+    //   default: 0x02020000,
+    // },
   },
   LATITUDE: {
     ifd: ["GPS"],

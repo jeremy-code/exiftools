@@ -11,14 +11,13 @@ import {
 } from "#features/exif-editor/forms/addEntryForm";
 import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
-import { decodeStringFromUtf8 } from "#utils/decodeStringFromUtf8";
-import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { titlecase } from "#utils/titlecase";
 import { Button } from "@exifi/ui/components/Button";
 import { ComboBox, ComboBoxItem } from "@exifi/ui/components/ComboBox";
 import { Select, SelectItem } from "@exifi/ui/components/Select";
 import { Spinner } from "@exifi/ui/components/Spinner";
-import { TextField } from "@exifi/ui/components/TextField";
+
+import { ExifEntryAddEditor } from "./ExifEntryAddEditor";
 
 const EXIF_TAG_TABLE = getExifTagTable();
 
@@ -35,7 +34,11 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
         ...exifEntryObject
       } = addFormSchema.parse(value);
 
-      addExifEntry({ tag: tagEntry.tag, ...exifEntryObject }, entryValue);
+      try {
+        addExifEntry({ tag: tagEntry.tag, ...exifEntryObject }, entryValue);
+      } finally {
+        addForm.reset();
+      }
     },
   });
 
@@ -57,6 +60,12 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
                 id: index,
                 ...item,
               }))}
+              // Needs a re-render when undefined (either form reset or unselected)
+              key={
+                field.state.value === undefined ?
+                  "is-undefined"
+                : "is-not-undefined"
+              }
               value={field.state.value?.index}
               onChange={(value) => {
                 if (typeof value !== "number") {
@@ -85,6 +94,11 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
           name="ifd"
           children={(field) => (
             <Select
+              key={
+                field.state.value === undefined ?
+                  "is-undefined"
+                : "is-not-undefined"
+              }
               label="Image File Domain"
               value={field.state.value}
               onChange={(value) => {
@@ -122,10 +136,24 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
           children={(field) => (
             <Select
               label="Format"
+              key={
+                field.state.value === undefined ?
+                  "is-undefined"
+                : "is-not-undefined"
+              }
               value={field.state.value}
               placeholder="Select a format"
               onChange={(value) => {
                 field.handleChange(value as AddFieldValues["format"]);
+                if (
+                  (value === "RATIONAL" || value === "SRATIONAL") &&
+                  addForm.state.values.value.length % 2 !== 0
+                ) {
+                  addForm.setFieldValue(
+                    "value",
+                    addForm.state.values.value.concat([1]),
+                  );
+                }
               }}
               onBlur={field.handleBlur}
               isRequired
@@ -152,28 +180,31 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
             </Select>
           )}
         />
-        <addForm.Field
-          name="value"
-          children={(field) => (
-            <TextField
-              label="Value"
-              value={
-                field.state.value === undefined ?
-                  undefined
-                : decodeStringFromUtf8(new Uint8Array(field.state.value))
-              }
-              onBlur={field.handleBlur}
-              onChange={(fieldValue) => {
-                field.handleChange(
-                  fieldValue === "" ?
-                    []
-                  : Array.from(encodeStringToUtf8(fieldValue)),
-                );
-              }}
-              isRequired
+        <addForm.Subscribe
+          selector={(state) => ({
+            tag: state.values.tagEntry?.tag,
+            format: state.values.format,
+            ifd: state.values.ifd,
+          })}
+        >
+          {({ tag, format, ifd }) => (
+            <addForm.Field
+              key={`${tag}-${format}-${ifd}`}
+              name="value"
+              children={(field) => (
+                <ExifEntryAddEditor
+                  exifEntryObject={{
+                    tag,
+                    format,
+                    ifd,
+                    value: field.state.value,
+                  }}
+                  onValueChange={field.handleChange}
+                />
+              )}
             />
           )}
-        />
+        </addForm.Subscribe>
         <addForm.Subscribe
           selector={(state) => state.isSubmitting}
           children={(isSubmitting) => (

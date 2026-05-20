@@ -47,9 +47,10 @@ const parseUserComment = (data: Iterable<number>): UserComment => {
     };
   }
 
-  throw new Error(
-    `USER_COMMENT tag is of an unknown encoding, received encoding ${JSON.stringify([...header])} and value of length ${value.length}`,
-  );
+  return {
+    encoding: "UNICODE",
+    value: textDecoder.decode(value),
+  };
 };
 
 export { parseUserComment, type UserComment };
