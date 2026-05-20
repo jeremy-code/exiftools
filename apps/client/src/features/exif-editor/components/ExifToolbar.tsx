@@ -58,17 +58,17 @@ const ExifToolbar = (props: ExifToolbarProps) => {
                 setFile(newFile);
               });
             });
-          }
-
-          startTransition(async () => {
-            const newFile = await generateFile();
-            startTransition(() => {
-              // If I move this outside of the startTransition callback, React
-              // gets stuck on isPending for much longer than it should be.
-              void saveFile(newFile);
-              setFile(newFile);
+          } else {
+            startTransition(async () => {
+              const newFile = await generateFile();
+              startTransition(() => {
+                // If I move this outside of the startTransition callback, React
+                // gets stuck on isPending for much longer than it should be.
+                void saveFile(newFile);
+                setFile(newFile);
+              });
             });
-          });
+          }
         }}
       >
         <Save size={16} />
