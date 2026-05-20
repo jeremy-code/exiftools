@@ -1,12 +1,7 @@
 import type { ComponentPropsWithRef } from "react";
 
 import { useForm } from "@tanstack/react-form";
-import {
-  ExifFormat,
-  exifIfdGetName,
-  getExifTagTable,
-  type TagEntry,
-} from "libexif-wasm";
+import { ExifFormat, exifIfdGetName, getExifTagTable } from "libexif-wasm";
 import { IFD_NAMES } from "libexif-wasm/constants";
 
 import {
@@ -16,14 +11,14 @@ import {
 } from "#features/exif-editor/forms/addEntryForm";
 import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
+import { decodeStringFromUtf8 } from "#utils/decodeStringFromUtf8";
+import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { titlecase } from "#utils/titlecase";
 import { Button } from "@exifi/ui/components/Button";
 import { ComboBox, ComboBoxItem } from "@exifi/ui/components/ComboBox";
 import { Select, SelectItem } from "@exifi/ui/components/Select";
 import { Spinner } from "@exifi/ui/components/Spinner";
 import { TextField } from "@exifi/ui/components/TextField";
-
-const textDecoder = new TextDecoder();
 
 const EXIF_TAG_TABLE = getExifTagTable();
 
@@ -58,19 +53,28 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
           name="tagEntry"
           children={(field) => (
             <ComboBox
-              items={EXIF_TAG_TABLE}
-              value={field.state.value?.tag}
+              items={EXIF_TAG_TABLE.map((item, index) => ({
+                id: index,
+                ...item,
+              }))}
+              value={field.state.value?.index}
               onChange={(value) => {
-                field.handleChange(
-                  EXIF_TAG_TABLE.find((item) => item.tag === value),
-                );
+                if (typeof value !== "number") {
+                  return;
+                }
+
+                const tagEntry = EXIF_TAG_TABLE.at(value);
+                if (tagEntry !== undefined) {
+                  field.handleChange({ ...tagEntry, index: value });
+                }
               }}
               onBlur={field.handleBlur}
               label="Tag"
               placeholder="ImageDescription"
+              isRequired
             >
-              {(item: TagEntry) => (
-                <ComboBoxItem key={item.tag} id={item.tag} value={item}>
+              {(item) => (
+                <ComboBoxItem id={item.id} value={item}>
                   {item.name}
                 </ComboBoxItem>
               )}
@@ -88,6 +92,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               }}
               placeholder="Select an IFD"
               onBlur={field.handleBlur}
+              isRequired
             >
               {IFD_NAMES.map((ifdName) => (
                 <addForm.Subscribe
@@ -123,6 +128,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
                 field.handleChange(value as AddFieldValues["format"]);
               }}
               onBlur={field.handleBlur}
+              isRequired
             >
               {Array.from(ExifFormat).map(([format]) => (
                 <addForm.Subscribe
@@ -146,56 +152,28 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
             </Select>
           )}
         />
-
         <addForm.Field
-          name="editor"
+          name="value"
           children={(field) => (
-            <Select
-              label="Editor"
-              value={field.state.value}
-              placeholder="Select an editor"
-              onChange={(value) => {
-                field.handleChange(value as AddFieldValues["editor"]);
-              }}
+            <TextField
+              label="Value"
+              value={
+                field.state.value === undefined ?
+                  undefined
+                : decodeStringFromUtf8(new Uint8Array(field.state.value))
+              }
               onBlur={field.handleBlur}
-            >
-              {["string", "array"].map((editor) => (
-                <SelectItem key={editor} id={editor}>
-                  {titlecase(editor)}
-                </SelectItem>
-              ))}
-            </Select>
+              onChange={(fieldValue) => {
+                field.handleChange(
+                  fieldValue === "" ?
+                    []
+                  : Array.from(encodeStringToUtf8(fieldValue)),
+                );
+              }}
+              isRequired
+            />
           )}
         />
-
-        <addForm.Subscribe
-          selector={(state) => state.values.editor}
-          children={(editor) => {
-            if (editor === "string") {
-              return (
-                <addForm.Field
-                  name="value"
-                  children={(field) => (
-                    <TextField
-                      label="Value"
-                      value={
-                        field.state.value === undefined ? undefined
-                        : typeof field.state.value === "string" ?
-                          field.state.value
-                        : textDecoder.decode(new Uint8Array(field.state.value))
-                      }
-                      onBlur={field.handleBlur}
-                      onChange={field.handleChange}
-                    />
-                  )}
-                />
-              );
-            }
-            // TODO: Not implemented
-            return null;
-          }}
-        />
-
         <addForm.Subscribe
           selector={(state) => state.isSubmitting}
           children={(isSubmitting) => (

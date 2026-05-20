@@ -1,24 +1,26 @@
 import { formOptions } from "@tanstack/react-form";
+import { exifTagTableCount } from "libexif-wasm";
 import { z } from "zod";
 
 import { FormatSchema, IfdSchema, TagEntrySchema } from "#schemas/exif";
 
 const addFormSchema = z.strictObject({
   ifd: IfdSchema,
-  tagEntry: TagEntrySchema,
+  tagEntry: TagEntrySchema.extend({
+    index: z.number().min(0).max(exifTagTableCount()),
+  }),
   format: FormatSchema,
-  editor: z.enum(["string", "array"]),
-  value: z.union([z.array(z.number()), z.string()]),
+  value: z.array(z.number()),
 });
 
-type AddFieldValues = Partial<z.infer<typeof addFormSchema>>;
+type AddFormSchema = z.infer<typeof addFormSchema>;
+type AddFieldValues = Partial<AddFormSchema> & Pick<AddFormSchema, "value">;
 
 const DEFAULT_FORM_VALUES: AddFieldValues = {
-  ifd: "IFD_0",
+  ifd: undefined,
   tagEntry: undefined,
-  format: "UNDEFINED",
-  editor: "string",
-  value: "",
+  format: undefined,
+  value: [],
 };
 
 const addEntryFormOptions = () =>
