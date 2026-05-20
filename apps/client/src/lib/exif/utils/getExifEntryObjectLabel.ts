@@ -2,7 +2,15 @@ import { ExifTagInfo } from "libexif-wasm";
 
 import type { ExifEntryObject } from "../serializeExifData";
 
-const getExifEntryObjectLabel = (exifEntryObject: ExifEntryObject) => {
+const getExifEntryObjectLabel = (exifEntryObject: Partial<ExifEntryObject>) => {
+  if (exifEntryObject.tag === undefined) {
+    return "Unknown tag";
+  }
+
+  if (exifEntryObject.ifd === undefined || exifEntryObject.tag === undefined) {
+    return exifEntryObject.tag;
+  }
+
   const title = ExifTagInfo.getTitleInIfd(
     exifEntryObject.tag,
     exifEntryObject.ifd,
