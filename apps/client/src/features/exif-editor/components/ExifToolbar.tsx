@@ -10,15 +10,15 @@ import { Button } from "@exifi/ui/components/Button";
 import { Toolbar, type ToolbarProps } from "@exifi/ui/components/Toolbar";
 
 import { ExifMenu } from "./ExifMenu";
-import { useExifEditorContext } from "../hooks/useExifEditorContext";
 import { AddEntryDialog } from "./dialogs/AddEntryDialog";
 import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
+import { useExifEditorContext } from "../hooks/useExifEditor";
 
 type ExifToolbarProps = Omit<ToolbarProps, "children">;
 
 const ExifToolbar = (props: ExifToolbarProps) => {
   const { file, setFile } = useFileStore();
-  const exifData = useExifEditorContext();
+  const { exifData } = useExifEditorContext();
   const [isPending, startTransition] = useTransition();
 
   return (

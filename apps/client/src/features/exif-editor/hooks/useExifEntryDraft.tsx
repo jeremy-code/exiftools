@@ -4,10 +4,10 @@ import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { arrayLikeEquals } from "#utils/arrayLikeEquals";
 
-import { useExifEditorStoreContext } from "./useExifEditor";
+import { useExifEditorStore } from "./useExifEditor";
 
 const useExifEntryDraft = (exifEntryObject: ExifEntryObject) => {
-  const updateExifEntry = useExifEditorStoreContext((s) => s.updateExifEntry);
+  const updateExifEntry = useExifEditorStore((s) => s.updateExifEntry);
   const [draft, setDraft] = useState(exifEntryObject.value);
 
   const isChanged = useMemo(

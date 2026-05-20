@@ -5,7 +5,7 @@ import { ExifFormat, getExifTagTable, type TagEntry } from "libexif-wasm";
 import { IFD_NAMES } from "libexif-wasm/constants";
 import { z } from "zod";
 
-import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
+import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { FormatSchema, IfdSchema, TagEntrySchema } from "#schemas/exif";
 import { titlecase } from "#utils/titlecase";
@@ -42,7 +42,7 @@ const DEFAULT_FORM_VALUES: FieldValues = {
 type ExifEntryAddFormProps = ComponentPropsWithRef<"form">;
 
 const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
-  const addExifEntry = useExifEditorStoreContext((state) => state.addExifEntry);
+  const addExifEntry = useExifEditorStore((state) => state.addExifEntry);
   const form = useForm({
     defaultValues: DEFAULT_FORM_VALUES,
     validators: {

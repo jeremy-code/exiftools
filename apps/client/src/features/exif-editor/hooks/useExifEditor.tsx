@@ -5,6 +5,7 @@ import type { LatLng } from "leaflet";
 import { ExifIfd, type ExifData, type ValidTypedArray } from "libexif-wasm";
 import { create, useStore } from "zustand";
 
+import { useExifData } from "#hooks/useExifData";
 import { updateDateAndTimeDigitized } from "#lib/exif/actions/updateDateAndTimeDigitized";
 import { updateGeolocationPosition } from "#lib/exif/actions/updateGeolocationPosition";
 import { updateLatLng } from "#lib/exif/actions/updateLatLng";
@@ -62,161 +63,145 @@ type ExifEditorStoreActions = {
 
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
 
-const useExifEditor = (exifData: ExifData) => {
+const createExifEditorStore = (
+  exifData: ExifData,
+  exifDataObject: ExifDataObject,
+) =>
+  create<ExifEditorStore>((set) => ({
+    exifDataObject,
+    updateExifEntry: (exifEntryObject, value) => {
+      set(() => {
+        const exifEntry = getExifEntryFromExifEntryObject(
+          exifData,
+          exifEntryObject,
+        );
+        const typedArray =
+          typeof value === "string" ? encodeStringToUtf8(value)
+          : isTypedArray(value) ? value
+          : newTypedArrayInFormat(value, exifEntryObject.format);
+
+        exifEntry.fromTypedArray(typedArray);
+
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+    removeExifEntry: (exifEntryObject) => {
+      set(() => {
+        const exifEntry = getExifEntryFromExifEntryObject(
+          exifData,
+          exifEntryObject,
+        );
+        const exifContent = exifEntry.parent!; // Never null since entry must belong to an IFD
+        exifContent.removeEntry(exifEntry);
+
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+    removeExifEntries: (exifEntryObjects) => {
+      set(() => {
+        exifEntryObjects.forEach((exifEntryObject) => {
+          const exifEntry = getExifEntryFromExifEntryObject(
+            exifData,
+            exifEntryObject,
+          );
+          const exifContent = exifEntry.parent!; // Never null since entry must belong to an IFD
+          exifContent.removeEntry(exifEntry);
+        });
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+    addExifEntry: (exifEntryObject, value) => {
+      set(() => {
+        const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
+        const prevExifEntry = exifContent.getEntry(exifEntryObject.tag);
+        if (prevExifEntry !== null) {
+          console.warn(
+            `Exif entry with tag ${exifEntryObject.tag} already exists and will be overwritten.`,
+          );
+        }
+        const exifEntry = getOrInsertEntry(exifContent, exifEntryObject.tag);
+        exifEntry.format = exifEntryObject.format;
+        const typedArray =
+          typeof value === "string" ? encodeStringToUtf8(value)
+          : isTypedArray(value) ? value
+          : newTypedArrayInFormat(value, exifEntryObject.format);
+        exifEntry.fromTypedArray(typedArray);
+
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+    fix: () => {
+      set(() => {
+        exifData.fix();
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+    updatePixelDimensions: async (file: File) => {
+      const imageDimensions = await imageDimensionsFromStream(file.stream());
+
+      if (imageDimensions === undefined) {
+        console.error("Failed to get image dimensions");
+        return;
+      }
+
+      set(() => {
+        updatePixelDimensions(exifData, imageDimensions);
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+    updateLatLng: (latLng: LatLng) => {
+      set(() => {
+        updateLatLng(exifData, latLng);
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+    updateGeolocationPosition: (geoLocationPosition) => {
+      set(() => {
+        updateGeolocationPosition(exifData, geoLocationPosition);
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+    updateDateAndTimeDigitized: () => {
+      set(() => {
+        updateDateAndTimeDigitized(exifData);
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+  }));
+
+type ExifEditorStoreApi = ReturnType<typeof createExifEditorStore>;
+
+const useExifEditor = (file: File) => {
+  const exifData = useExifData(file);
   const exifDataObject = useMemo(() => serializeExifData(exifData), [exifData]);
 
   const exifEditorStore = useMemo(
-    () =>
-      create<ExifEditorStore>((set) => ({
-        exifDataObject,
-        updateExifEntry: (exifEntryObject, value) => {
-          set(() => {
-            const exifEntry = getExifEntryFromExifEntryObject(
-              exifData,
-              exifEntryObject,
-            );
-            if (exifEntry.format === "ASCII" && typeof value === "string") {
-              const utf8Array = encodeStringToUtf8(value);
-              exifEntry.data = utf8Array;
-              exifEntry.components = utf8Array.length;
-            } else {
-              if (!isTypedArray(value)) {
-                throw new Error("Non-ASCII entries expect a TypedArray value");
-              }
-              exifEntry.fromTypedArray(value);
-            }
-
-            return { exifDataObject: serializeExifData(exifData) };
-          });
-        },
-        removeExifEntry: (exifEntryObject) => {
-          set(() => {
-            const exifEntry = getExifEntryFromExifEntryObject(
-              exifData,
-              exifEntryObject,
-            );
-            const exifContent = exifEntry.parent!; // Never null since entry must belong to an IFD
-            exifContent.removeEntry(exifEntry);
-
-            return { exifDataObject: serializeExifData(exifData) };
-          });
-        },
-        removeExifEntries: (exifEntryObjects) => {
-          set(() => {
-            exifEntryObjects.forEach((exifEntryObject) => {
-              const exifEntry = getExifEntryFromExifEntryObject(
-                exifData,
-                exifEntryObject,
-              );
-              const exifContent = exifEntry.parent!; // Never null since entry must belong to an IFD
-              exifContent.removeEntry(exifEntry);
-            });
-            return { exifDataObject: serializeExifData(exifData) };
-          });
-        },
-        addExifEntry: (exifEntryObject, value) => {
-          set(() => {
-            if (exifData === null) {
-              throw new Error("Reference to ExifData instance not found");
-            }
-            const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
-            const prevExifEntry = exifContent.getEntry(exifEntryObject.tag);
-            if (prevExifEntry !== null) {
-              console.warn(
-                `Exif entry with tag ${exifEntryObject.tag} already exists and will be overwritten.`,
-              );
-            }
-            const exifEntry = getOrInsertEntry(
-              exifContent,
-              exifEntryObject.tag,
-            );
-            exifEntry.format = exifEntryObject.format;
-            if (
-              exifEntryObject.format === "ASCII" &&
-              typeof value === "string"
-            ) {
-              const utf8Array = encodeStringToUtf8(value);
-              exifEntry.data = utf8Array;
-              exifEntry.components = utf8Array.length;
-            } else {
-              if (!isTypedArray(value) && !Array.isArray(value)) {
-                throw new Error(
-                  "Non-ASCII entries expect a TypedArray or array value",
-                );
-              }
-              exifEntry.fromTypedArray(
-                Array.isArray(value) ?
-                  newTypedArrayInFormat(value, exifEntryObject.format)
-                : value,
-              );
-            }
-
-            return { exifDataObject: serializeExifData(exifData) };
-          });
-        },
-        fix: () => {
-          set(() => {
-            exifData.fix();
-
-            return { exifDataObject: serializeExifData(exifData) };
-          });
-        },
-        updatePixelDimensions: async (file: File) => {
-          const imageDimensions = await imageDimensionsFromStream(
-            file.stream(),
-          );
-
-          if (imageDimensions === undefined) {
-            console.error("Failed to get image dimensions");
-            return;
-          }
-
-          set(() => {
-            updatePixelDimensions(exifData, imageDimensions);
-
-            return { exifDataObject: serializeExifData(exifData) };
-          });
-        },
-        updateLatLng: (latLng: LatLng) => {
-          set(() => {
-            updateLatLng(exifData, latLng);
-            return { exifDataObject: serializeExifData(exifData) };
-          });
-        },
-        updateGeolocationPosition: (geoLocationPosition) => {
-          set(() => {
-            updateGeolocationPosition(exifData, geoLocationPosition);
-            return { exifDataObject: serializeExifData(exifData) };
-          });
-        },
-        updateDateAndTimeDigitized: () => {
-          set(() => {
-            updateDateAndTimeDigitized(exifData);
-            return { exifDataObject: serializeExifData(exifData) };
-          });
-        },
-      })),
+    () => createExifEditorStore(exifData, exifDataObject),
     [exifData, exifDataObject],
   );
 
-  return exifEditorStore;
+  return {
+    exifData,
+    exifEditorStore,
+  };
 };
 
-type ExifEditorStoreApi = ReturnType<typeof useExifEditor>;
+const ExifEditorContext = createContext<ReturnType<
+  typeof useExifEditor
+> | null>(null);
 
-const ExifEditorStoreContext = createContext<ExifEditorStoreApi | null>(null);
+const useExifEditorContext = () => {
+  const exifEditorContext = use(ExifEditorContext);
 
-const useExifEditorStoreContext = <T,>(
-  selector: (state: ExifEditorStore) => T,
-): T => {
-  const exifEditorStore = use(ExifEditorStoreContext);
-
-  if (exifEditorStore === null) {
-    throw new Error("Missing ExifEditorStateStoreContext in the tree");
+  if (exifEditorContext === null) {
+    throw new Error("Missing ExifEditorContext in the tree");
   }
 
-  return useStore(exifEditorStore, selector);
+  return exifEditorContext;
 };
+
+const useExifEditorStore = <T,>(selector: (state: ExifEditorStore) => T): T =>
+  useStore(useExifEditorContext().exifEditorStore, selector);
 
 export {
   useExifEditor,
@@ -224,6 +209,7 @@ export {
   type ExifEditorStoreState,
   type ExifEditorStoreActions,
   type ExifEditorStoreApi,
-  ExifEditorStoreContext,
-  useExifEditorStoreContext,
+  ExifEditorContext,
+  useExifEditorContext,
+  useExifEditorStore,
 };

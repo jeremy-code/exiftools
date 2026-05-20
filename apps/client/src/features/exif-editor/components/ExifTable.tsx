@@ -16,7 +16,7 @@ import { ColumnResizer } from "#components/table/ColumnResizer";
 import { ExpandRows } from "#components/table/ExpandRows";
 import {
   type ExifEditorStoreActions,
-  useExifEditorStoreContext,
+  useExifEditorStore,
 } from "#features/exif-editor/hooks/useExifEditor";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { formatPlural } from "#utils/formatPlural";
@@ -49,9 +49,7 @@ const fallbackData: ExifEntryObject[] = [];
 type ExifTableProps = TableProps;
 
 const ExifTable = (props: ExifTableProps) => {
-  const exifDataObject = useExifEditorStoreContext(
-    (state) => state.exifDataObject,
-  );
+  const exifDataObject = useExifEditorStore((state) => state.exifDataObject);
   const exifEntryObjects = useMemo(
     () =>
       (Object.entries(exifDataObject.ifd) as [Ifd, ExifEntryObject[]][]).map(
@@ -59,13 +57,13 @@ const ExifTable = (props: ExifTableProps) => {
       ),
     [exifDataObject],
   );
-  const exifEditorStoreActions = useExifEditorStoreContext(
+  const exifEditorStoreActions = useExifEditorStore(
     useShallow((state) => ({
       updateExifEntry: state.updateExifEntry,
       removeExifEntry: state.removeExifEntry,
     })),
   );
-  const fix = useExifEditorStoreContext((state) => state.fix);
+  const fix = useExifEditorStore((state) => state.fix);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const table = useReactTable({
     columns,

@@ -2,7 +2,7 @@ import { Ellipsis } from "lucide-react";
 import type { MenuTriggerProps } from "react-aria-components";
 import { useShallow } from "zustand/react/shallow";
 
-import { useExifEditorStoreContext } from "#features/exif-editor/hooks/useExifEditor";
+import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
 import { useFileStore } from "#hooks/useFileStore";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { Button } from "@exifi/ui/components/Button";
@@ -17,7 +17,7 @@ const ExifMenu = (props: ExifMenuProps) => {
     updatePixelDimensions,
     updateGeolocationPosition,
     updateDateAndTimeDigitized,
-  ] = useExifEditorStoreContext(
+  ] = useExifEditorStore(
     useShallow((state) => [
       state.fix,
       state.updatePixelDimensions,

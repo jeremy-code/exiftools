@@ -5,7 +5,7 @@ import { cn } from "tailwind-variants";
 import { FileInformation } from "#components/file/FileInformation";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
 
-import { ExifViewerContent } from "./components/ExifViewerContent";
+import { ExifViewerContent } from "./ExifViewerContent";
 
 type ExifViewerProps = {
   file: File;

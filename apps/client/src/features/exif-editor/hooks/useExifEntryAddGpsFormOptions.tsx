@@ -10,7 +10,7 @@ import { parseCoordinateEntry } from "#lib/exif/gps/parseCoordinateEntry";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Latitude, Longitude } from "#schemas/common";
 
-import { useExifEditorStoreContext } from "./useExifEditor";
+import { useExifEditorStore } from "./useExifEditor";
 
 const gpsFormSchema = z.object({
   latitude: Latitude,
@@ -54,7 +54,7 @@ const getInitialFieldValues = (
 };
 
 const useExifEntryAddGpsFormOptions = () => {
-  const { updateLatLng, exifDataObject } = useExifEditorStoreContext(
+  const { updateLatLng, exifDataObject } = useExifEditorStore(
     useShallow((state) => ({
       updateLatLng: state.updateLatLng,
       exifDataObject: state.exifDataObject,
