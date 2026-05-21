@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, test, expect } from "vitest";
 
 import { EXIF_HEADER, JpegMarker, MARKER_FIRST_BYTE } from "./constants";
 import { createSegment } from "./jpeg/createSegment";
@@ -16,20 +16,20 @@ const VALID_EXIF = concatUint8Arrays([
 ]);
 
 describe("writeExifData()", () => {
-  it("throws if image does not start with SOI", () => {
+  test("throws if image does not start with SOI", () => {
     const image = new Uint8Array([0, 0, 0]);
 
     expect(() => writeExifData(image, VALID_EXIF)).toThrow();
   });
 
-  it("throws if exif header is invalid", () => {
+  test("throws if exif header is invalid", () => {
     const image = concatUint8Arrays([SOI, EOI]);
     const invalidExif = new Uint8Array([1, 2, 3]);
 
     expect(() => writeExifData(image, invalidExif)).toThrow();
   });
 
-  it("inserts EXIF after APP0", () => {
+  test("inserts EXIF after APP0", () => {
     const app0 = createSegment(JpegMarker.APP0, new Uint8Array([1, 2]));
     const image = concatUint8Arrays([SOI, app0, EOI]);
     const result = writeExifData(image, VALID_EXIF);
@@ -44,7 +44,7 @@ describe("writeExifData()", () => {
     );
   });
 
-  it("replaces existing EXIF segment", () => {
+  test("replaces existing EXIF segment", () => {
     const image = concatUint8Arrays([
       SOI,
       createSegment(JpegMarker.APP1, VALID_EXIF),
@@ -62,7 +62,7 @@ describe("writeExifData()", () => {
     );
   });
 
-  it("inserts after last APP1 if APP1 exists but not EXIF", () => {
+  test("inserts after last APP1 if APP1 exists but not EXIF", () => {
     const app1 = createSegment(JpegMarker.APP1, new Uint8Array([9, 9, 9]));
     const image = concatUint8Arrays([SOI, app1, EOI]);
     const result = writeExifData(image, VALID_EXIF);
@@ -77,7 +77,7 @@ describe("writeExifData()", () => {
     );
   });
 
-  it("inserts after SOI if no APP segments exist", () => {
+  test("inserts after SOI if no APP segments exist", () => {
     const image = concatUint8Arrays([SOI, EOI]);
     const result = writeExifData(image, VALID_EXIF);
 
