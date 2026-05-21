@@ -9,10 +9,10 @@ describe("useObjectUrl", () => {
 
     using createObjectUrlSpy = vi.spyOn(URL, "createObjectURL");
     using revokeObjectUrlSpy = vi.spyOn(URL, "revokeObjectURL");
-    // @ts-expect-error - renderHook doesn't properly type the result of useObjectUrl
-    const { result, unmount } = await renderHook(useObjectUrl, {
-      initialProps: blob,
-    });
+    const { result, unmount } = await renderHook(
+      (initialProps) => useObjectUrl(initialProps!),
+      { initialProps: blob },
+    );
     expect(createObjectUrlSpy).toHaveBeenCalledExactlyOnceWith(blob);
     expect(revokeObjectUrlSpy).not.toHaveBeenCalled();
     const objectUrl = result.current;
@@ -31,10 +31,10 @@ describe("useObjectUrl", () => {
     using createObjectUrlSpy = vi.spyOn(URL, "createObjectURL");
     using revokeObjectUrlSpy = vi.spyOn(URL, "revokeObjectURL");
 
-    // @ts-expect-error - renderHook doesn't properly type the result of useObjectUrl
-    const { rerender, result, unmount } = await renderHook(useObjectUrl, {
-      initialProps: blob1,
-    });
+    const { rerender, result, unmount } = await renderHook(
+      (initialProps) => useObjectUrl(initialProps!),
+      { initialProps: blob1 },
+    );
     expect(createObjectUrlSpy).toHaveBeenCalledExactlyOnceWith(blob1);
     expect(revokeObjectUrlSpy).not.toHaveBeenCalled();
     const objectUrl1 = result.current;
@@ -61,10 +61,10 @@ describe("useObjectUrl", () => {
     using createObjectUrlSpy = vi.spyOn(URL, "createObjectURL");
     using revokeObjectUrlSpy = vi.spyOn(URL, "revokeObjectURL");
 
-    // @ts-expect-error - renderHook doesn't properly type the result of useObjectUrl
-    const { rerender, unmount, result } = await renderHook(useObjectUrl, {
-      initialProps: blob,
-    });
+    const { rerender, result, unmount } = await renderHook(
+      (initialProps) => useObjectUrl(initialProps!),
+      { initialProps: blob },
+    );
     expect(createObjectUrlSpy).toHaveBeenCalledExactlyOnceWith(blob);
     expect(revokeObjectUrlSpy).not.toHaveBeenCalled();
     const objectUrl = result.current;
