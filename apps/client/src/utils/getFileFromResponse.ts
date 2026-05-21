@@ -1,6 +1,6 @@
 import { typeByExtension } from "@std/media-types/type-by-extension";
-import { basename } from "@std/path/basename";
-import { extname } from "@std/path/extname";
+import { basename } from "@std/path/posix/basename";
+import { extname } from "@std/path/posix/extname";
 import { parse as contentDispositionParse } from "content-disposition";
 
 /**
