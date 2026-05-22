@@ -13,6 +13,13 @@ const testConfig = defineConfig({
      * @see {@link https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-importing-vitest-globals.md}
      */
     "vitest/prefer-importing-vitest-globals": "error",
+    /**
+     * @see {@link https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/consistent-test-it.md}
+     */
+    "vitest/consistent-test-it": [
+      "error",
+      { fn: "test", withinDescribe: "test" },
+    ],
   },
   settings: {
     vitest: {
