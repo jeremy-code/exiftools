@@ -26,7 +26,8 @@ describe("useFileHash", () => {
         (initialProps) => useFileHash(initialProps!),
         { initialProps: file },
       );
-      expect(result.current).toBe(expectedHash);
+      // result.current may be null while suspending (more noticable in CI)
+      await expect.poll(() => result.current).toBe(expectedHash);
     },
   );
 
@@ -38,9 +39,9 @@ describe("useFileHash", () => {
       { initialProps: file1 },
     );
 
-    expect(result.current).toBe(SHA256.hello);
+    await expect.poll(() => result.current).toBe(SHA256.hello);
     await rerender(file2);
-    expect(result.current).toBe(SHA256.world);
+    await expect.poll(() => result.current).toBe(SHA256.world);
   });
 
   test("produces the same hash for two different File instances", async () => {
@@ -51,9 +52,9 @@ describe("useFileHash", () => {
       { initialProps: file1 },
     );
 
-    expect(result.current).toBe(SHA256.foo);
+    await expect.poll(() => result.current).toBe(SHA256.foo);
     await rerender(file2);
-    expect(result.current).toBe(SHA256.foo);
+    await expect.poll(() => result.current).toBe(SHA256.foo);
   });
 
   test("calls file.arrayBuffer() once for the same File reference", async () => {
