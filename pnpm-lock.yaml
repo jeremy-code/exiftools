@@ -55,6 +55,9 @@ importers:
       "@internationalized/date":
         specifier: ^3.12.1
         version: 3.12.1
+      "@noble/hashes":
+        specifier: ^2.2.0
+        version: 2.2.0
       "@react-leaflet/core":
         specifier: ^3.0.0
         version: 3.0.0(leaflet@1.9.4)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -88,9 +91,6 @@ importers:
       decimal.js:
         specifier: ^10.6.0
         version: 10.6.0
-      hash-wasm:
-        specifier: ^4.12.0
-        version: 4.12.0
       image-dimensions:
         specifier: ^2.5.1
         version: 2.5.1
@@ -1136,6 +1136,13 @@ packages:
     peerDependencies:
       "@emnapi/core": ^1.7.1
       "@emnapi/runtime": ^1.7.1
+
+  "@noble/hashes@2.2.0":
+    resolution:
+      {
+        integrity: sha512-IYqDGiTXab6FniAgnSdZwgWbomxpy9FtYvLKs7wCUs2a8RkITG+DFGO1DM9cr+E3/RgADRpFjrKVaJ1z6sjtEg==,
+      }
+    engines: { node: ">= 20.19.0" }
 
   "@oozcitak/dom@2.0.2":
     resolution:
@@ -3970,12 +3977,6 @@ packages:
       }
     engines: { node: ">=8" }
 
-  hash-wasm@4.12.0:
-    resolution:
-      {
-        integrity: sha512-+/2B2rYLb48I/evdOIhP+K/DD2ca2fgBjp6O+GBEnCDk2e4rpeXIK8GvIyRPjTezgmWn9gmKwkQjjx6BtqDHVQ==,
-      }
-
   hermes-estree@0.25.1:
     resolution:
       {
@@ -6360,6 +6361,8 @@ snapshots:
       "@tybys/wasm-util": 0.10.2
     optional: true
 
+  "@noble/hashes@2.2.0": {}
+
   "@oozcitak/dom@2.0.2":
     dependencies:
       "@oozcitak/infra": 2.0.2
@@ -8316,8 +8319,6 @@ snapshots:
       srvx: 0.11.15
 
   has-flag@4.0.0: {}
-
-  hash-wasm@4.12.0: {}
 
   hermes-estree@0.25.1: {}
 
