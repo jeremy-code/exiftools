@@ -6,6 +6,7 @@ import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { fontless } from "fontless";
 import { Features } from "lightningcss";
 import { defineConfig } from "vite";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 const viteConfig = defineConfig({
   plugins: [
@@ -29,6 +30,11 @@ const viteConfig = defineConfig({
     tailwindcss(),
     fontless(),
     devtools(),
+    nodePolyfills({
+      // Polyfill `buffer` for `iconv-lite`. Global not necessary because
+      // safer-buffer imports the package
+      include: ["buffer"],
+    }),
   ],
   define: {
     __BUILD_TIMESTAMP__: JSON.stringify(new Date().getTime()),

@@ -1,3 +1,6 @@
+import { concat } from "@std/bytes";
+import { encode } from "iconv-lite";
+
 import { assertNever } from "#utils/assertNever";
 
 import { ENCODING_TO_HEADER_MAP } from "./constants";
@@ -14,7 +17,10 @@ const formatUserComment = (userComment: UserComment): Uint8Array => {
         `${ENCODING_TO_HEADER_MAP[userComment.encoding]}${userComment.value}`,
       );
     case "JIS":
-      throw new Error("JIS encoding is not supported");
+      return concat([
+        textEncoder.encode(ENCODING_TO_HEADER_MAP[userComment.encoding]),
+        encode(userComment.value, "euc-jp"),
+      ]);
     default:
       assertNever(userComment.encoding);
   }
