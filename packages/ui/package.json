@@ -14,7 +14,7 @@
   "dependencies": {
     "@radix-ui/react-navigation-menu": "^1.2.14",
     "@radix-ui/react-scroll-area": "^1.2.10",
-    "lucide-react": "^1.14.0",
+    "lucide-react": "^1.16.0",
     "react-aria-components": "^1.17.0",
     "tailwind-merge": "^3.6.0",
     "tailwind-variants": "^3.2.2"
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@exifi/eslint-config": "workspace:*",
     "@exifi/tsconfig": "workspace:*",
-    "@types/react": "^19.2.14",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "tailwindcss": "^4.3.0",
     "tailwindcss-react-aria-components": "^2.1.0",
