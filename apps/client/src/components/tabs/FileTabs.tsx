@@ -7,6 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 import { SortableList } from "#components/dnd/SortableList";
 import { useFileTabsStore } from "#hooks/useFileTabsStore";
 import { Button } from "@exifi/ui/components/Button";
+import { ScrollArea } from "@exifi/ui/components/ScrollArea";
 import {
   Tabs,
   TabList,
@@ -71,26 +72,28 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
               createNewTabs(files);
             }}
           >
-            <div className="grid grid-cols-[1fr_auto] items-center gap-1 overflow-x-auto rounded-md border border-border bg-bg-muted shadow [scrollbar-width:thin]">
-              <TabList
-                ref={fileTabsListRef}
-                fitted
-                className="gap-1"
-                variant="enclosed"
-              >
-                {tabs.map((tab, index) => (
-                  <FileTab
-                    key={tab.id}
-                    id={tab.id}
-                    index={index}
-                    file={tab.file}
-                    removeTab={() => removeTab(tab.id)}
-                  />
-                ))}
-              </TabList>
-              <div className="sticky top-0 right-1">
+            <div className="grid grid-cols-[1fr_auto] items-start gap-1 rounded-md border border-border bg-bg-muted/80 shadow backdrop-blur-xs">
+              <ScrollArea>
+                <TabList
+                  ref={fileTabsListRef}
+                  fitted
+                  className="gap-1 bg-transparent"
+                  variant="enclosed"
+                >
+                  {tabs.map((tab, index) => (
+                    <FileTab
+                      key={tab.id}
+                      id={tab.id}
+                      index={index}
+                      file={tab.file}
+                      removeTab={() => removeTab(tab.id)}
+                    />
+                  ))}
+                </TabList>
+              </ScrollArea>
+              <div className="pt-1 pr-1">
                 <Button
-                  className="text-fg-muted"
+                  className="bg-transparent text-fg-muted"
                   size="icon"
                   variant="muted"
                   onPress={() => createNewTab()}

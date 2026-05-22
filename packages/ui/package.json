@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@radix-ui/react-scroll-area": "^1.2.10",
     "lucide-react": "^1.14.0",
     "react-aria-components": "^1.17.0",
     "tailwind-merge": "^3.6.0",
