@@ -5,14 +5,12 @@ import { parse as contentDispositionParse } from "content-disposition";
 
 /**
  * Returns Last-Modified header as a timestamp if present, otherwise returns
- * the Date header as a timestamp. Returns undefined as a fallback
+ * the Date header as a timestamp. Returns Date.now() as a fallback
  *
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Last-Modified}
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Date}
  */
-const getLastModifiedFromResponse = (
-  response: Response,
-): number | undefined => {
+const getLastModifiedFromResponse = (response: Response): number => {
   for (const headerName of ["Last-Modified", "Date"]) {
     const headerValue = response.headers.get(headerName);
     if (headerValue === null) {
@@ -30,8 +28,8 @@ const getLastModifiedFromResponse = (
   }
 
   // Fallback. When lastModified is undefined, File constructor defaults to
-  // Date.now()
-  return undefined;
+  // Date.now(). Setting manually for testing
+  return Date.now();
 };
 
 /**

@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 
 import { getFileFromResponse } from "./getFileFromResponse";
 
@@ -163,11 +163,13 @@ describe("getFileFromResponse", () => {
       expect(file.lastModified).toBe(FIXED_TIMESTAMP);
     });
 
-    test("defaults to approximately Date.now() when neither header is present", async () => {
+    test("defaults to Date.now() when neither header is present", async () => {
+      vi.useFakeTimers({ now: FIXED_TIMESTAMP });
       const file = await getFileFromResponse(
         getResponse("data", { url: "https://example.com/file.txt" }),
       );
-      expect(file.lastModified).toBe(Date.now());
+      expect(file.lastModified).toBe(FIXED_TIMESTAMP);
+      vi.useRealTimers();
     });
 
     test("skips an unparseable Last-Modified and tries Date header", async () => {
