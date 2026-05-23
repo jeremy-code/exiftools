@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 
 const objectUrlMap = new WeakMap<Blob | MediaSource, string>();
 
@@ -35,8 +35,7 @@ const useObjectUrl = (obj: Blob | MediaSource) => {
      * strings, a re-render won't be triggered on the first render, though it
      * will be triggered when the blob changes.
      */
-    // eslint-disable-next-line react-hooks/set-state-in-effect, @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
-    setObjectUrl(currObjectUrl);
+    startTransition(() => setObjectUrl(currObjectUrl));
 
     return () => {
       URL.revokeObjectURL(currObjectUrl);
