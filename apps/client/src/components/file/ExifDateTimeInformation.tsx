@@ -6,6 +6,11 @@ import {
   DataListItemLabel,
   DataListItemValue,
 } from "@exifi/ui/components/DataList";
+import {
+  Tooltip,
+  TooltipTarget,
+  TooltipTrigger,
+} from "@exifi/ui/components/Tooltip";
 
 type ExifDateTimeInformationProps = {
   exifData: ExifData;
@@ -65,9 +70,16 @@ const ExifDateTimeInformation = ({
     <DataListItem key={label}>
       <DataListItemLabel>{label}</DataListItemLabel>
       <DataListItemValue>
-        <time dateTime={value.toString()}>
-          {value.toInstant().toLocaleString()}
-        </time>
+        <TooltipTrigger>
+          <TooltipTarget>
+            <span role="button">
+              <time dateTime={value.toString()}>
+                {value.toInstant().toLocaleString()}
+              </time>
+            </span>
+          </TooltipTarget>
+          <Tooltip>{value.toLocaleString()}</Tooltip>
+        </TooltipTrigger>
       </DataListItemValue>
     </DataListItem>
   ));
