@@ -2,10 +2,10 @@ import type { ComponentPropsWithRef } from "react";
 
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
+import { useLocale } from "react-aria-components/I18nProvider";
 import { z } from "zod";
 
 import { useDropzoneStore } from "#hooks/useDropzoneStore";
-import { formatList } from "#utils/formatList";
 import { getFileFromResponse } from "#utils/getFileFromResponse";
 import { Button, type ButtonProps } from "@exifi/ui/components/Button";
 import { Spinner } from "@exifi/ui/components/Spinner";
@@ -14,17 +14,23 @@ import { toastQueue } from "@exifi/ui/components/Toast";
 import { composeTailwindRenderProps } from "@exifi/ui/utils/composeTailwindRenderProps";
 
 type FileUrlInputProps = {
-  inputProps?: TextFieldProps;
+  textFieldProps?: TextFieldProps;
   buttonProps?: ButtonProps;
   onSuccess?: (file: File) => void;
 } & ComponentPropsWithRef<"form">;
 
 const FileUrlInput = ({
-  inputProps,
+  textFieldProps,
   buttonProps,
   onSuccess,
   ...props
 }: FileUrlInputProps) => {
+  const { locale } = useLocale();
+  const listFormatter = new Intl.ListFormat(locale, {
+    style: "short",
+    type: "conjunction",
+  });
+
   const addAcceptedFiles = useDropzoneStore((state) => state.addAcceptedFiles);
   const mutation = useMutation({
     mutationFn: async (input: string) => {
@@ -74,24 +80,31 @@ const FileUrlInput = ({
           name="fileUrl"
           children={(field) => (
             <TextField
-              isRequired={true}
+              isRequired
               type="url"
-              inputProps={{ className: "rounded-r-none border-r-0" }}
-              className="flex-1"
-              {...inputProps}
+              aria-label={field.name}
+              {...textFieldProps}
+              className={composeTailwindRenderProps(
+                textFieldProps?.className,
+                "flex-1",
+              )}
+              inputProps={{
+                ...textFieldProps?.inputProps,
+                className: composeTailwindRenderProps(
+                  textFieldProps?.inputProps?.className,
+                  "rounded-r-none border-r-0",
+                ),
+              }}
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={field.handleChange}
-              aria-label={field.name}
               errorMessage={
                 field.state.meta.isTouched && !field.state.meta.isValid ?
-                  formatList(
-                    (field.state.meta.errors as z.core.$ZodIssue[]).map(
-                      (issue) => issue.message,
-                    ),
-                    undefined,
-                    { style: "short", type: "conjunction" },
+                  listFormatter.format(
+                    field.state.meta.errors
+                      .filter((issue) => issue !== undefined)
+                      .map((issue) => issue.message),
                   )
                 : undefined
               }

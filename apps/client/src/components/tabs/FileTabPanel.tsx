@@ -56,7 +56,7 @@ const FileTabPanel = ({
             </div>
             <FileUrlInput
               onSuccess={(file) => updateFile(file)}
-              inputProps={{
+              textFieldProps={{
                 placeholder:
                   "https://upload.wikimedia.org/wikipedia/commons/c/c9/Metadata_demo_exif_only.jpg",
               }}
