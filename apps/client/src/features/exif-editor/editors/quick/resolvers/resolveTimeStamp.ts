@@ -23,12 +23,18 @@ const parseTimeStampValue = (value: number[]) => {
       "Hours, minutes, and seconds are required for tag TIME_STAMP",
     );
   }
-  const millisecond = new Decimal(second)
+  const millisecond = new Decimal(second.numerator)
+    .div(second.denominator)
     .mod(1)
     .mul(millisecondsInSecond)
     .toNumber();
 
-  return new Time(hour, minute, Math.floor(second), millisecond);
+  return new Time(
+    hour.valueOf(),
+    minute.valueOf(),
+    Math.floor(second.valueOf()),
+    millisecond,
+  );
 };
 const resolveTimeStamp: QuickEditorResolver = (
   exifEntryObject,

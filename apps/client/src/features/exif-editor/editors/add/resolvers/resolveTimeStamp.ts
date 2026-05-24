@@ -1,7 +1,6 @@
 import { Time } from "@internationalized/date";
 import { millisecondsInSecond } from "date-fns/constants";
 import { Decimal } from "decimal.js";
-import { mapRationalFromObject } from "libexif-wasm";
 
 import { MAX_UINT32_VALUE } from "#lib/exif/constants";
 import { mapRationalArray } from "#lib/exif/mapRationalArray";
@@ -23,12 +22,18 @@ const parseTimeStampValue = (value: number[]) => {
       "Hours, minutes, and seconds are required for tag TIME_STAMP",
     );
   }
-  const millisecond = new Decimal(second)
+  const millisecond = new Decimal(second.numerator)
+    .div(second.denominator)
     .mod(1)
     .mul(millisecondsInSecond)
     .toNumber();
 
-  return new Time(hour, minute, Math.floor(second), millisecond);
+  return new Time(
+    hour.valueOf(),
+    minute.valueOf(),
+    Math.floor(second.valueOf()),
+    millisecond,
+  );
 };
 
 const resolveTimeStamp: AddEditorResolver = (
@@ -52,20 +57,20 @@ const resolveTimeStamp: AddEditorResolver = (
         onValueChange(
           value === undefined ?
             []
-          : Array.from(
-              mapRationalFromObject(
-                [
-                  value.hour,
-                  value.minute,
-                  new Decimal(value.second).plus(
-                    new Decimal(value.millisecond).div(millisecondsInSecond),
-                  ),
-                ].map((timeComponent) =>
-                  approximateRational(timeComponent, MAX_UINT32_VALUE),
-                ),
-                "RATIONAL",
+          : [
+              value.hour,
+              value.minute,
+              new Decimal(value.second).plus(
+                new Decimal(value.millisecond).div(millisecondsInSecond),
               ),
-            ),
+            ].flatMap((timeComponent) => {
+              const rational = approximateRational(
+                timeComponent,
+                MAX_UINT32_VALUE,
+              );
+
+              return [rational.numerator, rational.denominator];
+            }),
         ),
     };
   }

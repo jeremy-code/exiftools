@@ -1,4 +1,4 @@
-import { Decimal } from "decimal.js";
+import { Rational } from "#lib/math/Rational";
 
 const mapRationalArray = (numberArray: ArrayLike<number>) => {
   if (numberArray.length % 2 !== 0) {
@@ -7,7 +7,7 @@ const mapRationalArray = (numberArray: ArrayLike<number>) => {
     );
   }
 
-  const rationalArray: number[] = [];
+  const rationalArray: Rational[] = [];
 
   for (let index = 0; index < numberArray.length / 2; index++) {
     const numerator = numberArray[index * 2];
@@ -19,7 +19,7 @@ const mapRationalArray = (numberArray: ArrayLike<number>) => {
     if (denominator === undefined) {
       throw new Error(`numberArray was undefined at index ${index * 2 + 1}`);
     }
-    rationalArray.push(new Decimal(numerator).div(denominator).toNumber());
+    rationalArray.push(new Rational(numerator, denominator));
   }
 
   return rationalArray;

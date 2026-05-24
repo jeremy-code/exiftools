@@ -1,5 +1,5 @@
 import { dmsToDecimalDegrees } from "#lib/leaflet/dmsToDecimalDegrees";
-import { isDirection } from "#lib/leaflet/interfaces";
+import { isDirection, type Direction } from "#lib/leaflet/interfaces";
 
 import { mapRationalArray } from "../mapRationalArray";
 
@@ -7,10 +7,17 @@ const parseCoordinateEntry = (
   // Any iterable of numbers of format [numerator1, denominator1, numerator2, denominator2, ...]
   coordinateArray: ArrayLike<number>,
   // W or S or E or N
-  coordinateRef: string,
+  coordinateRef: Direction | "Sea level" | "Sea level reference",
 ): number | null => {
+  if (coordinateArray.length % 2 !== 0) {
+    return null;
+  }
+
+  const mappedCoordinateArray = mapRationalArray(coordinateArray).map(
+    (rational) => rational.valueOf(),
+  );
   if (coordinateArray.length === 6) {
-    const [degrees, minutes, seconds] = mapRationalArray(coordinateArray);
+    const [degrees, minutes, seconds] = mappedCoordinateArray;
 
     if (
       degrees === undefined ||
@@ -28,7 +35,7 @@ const parseCoordinateEntry = (
       direction: coordinateRef,
     });
   } else if (coordinateArray.length === 2) {
-    const [altitude] = mapRationalArray(coordinateArray);
+    const [altitude] = mappedCoordinateArray;
     if (
       altitude === undefined ||
       (coordinateRef !== "Sea level" && coordinateRef !== "Sea level reference")
