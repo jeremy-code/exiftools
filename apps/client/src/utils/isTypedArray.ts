@@ -12,7 +12,11 @@ type TypedArray =
   | BigUint64Array;
 
 const isTypedArray = (value: unknown): value is TypedArray => {
-  return ArrayBuffer.isView(value) && !(value instanceof DataView);
+  return (
+    ArrayBuffer.isView(value) &&
+    !(value instanceof DataView) &&
+    Object.prototype.toString.call(value) !== "[object DataView]"
+  );
 };
 
 export { isTypedArray, type TypedArray };
