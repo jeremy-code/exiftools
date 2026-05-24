@@ -85,9 +85,6 @@ importers:
       content-disposition:
         specifier: ^2.0.0
         version: 2.0.0
-      date-fns:
-        specifier: ^4.2.1
-        version: 4.2.1
       decimal.js:
         specifier: ^10.6.0
         version: 10.6.0
@@ -3705,12 +3702,6 @@ packages:
     resolution:
       {
         integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==,
-      }
-
-  date-fns@4.2.1:
-    resolution:
-      {
-        integrity: sha512-37RhSdxaG1suen6VDCza6rNrQfooyQh57HFVPwQGEq2QWliVLzPQZ8Oa017weOu+HZCnzI7N3Pf/wyoBKfEqrA==,
       }
 
   dayjs@1.11.20:
@@ -8975,8 +8966,6 @@ snapshots:
   css-what@6.2.2: {}
 
   csstype@3.2.3: {}
-
-  date-fns@4.2.1: {}
 
   dayjs@1.11.20: {}
 

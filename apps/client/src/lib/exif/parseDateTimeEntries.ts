@@ -1,21 +1,19 @@
-import { parse } from "date-fns/parse";
-
-import { EXIF_TIMESTAMP_FORMAT } from "./constants";
+import { parseExifDateTime } from "./date/dateTime/parseExifDateTime";
 
 const parseDateTimeEntries = (
   dateTime: string,
   offsetTime: string | undefined,
   subSecTime: string | undefined,
 ) => {
-  const dateTimeDate = parse(dateTime, EXIF_TIMESTAMP_FORMAT, new Date());
+  const dateTimeDate = parseExifDateTime(dateTime);
 
   return Temporal.ZonedDateTime.from({
-    year: dateTimeDate.getFullYear(),
-    month: dateTimeDate.getMonth() + 1,
-    day: dateTimeDate.getDate(),
-    hour: dateTimeDate.getHours(),
-    minute: dateTimeDate.getMinutes(),
-    second: dateTimeDate.getSeconds(),
+    year: dateTimeDate.year,
+    month: dateTimeDate.month,
+    day: dateTimeDate.day,
+    hour: dateTimeDate.hour,
+    minute: dateTimeDate.minute,
+    second: dateTimeDate.second,
     millisecond:
       subSecTime !== undefined && !Number.isNaN(Number(subSecTime)) ?
         Number(subSecTime)

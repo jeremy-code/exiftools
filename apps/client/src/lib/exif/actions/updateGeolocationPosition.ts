@@ -1,5 +1,4 @@
-import { secondsInHour, millisecondsInSecond } from "date-fns/constants";
-import { format } from "date-fns/format";
+import { fromAbsolute, toCalendarDate, toTime } from "@internationalized/date";
 import { LatLng } from "leaflet";
 import { ExifIfd, mapRationalFromObject, type ExifData } from "libexif-wasm";
 
@@ -8,8 +7,11 @@ import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
 import { getOrInsertEntry } from "../getOrInsertEntry";
 import { updateLatLng } from "./updateLatLng";
-import { EXIF_DATESTAMP_FORMAT, MAX_UINT32_VALUE } from "../constants";
+import { MAX_UINT32_VALUE } from "../constants";
+import { formatExifDateStamp } from "../date/dateStamp/formatExifDateStamp";
+import { formatExifTimeStamp } from "../date/timeStamp/formatExifTimeStamp";
 
+const SECONDS_IN_HOUR = 3600;
 const METERS_IN_KILOMETERS = 1000;
 
 const updateGeolocationPosition = (
@@ -18,33 +20,17 @@ const updateGeolocationPosition = (
 ) => {
   const exifDataGpsIfd = exifData.ifd[ExifIfd.GPS];
   const { timestamp, coords } = geolocationPosition;
-  const zonedDateTime =
-    Temporal.Instant.fromEpochMilliseconds(timestamp).toZonedDateTimeISO("UTC");
+  const zonedDateTime = fromAbsolute(timestamp, "UTC");
 
   const dateStampEntry = getOrInsertEntry(exifDataGpsIfd, "DATE_STAMP");
   dateStampEntry.format = "ASCII";
   dateStampEntry.fromTypedArray(
-    encodeStringToUtf8(
-      format(
-        new Date(
-          zonedDateTime.year,
-          zonedDateTime.month - 1,
-          zonedDateTime.day,
-        ),
-        EXIF_DATESTAMP_FORMAT,
-      ),
-    ),
+    encodeStringToUtf8(formatExifDateStamp(toCalendarDate(zonedDateTime))),
   );
   const timeStampEntry = getOrInsertEntry(exifDataGpsIfd, "TIME_STAMP");
   timeStampEntry.format = "RATIONAL";
   timeStampEntry.fromTypedArray(
-    mapRationalFromObject(
-      [
-        zonedDateTime.hour,
-        zonedDateTime.minute,
-        zonedDateTime.second + zonedDateTime.millisecond / millisecondsInSecond,
-      ].map((value) => approximateRational(value, MAX_UINT32_VALUE)),
-    ),
+    new Uint32Array(formatExifTimeStamp(toTime(zonedDateTime))),
   );
 
   updateLatLng(
@@ -58,21 +44,25 @@ const updateGeolocationPosition = (
   );
   hPositioningErrorEntry.format = "RATIONAL";
   hPositioningErrorEntry.fromTypedArray(
-    mapRationalFromObject([
-      approximateRational(coords.accuracy, MAX_UINT32_VALUE),
-    ]),
+    mapRationalFromObject(
+      [approximateRational(coords.accuracy, MAX_UINT32_VALUE)],
+      "RATIONAL",
+    ),
   );
 
   if (coords.speed !== null) {
     const speedEntry = getOrInsertEntry(exifDataGpsIfd, "SPEED");
     speedEntry.format = "RATIONAL";
     speedEntry.fromTypedArray(
-      mapRationalFromObject([
-        approximateRational(
-          coords.speed * (METERS_IN_KILOMETERS / secondsInHour),
-          MAX_UINT32_VALUE,
-        ),
-      ]),
+      mapRationalFromObject(
+        [
+          approximateRational(
+            coords.speed * (METERS_IN_KILOMETERS / SECONDS_IN_HOUR),
+            MAX_UINT32_VALUE,
+          ),
+        ],
+        "RATIONAL",
+      ),
     );
     const speedRefEntry = getOrInsertEntry(exifDataGpsIfd, "SPEED_REF");
     speedRefEntry.format = "ASCII";
@@ -83,9 +73,10 @@ const updateGeolocationPosition = (
     const imgDirectionEntry = getOrInsertEntry(exifDataGpsIfd, "IMG_DIRECTION");
     imgDirectionEntry.format = "RATIONAL";
     imgDirectionEntry.fromTypedArray(
-      mapRationalFromObject([
-        approximateRational(coords.heading, MAX_UINT32_VALUE),
-      ]),
+      mapRationalFromObject(
+        [approximateRational(coords.heading, MAX_UINT32_VALUE)],
+        "RATIONAL",
+      ),
     );
     const imgDirectionRefEntry = getOrInsertEntry(
       exifDataGpsIfd,

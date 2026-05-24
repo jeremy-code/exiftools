@@ -1,18 +1,8 @@
-import { CalendarDateTime } from "@internationalized/date";
-import { format } from "date-fns/format";
-import { parse } from "date-fns/parse";
-import { parseISO } from "date-fns/parseISO";
-
-import { EXIF_TIMESTAMP_FORMAT } from "#lib/exif/constants";
+import { DATETIME_TAGS, EXIF_DATETIME_REGEX } from "#lib/exif/date/constants";
+import { formatExifDateTime } from "#lib/exif/date/dateTime/formatExifDateTime";
+import { parseExifDateTime } from "#lib/exif/date/dateTime/parseExifDateTime";
 
 import type { QuickEditorResolver } from "../types";
-
-// https://github.com/libexif/libexif/blob/b9b7f3c08c1b6812ad3b9d62227ad9527ab9385a/libexif/exif-entry.c#L1718
-const DATETIME_TAGS = [
-  "DATE_TIME",
-  "DATE_TIME_ORIGINAL",
-  "DATE_TIME_DIGITIZED",
-];
 
 const resolveDateTime: QuickEditorResolver = (
   exifEntryObject,
@@ -20,30 +10,13 @@ const resolveDateTime: QuickEditorResolver = (
 ) => {
   if (
     DATETIME_TAGS.includes(exifEntryObject.tag) &&
-    exifEntryObject.components === EXIF_TIMESTAMP_FORMAT.length + 1 &&
-    exifEntryObject.size === EXIF_TIMESTAMP_FORMAT.length + 1
+    EXIF_DATETIME_REGEX.test(exifEntryObject.formattedValue ?? "")
   ) {
-    const parsedValue = parse(
-      exifEntryObject.formattedValue ?? "",
-      EXIF_TIMESTAMP_FORMAT,
-      new Date(),
-    );
-
     return {
       kind: "datetime",
       exifEntryObject,
-      value: new CalendarDateTime(
-        parsedValue.getFullYear(),
-        parsedValue.getMonth() + 1,
-        parsedValue.getDate(),
-        parsedValue.getHours(),
-        parsedValue.getMinutes(),
-        parsedValue.getSeconds(),
-      ),
-      onValueChange: (value) =>
-        onValueChange(
-          format(parseISO(value.toString()), EXIF_TIMESTAMP_FORMAT),
-        ),
+      value: parseExifDateTime(exifEntryObject.formattedValue ?? ""),
+      onValueChange: (value) => onValueChange(formatExifDateTime(value)),
     };
   }
 
