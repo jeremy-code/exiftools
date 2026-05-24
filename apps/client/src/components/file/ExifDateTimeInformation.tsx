@@ -1,4 +1,4 @@
-import { ExifIfd, type ExifData } from "libexif-wasm";
+import { type ExifData } from "libexif-wasm";
 import { useLocale } from "react-aria-components/I18nProvider";
 
 import { parseDateTimeEntries } from "#lib/exif/parseDateTimeEntries";
@@ -26,37 +26,12 @@ const ExifDateTimeInformation = ({
   const { locale } = useLocale();
   const dateTimeFormatter = new Intl.DateTimeFormat(locale);
 
-  // DATE_TIME may be in IFD0 or IFD1
-  const dateTimeEntry = exifData.getEntry("DATE_TIME");
-  const exifDataExifIfd = exifData.ifd[ExifIfd.EXIF];
-  const dateTimeOriginalEntry = exifDataExifIfd.getEntry("DATE_TIME_ORIGINAL");
-  const dateTimeDigitizedEntry = exifDataExifIfd.getEntry(
+  const dateTime = parseDateTimeEntries(exifData, "DATE_TIME");
+  const dateTimeOriginal = parseDateTimeEntries(exifData, "DATE_TIME_ORIGINAL");
+  const dateTimeDigitized = parseDateTimeEntries(
+    exifData,
     "DATE_TIME_DIGITIZED",
   );
-  const dateTime =
-    dateTimeEntry !== null ?
-      parseDateTimeEntries(
-        dateTimeEntry.toString(),
-        exifDataExifIfd.getEntry("OFFSET_TIME")?.toString(),
-        exifDataExifIfd.getEntry("SUB_SEC_TIME")?.toString(),
-      )
-    : null;
-  const dateTimeOriginal =
-    dateTimeOriginalEntry !== null ?
-      parseDateTimeEntries(
-        dateTimeOriginalEntry.toString(),
-        exifDataExifIfd.getEntry("OFFSET_TIME_ORIGINAL")?.toString(),
-        exifDataExifIfd.getEntry("SUB_SEC_TIME_ORIGINAL")?.toString(),
-      )
-    : null;
-  const dateTimeDigitized =
-    dateTimeDigitizedEntry !== null ?
-      parseDateTimeEntries(
-        dateTimeDigitizedEntry.toString(),
-        exifDataExifIfd.getEntry("OFFSET_TIME_DIGITIZED")?.toString(),
-        exifDataExifIfd.getEntry("SUB_SEC_TIME_DIGITIZED")?.toString(),
-      )
-    : null;
   const dateTimeGps = parseGpsDateTimeEntries(exifData);
 
   const dateTimeItems = Array.from(
