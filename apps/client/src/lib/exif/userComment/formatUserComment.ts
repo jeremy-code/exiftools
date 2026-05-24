@@ -1,4 +1,3 @@
-import { concat } from "@std/bytes";
 import { encode } from "iconv-lite";
 
 import { assertNever } from "#utils/assertNever";
@@ -16,11 +15,20 @@ const formatUserComment = (userComment: UserComment): Uint8Array => {
       return textEncoder.encode(
         `${ENCODING_TO_HEADER_MAP[userComment.encoding]}${userComment.value}`,
       );
-    case "JIS":
-      return concat([
-        textEncoder.encode(ENCODING_TO_HEADER_MAP[userComment.encoding]),
-        encode(userComment.value, "euc-jp"),
-      ]);
+    case "JIS": {
+      // Since JIS is compatible with ASCII, encoding header can be encoded with
+      // same encoder
+      const buffer = encode(
+        `${ENCODING_TO_HEADER_MAP[userComment.encoding]}${userComment.value}`,
+        "eucjp",
+      ) as Uint8Array;
+
+      return new Uint8Array(
+        buffer.buffer,
+        buffer.byteOffset,
+        buffer.byteLength,
+      );
+    }
     default:
       assertNever(userComment.encoding);
   }
