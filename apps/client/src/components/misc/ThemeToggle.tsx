@@ -1,6 +1,5 @@
 import { Moon, RefreshCw, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Switch as AriaSwitch } from "react-aria-components/Switch";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { cn } from "tailwind-variants";
 
@@ -8,47 +7,64 @@ import { useIsMounted } from "#hooks/useIsMounted";
 import {
   SwitchTrack,
   SwitchHandle,
-  switchVariants,
   type SwitchProps,
+  SwitchRoot,
 } from "@exifi/ui/components/Switch";
 
 type ThemeToggleProps = SwitchProps;
 
-const ThemeToggle = ({ size, ...props }: ThemeToggleProps) => {
+const ThemeToggle = ({
+  children,
+  switchTrackProps,
+  ...props
+}: ThemeToggleProps) => {
   // Prevent hydration error and layout shift as theme must be resolved from
   // `localStorage`
   const isMounted = useIsMounted();
   const { setTheme, resolvedTheme } = useTheme();
-  const isLight = resolvedTheme === "light";
+  const isDark = resolvedTheme === "dark";
 
   const [ThemeIcon, themeIconLabel] =
     isMounted ?
-      isLight ? [Sun, "Light Mode"]
-      : [Moon, "Dark Mode"]
+      isDark ? [Moon, "Switch to light theme"]
+      : [Sun, "Switch to dark theme"]
     : [RefreshCw, "Loading"];
 
   return (
-    <AriaSwitch
-      // Light mode = checked, Dark mode or not mounted = unchecked
-      isSelected={isMounted && isLight}
-      onChange={(isSelected) => setTheme(isSelected ? "light" : "dark")}
+    <SwitchRoot
+      // Light mode or not mounted = unchecked, Dark mode = checked
+      isSelected={isMounted && isDark}
+      onChange={(isSelected) => {
+        if (isMounted) {
+          setTheme(isSelected ? "dark" : "light");
+        }
+      }}
       isDisabled={!isMounted}
-      aria-label={`Toggle ${themeIconLabel}`}
+      aria-label={themeIconLabel}
+      data-testid="theme-toggle"
       {...props}
-      className={composeRenderProps(props.className, (className, renderProps) =>
-        switchVariants({ className, size, ...renderProps }),
-      )}
     >
-      <SwitchTrack>
-        <SwitchHandle>
-          <ThemeIcon
-            aria-hidden
-            size={16} // spacing.4 (1rem)
-            className={cn({ "animate-spin": !isMounted })}
-          />
-        </SwitchHandle>
-      </SwitchTrack>
-    </AriaSwitch>
+      {composeRenderProps(children, (children, renderProps) => (
+        <>
+          <SwitchTrack
+            renderProps={renderProps}
+            {...switchTrackProps}
+            className={cn(
+              switchTrackProps?.className,
+              "group-selected/switch:group-pressed/switchring-neutral group-selected/switch:bg-bg-muted group-selected/switch:ring-border group-selected/switch:group-hover/switch:ring-fg-subtle",
+            )}
+          >
+            <SwitchHandle className="bg-bg text-gray-600 dark:text-gray-50">
+              <ThemeIcon
+                className={cn("size-4", { "animate-spin": !isMounted })}
+                aria-hidden
+              />
+            </SwitchHandle>
+          </SwitchTrack>
+          {children}
+        </>
+      ))}
+    </SwitchRoot>
   );
 };
 
