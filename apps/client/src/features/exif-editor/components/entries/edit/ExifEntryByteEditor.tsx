@@ -40,7 +40,7 @@ const ExifEntryByteEditor = (props: ExifEntryEditorProps) => {
           </Button>
         </Heading>
         <DisclosurePanel className="mt-4">
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(--spacing(3.75),1fr))] gap-2">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(--spacing(20),1fr))] gap-2">
             {draft.map((value, index) => (
               <NumberField
                 key={index}
