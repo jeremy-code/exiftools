@@ -1,13 +1,13 @@
 import { dmsToDecimalDegrees } from "#lib/leaflet/dmsToDecimalDegrees";
-import { isDirection, type Direction } from "#lib/leaflet/interfaces";
+import { isDirection } from "#lib/leaflet/interfaces";
 
 import { mapRationalArray } from "../mapRationalArray";
 
 const parseCoordinateEntry = (
   // Any iterable of numbers of format [numerator1, denominator1, numerator2, denominator2, ...]
   coordinateArray: ArrayLike<number>,
-  // W or S or E or N
-  coordinateRef: Direction | "Sea level" | "Sea level reference",
+  // W, S, E, N, Sea level, or Sea level reference
+  coordinateRef: string,
 ): number | null => {
   if (coordinateArray.length % 2 !== 0) {
     return null;
