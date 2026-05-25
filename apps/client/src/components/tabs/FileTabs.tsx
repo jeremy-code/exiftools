@@ -5,7 +5,7 @@ import { DropZone } from "react-aria-components";
 import { useShallow } from "zustand/react/shallow";
 
 import { SortableList } from "#components/dnd/SortableList";
-import { useFileTabsStore } from "#hooks/useFileTabsStore";
+import { useFileTabsStore } from "#stores/fileTabsStore";
 import { Button } from "@exifi/ui/components/Button";
 import { ScrollArea } from "@exifi/ui/components/ScrollArea";
 import {
@@ -112,7 +112,7 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
               key={tab.id}
               id={tab.id}
               file={tab.file}
-              updateFile={(file) => updateTab(file, tab.id)}
+              updateFile={(file) => updateTab({ id: tab.id, file })}
               uploadFiles={createNewTabs}
             >
               {children}
