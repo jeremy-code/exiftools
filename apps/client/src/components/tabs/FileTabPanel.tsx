@@ -62,13 +62,7 @@ const FileTabPanel = ({
               }}
             />
           </div>
-        : <FileStoreProvider
-            initialFile={file}
-            onFileChange={(file) => updateFile(file)}
-          >
-            {children}
-          </FileStoreProvider>
-        }
+        : <FileStoreProvider initialFile={file}>{children}</FileStoreProvider>}
       </DropzoneStoreProvider>
     </TabPanel>
   );
