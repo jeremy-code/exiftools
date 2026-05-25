@@ -1,5 +1,5 @@
 import { type ExifData } from "libexif-wasm";
-import { useLocale } from "react-aria-components/I18nProvider";
+import { useDateFormatter } from "react-aria";
 
 import { parseDateTimeEntries } from "#lib/exif/parseDateTimeEntries";
 import { parseGpsDateTimeEntries } from "#lib/exif/parseGpsDateTimeEntries";
@@ -23,8 +23,7 @@ type DateTimeItem = { label: string; value: Temporal.ZonedDateTime };
 const ExifDateTimeInformation = ({
   exifData,
 }: ExifDateTimeInformationProps) => {
-  const { locale } = useLocale();
-  const dateTimeFormatter = new Intl.DateTimeFormat(locale);
+  const dateFormatter = useDateFormatter();
 
   const dateTime = parseDateTimeEntries(exifData, "DATE_TIME");
   const dateTimeOriginal = parseDateTimeEntries(exifData, "DATE_TIME_ORIGINAL");
@@ -43,7 +42,7 @@ const ExifDateTimeInformation = ({
     ]
       .reduce((acc, { label, value }) => {
         if (value !== null) {
-          const key = dateTimeFormatter.format(value.toInstant());
+          const key = dateFormatter.format(value.toInstant());
           // Deduplicate entries, priority goes to the first encountered
           if (!acc.has(key)) {
             acc.set(key, { label, value });
@@ -62,7 +61,7 @@ const ExifDateTimeInformation = ({
           <TooltipTarget>
             <span role="button">
               <time dateTime={value.toString()}>
-                {dateTimeFormatter.format(value.toInstant())}
+                {dateFormatter.format(value.toInstant())}
               </time>
             </span>
           </TooltipTarget>

@@ -1,7 +1,7 @@
 import { Suspense, useMemo, type ComponentPropsWithRef } from "react";
 
 import { imageDimensionsFromStream } from "image-dimensions";
-import { useNumberFormatter } from "react-aria";
+import { useDateFormatter, useNumberFormatter } from "react-aria";
 import { cn } from "tailwind-variants";
 
 import { useFileHash } from "#hooks/useFileHash";
@@ -57,6 +57,7 @@ const FileInformation = ({
     file.lastModified,
   );
   const numberFormatter = useNumberFormatter();
+  const dateFormatter = useDateFormatter();
 
   return (
     <div
@@ -118,7 +119,7 @@ const FileInformation = ({
               <DataListItemLabel>Last modified</DataListItemLabel>
               <DataListItemValue>
                 <time dateTime={lastModified.toString()}>
-                  {lastModified.toLocaleString()}
+                  {dateFormatter.format(lastModified)}
                 </time>
               </DataListItemValue>
             </DataListItem>

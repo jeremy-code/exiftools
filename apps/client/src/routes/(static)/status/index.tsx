@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useDateFormatter } from "react-aria";
 
 import { seo } from "#utils/seo";
 import {
@@ -10,15 +11,17 @@ import {
 import { Link } from "@exifi/ui/components/Link";
 
 const StatusComponent = () => {
+  const dateFormatter = useDateFormatter();
+
   return (
     <div className="container py-8">
       <DataList>
         <DataListItem className="max-sm:flex-col!">
           <DataListItemLabel className="min-w-40">Build time</DataListItemLabel>
           <DataListItemValue>
-            {Temporal.Instant.fromEpochMilliseconds(
-              __BUILD_TIMESTAMP__,
-            ).toLocaleString()}
+            {dateFormatter.format(
+              Temporal.Instant.fromEpochMilliseconds(__BUILD_TIMESTAMP__),
+            )}
           </DataListItemValue>
         </DataListItem>
         <DataListItem className="max-sm:flex-col!">
