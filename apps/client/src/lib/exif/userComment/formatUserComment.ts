@@ -9,7 +9,18 @@ const textEncoder = new TextEncoder();
 
 const formatUserComment = (userComment: UserComment): Uint8Array => {
   switch (userComment.encoding) {
-    case "ASCII":
+    case "ASCII": {
+      const buffer = encode(
+        `${ENCODING_TO_HEADER_MAP[userComment.encoding]}${userComment.value}`,
+        "ASCII",
+      ) as Uint8Array;
+
+      return new Uint8Array(
+        buffer.buffer,
+        buffer.byteOffset,
+        buffer.byteLength,
+      );
+    }
     case "UNICODE":
     case "EMPTY":
       return textEncoder.encode(
