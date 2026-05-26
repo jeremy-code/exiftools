@@ -17,12 +17,14 @@ const ExifMenu = (props: ExifMenuProps) => {
     updatePixelDimensions,
     updateGeolocationPosition,
     updateDateAndTimeDigitized,
+    addImageUniqueId,
   ] = useExifEditorStore(
     useShallow((state) => [
       state.fix,
       state.updatePixelDimensions,
       state.updateGeolocationPosition,
       state.updateDateAndTimeDigitized,
+      state.addImageUniqueId,
     ]),
   );
 
@@ -43,6 +45,9 @@ const ExifMenu = (props: ExifMenuProps) => {
         </MenuItem>
         <MenuItem onAction={() => updateDateAndTimeDigitized()}>
           Set Date and Time Digitized to current time
+        </MenuItem>
+        <MenuItem onAction={() => addImageUniqueId()}>
+          Add Image Unique ID
         </MenuItem>
       </Menu>
     </MenuTrigger>

@@ -6,6 +6,7 @@ import { ExifIfd, type ExifData, type ValidTypedArray } from "libexif-wasm";
 import { create, useStore } from "zustand";
 
 import { useExifData } from "#hooks/useExifData";
+import { addImageUniqueId } from "#lib/exif/actions/addImageUniqueId";
 import { updateDateAndTimeDigitized } from "#lib/exif/actions/updateDateAndTimeDigitized";
 import { updateGeolocationPosition } from "#lib/exif/actions/updateGeolocationPosition";
 import { updateLatLng } from "#lib/exif/actions/updateLatLng";
@@ -59,6 +60,7 @@ type ExifEditorStoreActions = {
   updateLatLng: (latLng: LatLng) => void;
   updateGeolocationPosition: (geoLocationPosition: GeolocationPosition) => void;
   updateDateAndTimeDigitized: () => void;
+  addImageUniqueId: () => void;
 };
 
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
@@ -164,6 +166,12 @@ const createExifEditorStore = (
     updateDateAndTimeDigitized: () => {
       set(() => {
         updateDateAndTimeDigitized(exifData);
+        return { exifDataObject: serializeExifData(exifData) };
+      });
+    },
+    addImageUniqueId: () => {
+      set(() => {
+        addImageUniqueId(exifData);
         return { exifDataObject: serializeExifData(exifData) };
       });
     },
