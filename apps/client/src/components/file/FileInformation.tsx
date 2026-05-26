@@ -6,7 +6,7 @@ import { cn } from "tailwind-variants";
 
 import { useFileHash } from "#hooks/useFileHash";
 import { useObjectUrl } from "#hooks/useObjectUrl";
-import { formatBytes } from "#utils/formatBytes";
+import { formatBytes } from "#utils/format/formatBytes";
 import { Badge } from "@exifi/ui/components/Badge";
 import {
   Card,

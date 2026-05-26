@@ -15,7 +15,7 @@ import {
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { getExifEntryObjectLabel } from "#lib/exif/utils/getExifEntryObjectLabel";
-import { formatPlural } from "#utils/formatPlural";
+import { formatPlural } from "#utils/format/formatPlural";
 import { Button } from "@exifi/ui/components/Button";
 import {
   DataList,

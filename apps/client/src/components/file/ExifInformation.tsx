@@ -6,7 +6,7 @@ import { type ExifData } from "libexif-wasm";
 import { useObjectUrl } from "#hooks/useObjectUrl";
 import { DATA_TYPE_MAP } from "#lib/exif/constants";
 import { assertNever } from "#utils/assertNever";
-import { formatPlural } from "#utils/formatPlural";
+import { formatPlural } from "#utils/format/formatPlural";
 import {
   Card,
   CardContent,

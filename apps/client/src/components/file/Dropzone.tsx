@@ -11,7 +11,7 @@ import { cn } from "tailwind-variants";
 import { useShallow } from "zustand/react/shallow";
 
 import { useDropzoneStore } from "#stores/dropzoneStore";
-import { formatBytes } from "#utils/formatBytes";
+import { formatBytes } from "#utils/format/formatBytes";
 import { Button } from "@exifi/ui/components/Button";
 import { linkVariants } from "@exifi/ui/components/Link";
 

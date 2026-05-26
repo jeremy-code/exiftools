@@ -1,6 +1,6 @@
 import { Trash2 } from "lucide-react";
 
-import { formatPlural } from "#utils/formatPlural";
+import { formatPlural } from "#utils/format/formatPlural";
 import { Button } from "@exifi/ui/components/Button";
 import {
   Dialog,

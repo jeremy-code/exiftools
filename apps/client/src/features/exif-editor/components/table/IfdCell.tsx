@@ -2,7 +2,7 @@ import type { CellContext } from "@tanstack/react-table";
 import { exifIfdGetName, type Ifd } from "libexif-wasm";
 
 import { ExpandRows } from "#components/table/ExpandRows";
-import { formatPlural } from "#utils/formatPlural";
+import { formatPlural } from "#utils/format/formatPlural";
 import { Badge } from "@exifi/ui/components/Badge";
 
 import type { ExifTableRow } from "./columns";

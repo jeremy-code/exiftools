@@ -1,6 +1,6 @@
 import type { ExifMnoteData } from "libexif-wasm";
 
-import { formatPlural } from "#utils/formatPlural";
+import { formatPlural } from "#utils/format/formatPlural";
 import {
   AccordionItem,
   AccordionHeader,

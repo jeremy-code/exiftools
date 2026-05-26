@@ -1,6 +1,6 @@
 import { exifIfdGetName, ExifTagInfo, type ExifContent } from "libexif-wasm";
 
-import { formatPlural } from "#utils/formatPlural";
+import { formatPlural } from "#utils/format/formatPlural";
 import {
   AccordionItem,
   AccordionHeader,
