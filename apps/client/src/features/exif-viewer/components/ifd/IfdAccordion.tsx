@@ -1,4 +1,4 @@
-import type { ExifData } from "libexif-wasm";
+import type { ExifData, Ifd } from "libexif-wasm";
 
 import { Accordion } from "@exifi/ui/components/Accordion";
 
@@ -8,13 +8,14 @@ const IfdAccordion = ({ exifData }: { exifData: ExifData }) => {
   return (
     <Accordion
       // Expand all nonempty IFDs
-      defaultExpandedKeys={exifData.ifd
-        .filter((ifd) => ifd.count !== 0)
-        .map((ifd) => ifd.ifd)
-        .filter((ifd) => ifd !== null)}
+      defaultExpandedKeys={exifData.ifd.reduce((acc, ifd) => {
+        if (ifd.ifd !== null && ifd.count !== 0) {
+          acc.add(ifd.ifd);
+        }
+        return acc;
+      }, new Set<Ifd>())}
       variant="enclosed"
       allowsMultipleExpanded
-      size="lg"
       className="shadow-sm"
     >
       {exifData.ifd.map((ifd) => (
