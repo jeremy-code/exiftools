@@ -1,9 +1,14 @@
+import { imageDimensionsFromStream } from "image-dimensions";
 import { Ellipsis } from "lucide-react";
 import type { MenuTriggerProps } from "react-aria-components";
 import { useShallow } from "zustand/react/shallow";
 
 import { useFile } from "#contexts/FileContext";
-import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
+import { useExifEditor } from "#features/exif-editor/contexts/ExifEditorContext";
+import { addImageUniqueId } from "#lib/exif/actions/addImageUniqueId";
+import { updateDateAndTimeDigitized } from "#lib/exif/actions/updateDateAndTimeDigitized";
+import { updateGeolocationPosition } from "#lib/exif/actions/updateGeolocationPosition";
+import { updatePixelDimensions } from "#lib/exif/actions/updatePixelDimensions";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { Button } from "@exifi/ui/components/Button";
 import { Menu, MenuItem, MenuTrigger } from "@exifi/ui/components/Menu";
@@ -12,20 +17,8 @@ type ExifMenuProps = Omit<MenuTriggerProps, "children">;
 
 const ExifMenu = (props: ExifMenuProps) => {
   const { file } = useFile();
-  const [
-    fix,
-    updatePixelDimensions,
-    updateGeolocationPosition,
-    updateDateAndTimeDigitized,
-    addImageUniqueId,
-  ] = useExifEditorStore(
-    useShallow((state) => [
-      state.fix,
-      state.updatePixelDimensions,
-      state.updateGeolocationPosition,
-      state.updateDateAndTimeDigitized,
-      state.addImageUniqueId,
-    ]),
+  const [exifData, setExifData] = useExifEditor(
+    useShallow((state) => [state.exifData, state.setExifData]),
   );
 
   return (
@@ -34,19 +27,53 @@ const ExifMenu = (props: ExifMenuProps) => {
         <Ellipsis className="size-4" />
       </Button>
       <Menu>
-        <MenuItem onAction={() => fix()}>Fix</MenuItem>
-        <MenuItem onAction={() => updatePixelDimensions(file)}>
+        <MenuItem
+          onAction={() => {
+            exifData.fix();
+            setExifData(exifData);
+          }}
+        >
+          Fix
+        </MenuItem>
+        <MenuItem
+          onAction={async () => {
+            const imageDimensions = await imageDimensionsFromStream(
+              file.stream(),
+            );
+
+            if (imageDimensions === undefined) {
+              console.warn("Failed to get image dimensions");
+              return;
+            }
+            updatePixelDimensions(exifData, imageDimensions);
+            setExifData(exifData);
+          }}
+        >
           Add image dimensions
         </MenuItem>
         <MenuItem
-          onAction={() => getCurrentPosition().then(updateGeolocationPosition)}
+          onAction={async () => {
+            const currentPosition = await getCurrentPosition();
+            updateGeolocationPosition(exifData, currentPosition);
+            setExifData(exifData);
+          }}
         >
           Set Exif to current GPS position
         </MenuItem>
-        <MenuItem onAction={() => updateDateAndTimeDigitized()}>
+        <MenuItem
+          onAction={() => {
+            updateDateAndTimeDigitized(exifData);
+            setExifData(exifData);
+          }}
+        >
           Set Date and Time Digitized to current time
         </MenuItem>
-        <MenuItem onAction={() => addImageUniqueId()}>
+        <MenuItem
+          onAction={() => {
+            addImageUniqueId(exifData);
+            setExifData(exifData);
+          }}
+        >
           Add Image Unique ID
         </MenuItem>
       </Menu>

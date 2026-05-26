@@ -2,8 +2,8 @@ import type { ComponentPropsWithRef } from "react";
 
 import { cn } from "tailwind-variants";
 
+import { ExifEntryDraftContext } from "#features/exif-editor/contexts/ExifEntryDraftContext";
 import { useExifEntryDraft } from "#features/exif-editor/hooks/useExifEntryDraft";
-import { ExifEntryDraftContext } from "#features/exif-editor/hooks/useExifEntryDraftContext";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { Button } from "@exifi/ui/components/Button";
 

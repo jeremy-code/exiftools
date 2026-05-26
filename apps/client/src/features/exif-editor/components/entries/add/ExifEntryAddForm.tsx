@@ -4,12 +4,12 @@ import { useForm } from "@tanstack/react-form";
 import { ExifFormat, exifIfdGetName, getExifTagTable } from "libexif-wasm";
 import { IFD_NAMES } from "libexif-wasm/constants";
 
+import { useExifEditor } from "#features/exif-editor/contexts/ExifEditorContext";
 import {
   addEntryFormOptions,
   addFormSchema,
   type AddFieldValues,
 } from "#features/exif-editor/forms/addEntryForm";
-import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { titlecase } from "#utils/titlecase";
 import { Button } from "@exifi/ui/components/Button";
@@ -24,7 +24,7 @@ const EXIF_TAG_TABLE = getExifTagTable();
 type ExifEntryAddFormProps = ComponentPropsWithRef<"form">;
 
 const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
-  const addExifEntry = useExifEditorStore((state) => state.addExifEntry);
+  const addExifEntry = useExifEditor((state) => state.addExifEntry);
   const addForm = useForm({
     ...addEntryFormOptions(),
     onSubmit: ({ value }) => {

@@ -1,8 +1,8 @@
 import { RationalInput } from "#components/editor/RationalInput";
 import { UserCommentSelect } from "#components/editor/UserCommentSelect";
 import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
+import { useExifEntryDraftContext } from "#features/exif-editor/contexts/ExifEntryDraftContext";
 import { getExifAdvancedEditor } from "#features/exif-editor/editors/advanced/getExifAdvancedEditor";
-import { useExifEntryDraftContext } from "#features/exif-editor/hooks/useExifEntryDraftContext";
 import { getExifEntryObjectLabel } from "#lib/exif/utils/getExifEntryObjectLabel";
 import { assertNever } from "#utils/assertNever";
 import { NumberField } from "@exifi/ui/components/NumberField";

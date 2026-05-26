@@ -14,10 +14,6 @@ import { useShallow } from "zustand/react/shallow";
 
 import { ColumnResizer } from "#components/table/ColumnResizer";
 import { ExpandRows } from "#components/table/ExpandRows";
-import {
-  type ExifEditorStoreActions,
-  useExifEditorStore,
-} from "#features/exif-editor/hooks/useExifEditor";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import { formatPlural } from "#utils/formatPlural";
 import { Badge } from "@exifi/ui/components/Badge";
@@ -35,12 +31,14 @@ import {
 
 import { SelectionBar } from "./table/SelectionBar";
 import { columns } from "./table/columns";
+import { useExifEditor } from "../contexts/ExifEditorContext";
+import type { ExifEditorStoreActions } from "../stores/exifEditorStore";
 
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- All declarations of 'TableMeta' must have identical type parameters.
   interface TableMeta<TData extends RowData> extends Pick<
     ExifEditorStoreActions,
-    "removeExifEntry" | "updateExifEntry"
+    "updateExifEntry"
   > {}
 }
 
@@ -49,7 +47,13 @@ const fallbackData: ExifEntryObject[] = [];
 type ExifTableProps = TableProps;
 
 const ExifTable = (props: ExifTableProps) => {
-  const exifDataObject = useExifEditorStore((state) => state.exifDataObject);
+  const { exifDataObject, exifData, setExifData } = useExifEditor(
+    useShallow((state) => ({
+      exifDataObject: state.exifDataObject,
+      exifData: state.exifData,
+      setExifData: state.setExifData,
+    })),
+  );
   const exifEntryObjects = useMemo(
     () =>
       (Object.entries(exifDataObject.ifd) as [Ifd, ExifEntryObject[]][]).map(
@@ -57,13 +61,7 @@ const ExifTable = (props: ExifTableProps) => {
       ),
     [exifDataObject],
   );
-  const exifEditorStoreActions = useExifEditorStore(
-    useShallow((state) => ({
-      updateExifEntry: state.updateExifEntry,
-      removeExifEntry: state.removeExifEntry,
-    })),
-  );
-  const fix = useExifEditorStore((state) => state.fix);
+  const updateExifEntry = useExifEditor((state) => state.updateExifEntry);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const table = useReactTable({
     columns,
@@ -80,7 +78,9 @@ const ExifTable = (props: ExifTableProps) => {
     state: {
       rowSelection,
     },
-    meta: exifEditorStoreActions,
+    meta: {
+      updateExifEntry,
+    },
   });
 
   const columnSizeCssVars = useMemo(
@@ -105,7 +105,10 @@ const ExifTable = (props: ExifTableProps) => {
           className={(renderProps) =>
             linkVariants({ ...renderProps, color: "blue", underline: true })
           }
-          onPress={() => fix()}
+          onPress={() => {
+            exifData.fix();
+            setExifData(exifData);
+          }}
         >
           Initialize with default entries?
         </AriaButton>

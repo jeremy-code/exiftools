@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import type { RowSelectionState, Table } from "@tanstack/react-table";
 import { IFD_NAMES } from "libexif-wasm";
 
-import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
+import { useExifEditor } from "#features/exif-editor/contexts/ExifEditorContext";
 
 import type { ExifTableRow } from "./columns";
 import { DeleteEntriesDialog } from "../dialogs/DeleteEntriesDialog";
@@ -27,9 +27,7 @@ const SelectionBar = ({
         .map(([rowId]) => rowId),
     [rowSelection],
   );
-  const removeExifEntries = useExifEditorStore(
-    (state) => state.removeExifEntries,
-  );
+  const removeExifEntries = useExifEditor((state) => state.removeExifEntries);
   const deleteRows = useCallback(() => {
     const selectedEntries = selectedRowIds.flatMap((selectedRowId) => {
       const selectedRow = table.getRow(selectedRowId).original;

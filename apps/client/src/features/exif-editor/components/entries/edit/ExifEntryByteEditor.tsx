@@ -6,7 +6,7 @@ import {
   Heading,
 } from "react-aria-components/Disclosure";
 
-import { useExifEntryDraftContext } from "#features/exif-editor/hooks/useExifEntryDraftContext";
+import { useExifEntryDraftContext } from "#features/exif-editor/contexts/ExifEntryDraftContext";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
 import { Button } from "@exifi/ui/components/Button";
 import { NumberField } from "@exifi/ui/components/NumberField";

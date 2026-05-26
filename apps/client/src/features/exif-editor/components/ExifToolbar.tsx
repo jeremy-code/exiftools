@@ -12,13 +12,13 @@ import { Toolbar, type ToolbarProps } from "@exifi/ui/components/Toolbar";
 import { ExifMenu } from "./ExifMenu";
 import { AddEntryDialog } from "./dialogs/AddEntryDialog";
 import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
-import { useExifEditorContext } from "../hooks/useExifEditor";
+import { useExifEditor } from "../contexts/ExifEditorContext";
 
 type ExifToolbarProps = Omit<ToolbarProps, "children">;
 
 const ExifToolbar = (props: ExifToolbarProps) => {
   const { file, setFile } = useFile();
-  const { exifData } = useExifEditorContext();
+  const exifData = useExifEditor((state) => state.exifData);
   const [isPending, startTransition] = useTransition();
 
   return (

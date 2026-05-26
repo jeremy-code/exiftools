@@ -5,8 +5,9 @@ import { LatLng } from "leaflet";
 import { cn } from "tailwind-variants";
 import { useShallow } from "zustand/react/shallow";
 
+import { useExifEditor } from "#features/exif-editor/contexts/ExifEditorContext";
 import { addGpsEntriesFormOptions } from "#features/exif-editor/forms/addGpsEntriesForm";
-import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
+import { updateLatLng } from "#lib/exif/actions/updateLatLng";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { Button } from "@exifi/ui/components/Button";
 import { NumberField } from "@exifi/ui/components/NumberField";
@@ -20,10 +21,11 @@ const ExifEntryAddGpsForm = ({
   className,
   ...props
 }: ExifEntryAddGpsFormProps) => {
-  const { updateLatLng, exifDataObject } = useExifEditorStore(
+  const { exifData, exifDataObject, setExifData } = useExifEditor(
     useShallow((state) => ({
-      updateLatLng: state.updateLatLng,
+      exifData: state.exifData,
       exifDataObject: state.exifDataObject,
+      setExifData: state.setExifData,
     })),
   );
   const gpsForm = useForm({
@@ -31,8 +33,10 @@ const ExifEntryAddGpsForm = ({
     onSubmit: ({ value }) => {
       if (value.latitude !== undefined && value.longitude !== undefined) {
         updateLatLng(
+          exifData,
           new LatLng(value.latitude, value.longitude, value.altitude),
         );
+        setExifData(exifData);
       }
     },
   });

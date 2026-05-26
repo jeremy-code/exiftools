@@ -1,18 +1,19 @@
 import { ExifInformation } from "#components/file/ExifInformation";
+import { useExifData } from "#hooks/useExifData";
 
 import { ExifTable } from "./components/ExifTable";
 import { ExifToolbar } from "./components/ExifToolbar";
-import { useExifEditor, ExifEditorContext } from "./hooks/useExifEditor";
+import { ExifEditorProvider } from "./contexts/ExifEditorContext";
 
 const ExifEditorContent = ({ file }: { file: File }) => {
-  const exifEditor = useExifEditor(file);
+  const exifData = useExifData(file);
 
   return (
-    <ExifEditorContext value={exifEditor}>
-      <ExifInformation exifData={exifEditor.exifData} />
+    <ExifEditorProvider exifData={exifData}>
+      <ExifInformation exifData={exifData} />
       <ExifToolbar />
       <ExifTable />
-    </ExifEditorContext>
+    </ExifEditorProvider>
   );
 };
 
