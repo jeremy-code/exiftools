@@ -2,7 +2,7 @@ import type { ComponentPropsWithRef, ReactNode } from "react";
 
 import { Dropzone } from "#components/file/Dropzone";
 import { FileUrlInput } from "#components/file/FileUrlInput";
-import { FileStoreProvider } from "#hooks/useFileStore";
+import { FileProvider } from "#contexts/FileContext";
 import { useDropzoneStore } from "#stores/dropzoneStore";
 import { Heading } from "@exifi/ui/components/Heading";
 import { TabPanel } from "@exifi/ui/components/Tabs";
@@ -67,7 +67,7 @@ const FileTabPanel = ({
             }}
           />
         </div>
-      : <FileStoreProvider initialFile={file}>{children}</FileStoreProvider>}
+      : <FileProvider initialFile={file}>{children}</FileProvider>}
     </TabPanel>
   );
 };

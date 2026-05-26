@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { useFile } from "#contexts/FileContext";
 import { ExifEditor } from "#features/exif-editor/ExifEditor";
-import { useFileStore } from "#hooks/useFileStore";
 import { seo } from "#utils/seo";
 
 const EditorComponent = () => {
-  const { file } = useFileStore();
+  const { file } = useFile();
 
   return <ExifEditor file={file} />;
 };

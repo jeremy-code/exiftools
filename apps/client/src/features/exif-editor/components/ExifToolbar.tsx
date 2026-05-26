@@ -2,7 +2,7 @@ import { useTransition } from "react";
 
 import { Save } from "lucide-react";
 
-import { useFileStore } from "#hooks/useFileStore";
+import { useFile } from "#contexts/FileContext";
 import { isMobileWebKit } from "#utils/platform";
 import { saveFile } from "#utils/saveFile";
 import { writeExifData } from "@exifi/exif-utils";
@@ -17,7 +17,7 @@ import { useExifEditorContext } from "../hooks/useExifEditor";
 type ExifToolbarProps = Omit<ToolbarProps, "children">;
 
 const ExifToolbar = (props: ExifToolbarProps) => {
-  const { file, setFile } = useFileStore();
+  const { file, setFile } = useFile();
   const { exifData } = useExifEditorContext();
   const [isPending, startTransition] = useTransition();
 

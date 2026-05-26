@@ -7,7 +7,7 @@ import { ExifData } from "libexif-wasm";
 
 import { GeoSearchControl } from "#components/map/GeoSearchControl";
 import { Map } from "#components/map/Map";
-import { useFileStore } from "#hooks/useFileStore";
+import { useFile } from "#contexts/FileContext";
 import { useGeoSearchLocation } from "#hooks/useGeoSearchLocation";
 import { updateLatLng } from "#lib/exif/actions/updateLatLng";
 import { formatLatLng } from "#lib/leaflet/formatLatLng";
@@ -49,7 +49,7 @@ const EditorGpsApp = ({
   const osmProvider = getOsmProvider(currentPositionLatLng);
   const [map, setMap] = useState<LeafletMap | null>(null);
   const { latLng } = useGeoSearchLocation(map);
-  const { file, setFile } = useFileStore();
+  const { file, setFile } = useFile();
 
   return (
     <div className="flex flex-col gap-2">

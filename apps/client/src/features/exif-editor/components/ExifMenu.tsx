@@ -2,8 +2,8 @@ import { Ellipsis } from "lucide-react";
 import type { MenuTriggerProps } from "react-aria-components";
 import { useShallow } from "zustand/react/shallow";
 
+import { useFile } from "#contexts/FileContext";
 import { useExifEditorStore } from "#features/exif-editor/hooks/useExifEditor";
-import { useFileStore } from "#hooks/useFileStore";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { Button } from "@exifi/ui/components/Button";
 import { Menu, MenuItem, MenuTrigger } from "@exifi/ui/components/Menu";
@@ -11,7 +11,7 @@ import { Menu, MenuItem, MenuTrigger } from "@exifi/ui/components/Menu";
 type ExifMenuProps = Omit<MenuTriggerProps, "children">;
 
 const ExifMenu = (props: ExifMenuProps) => {
-  const { file } = useFileStore();
+  const { file } = useFile();
   const [
     fix,
     updatePixelDimensions,
