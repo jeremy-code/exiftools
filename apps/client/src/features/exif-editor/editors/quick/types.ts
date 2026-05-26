@@ -5,6 +5,7 @@ import type {
 } from "@internationalized/date";
 import type { ValidTypedArray } from "libexif-wasm";
 
+import type { ExifVersion } from "#lib/exif/interfaces";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 
 type QuickEditorResolver = (
@@ -16,11 +17,6 @@ type ResolvedQuickEditor<T> = {
   exifEntryObject: ExifEntryObject;
   value: T;
   onValueChange: (value: T) => void;
-};
-
-type ExifVersion = {
-  major: number;
-  minor: number;
 };
 
 type QuickEditor =

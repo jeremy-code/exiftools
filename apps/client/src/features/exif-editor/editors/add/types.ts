@@ -5,6 +5,7 @@ import type {
 } from "@internationalized/date";
 import type { RationalObject } from "libexif-wasm";
 
+import type { ExifVersion } from "#lib/exif/interfaces";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
 import type { UserComment } from "#lib/exif/userComment/interfaces";
 
@@ -17,11 +18,6 @@ type ResolvedAddEditor<T> = {
   exifEntryObject: Partial<ExifEntryObject> & Pick<ExifEntryObject, "value">;
   value: T | undefined;
   onValueChange: (value: T) => void;
-};
-
-type ExifVersion = {
-  major: number;
-  minor: number;
 };
 
 type AddEditor = (
