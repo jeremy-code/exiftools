@@ -73,7 +73,7 @@ const FileTabs = ({ children, ...props }: FileTabsProps) => {
             }}
           >
             <div className="grid grid-cols-[1fr_auto] items-start gap-1 rounded-md border border-border bg-bg-muted/80 shadow backdrop-blur-xs">
-              <ScrollArea>
+              <ScrollArea className="min-w-0 rounded-md" maskImage="x">
                 <TabList
                   ref={fileTabsListRef}
                   fitted

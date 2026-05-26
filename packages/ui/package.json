@@ -12,8 +12,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@base-ui/react": "^1.5.0",
     "@radix-ui/react-navigation-menu": "^1.2.14",
-    "@radix-ui/react-scroll-area": "^1.2.10",
     "lucide-react": "^1.16.0",
     "react-aria-components": "^1.17.0",
     "tailwind-merge": "^3.6.0",

@@ -7,6 +7,32 @@
   padding-inline: --spacing(8); /* 2rem = 32px */
 }
 
+@utility scroll-fade-mask-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black min(40px, var(--scroll-area-overflow-x-start)),
+    black calc(100% - min(40px, var(--scroll-area-overflow-x-end, 40px))),
+    transparent 100%
+  );
+  mask-repeat: no-repeat;
+}
+
+@utility scroll-fade-mask-y {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black min(--spacing(10), var(--scroll-area-overflow-y-start)),
+    black
+      calc(
+        100% -
+          min(--spacing(10), var(--scroll-area-overflow-y-end, --spacing(10)))
+      ),
+    transparent 100%
+  );
+  mask-repeat: no-repeat;
+}
+
 @theme static {
   --breakpoint-sm: 40rem;
   --breakpoint-md: 48rem;

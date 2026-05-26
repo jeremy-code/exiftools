@@ -1,41 +1,56 @@
-import type { ComponentPropsWithRef } from "react";
+import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
+import { cn, tv, type VariantProps } from "tailwind-variants";
 
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
-import { cn } from "tailwind-variants";
+import { focusRing } from "../utils/focusRing";
 
-const ScrollArea = ({
-  className,
-  children,
-  ...props
-}: ComponentPropsWithRef<typeof ScrollAreaPrimitive.Root>) => (
-  <ScrollAreaPrimitive.Root
-    className={cn("overflow-hidden", className)}
-    {...props}
-  >
-    <ScrollAreaPrimitive.Viewport className="size-full rounded-[inherit]">
-      {children}
-    </ScrollAreaPrimitive.Viewport>
-    <ScrollBar orientation="horizontal" />
-    <ScrollBar orientation="vertical" />
-    <ScrollAreaPrimitive.Corner />
-  </ScrollAreaPrimitive.Root>
-);
+const scrollAreaViewportVariants = tv({
+  extend: focusRing,
+  base: "size-full rounded-[inherit]",
+  variants: {
+    maskImage: {
+      x: "scroll-fade-mask-x",
+      y: "scroll-fade-mask-y",
+    },
+  },
+});
+
+type ScrollAreaProps = ScrollAreaPrimitive.Root.Props &
+  VariantProps<typeof scrollAreaViewportVariants>;
+
+const ScrollArea = ({ children, maskImage, ...props }: ScrollAreaProps) => {
+  return (
+    <ScrollAreaPrimitive.Root {...props}>
+      <ScrollAreaPrimitive.Viewport
+        className={scrollAreaViewportVariants({ maskImage })}
+      >
+        <ScrollAreaPrimitive.Content>{children}</ScrollAreaPrimitive.Content>
+      </ScrollAreaPrimitive.Viewport>
+      <ScrollBar orientation="vertical" />
+      <ScrollBar orientation="horizontal" />
+      <ScrollAreaPrimitive.Corner />
+    </ScrollAreaPrimitive.Root>
+  );
+};
 
 const ScrollBar = ({
   className,
   ...props
-}: ComponentPropsWithRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) => (
-  <ScrollAreaPrimitive.ScrollAreaScrollbar
-    className={cn(
-      "flex touch-none bg-bg-muted/50 p-0.5 transition-colors select-none hover:bg-bg-muted/80",
-      "orientation-vertical:w-2.5 orientation-vertical:flex-row",
-      "orientation-horizontal:h-2.5 orientation-horizontal:flex-col",
-      className,
-    )}
-    {...props}
-  >
-    <ScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-[10px] bg-fg-subtle" />
-  </ScrollAreaPrimitive.ScrollAreaScrollbar>
-);
+}: ScrollAreaPrimitive.Scrollbar.Props) => {
+  return (
+    <ScrollAreaPrimitive.Scrollbar
+      className={cn(
+        "flex touch-none bg-bg-muted/50 p-0.5 opacity-0 transition-opacity select-none",
+        "data-hovering:pointer-events-auto data-hovering:opacity-100",
+        "data-scrolling:pointer-events-auto data-scrolling:opacity-100",
+        "orientation-vertical:w-2.5 orientation-vertical:flex-row",
+        "orientation-horizontal:h-2.5 orientation-horizontal:flex-col",
+        className,
+      )}
+      {...props}
+    >
+      <ScrollAreaPrimitive.Thumb className="relative flex-1 rounded-[10px] bg-fg-subtle" />
+    </ScrollAreaPrimitive.Scrollbar>
+  );
+};
 
 export { ScrollArea, ScrollBar };
