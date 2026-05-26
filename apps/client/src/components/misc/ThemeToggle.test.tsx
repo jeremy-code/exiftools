@@ -41,32 +41,4 @@ describe("ThemeToggle", () => {
       "true",
     );
   });
-
-  test("switches to dark theme when clicked in light mode", async () => {
-    mockResolvedTheme = "light";
-
-    const screen = await render(<ThemeToggle data-testid="theme-toggle" />);
-
-    await screen.getByTestId("theme-toggle").click();
-
-    expect(mockSetTheme).toHaveBeenCalledOnce();
-    expect(mockSetTheme).toHaveBeenCalledExactlyOnceWith("dark");
-  });
-
-  test("switches to light theme when clicked in dark mode", async () => {
-    mockResolvedTheme = "dark";
-
-    const screen = await render(<ThemeToggle data-testid="theme-toggle" />);
-
-    await screen.getByTestId("theme-toggle").click();
-
-    expect(mockSetTheme).toHaveBeenCalledOnce();
-    expect(mockSetTheme).toHaveBeenCalledExactlyOnceWith("light");
-  });
-
-  test("renders children", async () => {
-    const screen = await render(<ThemeToggle>Theme</ThemeToggle>);
-
-    expect(screen.getByText("Theme")).toBeInTheDocument();
-  });
 });

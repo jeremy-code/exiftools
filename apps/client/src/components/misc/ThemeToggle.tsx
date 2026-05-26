@@ -41,7 +41,6 @@ const ThemeToggle = ({
       }}
       isDisabled={!isMounted}
       aria-label={themeIconLabel}
-      data-testid="theme-toggle"
       {...props}
     >
       {composeRenderProps(children, (children, renderProps) => (
