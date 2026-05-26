@@ -1,7 +1,7 @@
 import { Suspense, useMemo, type ComponentPropsWithRef } from "react";
 
 import { imageDimensionsFromStream } from "image-dimensions";
-import { useDateFormatter, useNumberFormatter } from "react-aria";
+import { useDateFormatter, useLocale, useNumberFormatter } from "react-aria";
 import { cn } from "tailwind-variants";
 
 import { useFileHash } from "#hooks/useFileHash";
@@ -56,6 +56,7 @@ const FileInformation = ({
   const lastModified = Temporal.Instant.fromEpochMilliseconds(
     file.lastModified,
   );
+  const { locale } = useLocale();
   const numberFormatter = useNumberFormatter();
   const dateFormatter = useDateFormatter();
 
@@ -106,7 +107,7 @@ const FileInformation = ({
                 <TooltipTrigger>
                   <TooltipTarget>
                     <span role="button">
-                      {formatBytes(file.size, undefined, {
+                      {formatBytes(file.size, locale, {
                         maximumFractionDigits: 1,
                       })}
                     </span>

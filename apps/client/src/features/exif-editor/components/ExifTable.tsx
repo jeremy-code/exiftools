@@ -9,6 +9,7 @@ import {
   type RowSelectionState,
 } from "@tanstack/react-table";
 import type { Ifd } from "libexif-wasm";
+import { useLocale } from "react-aria/I18nProvider";
 import { Button as AriaButton } from "react-aria-components/Button";
 import { useShallow } from "zustand/react/shallow";
 
@@ -47,6 +48,7 @@ const fallbackData: ExifEntryObject[] = [];
 type ExifTableProps = TableProps;
 
 const ExifTable = (props: ExifTableProps) => {
+  const { locale } = useLocale();
   const { exifDataObject, exifData, setExifData } = useExifEditor(
     useShallow((state) => ({
       exifDataObject: state.exifDataObject,
@@ -177,10 +179,14 @@ const ExifTable = (props: ExifTableProps) => {
                         cell.getContext(),
                       )}
                       <Badge>
-                        {formatPlural(row.subRows.length, {
-                          one: " tag",
-                          other: " tags",
-                        })}
+                        {formatPlural(
+                          row.subRows.length,
+                          {
+                            one: " tag",
+                            other: " tags",
+                          },
+                          locale,
+                        )}
                       </Badge>
                     </ExpandRows>
                   : cell.getIsAggregated() ?

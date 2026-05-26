@@ -2,6 +2,7 @@ import { Suspense, useMemo, type ComponentPropsWithRef } from "react";
 
 import { imageDimensionsFromStream } from "image-dimensions";
 import { type ExifData } from "libexif-wasm";
+import { useLocale } from "react-aria/I18nProvider";
 
 import { useObjectUrl } from "#hooks/useObjectUrl";
 import { DATA_TYPE_MAP } from "#lib/exif/constants";
@@ -57,6 +58,8 @@ const ExifInformation = ({
   className,
   ...props
 }: ExifInformationProps) => {
+  const { locale } = useLocale();
+
   return (
     <Card className="max-w-full min-w-0" {...props}>
       <CardHeader>
@@ -94,10 +97,14 @@ const ExifInformation = ({
             </DataListItemLabel>
             <DataListItemValue>
               {exifData.mnoteData !== null ?
-                formatPlural(exifData.mnoteData.dataCount, {
-                  one: " entry",
-                  other: " entries",
-                })
+                formatPlural(
+                  exifData.mnoteData.dataCount,
+                  {
+                    one: " entry",
+                    other: " entries",
+                  },
+                  locale,
+                )
               : exifData.getEntry("MAKER_NOTE") !== null ?
                 "Unable to parse"
               : "Does not exist"}

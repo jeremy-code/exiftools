@@ -1,4 +1,5 @@
 import type { ExifMnoteData } from "libexif-wasm";
+import { useLocale } from "react-aria/I18nProvider";
 
 import { formatPlural } from "#utils/format/formatPlural";
 import {
@@ -24,16 +25,21 @@ const MakerNoteAccordionItem = ({
 }: {
   mnoteData: ExifMnoteData;
 }) => {
+  const { locale } = useLocale();
   return (
     <AccordionItem id="MAKERNOTE">
       <AccordionHeader>
         <div className="flex gap-2">
           Makernote
           <Badge>
-            {formatPlural(mnoteData.dataCount, {
-              one: " tag",
-              other: " tags",
-            })}
+            {formatPlural(
+              mnoteData.dataCount,
+              {
+                one: " tag",
+                other: " tags",
+              },
+              locale,
+            )}
           </Badge>
         </div>
       </AccordionHeader>

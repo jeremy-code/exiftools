@@ -1,4 +1,5 @@
 import { Trash2 } from "lucide-react";
+import { useLocale } from "react-aria/I18nProvider";
 
 import { formatPlural } from "#utils/format/formatPlural";
 import { Button } from "@exifi/ui/components/Button";
@@ -23,6 +24,8 @@ const DeleteEntriesDialog = ({
   deleteRows,
   ...props
 }: DeleteEntriesDialogProps) => {
+  const { locale } = useLocale();
+
   return (
     <DialogTrigger {...props}>
       <Button aria-label="Delete entries">
@@ -40,10 +43,14 @@ const DeleteEntriesDialog = ({
             <DialogTitle>Are you sure?</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            {`This action will delete ${formatPlural(rows.length, {
-              one: " Exif entry",
-              other: " Exif entries",
-            })}`}
+            {`This action will delete ${formatPlural(
+              rows.length,
+              {
+                one: " Exif entry",
+                other: " Exif entries",
+              },
+              locale,
+            )}`}
           </DialogBody>
           <DialogFooter closeButton>
             <Button onPress={() => deleteRows()} className="ml-3">

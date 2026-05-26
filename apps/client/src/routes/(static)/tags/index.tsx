@@ -14,6 +14,7 @@ import {
   type SupportLevel,
   type TagEntry,
 } from "libexif-wasm";
+import { useLocale } from "react-aria/I18nProvider";
 
 import { ColumnResizer } from "#components/table/ColumnResizer";
 import { ExpandRows } from "#components/table/ExpandRows";
@@ -119,6 +120,7 @@ const columns = [
 ];
 
 const TagsComponent = () => {
+  const { locale } = useLocale();
   const table = useReactTable({
     columns,
     columnResizeMode: "onChange",
@@ -218,10 +220,14 @@ const TagsComponent = () => {
                           cell.getContext(),
                         )}
                         <Badge>
-                          {formatPlural(row.subRows.length, {
-                            one: " tag",
-                            other: " tags",
-                          })}
+                          {formatPlural(
+                            row.subRows.length,
+                            {
+                              one: " tag",
+                              other: " tags",
+                            },
+                            locale,
+                          )}
                         </Badge>
                       </span>
                     </ExpandRows>

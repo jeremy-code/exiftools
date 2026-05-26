@@ -9,6 +9,11 @@
  * formatting such as "1 BB" instead of "1 GB".
  */
 
+import {
+  NumberFormatter,
+  type NumberFormatOptions,
+} from "@internationalized/number";
+
 /**
  * Valid byte units supported by the `Intl.NumberFormat` API
  *
@@ -21,12 +26,13 @@ const UNITS = [
   "gigabyte",
   "terabyte",
   "petabyte",
-] as const satisfies Intl.NumberFormatOptions["unit"][];
+] as const satisfies NumberFormatOptions["unit"][];
 
 // SI units, where 1 gigabyte = 1000 megabytes
 export const formatBytes = (
   bytes: number,
-  ...[locales, options]: ConstructorParameters<Intl.NumberFormatConstructor>
+  locale?: string,
+  options?: NumberFormatOptions,
 ): string => {
   const exponent =
     // 0 becomes -Infinity, nonfinite numbers cannot index `UNITS`
@@ -37,9 +43,14 @@ export const formatBytes = (
 
   const value = bytes / 1000 ** exponent;
 
-  return new Intl.NumberFormat(locales, {
-    style: "unit",
-    unit: UNITS[exponent],
-    ...options,
-  }).format(value);
+  return new NumberFormatter(
+    locale === undefined ?
+      Intl.NumberFormat().resolvedOptions().locale
+    : locale,
+    {
+      style: "unit",
+      unit: UNITS[exponent],
+      ...options,
+    },
+  ).format(value);
 };

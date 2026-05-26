@@ -1,6 +1,7 @@
 import type { ComponentPropsWithRef, RefObject } from "react";
 
 import { Clapperboard, File, FileUp, Image, Music, X } from "lucide-react";
+import { useLocale } from "react-aria/I18nProvider";
 import { Button as AriaButton } from "react-aria-components/Button";
 import {
   useDropzone,
@@ -26,6 +27,7 @@ const AcceptedFile = ({
   removeFile,
   ...props
 }: AcceptedFileProps) => {
+  const { locale } = useLocale();
   const AcceptedFileIcon =
     file.type.startsWith("image/") ? Image
     : file.type.startsWith("video/") ? Clapperboard
@@ -51,7 +53,7 @@ const AcceptedFile = ({
           {file.name}
         </p>
         <p className="text-xs text-fg-subtle">
-          {formatBytes(file.size, undefined, { maximumFractionDigits: 2 })}
+          {formatBytes(file.size, locale, { maximumFractionDigits: 2 })}
         </p>
       </div>
       <div className="grid aspect-square place-content-center">
