@@ -1,4 +1,5 @@
 import { RationalInput } from "#components/editor/RationalInput";
+import { UserCommentSelect } from "#components/editor/UserCommentSelect";
 import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
 import { getExifAdvancedEditor } from "#features/exif-editor/editors/advanced/getExifAdvancedEditor";
 import { useExifEntryDraftContext } from "#features/exif-editor/hooks/useExifEntryDraftContext";
@@ -49,7 +50,12 @@ const ExifEntryEditor = () => {
         />
       ));
     case "userComment":
-      return <UserCommentTextarea aria-label={label} {...exifAdvancedEditor} />;
+      return (
+        <div className="flex flex-col gap-2">
+          <UserCommentSelect aria-label={label} {...exifAdvancedEditor} />
+          <UserCommentTextarea aria-label={label} {...exifAdvancedEditor} />
+        </div>
+      );
     default:
       assertNever(exifAdvancedEditor);
   }

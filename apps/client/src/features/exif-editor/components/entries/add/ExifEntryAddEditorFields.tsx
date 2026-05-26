@@ -2,6 +2,7 @@ import { EnumSelect } from "#components/editor/EnumSelect";
 import { ExifVersionInput } from "#components/editor/ExifVersionInput";
 import { GpsTagVersionInput } from "#components/editor/GpsTagVersionInput";
 import { RationalInput } from "#components/editor/RationalInput";
+import { UserCommentSelect } from "#components/editor/UserCommentSelect";
 import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
 import type { AddEditor } from "#features/exif-editor/editors/add/types";
 import { getExifEntryObjectLabel } from "#lib/exif/utils/getExifEntryObjectLabel";
@@ -139,11 +140,18 @@ const ExifEntryAddEditorFields = ({
       );
     case "userComment":
       return (
-        <UserCommentTextarea
-          label="Value"
-          aria-label={label}
-          {...exifAddEditor}
-        />
+        <div className="flex flex-col gap-2">
+          <UserCommentSelect
+            label="Encoding"
+            aria-label="Select a value for the user comment encoding"
+            {...exifAddEditor}
+          />
+          <UserCommentTextarea
+            label="Value"
+            aria-label={label}
+            {...exifAddEditor}
+          />
+        </div>
       );
     default:
       assertNever(exifAddEditor);
