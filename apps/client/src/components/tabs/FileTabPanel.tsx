@@ -2,8 +2,8 @@ import type { ComponentPropsWithRef, ReactNode } from "react";
 
 import { Dropzone } from "#components/file/Dropzone";
 import { FileUrlInput } from "#components/file/FileUrlInput";
-import { DropzoneStoreProvider } from "#hooks/useDropzoneStore";
 import { FileStoreProvider } from "#hooks/useFileStore";
+import { useDropzoneStore } from "#stores/dropzoneStore";
 import { Heading } from "@exifi/ui/components/Heading";
 import { TabPanel } from "@exifi/ui/components/Tabs";
 
@@ -23,47 +23,51 @@ const FileTabPanel = ({
   uploadFiles,
   ...props
 }: FileTabPanelProps) => {
+  const reset = useDropzoneStore((state) => state.resetAcceptedFiles);
+
   return (
     <TabPanel {...props} id={id}>
-      <DropzoneStoreProvider>
-        {file === null ?
-          <div className="flex flex-col gap-2">
-            <Heading level={1} size="2xl" className="mb-4">
-              Upload file to view Exif metadata
-            </Heading>
+      {file === null ?
+        <div className="flex flex-col gap-2">
+          <Heading level={1} size="2xl" className="mb-4">
+            Upload file to view Exif metadata
+          </Heading>
 
-            <Dropzone
-              dropzoneOptions={{
-                onDropAccepted: (acceptedFiles) => {
-                  if (acceptedFiles.length === 0) {
-                    return;
-                  }
-                  const acceptedFile = acceptedFiles.at(0);
-                  if (acceptedFile) {
-                    updateFile(acceptedFile);
-                  }
+          <Dropzone
+            dropzoneOptions={{
+              onDropAccepted: (acceptedFiles) => {
+                if (acceptedFiles.length === 0) {
+                  return;
+                }
+                const acceptedFile = acceptedFiles.at(0);
+                if (acceptedFile) {
+                  updateFile(acceptedFile);
+                  reset();
+                }
 
-                  if (acceptedFiles.length > 1) {
-                    uploadFiles(acceptedFiles.slice(1));
-                  }
-                },
-              }}
-              rootProps={{ className: "min-h-25" }}
-            />
+                if (acceptedFiles.length > 1) {
+                  uploadFiles(acceptedFiles.slice(1));
+                }
+              },
+            }}
+            rootProps={{ className: "min-h-25" }}
+          />
 
-            <div className="flex items-center gap-4 text-fg-muted before:h-px before:grow before:bg-bg-muted after:h-px after:grow after:bg-bg-muted">
-              OR
-            </div>
-            <FileUrlInput
-              onSuccess={(file) => updateFile(file)}
-              textFieldProps={{
-                placeholder:
-                  "https://upload.wikimedia.org/wikipedia/commons/c/c9/Metadata_demo_exif_only.jpg",
-              }}
-            />
+          <div className="flex items-center gap-4 text-fg-muted before:h-px before:grow before:bg-bg-muted after:h-px after:grow after:bg-bg-muted">
+            OR
           </div>
-        : <FileStoreProvider initialFile={file}>{children}</FileStoreProvider>}
-      </DropzoneStoreProvider>
+          <FileUrlInput
+            onSuccess={(file) => {
+              updateFile(file);
+              reset();
+            }}
+            textFieldProps={{
+              placeholder:
+                "https://upload.wikimedia.org/wikipedia/commons/c/c9/Metadata_demo_exif_only.jpg",
+            }}
+          />
+        </div>
+      : <FileStoreProvider initialFile={file}>{children}</FileStoreProvider>}
     </TabPanel>
   );
 };

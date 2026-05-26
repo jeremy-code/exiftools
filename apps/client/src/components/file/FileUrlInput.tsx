@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useLocale } from "react-aria-components/I18nProvider";
 import { z } from "zod";
 
-import { useDropzoneStore } from "#hooks/useDropzoneStore";
+import { useDropzoneStore } from "#stores/dropzoneStore";
 import { getFileFromResponse } from "#utils/getFileFromResponse";
 import { Button, type ButtonProps } from "@exifi/ui/components/Button";
 import { Spinner } from "@exifi/ui/components/Spinner";
