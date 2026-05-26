@@ -108,7 +108,7 @@ const ExifInformation = ({
               Thumbnail
             </DataListItemLabel>
             <DataListItemValue className="inline">
-              {exifData.data !== null ?
+              {exifData.data.length !== 0 ?
                 <ExifThumbnailInformation thumbnail={exifData.data} />
               : "Does not exist"}
             </DataListItemValue>
