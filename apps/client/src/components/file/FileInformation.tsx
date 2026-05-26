@@ -57,7 +57,11 @@ const FileInformation = ({
     file.lastModified,
   );
   const { locale } = useLocale();
-  const numberFormatter = useNumberFormatter();
+  const byteNumberFormatter = useNumberFormatter({
+    style: "unit",
+    unit: "byte",
+    unitDisplay: "long",
+  });
   const dateFormatter = useDateFormatter();
 
   return (
@@ -112,7 +116,7 @@ const FileInformation = ({
                       })}
                     </span>
                   </TooltipTarget>
-                  <Tooltip>{numberFormatter.format(file.size)} bytes</Tooltip>
+                  <Tooltip>{byteNumberFormatter.format(file.size)}</Tooltip>
                 </TooltipTrigger>
               </DataListItemValue>
             </DataListItem>

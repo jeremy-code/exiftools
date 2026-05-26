@@ -6,6 +6,7 @@ import {
   exifSupportLevelGetName,
 } from "libexif-wasm";
 import { ChevronDown } from "lucide-react";
+import { useNumberFormatter } from "react-aria";
 import { useLocale } from "react-aria/I18nProvider";
 import {
   Disclosure,
@@ -34,6 +35,11 @@ const ExifEntryMetadata = ({
   ...props
 }: ExifEntryMetadataProps) => {
   const { locale } = useLocale();
+  const byteNumberFormatter = useNumberFormatter({
+    style: "unit",
+    unit: "byte",
+    unitDisplay: "long",
+  });
 
   return (
     <Disclosure {...props}>
@@ -87,10 +93,8 @@ const ExifEntryMetadata = ({
             <DataListItem>
               <DataListItemLabel className="min-w-50">Format</DataListItemLabel>
               <DataListItemValue>
-                {`${exifFormatGetName(exifEntryObject.format)} (${formatPlural(
+                {`${exifFormatGetName(exifEntryObject.format)} (${byteNumberFormatter.format(
                   exifFormatGetSize(exifEntryObject.format),
-                  { one: " byte", other: " bytes" },
-                  locale,
                 )})`}
               </DataListItemValue>
             </DataListItem>
@@ -106,13 +110,8 @@ const ExifEntryMetadata = ({
                     other: " components",
                   },
                   locale,
-                )} (${formatPlural(
+                )} (${byteNumberFormatter.format(
                   exifEntryObject.size,
-                  {
-                    one: " byte",
-                    other: " bytes",
-                  },
-                  locale,
                 )} in total)`}
               </DataListItemValue>
             </DataListItem>
