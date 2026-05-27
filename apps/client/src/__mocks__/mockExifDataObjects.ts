@@ -1,4 +1,4 @@
-import type { ExifDataObject } from "#lib/exif/serializeExifData";
+import type { ExifDataObject } from "#lib/exif/interfaces";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
 const MOCK_EXIF_DATA_OBJECT = {

@@ -4,7 +4,7 @@ import { cn } from "tailwind-variants";
 
 import { ExifEntryDraftContext } from "#features/exif-editor/contexts/ExifEntryDraftContext";
 import { useExifEntryDraft } from "#features/exif-editor/hooks/useExifEntryDraft";
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import type { ExifEntryObject } from "#lib/exif/interfaces";
 import { Button } from "@exifi/ui/components/Button";
 
 import { ExifEntryByteEditor } from "./ExifEntryByteEditor";

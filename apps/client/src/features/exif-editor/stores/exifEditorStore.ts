@@ -2,10 +2,10 @@ import { ExifIfd, type ExifData, type ValidTypedArray } from "libexif-wasm";
 import { create } from "zustand";
 
 import {
-  serializeExifData,
   type ExifDataObject,
   type ExifEntryObject,
-} from "#lib/exif/serializeExifData";
+} from "#lib/exif/interfaces";
+import { serializeExifData } from "#lib/exif/serializeExifData";
 import { getEntryFromEntryObject } from "#lib/exif/utils/getEntryFromEntryObject";
 import { getOrInsertEntry } from "#lib/exif/utils/getOrInsertEntry";
 import { typedArrayInFormat } from "#lib/exif/utils/typedArrayInFormat";

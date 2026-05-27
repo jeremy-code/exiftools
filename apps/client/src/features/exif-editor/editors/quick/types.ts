@@ -5,8 +5,7 @@ import type {
 } from "@internationalized/date";
 import type { ValidTypedArray } from "libexif-wasm";
 
-import type { ExifVersion } from "#lib/exif/interfaces";
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import type { ExifEntryObject, ExifVersion } from "#lib/exif/interfaces";
 
 type QuickEditorResolver = (
   entry: ExifEntryObject,

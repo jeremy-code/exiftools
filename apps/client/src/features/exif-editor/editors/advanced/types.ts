@@ -1,6 +1,6 @@
 import type { RationalObject } from "libexif-wasm";
 
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import type { ExifEntryObject } from "#lib/exif/interfaces";
 import type { UserComment } from "#lib/exif/userComment/interfaces";
 
 type AdvancedEditorResolver = (

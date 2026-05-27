@@ -1,6 +1,6 @@
 import { Minus, Plus } from "lucide-react";
 
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import type { ExifEntryObject } from "#lib/exif/interfaces";
 import { Button } from "@exifi/ui/components/Button";
 
 type ExifEntryAddEditorControlsProps = {

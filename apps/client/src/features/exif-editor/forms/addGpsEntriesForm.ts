@@ -4,10 +4,7 @@ import { z } from "zod";
 
 import { MAX_UINT32_VALUE } from "#lib/exif/constants";
 import { parseCoordinateEntry } from "#lib/exif/gps/parseCoordinateEntry";
-import type {
-  ExifDataObject,
-  ExifEntryObject,
-} from "#lib/exif/serializeExifData";
+import type { ExifDataObject, ExifEntryObject } from "#lib/exif/interfaces";
 import { Latitude, Longitude } from "#schemas/common";
 
 const gpsFormSchema = z.strictObject({

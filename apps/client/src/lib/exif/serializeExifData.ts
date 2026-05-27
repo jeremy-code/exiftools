@@ -1,33 +1,10 @@
+import type { ExifData, ExifEntry } from "libexif-wasm";
+
 import type {
-  ExifData,
-  ExifEntry,
-  Ifd,
-  Tag,
-  Format,
-  DataType,
-  ByteOrder,
-} from "libexif-wasm";
-
-type ExifEntryObject = {
-  ifd: Ifd;
-  tag: Tag;
-  format: Format;
-  components: number;
-  data: number[];
-  size: number;
-  value: number[];
-  formattedValue: string | null;
-  byteOrder: ByteOrder;
-};
-
-type ExifIfdObject = Record<Ifd, ExifEntryObject[]>;
-
-type ExifDataObject = {
-  ifd: ExifIfdObject;
-  data: number[];
-  dataType: DataType | null;
-  byteOrder: ByteOrder | null;
-};
+  ExifDataObject,
+  ExifEntryObject,
+  ExifIfdObject,
+} from "./interfaces";
 
 const EMPTY_EXIF_IFD_OBJECT: ExifIfdObject = {
   IFD_0: [],
@@ -84,10 +61,4 @@ const serializeExifData = (exifData: ExifData): ExifDataObject => {
   };
 };
 
-export {
-  serializeExifEntry,
-  type ExifEntryObject,
-  type ExifIfdObject,
-  type ExifDataObject,
-  serializeExifData,
-};
+export { serializeExifEntry, serializeExifData };

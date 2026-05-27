@@ -15,7 +15,7 @@ import {
   Heading,
 } from "react-aria-components/Disclosure";
 
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import type { ExifEntryObject } from "#lib/exif/interfaces";
 import { getEntryObjectLabel } from "#lib/exif/utils/getEntryObjectLabel";
 import { formatPlural } from "#utils/format/formatPlural";
 import { Button } from "@exifi/ui/components/Button";

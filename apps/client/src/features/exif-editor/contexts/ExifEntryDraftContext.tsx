@@ -1,6 +1,6 @@
 import { createContext, use, type Dispatch, type SetStateAction } from "react";
 
-import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import type { ExifEntryObject } from "#lib/exif/interfaces";
 
 type ExifEntryDraft = {
   exifEntryObject: ExifEntryObject;
