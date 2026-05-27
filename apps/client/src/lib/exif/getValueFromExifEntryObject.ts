@@ -1,8 +1,8 @@
 import { ExifData, ExifIfd } from "libexif-wasm";
 
 import { getOrInsertEntry } from "./getOrInsertEntry";
-import { newTypedArrayInFormat } from "./newTypedArrayInFormat";
 import type { ExifEntryObject } from "./serializeExifData";
+import { typedArrayInFormat } from "./typedArrayInFormat";
 
 const getValueFromExifEntryObject = (
   exifEntryObject: Pick<
@@ -20,7 +20,7 @@ const getValueFromExifEntryObject = (
   exifEntry.format = exifEntryObject.format;
 
   exifEntry.fromTypedArray(
-    newTypedArrayInFormat(exifEntryObject.value, exifEntryObject.format),
+    typedArrayInFormat(exifEntryObject.value, exifEntryObject.format),
   );
   const formattedValue = exifEntry.toString();
 

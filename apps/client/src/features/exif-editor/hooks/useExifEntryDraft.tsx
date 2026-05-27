@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
-import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import { typedArrayInFormat } from "#lib/exif/typedArrayInFormat";
 import { arrayLikeEquals } from "#utils/arrayLikeEquals";
 
 import { useExifEditor } from "../contexts/ExifEditorContext";
@@ -18,7 +18,7 @@ const useExifEntryDraft = (exifEntryObject: ExifEntryObject) => {
   const save = useCallback(() => {
     updateExifEntry(
       exifEntryObject,
-      newTypedArrayInFormat(draft, exifEntryObject.format),
+      typedArrayInFormat(draft, exifEntryObject.format),
     );
   }, [draft, exifEntryObject, updateExifEntry]);
 

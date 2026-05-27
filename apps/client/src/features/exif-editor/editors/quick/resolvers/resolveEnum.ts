@@ -1,5 +1,5 @@
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
-import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
+import { typedArrayInFormat } from "#lib/exif/typedArrayInFormat";
 
 import type { QuickEditorResolver } from "../types";
 
@@ -25,7 +25,7 @@ const resolveEnum: QuickEditorResolver = (entry, onValueChange) => {
     values: Object.keys(values),
     onValueChange: (value) => {
       if (value in values && values[value] !== undefined) {
-        onValueChange(newTypedArrayInFormat([values[value]], entry.format));
+        onValueChange(typedArrayInFormat([values[value]], entry.format));
       }
     },
   };

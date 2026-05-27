@@ -2,12 +2,12 @@ import { ExifIfd, type ExifData, type ValidTypedArray } from "libexif-wasm";
 import { create } from "zustand";
 
 import { getOrInsertEntry } from "#lib/exif/getOrInsertEntry";
-import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
 import {
   serializeExifData,
   type ExifDataObject,
   type ExifEntryObject,
 } from "#lib/exif/serializeExifData";
+import { typedArrayInFormat } from "#lib/exif/typedArrayInFormat";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { isTypedArray } from "#utils/isTypedArray";
 
@@ -63,7 +63,7 @@ const createExifEditorStore = (exifData: ExifData) =>
         const typedArray =
           typeof value === "string" ? encodeStringToUtf8(value)
           : isTypedArray(value) ? value
-          : newTypedArrayInFormat(value, exifEntryObject.format);
+          : typedArrayInFormat(value, exifEntryObject.format);
 
         exifEntry.fromTypedArray(typedArray);
 
@@ -97,7 +97,7 @@ const createExifEditorStore = (exifData: ExifData) =>
         const typedArray =
           typeof value === "string" ? encodeStringToUtf8(value)
           : isTypedArray(value) ? value
-          : newTypedArrayInFormat(value, exifEntryObject.format);
+          : typedArrayInFormat(value, exifEntryObject.format);
         exifEntry.fromTypedArray(typedArray);
 
         return { exifDataObject: serializeExifData(exifData) };

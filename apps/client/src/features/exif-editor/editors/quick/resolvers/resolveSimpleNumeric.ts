@@ -1,6 +1,6 @@
 import { exifFormatGetSize } from "libexif-wasm";
 
-import { newTypedArrayInFormat } from "#lib/exif/newTypedArrayInFormat";
+import { typedArrayInFormat } from "#lib/exif/typedArrayInFormat";
 
 import type { QuickEditorResolver } from "../types";
 
@@ -25,7 +25,7 @@ const resolveSimpleNumeric: QuickEditorResolver = (
       exifEntryObject,
       value: exifEntryObject.value[0],
       onValueChange: (value) =>
-        onValueChange(newTypedArrayInFormat([value], exifEntryObject.format)),
+        onValueChange(typedArrayInFormat([value], exifEntryObject.format)),
     };
   }
 

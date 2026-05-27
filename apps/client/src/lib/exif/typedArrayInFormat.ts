@@ -1,6 +1,6 @@
 import type { Format, ValidTypedArray } from "libexif-wasm";
 
-const newTypedArrayInFormat = (
+const typedArrayInFormat = (
   elements: Iterable<number>,
   format: Format,
 ): ValidTypedArray => {
@@ -29,4 +29,4 @@ const newTypedArrayInFormat = (
   }
 };
 
-export { newTypedArrayInFormat };
+export { typedArrayInFormat };
