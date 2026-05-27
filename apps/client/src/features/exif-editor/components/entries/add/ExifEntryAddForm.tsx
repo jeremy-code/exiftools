@@ -52,9 +52,8 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
       }}
     >
       <div className="flex flex-col gap-2">
-        <addForm.Field
-          name="tagEntry"
-          children={(field) => (
+        <addForm.Field name="tagEntry">
+          {(field) => (
             <ComboBox
               items={EXIF_TAG_TABLE.map((item, index) => ({
                 id: index,
@@ -89,10 +88,9 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               )}
             </ComboBox>
           )}
-        />
-        <addForm.Field
-          name="ifd"
-          children={(field) => (
+        </addForm.Field>
+        <addForm.Field name="ifd">
+          {(field) => (
             <Select
               key={
                 field.state.value === undefined ?
@@ -130,10 +128,9 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               ))}
             </Select>
           )}
-        />
-        <addForm.Field
-          name="format"
-          children={(field) => (
+        </addForm.Field>
+        <addForm.Field name="format">
+          {(field) => (
             <Select
               label="Format"
               key={
@@ -179,7 +176,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               ))}
             </Select>
           )}
-        />
+        </addForm.Field>
         <addForm.Subscribe
           selector={(state) => ({
             tag: state.values.tagEntry?.tag,
@@ -188,10 +185,8 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
           })}
         >
           {({ tag, format, ifd }) => (
-            <addForm.Field
-              key={`${tag}-${format}-${ifd}`}
-              name="value"
-              children={(field) => (
+            <addForm.Field key={`${tag}-${format}-${ifd}`} name="value">
+              {(field) => (
                 <ExifEntryAddEditor
                   exifEntryObject={{
                     tag,
@@ -202,12 +197,11 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
                   onValueChange={field.handleChange}
                 />
               )}
-            />
+            </addForm.Field>
           )}
         </addForm.Subscribe>
-        <addForm.Subscribe
-          selector={(state) => state.isSubmitting}
-          children={(isSubmitting) => (
+        <addForm.Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => (
             <Button
               className="mt-4 self-end px-8"
               type="submit"
@@ -223,7 +217,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               </span>
             </Button>
           )}
-        />
+        </addForm.Subscribe>
       </div>
     </form>
   );

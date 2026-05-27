@@ -141,8 +141,7 @@ const TagsComponent = () => {
           acc[`--col-${header.column.id}-size`] = header.column.getSize();
           return acc;
         }, {}),
-    // eslint-disable-next-line react-compiler/react-compiler -- See below
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- https://tanstack.com/table/latest/docs/framework/react/examples/column-resizing-performant
+    // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps, @eslint-react/exhaustive-deps -- https://tanstack.com/table/latest/docs/framework/react/examples/column-resizing-performant
     [table.getState().columnSizingInfo, table.getState().columnSizing],
   );
 

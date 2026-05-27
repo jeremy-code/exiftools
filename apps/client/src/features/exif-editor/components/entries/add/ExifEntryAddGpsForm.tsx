@@ -72,9 +72,8 @@ const ExifEntryAddGpsForm = ({
       >
         Set latitude/longitude to current position
       </Button>
-      <gpsForm.Subscribe
-        selector={(state) => state.values}
-        children={(values) => (
+      <gpsForm.Subscribe selector={(state) => state.values}>
+        {(values) => (
           <ExifGpsMap
             coordinate={
               values.latitude !== undefined && values.longitude !== undefined ?
@@ -84,7 +83,7 @@ const ExifEntryAddGpsForm = ({
             setCoordinate={setGpsForm}
           />
         )}
-      />
+      </gpsForm.Subscribe>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -93,9 +92,8 @@ const ExifEntryAddGpsForm = ({
         }}
       >
         <div className="flex flex-col gap-2">
-          <gpsForm.Field
-            name="latitude"
-            children={(field) => (
+          <gpsForm.Field name="latitude">
+            {(field) => (
               <NumberField
                 label="Latitude"
                 value={field.state.value}
@@ -112,10 +110,9 @@ const ExifEntryAddGpsForm = ({
                 }}
               />
             )}
-          />
-          <gpsForm.Field
-            name="longitude"
-            children={(field) => (
+          </gpsForm.Field>
+          <gpsForm.Field name="longitude">
+            {(field) => (
               <NumberField
                 label="Longitude"
                 value={field.state.value}
@@ -132,10 +129,9 @@ const ExifEntryAddGpsForm = ({
                 }}
               />
             )}
-          />
-          <gpsForm.Field
-            name="altitude"
-            children={(field) => (
+          </gpsForm.Field>
+          <gpsForm.Field name="altitude">
+            {(field) => (
               <NumberField
                 label="Altitude"
                 value={field.state.value}
@@ -144,10 +140,9 @@ const ExifEntryAddGpsForm = ({
                 formatOptions={{ style: "unit", unit: "meter" }}
               />
             )}
-          />
-          <gpsForm.Subscribe
-            selector={(state) => state.isSubmitting}
-            children={(isSubmitting) => (
+          </gpsForm.Field>
+          <gpsForm.Subscribe selector={(state) => state.isSubmitting}>
+            {(isSubmitting) => (
               <Button type="submit" variant="surface" isDisabled={isSubmitting}>
                 {isSubmitting && <Spinner className="absolute" />}
                 <span
@@ -158,7 +153,7 @@ const ExifEntryAddGpsForm = ({
                 </span>
               </Button>
             )}
-          />
+          </gpsForm.Subscribe>
         </div>
       </form>
     </div>

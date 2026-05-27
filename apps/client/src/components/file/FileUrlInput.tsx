@@ -76,9 +76,8 @@ const FileUrlInput = ({
       {...props}
     >
       <div className="flex">
-        <form.Field
-          name="fileUrl"
-          children={(field) => (
+        <form.Field name="fileUrl">
+          {(field) => (
             <TextField
               isRequired
               type="url"
@@ -110,10 +109,9 @@ const FileUrlInput = ({
               }
             />
           )}
-        />
-        <form.Subscribe
-          selector={(state) => state.isSubmitting}
-          children={(isSubmitting) => (
+        </form.Field>
+        <form.Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => (
             <Button
               type="submit"
               variant="surface"
@@ -133,7 +131,7 @@ const FileUrlInput = ({
               </span>
             </Button>
           )}
-        />
+        </form.Subscribe>
       </div>
     </form>
   );
