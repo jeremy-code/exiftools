@@ -18,15 +18,17 @@ const ExifEntryByteEditor = (props: ExifEntryEditorProps) => {
   const { exifEntryObject, draft, setDraft } = useExifEntryDraftContext();
 
   const isRationalOrSRational =
-    exifEntryObject.format === "SRATIONAL" ||
-    exifEntryObject.format === "RATIONAL";
+    exifEntryObject.format === "RATIONAL" ||
+    exifEntryObject.format === "SRATIONAL";
 
-  // TODO: Explicitly return null
-  return (
-    (exifEntryObject.format === "ASCII" ||
-      XP_TAGS.includes(exifEntryObject.tag) ||
-      isRationalOrSRational ||
-      exifEntryObject.tag === "USER_COMMENT") && (
+  if (
+    isRationalOrSRational ||
+    exifEntryObject.format === "ASCII" ||
+    (exifEntryObject.format === "BYTE" &&
+      XP_TAGS.includes(exifEntryObject.tag)) ||
+    exifEntryObject.tag === "USER_COMMENT"
+  ) {
+    return (
       <Disclosure {...props}>
         <Heading>
           <Button
@@ -89,8 +91,10 @@ const ExifEntryByteEditor = (props: ExifEntryEditorProps) => {
           </div>
         </DisclosurePanel>
       </Disclosure>
-    )
-  );
+    );
+  }
+
+  return null;
 };
 
 export { ExifEntryByteEditor };
