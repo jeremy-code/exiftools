@@ -11,6 +11,7 @@ import { useFile } from "#contexts/FileContext";
 import { useGeoSearchLocation } from "#hooks/useGeoSearchLocation";
 import { updateLatLng } from "#lib/exif/actions/updateLatLng";
 import { formatLatLng } from "#lib/leaflet/formatLatLng";
+import { useGeoSearchLocationStore } from "#stores/geoSearchLocationStore";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { saveFile } from "#utils/saveFile";
 import { seo } from "#utils/seo";
@@ -48,7 +49,8 @@ const EditorGpsApp = ({
     : null;
   const osmProvider = getOsmProvider(currentPositionLatLng);
   const [map, setMap] = useState<LeafletMap | null>(null);
-  const { latLng } = useGeoSearchLocation(map);
+  useGeoSearchLocation(map);
+  const latLng = useGeoSearchLocationStore((state) => state.location?.latLng);
   const { file, setFile } = useFile();
 
   return (
@@ -60,10 +62,10 @@ const EditorGpsApp = ({
       >
         <GeoSearchControl provider={osmProvider} />
       </Map>
-      {latLng !== null ? formatLatLng(latLng) : "Location not found"}
+      {latLng !== undefined ? formatLatLng(latLng) : "Location not found"}
       <Button
         onPress={async () => {
-          if (latLng === null) {
+          if (latLng === undefined) {
             return;
           }
 

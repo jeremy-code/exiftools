@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 
 import { LatLng, type Map as LeafletMap } from "leaflet";
 import { cn } from "tailwind-variants";
@@ -8,6 +8,10 @@ import { GeoSearchControl } from "#components/map/GeoSearchControl";
 import { GpsPopup } from "#components/map/GpsPopup";
 import { Map, type MapProps } from "#components/map/Map";
 import { useGeoSearchLocation } from "#hooks/useGeoSearchLocation";
+import {
+  useGeoSearchLocationStore,
+  type GeoSearchLocationStore,
+} from "#stores/geoSearchLocationStore";
 
 type ExifGpsMapProps = {
   coordinate: LatLng | undefined;
@@ -20,13 +24,23 @@ const ExifGpsMap = ({
   setCoordinate,
   ...props
 }: ExifGpsMapProps) => {
+  // Use label from the store if the coordinate is the same, otherwise undefined
+  // (uses Nominatim API to get the label)
+  const label = useGeoSearchLocationStore((state) =>
+    coordinate !== undefined && state.location?.latLng.equals(coordinate) ?
+      state.location.label
+    : undefined,
+  );
   const [map, setMap] = useState<LeafletMap | null>(null);
-  const { label, latLng: geoSearchLocationLatLng } = useGeoSearchLocation(
-    map,
-    ({ location }) => {
-      const newLatLng = new LatLng(location.y, location.x, coordinate?.alt);
-      if (coordinate === undefined || !coordinate.equals(newLatLng)) {
-        setCoordinate(newLatLng);
+  useGeoSearchLocation(map);
+
+  const onLocationChange = useEffectEvent(
+    ({ location }: GeoSearchLocationStore) => {
+      if (
+        location !== null &&
+        (coordinate === undefined || !location.latLng.equals(coordinate))
+      ) {
+        setCoordinate(location.latLng);
       }
     },
   );
@@ -34,10 +48,18 @@ const ExifGpsMap = ({
   // Leaflet Map isn't controlled by map, so center={coordinate} does not update
   // as expected. Hence, using useEffect to pan whenenvr the coordinate changes
   useEffect(() => {
-    if (coordinate !== undefined) {
-      map?.panTo(coordinate);
+    if (coordinate !== undefined && map !== null) {
+      map.panTo(coordinate);
     }
   }, [map, coordinate]);
+
+  useEffect(() => {
+    const unsubscribe = useGeoSearchLocationStore.subscribe(onLocationChange);
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <Map
@@ -57,14 +79,7 @@ const ExifGpsMap = ({
             }
           }}
         >
-          <GpsPopup
-            coordinate={coordinate}
-            label={
-              geoSearchLocationLatLng?.equals(coordinate) && label !== null ?
-                label
-              : undefined
-            }
-          />
+          <GpsPopup coordinate={coordinate} label={label} />
         </DraggableMarker>
       )}
     </Map>
