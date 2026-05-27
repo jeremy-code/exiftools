@@ -7,7 +7,7 @@ const getEntryObjectLabel = (exifEntryObject: Partial<ExifEntryObject>) => {
     return "Unknown tag";
   }
 
-  if (exifEntryObject.ifd === undefined || exifEntryObject.tag === undefined) {
+  if (exifEntryObject.ifd === undefined) {
     return exifEntryObject.tag;
   }
 
