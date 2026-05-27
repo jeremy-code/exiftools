@@ -8,6 +8,7 @@ import {
 
 import { useExifEntryDraftContext } from "#features/exif-editor/contexts/ExifEntryDraftContext";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
+import { XP_TAGS } from "#lib/exif/xp/constants";
 import { Button } from "@exifi/ui/components/Button";
 import { NumberField } from "@exifi/ui/components/NumberField";
 
@@ -20,8 +21,10 @@ const ExifEntryByteEditor = (props: ExifEntryEditorProps) => {
     exifEntryObject.format === "SRATIONAL" ||
     exifEntryObject.format === "RATIONAL";
 
+  // TODO: Explicitly return null
   return (
     (exifEntryObject.format === "ASCII" ||
+      XP_TAGS.includes(exifEntryObject.tag) ||
       isRationalOrSRational ||
       exifEntryObject.tag === "USER_COMMENT") && (
       <Disclosure {...props}>

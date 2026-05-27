@@ -89,6 +89,7 @@ const ValueCell = ({ row, getValue, table }: ValueCellProps) => {
         />
       );
     case "ascii":
+    case "xp":
       return (
         <TextField
           aria-label={label}

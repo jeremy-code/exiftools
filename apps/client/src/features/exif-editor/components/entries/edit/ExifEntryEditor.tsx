@@ -33,6 +33,7 @@ const ExifEntryEditor = () => {
         />
       ));
     case "ascii":
+    case "xp":
       return (
         <TextAreaField
           aria-label={label}

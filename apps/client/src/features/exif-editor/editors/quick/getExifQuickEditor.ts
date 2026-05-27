@@ -8,6 +8,7 @@ import { resolveSimpleNumeric } from "./resolvers/resolveSimpleNumeric";
 import { resolveSimpleRational } from "./resolvers/resolveSimpleRational";
 import { resolveTimeStamp } from "./resolvers/resolveTimeStamp";
 import { resolveVersionId } from "./resolvers/resolveVersionId";
+import { resolveXp } from "./resolvers/resolveXp";
 import type { QuickEditorResolver } from "./types";
 
 const resolvers: QuickEditorResolver[] = [
@@ -18,6 +19,7 @@ const resolvers: QuickEditorResolver[] = [
   resolveExifVersion, // tag === "EXIF_VERSION"
   resolveVersionId, // tag === "VERSION_ID"
   resolveTimeStamp, // tag === "TIME_STAMP"
+  resolveXp, // tag is in XP_TAGS
   resolveAscii, // format === "ASCII"
   resolveSimpleRational, // format === "RATIONAL" && denominator === 1
   resolveSimpleNumeric, // format is numeric && components === 1
