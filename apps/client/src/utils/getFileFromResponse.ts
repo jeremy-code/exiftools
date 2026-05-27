@@ -1,7 +1,6 @@
-import { typeByExtension } from "@std/media-types/type-by-extension";
 import { basename } from "@std/path/posix/basename";
-import { extname } from "@std/path/posix/extname";
 import { parse as contentDispositionParse } from "content-disposition";
+import { lookup } from "mrmime";
 
 /**
  * Returns Last-Modified header as a timestamp if present, otherwise returns
@@ -62,8 +61,7 @@ const getFileFromResponse = async (response: Response): Promise<File> => {
        * parameters are not included
        */
     : basename(new URL(response.url).pathname);
-  const contentType =
-    response.headers.get("Content-Type") ?? typeByExtension(extname(fileName));
+  const contentType = response.headers.get("Content-Type") ?? lookup(fileName);
 
   const file = new File([await response.arrayBuffer()], fileName, {
     type: contentType,
