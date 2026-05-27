@@ -1,4 +1,4 @@
-import { mapRationalArray } from "#lib/exif/mapRationalArray";
+import { mapRationalArray } from "#lib/exif/utils/mapRationalArray";
 
 import type { AdvancedEditorResolver } from "../types";
 

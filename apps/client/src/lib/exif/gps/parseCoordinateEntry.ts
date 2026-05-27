@@ -1,7 +1,7 @@
 import { dmsToDecimalDegrees } from "#lib/leaflet/dmsToDecimalDegrees";
 import { isDirection } from "#lib/leaflet/interfaces";
 
-import { mapRationalArray } from "../mapRationalArray";
+import { mapRationalArray } from "../utils/mapRationalArray";
 
 const parseCoordinateEntry = (
   // Any iterable of numbers of format [numerator1, denominator1, numerator2, denominator2, ...]

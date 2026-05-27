@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
-import { typedArrayInFormat } from "#lib/exif/typedArrayInFormat";
+import { typedArrayInFormat } from "#lib/exif/utils/typedArrayInFormat";
 import { arrayLikeEquals } from "#utils/arrayLikeEquals";
 
 import { useExifEditor } from "../contexts/ExifEditorContext";

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
-import { getOrInsertEntry } from "../getOrInsertEntry";
+import { getOrInsertEntry } from "../utils/getOrInsertEntry";
 
 const addImageUniqueId = (exifData: ExifData) => {
   const exifDataExifIfd = exifData.ifd[ExifIfd.EXIF];

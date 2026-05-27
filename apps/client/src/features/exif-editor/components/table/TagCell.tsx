@@ -1,7 +1,7 @@
 import type { CellContext } from "@tanstack/react-table";
 import { ExifTagInfo } from "libexif-wasm";
 
-import { getExifEntryObjectLabel } from "#lib/exif/utils/getExifEntryObjectLabel";
+import { getEntryObjectLabel } from "#lib/exif/utils/getEntryObjectLabel";
 import {
   Tooltip,
   TooltipTrigger,
@@ -20,7 +20,7 @@ const TagCell = ({ row }: TagCellProps) => {
   return (
     <TooltipTrigger>
       <TooltipTarget>
-        <span role="button">{getExifEntryObjectLabel(row.original)}</span>
+        <span role="button">{getEntryObjectLabel(row.original)}</span>
       </TooltipTarget>
       <Tooltip>
         {ExifTagInfo.getDescriptionInIfd(row.original.tag, row.original.ifd)}

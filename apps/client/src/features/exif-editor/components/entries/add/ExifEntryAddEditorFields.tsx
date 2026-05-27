@@ -5,7 +5,7 @@ import { RationalInput } from "#components/editor/RationalInput";
 import { UserCommentSelect } from "#components/editor/UserCommentSelect";
 import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
 import type { AddEditor } from "#features/exif-editor/editors/add/types";
-import { getExifEntryObjectLabel } from "#lib/exif/utils/getExifEntryObjectLabel";
+import { getEntryObjectLabel } from "#lib/exif/utils/getEntryObjectLabel";
 import { assertNever } from "#utils/assertNever";
 import { DateField } from "@exifi/ui/components/DateField";
 import { DatePicker } from "@exifi/ui/components/DatePicker";
@@ -21,7 +21,7 @@ type ExifEntryAddEditorFieldsProps = {
 const ExifEntryAddEditorFields = ({
   exifAddEditor,
 }: ExifEntryAddEditorFieldsProps) => {
-  const label = getExifEntryObjectLabel(exifAddEditor.exifEntryObject);
+  const label = getEntryObjectLabel(exifAddEditor.exifEntryObject);
 
   switch (exifAddEditor.kind) {
     case "enum":

@@ -1,10 +1,10 @@
 import { ExifData, ExifIfd } from "libexif-wasm";
 
 import { getOrInsertEntry } from "./getOrInsertEntry";
-import type { ExifEntryObject } from "./serializeExifData";
+import type { ExifEntryObject } from "../serializeExifData";
 import { typedArrayInFormat } from "./typedArrayInFormat";
 
-const getValueFromExifEntryObject = (
+const getValueFromEntryObject = (
   exifEntryObject: Pick<
     ExifEntryObject,
     "ifd" | "tag" | "format" | "value" | "byteOrder"
@@ -28,4 +28,4 @@ const getValueFromExifEntryObject = (
   return formattedValue;
 };
 
-export { getValueFromExifEntryObject };
+export { getValueFromEntryObject };

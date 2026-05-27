@@ -2,8 +2,8 @@ import type { ComponentPropsWithRef } from "react";
 
 import { cn } from "tailwind-variants";
 
-import { getValueFromExifEntryObject } from "#lib/exif/getValueFromExifEntryObject";
 import type { ExifEntryObject } from "#lib/exif/serializeExifData";
+import { getValueFromEntryObject } from "#lib/exif/utils/getValueFromEntryObject";
 
 type ExifEntryValidityProps = {
   exifEntryObject: ExifEntryObject;
@@ -14,7 +14,7 @@ const ExifEntryValidity = ({
   exifEntryObject,
   ...props
 }: ExifEntryValidityProps) => {
-  const expectedValue = getValueFromExifEntryObject(exifEntryObject);
+  const expectedValue = getValueFromEntryObject(exifEntryObject);
   const isEmptyString = expectedValue === "";
 
   return (

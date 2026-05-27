@@ -1,6 +1,6 @@
 import { exifFormatGetSize } from "libexif-wasm";
 
-import { typedArrayInFormat } from "#lib/exif/typedArrayInFormat";
+import { typedArrayInFormat } from "#lib/exif/utils/typedArrayInFormat";
 
 import type { QuickEditorResolver } from "../types";
 

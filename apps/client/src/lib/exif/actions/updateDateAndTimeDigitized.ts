@@ -8,7 +8,7 @@ import { ExifIfd, type ExifData } from "libexif-wasm";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
 import { formatExifDateTime } from "../date/dateTime/formatExifDateTime";
-import { getOrInsertEntry } from "../getOrInsertEntry";
+import { getOrInsertEntry } from "../utils/getOrInsertEntry";
 
 const updateDateAndTimeDigitized = (exifData: ExifData) => {
   const exifDataExifIfd = exifData.ifd[ExifIfd.EXIF];

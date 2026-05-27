@@ -1,5 +1,5 @@
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
-import { typedArrayInFormat } from "#lib/exif/typedArrayInFormat";
+import { typedArrayInFormat } from "#lib/exif/utils/typedArrayInFormat";
 
 import type { QuickEditorResolver } from "../types";
 

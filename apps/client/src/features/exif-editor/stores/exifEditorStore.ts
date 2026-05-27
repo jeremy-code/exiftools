@@ -1,30 +1,16 @@
 import { ExifIfd, type ExifData, type ValidTypedArray } from "libexif-wasm";
 import { create } from "zustand";
 
-import { getOrInsertEntry } from "#lib/exif/getOrInsertEntry";
 import {
   serializeExifData,
   type ExifDataObject,
   type ExifEntryObject,
 } from "#lib/exif/serializeExifData";
-import { typedArrayInFormat } from "#lib/exif/typedArrayInFormat";
+import { getEntryFromEntryObject } from "#lib/exif/utils/getEntryFromEntryObject";
+import { getOrInsertEntry } from "#lib/exif/utils/getOrInsertEntry";
+import { typedArrayInFormat } from "#lib/exif/utils/typedArrayInFormat";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 import { isTypedArray } from "#utils/isTypedArray";
-
-const getExifEntryFromExifEntryObject = (
-  exifData: ExifData,
-  exifEntryObject: ExifEntryObject,
-) => {
-  const exifContent = exifData.ifd[ExifIfd[exifEntryObject.ifd]];
-  const exifEntry = exifContent.getEntry(exifEntryObject.tag);
-
-  if (exifEntry === null) {
-    throw new Error(
-      `Exif entry with tag ${exifEntryObject.tag} was not found.`,
-    );
-  }
-  return exifEntry;
-};
 
 type ExifEditorStoreState = {
   exifData: ExifData;
@@ -56,7 +42,7 @@ const createExifEditorStore = (exifData: ExifData) =>
     },
     updateExifEntry: (exifEntryObject, value) => {
       set((state) => {
-        const exifEntry = getExifEntryFromExifEntryObject(
+        const exifEntry = getEntryFromEntryObject(
           state.exifData,
           exifEntryObject,
         );
@@ -73,7 +59,7 @@ const createExifEditorStore = (exifData: ExifData) =>
     removeExifEntries: (exifEntryObjects) => {
       set((state) => {
         exifEntryObjects.forEach((exifEntryObject) => {
-          const exifEntry = getExifEntryFromExifEntryObject(
+          const exifEntry = getEntryFromEntryObject(
             state.exifData,
             exifEntryObject,
           );

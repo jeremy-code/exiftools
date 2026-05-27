@@ -1,7 +1,7 @@
 import type { ImageType } from "image-dimensions";
 import { ExifIfd, type ExifData } from "libexif-wasm";
 
-import { getOrInsertEntry } from "../getOrInsertEntry";
+import { getOrInsertEntry } from "../utils/getOrInsertEntry";
 
 const updatePixelDimensions = (
   exifData: ExifData,

@@ -6,7 +6,7 @@ import { approximateRational } from "#lib/math/approximateRational";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
 import { MAX_UINT32_VALUE } from "../constants";
-import { getOrInsertEntry } from "../getOrInsertEntry";
+import { getOrInsertEntry } from "../utils/getOrInsertEntry";
 
 const updateLatLng = (exifData: ExifData, latLng: LatLng) => {
   const exifDataGpsIfd = exifData.ifd[ExifIfd.GPS];

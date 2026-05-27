@@ -3,7 +3,7 @@ import { UserCommentSelect } from "#components/editor/UserCommentSelect";
 import { UserCommentTextarea } from "#components/editor/UserCommentTextarea";
 import { useExifEntryDraftContext } from "#features/exif-editor/contexts/ExifEntryDraftContext";
 import { getExifAdvancedEditor } from "#features/exif-editor/editors/advanced/getExifAdvancedEditor";
-import { getExifEntryObjectLabel } from "#lib/exif/utils/getExifEntryObjectLabel";
+import { getEntryObjectLabel } from "#lib/exif/utils/getEntryObjectLabel";
 import { assertNever } from "#utils/assertNever";
 import { NumberField } from "@exifi/ui/components/NumberField";
 import { TextAreaField } from "@exifi/ui/components/TextAreaField";
@@ -18,7 +18,7 @@ const ExifEntryEditor = () => {
   if (exifAdvancedEditor === null) {
     return null;
   }
-  const label = getExifEntryObjectLabel(exifEntryObject);
+  const label = getEntryObjectLabel(exifEntryObject);
 
   switch (exifAdvancedEditor.kind) {
     case "rational":

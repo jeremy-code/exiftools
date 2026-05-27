@@ -2,7 +2,7 @@ import { ExifTagInfo } from "libexif-wasm";
 
 import type { ExifEntryObject } from "../serializeExifData";
 
-const getExifEntryObjectLabel = (exifEntryObject: Partial<ExifEntryObject>) => {
+const getEntryObjectLabel = (exifEntryObject: Partial<ExifEntryObject>) => {
   if (exifEntryObject.tag === undefined) {
     return "Unknown tag";
   }
@@ -27,4 +27,4 @@ const getExifEntryObjectLabel = (exifEntryObject: Partial<ExifEntryObject>) => {
   return title;
 };
 
-export { getExifEntryObjectLabel };
+export { getEntryObjectLabel };

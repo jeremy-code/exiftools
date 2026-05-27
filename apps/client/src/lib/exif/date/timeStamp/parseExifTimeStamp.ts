@@ -1,7 +1,7 @@
 import { Time } from "@internationalized/date";
 import { Decimal } from "decimal.js";
 
-import { mapRationalArray } from "#lib/exif/mapRationalArray";
+import { mapRationalArray } from "#lib/exif/utils/mapRationalArray";
 
 const MILLISECONDS_IN_SECOND = 1000;
 
