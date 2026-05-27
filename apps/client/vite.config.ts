@@ -6,6 +6,7 @@ import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { fontless } from "fontless";
 import { Features } from "lightningcss";
 import { defineConfig } from "vite";
+import { analyzer } from "vite-bundle-analyzer";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 const viteConfig = defineConfig({
@@ -34,6 +35,9 @@ const viteConfig = defineConfig({
       // Polyfill `buffer` for `iconv-lite`. Global not necessary because
       // safer-buffer imports the package
       include: ["buffer"],
+    }),
+    analyzer({
+      analyzerPort: "auto",
     }),
   ],
   define: {
