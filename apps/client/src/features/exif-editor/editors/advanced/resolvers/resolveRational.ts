@@ -1,6 +1,4 @@
-import { mapRationalToObject } from "libexif-wasm";
-
-import { typedArrayInFormat } from "#lib/exif/typedArrayInFormat";
+import { mapRationalArray } from "#lib/exif/mapRationalArray";
 
 import type { AdvancedEditorResolver } from "../types";
 
@@ -15,9 +13,10 @@ const resolveRational: AdvancedEditorResolver = (
     return {
       kind: "rational",
       exifEntryObject,
-      values: mapRationalToObject(
-        typedArrayInFormat(exifEntryObject.value, exifEntryObject.format),
-      ),
+      values: mapRationalArray(exifEntryObject.value).map((rational) => ({
+        numerator: rational.numerator,
+        denominator: rational.denominator,
+      })),
       onValueChange: (rationalObject, index) => {
         onValueChange(
           exifEntryObject.value.toSpliced(
