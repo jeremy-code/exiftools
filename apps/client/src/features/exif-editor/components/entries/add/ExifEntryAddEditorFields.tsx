@@ -76,6 +76,7 @@ const ExifEntryAddEditorFields = ({
         />
       );
     case "ascii":
+    case "xp":
       return (
         <TextAreaField
           label="Value"

@@ -28,6 +28,7 @@ type QuickEditor =
   | ({ kind: "versionId" } & ResolvedQuickEditor<number[]>)
   | ({ kind: "datetime" } & ResolvedQuickEditor<CalendarDateTime>)
   | ({ kind: "ascii" } & ResolvedQuickEditor<string>)
+  | ({ kind: "xp" } & ResolvedQuickEditor<string>)
   | ({ kind: "exifVersion" } & ResolvedQuickEditor<ExifVersion>)
   | ({ kind: "simpleNumeric" } & ResolvedQuickEditor<number>)
   | ({ kind: "timeStamp" } & ResolvedQuickEditor<Time>);

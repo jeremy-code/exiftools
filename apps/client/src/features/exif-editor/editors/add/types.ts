@@ -29,6 +29,7 @@ type AddEditor = (
   | ({ kind: "versionId" } & ResolvedAddEditor<number[]>)
   | ({ kind: "datetime" } & ResolvedAddEditor<CalendarDateTime | undefined>)
   | ({ kind: "ascii" } & ResolvedAddEditor<string>)
+  | ({ kind: "xp" } & ResolvedAddEditor<string>)
   | ({ kind: "exifVersion" } & ResolvedAddEditor<ExifVersion>)
   | ({ kind: "timeStamp" } & ResolvedAddEditor<Time | undefined>)
   | {

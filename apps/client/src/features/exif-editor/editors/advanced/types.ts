@@ -21,6 +21,12 @@ type AdvancedEditor =
       value: UserComment;
       onValueChange: (value: UserComment) => void;
     }
+  | {
+      kind: "xp";
+      exifEntryObject: ExifEntryObject;
+      value: string;
+      onValueChange: (value: string) => void;
+    }
   | ({ kind: "rational" } & ResolvedAdvancedEditor<RationalObject>)
   | {
       kind: "ascii";

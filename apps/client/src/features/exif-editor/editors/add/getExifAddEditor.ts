@@ -9,6 +9,7 @@ import { resolveRational } from "./resolvers/resolveRational";
 import { resolveTimeStamp } from "./resolvers/resolveTimeStamp";
 import { resolveUserComment } from "./resolvers/resolveUserComment";
 import { resolveVersionId } from "./resolvers/resolveVersionId";
+import { resolveXp } from "./resolvers/resolveXp";
 import type { AddEditorResolver } from "./types";
 
 const resolvers: AddEditorResolver[] = [
@@ -20,6 +21,7 @@ const resolvers: AddEditorResolver[] = [
   resolveVersionId, // tag === "VERSION_ID"
   resolveTimeStamp, // tag === "TIME_STAMP"
   resolveUserComment, // tag === "USER_COMMENT"
+  resolveXp, // tag is in XP_TAGS
   resolveAscii, // format === "ASCII"
   resolveNumeric, // format is numeric
   resolveRational, // format is rational
