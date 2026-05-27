@@ -27,7 +27,7 @@ const toastQueue = new ToastQueue<ToastInfo>({
   wrapUpdate(fn) {
     if ("startViewTransition" in document) {
       document.startViewTransition(() => {
-        // eslint-disable-next-line @eslint-react/dom/no-flush-sync -- Per https://developer.chrome.com/docs/web-platform/view-transitions/same-document#working_with_frameworks and Dan Abramov, this is correct for view transitions
+        // eslint-disable-next-line @eslint-react/dom-no-flush-sync -- Per https://developer.chrome.com/docs/web-platform/view-transitions/same-document#working_with_frameworks and Dan Abramov, this is correct for view transitions
         flushSync(fn);
       });
     } else {
