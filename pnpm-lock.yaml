@@ -29,8 +29,8 @@ importers:
         specifier: ^0.8.0
         version: 0.8.0(prettier@3.8.3)
       turbo:
-        specifier: ^2.9.14
-        version: 2.9.14
+        specifier: ^2.9.15
+        version: 2.9.15
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -68,8 +68,8 @@ importers:
         specifier: jsr:^1.1.4
         version: "@jsr/std__path@1.1.4"
       "@tanstack/react-form":
-        specifier: ^1.32.0
-        version: 1.32.0(@tanstack/react-start@1.168.13(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        specifier: ^1.32.1
+        version: 1.32.1(@tanstack/react-start@1.168.14(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       "@tanstack/react-query":
         specifier: ^5.100.14
         version: 5.100.14(react@19.2.6)
@@ -77,8 +77,8 @@ importers:
         specifier: ^1.170.8
         version: 1.170.8(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       "@tanstack/react-start":
-        specifier: ^1.168.13
-        version: 1.168.13(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
+        specifier: ^1.168.14
+        version: 1.168.14(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
       "@tanstack/react-table":
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -177,8 +177,8 @@ importers:
         specifier: ^0.10.5
         version: 0.10.5(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(csstype@3.2.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(solid-js@1.9.11)
       "@tanstack/react-form-devtools":
-        specifier: ^0.2.27
-        version: 0.2.27(@types/react@19.2.15)(csstype@3.2.3)(react@19.2.6)(solid-js@1.9.11)
+        specifier: ^0.2.28
+        version: 0.2.28(@types/react@19.2.15)(csstype@3.2.3)(react@19.2.6)(solid-js@1.9.11)
       "@tanstack/react-query-devtools":
         specifier: ^5.100.14
         version: 5.100.14(@tanstack/react-query@5.100.14(react@19.2.6))(react@19.2.6)
@@ -246,8 +246,8 @@ importers:
   packages/eslint-config:
     devDependencies:
       "@eslint-community/eslint-plugin-eslint-comments":
-        specifier: ^4.7.1
-        version: 4.7.1(eslint@10.4.0(jiti@2.7.0))
+        specifier: ^4.7.2
+        version: 4.7.2(eslint@10.4.0(jiti@2.7.0))
       "@eslint-react/eslint-plugin":
         specifier: ^5.8.5
         version: 5.8.5(eslint@10.4.0(jiti@2.7.0))(typescript@5.9.3)
@@ -279,8 +279,8 @@ importers:
         specifier: ^7.1.1
         version: 7.1.1(eslint@10.4.0(jiti@2.7.0))
       eslint-plugin-turbo:
-        specifier: ^2.9.14
-        version: 2.9.14(eslint@10.4.0(jiti@2.7.0))(turbo@2.9.14)
+        specifier: ^2.9.15
+        version: 2.9.15(eslint@10.4.0(jiti@2.7.0))(turbo@2.9.15)
       globals:
         specifier: ^17.6.0
         version: 17.6.0
@@ -1035,10 +1035,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  "@eslint-community/eslint-plugin-eslint-comments@4.7.1":
+  "@eslint-community/eslint-plugin-eslint-comments@4.7.2":
     resolution:
       {
-        integrity: sha512-Ql2nJFwA8wUGpILYGOQaT1glPsmvEwE0d+a+l7AALLzQvInqdbXJdx7aSu0DpUX9dB1wMVBMhm99/++S3MdEtQ==,
+        integrity: sha512-LF03qURSwEWm2dz5wtdDCzNk+7Opl0X7q6I3undsaIuNsEiNvRV3BCtqu14Q/6Pzg1tBj44LcxpW2EpSLZStZw==,
       }
     engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
     peerDependencies:
@@ -2257,15 +2257,6 @@ packages:
     engines: { node: ">=18" }
     hasBin: true
 
-  "@tanstack/devtools-ui@0.5.1":
-    resolution:
-      {
-        integrity: sha512-T9JjAdqMSnxsVO6AQykD5vhxPF4iFLKtbYxee/bU3OLlk446F5C1220GdCmhDSz7y4lx+m8AvIS0bq6zzvdDUA==,
-      }
-    engines: { node: ">=18" }
-    peerDependencies:
-      solid-js: ">=1.9.7"
-
   "@tanstack/devtools-ui@0.5.2":
     resolution:
       {
@@ -2340,16 +2331,16 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
 
-  "@tanstack/form-core@1.32.0":
+  "@tanstack/form-core@1.32.1":
     resolution:
       {
-        integrity: sha512-Tn5VRDSjyqjmaet2tJMuEWDRFyrCaon03vxXPlSSaiSs6C/N7lCIwGCXJbZXEUq1kTj8jYN9qyXHbsz4LQHcow==,
+        integrity: sha512-5yTCJ1/0bBjdVDsZsqPpLMVZLLN/G39b+ONnwv4vjz2jDes4YAd63cVwti5RtWuGuS1yLc5tVrGl1rWyVYsNGw==,
       }
 
-  "@tanstack/form-devtools@0.2.27":
+  "@tanstack/form-devtools@0.2.28":
     resolution:
       {
-        integrity: sha512-h91foKH1RtUwJC1079kwcNQlO1LYBKdIY5n7kHGGjNTQiH0wLSIBJnxZnOxOJ1qaSjErTqJw5e9sIj3O+zyRYg==,
+        integrity: sha512-uhgdekuLZUPuUu+B0VSk0I7LoeEMNjAbZrVGQ66+csC9KAWyhsnDLYjjNiIwm8CGGUe4aq9UDkGFrM0hHHXwCw==,
       }
     peerDependencies:
       solid-js: ">=1.9.9"
@@ -2392,18 +2383,18 @@ packages:
       react: ">=16.8"
       react-dom: ">=16.8"
 
-  "@tanstack/react-form-devtools@0.2.27":
+  "@tanstack/react-form-devtools@0.2.28":
     resolution:
       {
-        integrity: sha512-c7ugxpwxPBrT2nMYFPaW448SVxYvdi+ruPU/UcFS6YYdQ5uJGqjOJDF+ObCHWxlNJQWIXQVIeqbDZ8UaNPOLTA==,
+        integrity: sha512-TaYkk95bdEFh1vwdG35MnuiEV5iDW67HT6zmjYMxbHmnIwmamrjgaAZ748y8K/tZScM2gAuETUR2kK3HJLkBzw==,
       }
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  "@tanstack/react-form@1.32.0":
+  "@tanstack/react-form@1.32.1":
     resolution:
       {
-        integrity: sha512-6WP5SQTA6/H9crCpvpq3ZppYWqtrdE5NjOy6ebABi6uAQPqhfTzrdjS9t40mCZCFtGI5585OhJV6zBP/KN2zcw==,
+        integrity: sha512-GQ6IdIFnAJvhVaBZJIyVzi14c8b02W4SopJFzFZCjYFIAb5CfTZCbvHZ4Cnd5byd0OzTwLLW/R95noRKD+2+ZA==,
       }
     peerDependencies:
       "@tanstack/react-start": "*"
@@ -2454,10 +2445,10 @@ packages:
       react: ">=18.0.0 || >=19.0.0"
       react-dom: ">=18.0.0 || >=19.0.0"
 
-  "@tanstack/react-start-client@1.168.4":
+  "@tanstack/react-start-client@1.168.5":
     resolution:
       {
-        integrity: sha512-PDJ7xEuUKrlBiQz2PrVN9pD2ErmWeFpckYW1WUE8JCAeVi8U7C6rQNTQe4hQxBhycRfRdD53M6UfdWdQODIxyg==,
+        integrity: sha512-xRAGDhb81kvJa9lkr5CLt66HVMJWGh1iPZL/AYO8/wnPdbwFbRKSv5Yzx5SI+YQbB0qTgcYCyOPi4jrscAppag==,
       }
     engines: { node: ">=22.12.0" }
     peerDependencies:
@@ -2494,10 +2485,10 @@ packages:
       react: ">=18.0.0 || >=19.0.0"
       react-dom: ">=18.0.0 || >=19.0.0"
 
-  "@tanstack/react-start@1.168.13":
+  "@tanstack/react-start@1.168.14":
     resolution:
       {
-        integrity: sha512-E2pHQ92NiND1/HiD5Ax71xFXxiRZ2reOfU5W4BqxUL5plap3p8xSw1c6L8Np1E60vsxknuPCYRZESKkRy/LkOA==,
+        integrity: sha512-Y/CXqtufmZkUL6OCcxxDoGxDDnz/hqrYqCJQeiBHx4MUbn9mx3sZviFVDkFrsyi/8J+IKjXdV5LlNATAxHQzAQ==,
       }
     engines: { node: ">=22.12.0" }
     peerDependencies:
@@ -2669,50 +2660,50 @@ packages:
       }
     engines: { node: ">=20.19" }
 
-  "@turbo/darwin-64@2.9.14":
+  "@turbo/darwin-64@2.9.15":
     resolution:
       {
-        integrity: sha512-t7QiPflaEyBE4oayeZtSmu4mEfjgIrcNlNNl1z1dmIVPqEdtA7+CfTf8d7KXsOGPh6aNgWjKxyvQg9uGfDQF+A==,
+        integrity: sha512-nnDo9R1Df+s2x6jxlERtbg7xRpuicf8p4J2krcnjeaMBt3q9V41pGXa4t9YM2Y4ozozsVJ+CH405CJUrWIQK4Q==,
       }
     cpu: [x64]
     os: [darwin]
 
-  "@turbo/darwin-arm64@2.9.14":
+  "@turbo/darwin-arm64@2.9.15":
     resolution:
       {
-        integrity: sha512-d23147mC9BsCPA9mJ0h/ubcpbRgcJBXbcG3+Vq7YLhjz3IXuvQsJ1UXH8f4MD76ZjJ4m/E4aRdJV+MW88CDfbw==,
+        integrity: sha512-fDSx56oqoFuS+yUQw7hqjQTkjrSLdMcplhuLC8HcSkWC6YrpwEmUUYsPYHPxy4ALvLxnmPQuk6XoSD8tdkjP+g==,
       }
     cpu: [arm64]
     os: [darwin]
 
-  "@turbo/linux-64@2.9.14":
+  "@turbo/linux-64@2.9.15":
     resolution:
       {
-        integrity: sha512-P3ZKB5tuUDdDQWuAsACGUR1qv9W7BNWxdxqVJ0kZNuNNPRaVYTPPikLcp79+GiEcW3npsR+KyP38lnQiBc5aSA==,
+        integrity: sha512-/bmxn+x/xE+oh0VzEXt/zf2zsORAYZPrL3db5/VrXzYt0Z4wxcvffwJBGlSfla2smfS1BLGBiyWldJlWDXJVXA==,
       }
     cpu: [x64]
     os: [linux]
 
-  "@turbo/linux-arm64@2.9.14":
+  "@turbo/linux-arm64@2.9.15":
     resolution:
       {
-        integrity: sha512-ZRTlzcUMrrPv9ZuDzRF9n60Ym13bKeG9jDB8WjxyLhWNzV+AJQN+zdpIk3NJYf2zQsGUm1mNar2P0elRzLw25g==,
+        integrity: sha512-cbOaDe1ijz5As+mimOOHgmRMolZZZO7miNBHHp5xdiYMm2Q/Dwu1JVLx/Kw4s7xjocG/oEoHrpHrxpEAIEfNiw==,
       }
     cpu: [arm64]
     os: [linux]
 
-  "@turbo/windows-64@2.9.14":
+  "@turbo/windows-64@2.9.15":
     resolution:
       {
-        integrity: sha512-exanwN6sIduZwykYeiTQj8kCmOhazP5WOz3bvXMcYtjhL6Z3iRWLewKrXCBq0bqwSP3iBMb/AerRCnHI4lx46A==,
+        integrity: sha512-/Fzm7afui7uK7dFBwrTXKuDhBBTiHk5I+hMVAPMR7cqQyDo2norCNUsN9PdNuYcmzYbhSOxzz498wQYvSAz29w==,
       }
     cpu: [x64]
     os: [win32]
 
-  "@turbo/windows-arm64@2.9.14":
+  "@turbo/windows-arm64@2.9.15":
     resolution:
       {
-        integrity: sha512-fVdCsnmYoKICsycbWuuGp6Jvi51/3G/UluFWuAUCvR8PIW5IJkAk5BM9UF8PSm0Q2IphWHFZjYEgjHsh3B9y/g==,
+        integrity: sha512-fOHEsLcqVdFXLw2ApWv4gxwfHzkUnpo9rHGml+9+dyHj148m/Bc+556kEvb5+4u6prI1LMd8zEZE2HcO6Jn2VQ==,
       }
     cpu: [arm64]
     os: [win32]
@@ -3715,6 +3706,12 @@ packages:
         integrity: sha512-YbwwqR/uYpeoP4pu043q+LTDLFBLApUP6VxRihdfNTqu4ubqMlGDLd6ErXhEgsyvY0K6nCs7nggYumAN+9uEuQ==,
       }
 
+  dayjs@1.11.21:
+    resolution:
+      {
+        integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==,
+      }
+
   debug@4.4.3:
     resolution:
       {
@@ -4024,10 +4021,10 @@ packages:
       eslint: ^10.3.0
       typescript: "*"
 
-  eslint-plugin-turbo@2.9.14:
+  eslint-plugin-turbo@2.9.15:
     resolution:
       {
-        integrity: sha512-ROTlsO1JBJLATxtDNd7t22vviSb0hD8fKnjOO0WRgtxJW3VBRNO3BLAC129GPZSvEvtMH/f71Y2TzrqGPjLpEw==,
+        integrity: sha512-IBV3/xMl/TuK7pdW4nHQtbEOq/Si1e4WVOFuEmNsdX0VgzC9CWWtYf+kUH5gqz4h9+uRRYY7nR9SvzCEx2sWlQ==,
       }
     peerDependencies:
       eslint: ">6.6.0"
@@ -4325,14 +4322,6 @@ packages:
         integrity: sha512-sepffkT8stwnIYbsMBpoCHJuJM5l98FUF2AnE07hfvE0m/qp3R586hw4jF4uadbhvg1ooIdzuu7CsfD2jzCaNA==,
       }
     engines: { node: ">=18" }
-
-  goober@2.1.18:
-    resolution:
-      {
-        integrity: sha512-2vFqsaDVIT9Gz7N6kAL++pLpp41l3PfDuusHcjnGLfR6+huZkl6ziX+zgVC3ZxpqWhzH6pyDdGrCeDhMIvwaxw==,
-      }
-    peerDependencies:
-      csstype: ^3.0.10
 
   goober@2.1.19:
     resolution:
@@ -6089,10 +6078,10 @@ packages:
         integrity: sha512-C3TaO7K81YvjCgQH9Q1S3R3P3BtN3RIM8n+OvX4il1K1zgE8ZhI0op7kClgkxtutIE8hQrcrHBXvIheqKUUCxw==,
       }
 
-  turbo@2.9.14:
+  turbo@2.9.15:
     resolution:
       {
-        integrity: sha512-BQqXRr4UoWI3UPFrtznCLykYHxwxWh53iCB57x092jPMjIlW1wnm3N895g5irpiXmnxUhREBB0n6+y8BHhs4nw==,
+        integrity: sha512-VpKvD9Z0Hu/xrGUAYX1wnhfpqv835wIwGqeKfulvBPTOcDap0E3nFwyzCAVV85fB1sBcBDEfTP+7FSW7GzwWSQ==,
       }
     hasBin: true
 
@@ -7066,7 +7055,7 @@ snapshots:
   "@esbuild/win32-x64@0.27.3":
     optional: true
 
-  "@eslint-community/eslint-plugin-eslint-comments@4.7.1(eslint@10.4.0(jiti@2.7.0))":
+  "@eslint-community/eslint-plugin-eslint-comments@4.7.2(eslint@10.4.0(jiti@2.7.0))":
     dependencies:
       escape-string-regexp: 4.0.0
       eslint: 10.4.0(jiti@2.7.0)
@@ -7749,15 +7738,6 @@ snapshots:
 
   "@tanstack/devtools-event-client@0.4.3": {}
 
-  "@tanstack/devtools-ui@0.5.1(csstype@3.2.3)(solid-js@1.9.11)":
-    dependencies:
-      clsx: 2.1.1
-      dayjs: 1.11.20
-      goober: 2.1.18(csstype@3.2.3)
-      solid-js: 1.9.11
-    transitivePeerDependencies:
-      - csstype
-
   "@tanstack/devtools-ui@0.5.2(csstype@3.2.3)(solid-js@1.9.11)":
     dependencies:
       clsx: 2.1.1
@@ -7822,20 +7802,20 @@ snapshots:
       - supports-color
       - typescript
 
-  "@tanstack/form-core@1.32.0":
+  "@tanstack/form-core@1.32.1":
     dependencies:
       "@tanstack/devtools-event-client": 0.4.3
       "@tanstack/pacer-lite": 0.1.1
       "@tanstack/store": 0.9.3
 
-  "@tanstack/form-devtools@0.2.27(@types/react@19.2.15)(csstype@3.2.3)(react@19.2.6)(solid-js@1.9.11)":
+  "@tanstack/form-devtools@0.2.28(@types/react@19.2.15)(csstype@3.2.3)(react@19.2.6)(solid-js@1.9.11)":
     dependencies:
-      "@tanstack/devtools-ui": 0.5.1(csstype@3.2.3)(solid-js@1.9.11)
+      "@tanstack/devtools-ui": 0.5.2(csstype@3.2.3)(solid-js@1.9.11)
       "@tanstack/devtools-utils": 0.4.0(@types/react@19.2.15)(react@19.2.6)(solid-js@1.9.11)
-      "@tanstack/form-core": 1.32.0
+      "@tanstack/form-core": 1.32.1
       clsx: 2.1.1
-      dayjs: 1.11.20
-      goober: 2.1.18(csstype@3.2.3)
+      dayjs: 1.11.21
+      goober: 2.1.19(csstype@3.2.3)
       solid-js: 1.9.11
     transitivePeerDependencies:
       - "@types/react"
@@ -7865,10 +7845,10 @@ snapshots:
       - solid-js
       - utf-8-validate
 
-  "@tanstack/react-form-devtools@0.2.27(@types/react@19.2.15)(csstype@3.2.3)(react@19.2.6)(solid-js@1.9.11)":
+  "@tanstack/react-form-devtools@0.2.28(@types/react@19.2.15)(csstype@3.2.3)(react@19.2.6)(solid-js@1.9.11)":
     dependencies:
       "@tanstack/devtools-utils": 0.4.0(@types/react@19.2.15)(react@19.2.6)(solid-js@1.9.11)
-      "@tanstack/form-devtools": 0.2.27(@types/react@19.2.15)(csstype@3.2.3)(react@19.2.6)(solid-js@1.9.11)
+      "@tanstack/form-devtools": 0.2.28(@types/react@19.2.15)(csstype@3.2.3)(react@19.2.6)(solid-js@1.9.11)
       react: 19.2.6
     transitivePeerDependencies:
       - "@types/react"
@@ -7877,13 +7857,13 @@ snapshots:
       - solid-js
       - vue
 
-  "@tanstack/react-form@1.32.0(@tanstack/react-start@1.168.13(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)":
+  "@tanstack/react-form@1.32.1(@tanstack/react-start@1.168.14(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)":
     dependencies:
-      "@tanstack/form-core": 1.32.0
+      "@tanstack/form-core": 1.32.1
       "@tanstack/react-store": 0.9.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react: 19.2.6
     optionalDependencies:
-      "@tanstack/react-start": 1.168.13(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
+      "@tanstack/react-start": 1.168.14(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
     transitivePeerDependencies:
       - react-dom
 
@@ -7918,7 +7898,7 @@ snapshots:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
 
-  "@tanstack/react-start-client@1.168.4(react-dom@19.2.6(react@19.2.6))(react@19.2.6)":
+  "@tanstack/react-start-client@1.168.5(react-dom@19.2.6(react@19.2.6))(react@19.2.6)":
     dependencies:
       "@tanstack/react-router": 1.170.8(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       "@tanstack/router-core": 1.171.6
@@ -7960,10 +7940,10 @@ snapshots:
     transitivePeerDependencies:
       - crossws
 
-  "@tanstack/react-start@1.168.13(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))":
+  "@tanstack/react-start@1.168.14(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))":
     dependencies:
       "@tanstack/react-router": 1.170.8(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      "@tanstack/react-start-client": 1.168.4(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      "@tanstack/react-start-client": 1.168.5(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       "@tanstack/react-start-rsc": 0.1.13(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
       "@tanstack/react-start-server": 1.167.9(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       "@tanstack/router-utils": 1.162.1
@@ -8131,22 +8111,22 @@ snapshots:
 
   "@tanstack/virtual-file-routes@1.162.0": {}
 
-  "@turbo/darwin-64@2.9.14":
+  "@turbo/darwin-64@2.9.15":
     optional: true
 
-  "@turbo/darwin-arm64@2.9.14":
+  "@turbo/darwin-arm64@2.9.15":
     optional: true
 
-  "@turbo/linux-64@2.9.14":
+  "@turbo/linux-64@2.9.15":
     optional: true
 
-  "@turbo/linux-arm64@2.9.14":
+  "@turbo/linux-arm64@2.9.15":
     optional: true
 
-  "@turbo/windows-64@2.9.14":
+  "@turbo/windows-64@2.9.15":
     optional: true
 
-  "@turbo/windows-arm64@2.9.14":
+  "@turbo/windows-arm64@2.9.15":
     optional: true
 
   "@tybys/wasm-util@0.10.1":
@@ -8784,6 +8764,8 @@ snapshots:
 
   dayjs@1.11.20: {}
 
+  dayjs@1.11.21: {}
+
   debug@4.4.3(supports-color@10.2.2):
     dependencies:
       ms: 2.1.3
@@ -9061,11 +9043,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-turbo@2.9.14(eslint@10.4.0(jiti@2.7.0))(turbo@2.9.14):
+  eslint-plugin-turbo@2.9.15(eslint@10.4.0(jiti@2.7.0))(turbo@2.9.15):
     dependencies:
       dotenv: 16.0.3
       eslint: 10.4.0(jiti@2.7.0)
-      turbo: 2.9.14
+      turbo: 2.9.15
 
   eslint-scope@9.1.2:
     dependencies:
@@ -9285,10 +9267,6 @@ snapshots:
       is-glob: 4.0.3
 
   globals@17.6.0: {}
-
-  goober@2.1.18(csstype@3.2.3):
-    dependencies:
-      csstype: 3.2.3
 
   goober@2.1.19(csstype@3.2.3):
     dependencies:
@@ -10276,14 +10254,14 @@ snapshots:
 
   tty-browserify@0.0.1: {}
 
-  turbo@2.9.14:
+  turbo@2.9.15:
     optionalDependencies:
-      "@turbo/darwin-64": 2.9.14
-      "@turbo/darwin-arm64": 2.9.14
-      "@turbo/linux-64": 2.9.14
-      "@turbo/linux-arm64": 2.9.14
-      "@turbo/windows-64": 2.9.14
-      "@turbo/windows-arm64": 2.9.14
+      "@turbo/darwin-64": 2.9.15
+      "@turbo/darwin-arm64": 2.9.15
+      "@turbo/linux-64": 2.9.15
+      "@turbo/linux-arm64": 2.9.15
+      "@turbo/windows-64": 2.9.15
+      "@turbo/windows-arm64": 2.9.15
 
   tw-animate-css@1.4.0: {}
 
