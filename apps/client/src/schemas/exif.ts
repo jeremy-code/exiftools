@@ -10,14 +10,14 @@ const TagSchema = z.enum(Array.from(ExifTagUnified, ([key]) => key));
 
 const SupportLevelSchema = z.enum(Array.from(ExifSupportLevel, ([key]) => key));
 
-const IfdSchema = z.enum(
-  Array.from(ExifIfd, ([key]) => key).filter((key) => key !== "COUNT"),
-);
+const IfdSchema = z
+  .enum(Array.from(ExifIfd, ([key]) => key))
+  .exclude(["COUNT"]);
 
 const TagEntrySchema = z.strictObject({
-  tagVal: z.number().int(),
+  tagVal: z.int().min(0).max(0xffff /* 16-bit integer tag */),
   tag: TagSchema,
-  name: z.string(),
+  name: z.string().min(1),
   title: z.string(),
   description: z.string(),
   esl: z.record(IfdSchema, SupportLevelSchema),
