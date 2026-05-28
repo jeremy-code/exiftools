@@ -19,9 +19,9 @@ import { useLocale } from "react-aria/I18nProvider";
 import { ColumnResizer } from "#components/table/ColumnResizer";
 import { ExpandRows } from "#components/table/ExpandRows";
 import { SortingHandlerToggle } from "#components/table/SortingHandlerToggle";
+import { SUPPORT_LEVEL_MAP } from "#lib/exif/constants";
 import { formatPlural } from "#utils/format/formatPlural";
 import { seo } from "#utils/seo";
-import { titlecase } from "#utils/titlecase";
 import { Badge } from "@exifi/ui/components/Badge";
 import { Heading } from "@exifi/ui/components/Heading";
 import {
@@ -44,9 +44,10 @@ const columnHelper = createColumnHelper<TagEntry>();
 
 const SupportLevelCell = (props: CellContext<TagEntry, SupportLevel>) => {
   const value = props.getValue();
+  const formattedValue = SUPPORT_LEVEL_MAP[value];
 
   if (value === "UNKNOWN") {
-    return <span className="text-fg-muted italic">{titlecase(value)}</span>;
+    return <span className="text-fg-muted italic">{formattedValue}</span>;
   }
 
   return (
@@ -54,7 +55,7 @@ const SupportLevelCell = (props: CellContext<TagEntry, SupportLevel>) => {
       className="select-text"
       color={value === "MANDATORY" ? "success" : "default"}
     >
-      {titlecase(value)}
+      {formattedValue}
     </Badge>
   );
 };

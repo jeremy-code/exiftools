@@ -1,4 +1,4 @@
-import type { DataType } from "libexif-wasm";
+import type { DataType, SupportLevel } from "libexif-wasm";
 
 const MAX_INT32_VALUE = 0x7fffffff;
 
@@ -15,4 +15,11 @@ const DATA_TYPE_MAP: Record<DataType, string> = {
   UNKNOWN: "Unknown",
 };
 
-export { MAX_INT32_VALUE, MAX_UINT32_VALUE, DATA_TYPE_MAP };
+const SUPPORT_LEVEL_MAP: Record<SupportLevel, string> = {
+  UNKNOWN: "Unknown",
+  NOT_RECORDED: "Not recorded",
+  MANDATORY: "Mandatory",
+  OPTIONAL: "Optional",
+};
+
+export { MAX_INT32_VALUE, MAX_UINT32_VALUE, DATA_TYPE_MAP, SUPPORT_LEVEL_MAP };

@@ -10,8 +10,8 @@ import {
   addFormSchema,
   type AddFieldValues,
 } from "#features/exif-editor/forms/addEntryForm";
+import { SUPPORT_LEVEL_MAP } from "#lib/exif/constants";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
-import { titlecase } from "#utils/titlecase";
 import { Button } from "@exifi/ui/components/Button";
 import { ComboBox, ComboBoxItem } from "@exifi/ui/components/ComboBox";
 import { Select, SelectItem } from "@exifi/ui/components/Select";
@@ -108,7 +108,9 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
                       }
                     >
                       {`${exifIfdGetName(ifdName)}${
-                        esl === undefined ? "" : ` (${titlecase(esl[ifdName])})`
+                        esl === undefined ? "" : (
+                          ` (${SUPPORT_LEVEL_MAP[esl[ifdName]]})`
+                        )
                       }`}
                     </SelectItem>
                   )}
