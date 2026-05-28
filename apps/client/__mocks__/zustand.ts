@@ -1,6 +1,4 @@
-// Taken from zustand doc: https://zustand.docs.pmnd.rs/guides/testing#jest
-import { act } from "react";
-
+// Taken from zustand doc: https://zustand.docs.pmnd.rs/learn/guides/testing#vitest
 import { afterEach, vi } from "vitest";
 import type { StateCreator, StoreApi, UseBoundStore } from "zustand";
 
@@ -43,10 +41,8 @@ const createStore = <T>(stateCreator: StateCreator<T>) => {
 };
 
 afterEach(() => {
-  act(() => {
-    STORE_RESET_FUNCTIONS.forEach((resetFn) => {
-      resetFn();
-    });
+  STORE_RESET_FUNCTIONS.forEach((resetFn) => {
+    resetFn();
   });
 });
 
