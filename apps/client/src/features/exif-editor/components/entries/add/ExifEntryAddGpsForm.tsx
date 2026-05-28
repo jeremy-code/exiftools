@@ -26,11 +26,11 @@ const ExifEntryAddGpsForm = ({
     style: "short",
     type: "conjunction",
   });
-  const { exifData, exifDataObject, setExifData } = useExifEditor(
+  const { exifData, exifDataObject, updateExifDataObject } = useExifEditor(
     useShallow((state) => ({
       exifData: state.exifData,
       exifDataObject: state.exifDataObject,
-      setExifData: state.setExifData,
+      updateExifDataObject: state.updateExifDataObject,
     })),
   );
   const gpsForm = useForm({
@@ -41,7 +41,7 @@ const ExifEntryAddGpsForm = ({
           exifData,
           new LatLng(value.latitude, value.longitude, value.altitude),
         );
-        setExifData(exifData);
+        updateExifDataObject();
         gpsForm.reset();
       }
     },

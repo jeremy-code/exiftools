@@ -49,11 +49,11 @@ type ExifTableProps = TableProps;
 
 const ExifTable = (props: ExifTableProps) => {
   const { locale } = useLocale();
-  const { exifDataObject, exifData, setExifData } = useExifEditor(
+  const { exifDataObject, exifData, updateExifDataObject } = useExifEditor(
     useShallow((state) => ({
       exifDataObject: state.exifDataObject,
       exifData: state.exifData,
-      setExifData: state.setExifData,
+      updateExifDataObject: state.updateExifDataObject,
     })),
   );
   const exifEntryObjects = useMemo(
@@ -109,7 +109,7 @@ const ExifTable = (props: ExifTableProps) => {
           }
           onPress={() => {
             exifData.fix();
-            setExifData(exifData);
+            updateExifDataObject();
           }}
         >
           Initialize with default entries?

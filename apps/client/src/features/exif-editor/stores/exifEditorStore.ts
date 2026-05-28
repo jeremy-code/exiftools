@@ -18,7 +18,7 @@ type ExifEditorStoreState = {
 };
 
 type ExifEditorStoreActions = {
-  setExifData: (exifData: ExifData) => void;
+  updateExifDataObject: () => void;
   updateExifEntry: (
     exifEntryObject: ExifEntryObject,
     value: string | ValidTypedArray,
@@ -37,8 +37,8 @@ const createExifEditorStore = (exifData: ExifData) =>
   create<ExifEditorStore>((set) => ({
     exifData,
     exifDataObject: serializeExifData(exifData),
-    setExifData: (exifData) => {
-      set({ exifData, exifDataObject: serializeExifData(exifData) });
+    updateExifDataObject: () => {
+      set((state) => ({ exifDataObject: serializeExifData(state.exifData) }));
     },
     updateExifEntry: (exifEntryObject, value) => {
       set((state) => {

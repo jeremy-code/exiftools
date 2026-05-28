@@ -17,8 +17,8 @@ type ExifMenuProps = Omit<MenuTriggerProps, "children">;
 
 const ExifMenu = (props: ExifMenuProps) => {
   const { file } = useFile();
-  const [exifData, setExifData] = useExifEditor(
-    useShallow((state) => [state.exifData, state.setExifData]),
+  const [exifData, updateExifDataObject] = useExifEditor(
+    useShallow((state) => [state.exifData, state.updateExifDataObject]),
   );
 
   return (
@@ -30,7 +30,7 @@ const ExifMenu = (props: ExifMenuProps) => {
         <MenuItem
           onAction={() => {
             exifData.fix();
-            setExifData(exifData);
+            updateExifDataObject();
           }}
         >
           Fix
@@ -46,7 +46,7 @@ const ExifMenu = (props: ExifMenuProps) => {
               return;
             }
             updatePixelDimensions(exifData, imageDimensions);
-            setExifData(exifData);
+            updateExifDataObject();
           }}
         >
           Add image dimensions
@@ -55,7 +55,7 @@ const ExifMenu = (props: ExifMenuProps) => {
           onAction={async () => {
             const currentPosition = await getCurrentPosition();
             updateGeolocationPosition(exifData, currentPosition);
-            setExifData(exifData);
+            updateExifDataObject();
           }}
         >
           Set Exif to current GPS position
@@ -63,7 +63,7 @@ const ExifMenu = (props: ExifMenuProps) => {
         <MenuItem
           onAction={() => {
             updateDateAndTimeDigitized(exifData);
-            setExifData(exifData);
+            updateExifDataObject();
           }}
         >
           Set Date and Time Digitized to current time
@@ -71,7 +71,7 @@ const ExifMenu = (props: ExifMenuProps) => {
         <MenuItem
           onAction={() => {
             addImageUniqueId(exifData);
-            setExifData(exifData);
+            updateExifDataObject();
           }}
         >
           Add Image Unique ID
