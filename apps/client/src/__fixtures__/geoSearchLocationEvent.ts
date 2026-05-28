@@ -1,4 +1,4 @@
-const MOCK_GEOSEARCH_LOCATION_EVENT = {
+const GEOSEARCH_LOCATION_EVENT = {
   type: "geosearch/showlocation",
   location: {
     x: -77.0365528,
@@ -30,4 +30,4 @@ const MOCK_GEOSEARCH_LOCATION_EVENT = {
   },
 };
 
-export { MOCK_GEOSEARCH_LOCATION_EVENT };
+export { GEOSEARCH_LOCATION_EVENT };

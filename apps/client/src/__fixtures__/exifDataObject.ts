@@ -1,7 +1,7 @@
 import type { ExifDataObject } from "#lib/exif/interfaces";
 import { encodeStringToUtf8 } from "#utils/encodeStringToUtf8";
 
-const MOCK_EXIF_DATA_OBJECT = {
+const EXIF_DATA_OBJECT = {
   byteOrder: "MOTOROLA",
   data: [],
   dataType: "UNKNOWN",
@@ -115,4 +115,4 @@ const MOCK_EXIF_DATA_OBJECT = {
   },
 } satisfies ExifDataObject;
 
-export { MOCK_EXIF_DATA_OBJECT };
+export { EXIF_DATA_OBJECT };
