@@ -1,3 +1,5 @@
+import type { GeoSearchLocationEvent } from "#stores/geoSearchLocationStore";
+
 const GEOSEARCH_LOCATION_EVENT = {
   type: "geosearch/showlocation",
   location: {
@@ -28,6 +30,6 @@ const GEOSEARCH_LOCATION_EVENT = {
       boundingbox: ["38.8974904", "38.8977959", "-77.0368541", "-77.0362517"],
     },
   },
-};
+} satisfies GeoSearchLocationEvent;
 
 export { GEOSEARCH_LOCATION_EVENT };
