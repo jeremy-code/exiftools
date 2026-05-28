@@ -1,3 +1,4 @@
+import { dequal } from "dequal";
 import { ExifIfd, type ExifData, type ValidTypedArray } from "libexif-wasm";
 import { create } from "zustand";
 
@@ -15,6 +16,8 @@ import { isTypedArray } from "#utils/isTypedArray";
 type ExifEditorStoreState = {
   exifData: ExifData;
   exifDataObject: ExifDataObject;
+  initialExifDataObject: ExifDataObject;
+  isDirty: boolean;
 };
 
 type ExifEditorStoreActions = {
@@ -34,62 +37,88 @@ type ExifEditorStoreActions = {
 type ExifEditorStore = ExifEditorStoreState & ExifEditorStoreActions;
 
 const createExifEditorStore = (exifData: ExifData) =>
-  create<ExifEditorStore>((set) => ({
-    exifData,
-    exifDataObject: serializeExifData(exifData),
-    updateExifDataObject: () => {
-      set((state) => ({ exifDataObject: serializeExifData(state.exifData) }));
-    },
-    updateExifEntry: (exifEntryObject, value) => {
-      set((state) => {
-        const exifEntry = getEntryFromEntryObject(
-          state.exifData,
-          exifEntryObject,
-        );
-        const typedArray =
-          typeof value === "string" ? encodeStringToUtf8(value)
-          : isTypedArray(value) ? value
-          : typedArrayInFormat(value, exifEntryObject.format);
+  create<ExifEditorStore>((set) => {
+    const initialExifDataObject = serializeExifData(exifData);
 
-        exifEntry.fromTypedArray(typedArray);
-
-        return { exifDataObject: serializeExifData(exifData) };
-      });
-    },
-    removeExifEntries: (exifEntryObjects) => {
-      set((state) => {
-        exifEntryObjects.forEach((exifEntryObject) => {
+    return {
+      exifData,
+      exifDataObject: initialExifDataObject,
+      // TODO: Use a better way of comparing objects than dequal that is more
+      // efficient and only compares the necessary entries
+      isDirty: false,
+      initialExifDataObject,
+      updateExifDataObject: () => {
+        set((state) => {
+          const exifDataObject = serializeExifData(state.exifData);
+          return {
+            exifDataObject,
+            isDirty: !dequal(exifDataObject, state.initialExifDataObject),
+          };
+        });
+      },
+      updateExifEntry: (exifEntryObject, value) => {
+        set((state) => {
           const exifEntry = getEntryFromEntryObject(
             state.exifData,
             exifEntryObject,
           );
-          const exifContent = exifEntry.parent!; // Never null since entry must belong to an IFD
-          exifContent.removeEntry(exifEntry);
-        });
-        return { exifDataObject: serializeExifData(exifData) };
-      });
-    },
-    addExifEntry: (exifEntryObject, value) => {
-      set((state) => {
-        const exifContent = state.exifData.ifd[ExifIfd[exifEntryObject.ifd]];
-        const prevExifEntry = exifContent.getEntry(exifEntryObject.tag);
-        if (prevExifEntry !== null) {
-          console.warn(
-            `Exif entry with tag ${exifEntryObject.tag} already exists and will be overwritten.`,
-          );
-        }
-        const exifEntry = getOrInsertEntry(exifContent, exifEntryObject.tag);
-        exifEntry.format = exifEntryObject.format;
-        const typedArray =
-          typeof value === "string" ? encodeStringToUtf8(value)
-          : isTypedArray(value) ? value
-          : typedArrayInFormat(value, exifEntryObject.format);
-        exifEntry.fromTypedArray(typedArray);
+          const typedArray =
+            typeof value === "string" ? encodeStringToUtf8(value)
+            : isTypedArray(value) ? value
+            : typedArrayInFormat(value, exifEntryObject.format);
 
-        return { exifDataObject: serializeExifData(exifData) };
-      });
-    },
-  }));
+          exifEntry.fromTypedArray(typedArray);
+
+          const exifDataObject = serializeExifData(state.exifData);
+          return {
+            exifDataObject,
+            isDirty: !dequal(exifDataObject, state.initialExifDataObject),
+          };
+        });
+      },
+      removeExifEntries: (exifEntryObjects) => {
+        set((state) => {
+          exifEntryObjects.forEach((exifEntryObject) => {
+            const exifEntry = getEntryFromEntryObject(
+              state.exifData,
+              exifEntryObject,
+            );
+            const exifContent = exifEntry.parent!; // Never null since entry must belong to an IFD
+            exifContent.removeEntry(exifEntry);
+          });
+          const exifDataObject = serializeExifData(state.exifData);
+          return {
+            exifDataObject,
+            isDirty: !dequal(exifDataObject, state.initialExifDataObject),
+          };
+        });
+      },
+      addExifEntry: (exifEntryObject, value) => {
+        set((state) => {
+          const exifContent = state.exifData.ifd[ExifIfd[exifEntryObject.ifd]];
+          const prevExifEntry = exifContent.getEntry(exifEntryObject.tag);
+          if (prevExifEntry !== null) {
+            console.warn(
+              `Exif entry with tag ${exifEntryObject.tag} already exists and will be overwritten.`,
+            );
+          }
+          const exifEntry = getOrInsertEntry(exifContent, exifEntryObject.tag);
+          exifEntry.format = exifEntryObject.format;
+          const typedArray =
+            typeof value === "string" ? encodeStringToUtf8(value)
+            : isTypedArray(value) ? value
+            : typedArrayInFormat(value, exifEntryObject.format);
+          exifEntry.fromTypedArray(typedArray);
+
+          const exifDataObject = serializeExifData(state.exifData);
+          return {
+            exifDataObject,
+            isDirty: !dequal(exifDataObject, state.initialExifDataObject),
+          };
+        });
+      },
+    };
+  });
 
 type ExifEditorStoreApi = ReturnType<typeof createExifEditorStore>;
 

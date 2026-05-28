@@ -1,6 +1,7 @@
 import { useTransition } from "react";
 
 import { Save } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 
 import { useFile } from "#contexts/FileContext";
 import { isMobileWebKit } from "#utils/platform";
@@ -18,12 +19,18 @@ type ExifToolbarProps = Omit<ToolbarProps, "children">;
 
 const ExifToolbar = (props: ExifToolbarProps) => {
   const { file, setFile } = useFile();
-  const exifData = useExifEditor((state) => state.exifData);
+  const { exifData, isDirty } = useExifEditor(
+    useShallow((state) => ({
+      exifData: state.exifData,
+      isDirty: state.isDirty,
+    })),
+  );
   const [isPending, startTransition] = useTransition();
 
   return (
     <Toolbar aria-label="Exif editor toolbar" {...props}>
       <Button
+        isDisabled={!isDirty}
         onPress={() => {
           const generateFile = async () => {
             const newFileInBytes = writeExifData(
@@ -72,7 +79,11 @@ const ExifToolbar = (props: ExifToolbarProps) => {
         }}
       >
         <Save size={16} />
-        {isPending ? "Saving..." : "Save"}
+        {!isDirty ?
+          "Saved"
+        : isPending ?
+          "Saving..."
+        : "Save"}
       </Button>
       <AddEntryDialog />
       <AddGpsEntriesDialog />
