@@ -34,11 +34,8 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
         ...exifEntryObject
       } = addFormSchema.parse(value);
 
-      try {
-        addExifEntry({ tag: tagEntry.tag, ...exifEntryObject }, entryValue);
-      } finally {
-        addForm.reset();
-      }
+      addExifEntry({ tag: tagEntry.tag, ...exifEntryObject }, entryValue);
+      addForm.reset();
     },
   });
 
@@ -59,12 +56,6 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
                 id: index,
                 ...item,
               }))}
-              // Needs a re-render when undefined (either form reset or unselected)
-              key={
-                field.state.value === undefined ?
-                  "is-undefined"
-                : "is-not-undefined"
-              }
               value={field.state.value?.index}
               onChange={(value) => {
                 if (typeof value !== "number") {
@@ -79,6 +70,8 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
               onBlur={field.handleBlur}
               label="Tag"
               placeholder="ImageDescription"
+              // Not using isInvalid/errorMessage because the default error messages
+              // are more informative compared to Zod's
               isRequired
             >
               {(item) => (
@@ -92,11 +85,6 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
         <addForm.Field name="ifd">
           {(field) => (
             <Select
-              key={
-                field.state.value === undefined ?
-                  "is-undefined"
-                : "is-not-undefined"
-              }
               label="Image File Domain"
               value={field.state.value}
               onChange={(value) => {
@@ -133,15 +121,9 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
           {(field) => (
             <Select
               label="Format"
-              key={
-                field.state.value === undefined ?
-                  "is-undefined"
-                : "is-not-undefined"
-              }
               value={field.state.value}
               placeholder="Select a format"
               onChange={(value) => {
-                field.handleChange(value as AddFieldValues["format"]);
                 if (
                   (value === "RATIONAL" || value === "SRATIONAL") &&
                   addForm.state.values.value.length % 2 !== 0
@@ -151,6 +133,7 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
                     addForm.state.values.value.concat([1]),
                   );
                 }
+                field.handleChange(value as AddFieldValues["format"]);
               }}
               onBlur={field.handleBlur}
               isRequired

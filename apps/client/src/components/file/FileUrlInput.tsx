@@ -2,7 +2,7 @@ import type { ComponentPropsWithRef } from "react";
 
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
-import { useLocale } from "react-aria-components/I18nProvider";
+import { useListFormatter } from "react-aria/useListFormatter";
 import { z } from "zod";
 
 import { useDropzoneStore } from "#stores/dropzoneStore";
@@ -25,12 +25,10 @@ const FileUrlInput = ({
   onSuccess,
   ...props
 }: FileUrlInputProps) => {
-  const { locale } = useLocale();
-  const listFormatter = new Intl.ListFormat(locale, {
+  const listFormatter = useListFormatter({
     style: "short",
     type: "conjunction",
   });
-
   const addAcceptedFiles = useDropzoneStore((state) => state.addAcceptedFiles);
   const mutation = useMutation({
     mutationFn: async (input: string) => {
@@ -98,8 +96,9 @@ const FileUrlInput = ({
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={field.handleChange}
+              isInvalid={!field.state.meta.isValid}
               errorMessage={
-                field.state.meta.isTouched && !field.state.meta.isValid ?
+                field.state.meta.errors.length > 0 ?
                   listFormatter.format(
                     field.state.meta.errors
                       .filter((issue) => issue !== undefined)

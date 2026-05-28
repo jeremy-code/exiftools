@@ -2,6 +2,7 @@ import { useCallback, type ComponentPropsWithRef } from "react";
 
 import { useForm } from "@tanstack/react-form";
 import { LatLng } from "leaflet";
+import { useListFormatter } from "react-aria/useListFormatter";
 import { cn } from "tailwind-variants";
 import { useShallow } from "zustand/react/shallow";
 
@@ -21,6 +22,10 @@ const ExifEntryAddGpsForm = ({
   className,
   ...props
 }: ExifEntryAddGpsFormProps) => {
+  const listFormatter = useListFormatter({
+    style: "short",
+    type: "conjunction",
+  });
   const { exifData, exifDataObject, setExifData } = useExifEditor(
     useShallow((state) => ({
       exifData: state.exifData,
@@ -37,6 +42,7 @@ const ExifEntryAddGpsForm = ({
           new LatLng(value.latitude, value.longitude, value.altitude),
         );
         setExifData(exifData);
+        gpsForm.reset();
       }
     },
   });
@@ -100,7 +106,9 @@ const ExifEntryAddGpsForm = ({
                 onBlur={field.handleBlur}
                 minValue={-90}
                 maxValue={90}
-                onChange={(value) => field.handleChange(value)}
+                onChange={(value) => {
+                  field.handleChange(!Number.isNaN(value) ? value : undefined);
+                }}
                 formatOptions={{
                   style: "unit",
                   unit: "degree",
@@ -108,6 +116,16 @@ const ExifEntryAddGpsForm = ({
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 6,
                 }}
+                isInvalid={!field.state.meta.isValid}
+                errorMessage={
+                  field.state.meta.errors.length > 0 ?
+                    listFormatter.format(
+                      field.state.meta.errors
+                        .filter((issue) => issue !== undefined)
+                        .map((issue) => issue.message),
+                    )
+                  : undefined
+                }
               />
             )}
           </gpsForm.Field>
@@ -117,7 +135,9 @@ const ExifEntryAddGpsForm = ({
                 label="Longitude"
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={(value) => field.handleChange(value)}
+                onChange={(value) => {
+                  field.handleChange(!Number.isNaN(value) ? value : undefined);
+                }}
                 minValue={-180}
                 maxValue={180}
                 formatOptions={{
@@ -127,6 +147,16 @@ const ExifEntryAddGpsForm = ({
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 6,
                 }}
+                isInvalid={!field.state.meta.isValid}
+                errorMessage={
+                  field.state.meta.errors.length > 0 ?
+                    listFormatter.format(
+                      field.state.meta.errors
+                        .filter((issue) => issue !== undefined)
+                        .map((issue) => issue.message),
+                    )
+                  : undefined
+                }
               />
             )}
           </gpsForm.Field>
@@ -136,8 +166,20 @@ const ExifEntryAddGpsForm = ({
                 label="Altitude"
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={(value) => field.handleChange(value)}
+                onChange={(value) => {
+                  field.handleChange(!Number.isNaN(value) ? value : undefined);
+                }}
                 formatOptions={{ style: "unit", unit: "meter" }}
+                isInvalid={!field.state.meta.isValid}
+                errorMessage={
+                  field.state.meta.errors.length > 0 ?
+                    listFormatter.format(
+                      field.state.meta.errors
+                        .filter((issue) => issue !== undefined)
+                        .map((issue) => issue.message),
+                    )
+                  : undefined
+                }
               />
             )}
           </gpsForm.Field>
