@@ -10,10 +10,10 @@ const { mockedUuidv4 } = vi.hoisted(() => ({
 vi.mock("uuid", () => ({
   v4: mockedUuidv4,
 }));
+vi.mock("zustand");
 
 describe("useFileTabsStore", () => {
   beforeEach(() => {
-    useFileTabsStore.setState(useFileTabsStore.getInitialState());
     let uuidCounter = 1;
     mockedUuidv4.mockImplementation(() => "uuid-" + uuidCounter++);
   });

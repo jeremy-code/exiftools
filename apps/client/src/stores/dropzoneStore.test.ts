@@ -1,13 +1,11 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi, afterEach } from "vitest";
 import { renderHook } from "vitest-browser-react";
 
 import { useDropzoneStore } from "./dropzoneStore";
 
-describe("useDropzoneStore", () => {
-  beforeEach(() => {
-    useDropzoneStore.setState(useDropzoneStore.getInitialState());
-  });
+vi.mock("zustand");
 
+describe("useDropzoneStore", () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
