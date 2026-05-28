@@ -31,19 +31,18 @@ const useGeoSearchLocationStore = create<GeoSearchLocationStore>((set) => ({
     console.log(event);
     set((state) => {
       const prevLocation = state.location;
-      const nextLatLng = new LatLng(event.location.y, event.location.x);
-      const nextBounds = new LatLngBounds(
-        new LatLng(...event.location.bounds[0]),
-        new LatLng(...event.location.bounds[1]),
-      );
+      const nextLocation = {
+        latLng: new LatLng(event.location.y, event.location.x),
+        label: event.location.label,
+        bounds: new LatLngBounds(
+          event.location.bounds[0],
+          event.location.bounds[1],
+        ),
+      };
 
       if (prevLocation === null) {
         return {
-          location: {
-            latLng: nextLatLng,
-            label: event.location.label,
-            bounds: nextBounds,
-          },
+          location: nextLocation,
         };
       }
 
@@ -51,14 +50,14 @@ const useGeoSearchLocationStore = create<GeoSearchLocationStore>((set) => ({
         location: {
           // Only update reference if necessary
           latLng:
-            prevLocation.latLng.equals(nextLatLng) ?
+            prevLocation.latLng.equals(nextLocation.latLng) ?
               prevLocation.latLng
-            : nextLatLng,
-          label: event.location.label,
+            : nextLocation.latLng,
+          label: nextLocation.label,
           bounds:
-            prevLocation.bounds.equals(nextBounds) ?
+            prevLocation.bounds.equals(nextLocation.bounds) ?
               prevLocation.bounds
-            : nextBounds,
+            : nextLocation.bounds,
         },
       };
     });
