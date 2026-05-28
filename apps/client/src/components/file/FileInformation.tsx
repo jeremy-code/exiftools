@@ -1,7 +1,9 @@
 import { Suspense, useMemo, type ComponentPropsWithRef } from "react";
 
 import { imageDimensionsFromStream } from "image-dimensions";
-import { useDateFormatter, useLocale, useNumberFormatter } from "react-aria";
+import { useLocale } from "react-aria/I18nProvider";
+import { useDateFormatter } from "react-aria/useDateFormatter";
+import { useNumberFormatter } from "react-aria/useNumberFormatter";
 import { cn } from "tailwind-variants";
 
 import { useFileHash } from "#hooks/useFileHash";

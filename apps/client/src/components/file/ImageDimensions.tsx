@@ -1,7 +1,7 @@
 import { use } from "react";
 
 import type { ImageType } from "image-dimensions";
-import { useNumberFormatter } from "react-aria";
+import { useNumberFormatter } from "react-aria/useNumberFormatter";
 
 type ImageDimensionsPromise = {
   imageDimensionsPromise: Promise<

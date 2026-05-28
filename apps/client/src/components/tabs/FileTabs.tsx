@@ -1,7 +1,7 @@
 import { useRef, type ReactNode } from "react";
 
 import { Plus } from "lucide-react";
-import { DropZone } from "react-aria-components";
+import { DropZone } from "react-aria-components/DropZone";
 import { useShallow } from "zustand/react/shallow";
 
 import { SortableList } from "#components/dnd/SortableList";

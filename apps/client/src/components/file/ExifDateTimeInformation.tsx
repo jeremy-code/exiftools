@@ -1,5 +1,5 @@
 import { type ExifData } from "libexif-wasm";
-import { useDateFormatter } from "react-aria";
+import { useDateFormatter } from "react-aria/useDateFormatter";
 
 import { parseDateTimeEntries } from "#lib/exif/parseDateTimeEntries";
 import { parseGpsDateTimeEntries } from "#lib/exif/parseGpsDateTimeEntries";

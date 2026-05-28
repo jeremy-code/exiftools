@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useDateFormatter } from "react-aria";
+import { useDateFormatter } from "react-aria/useDateFormatter";
 
 import { seo } from "#utils/seo";
 import {

@@ -1,6 +1,6 @@
 import { imageDimensionsFromStream } from "image-dimensions";
 import { Ellipsis } from "lucide-react";
-import type { MenuTriggerProps } from "react-aria-components";
+import type { MenuTriggerProps } from "react-aria-components/Menu";
 import { useShallow } from "zustand/react/shallow";
 
 import { useFile } from "#contexts/FileContext";

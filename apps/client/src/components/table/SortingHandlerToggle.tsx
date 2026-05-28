@@ -1,10 +1,10 @@
 import type { Column, RowData } from "@tanstack/react-table";
 import { ArrowDownWideNarrow, ArrowUpNarrowWide } from "lucide-react";
-import { composeRenderProps } from "react-aria-components";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
 } from "react-aria-components/Button";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 
 import { composeTailwindRenderProps } from "@exifi/ui/utils/composeTailwindRenderProps";
 

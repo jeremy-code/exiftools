@@ -1,8 +1,8 @@
-import { composeRenderProps } from "react-aria-components";
 import {
   TextField as AriaTextField,
   type TextFieldProps as AriaTextFieldProps,
 } from "react-aria-components/TextField";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { tv, type VariantProps } from "tailwind-variants";
 
 import {

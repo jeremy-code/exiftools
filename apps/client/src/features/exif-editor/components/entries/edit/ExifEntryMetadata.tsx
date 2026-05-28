@@ -6,8 +6,8 @@ import {
   exifSupportLevelGetName,
 } from "libexif-wasm";
 import { ChevronDown } from "lucide-react";
-import { useNumberFormatter } from "react-aria";
 import { useLocale } from "react-aria/I18nProvider";
+import { useNumberFormatter } from "react-aria/useNumberFormatter";
 import {
   Disclosure,
   type DisclosureProps,

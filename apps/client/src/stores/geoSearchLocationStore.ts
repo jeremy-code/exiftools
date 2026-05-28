@@ -28,7 +28,6 @@ type GeoSearchLocationStore = {
 const useGeoSearchLocationStore = create<GeoSearchLocationStore>((set) => ({
   location: null,
   setLocationFromEvent: (event) => {
-    console.log(event);
     set((state) => {
       const prevLocation = state.location;
       const nextLocation = {
