@@ -18,6 +18,10 @@ const SelectCell = ({ row }: CellContext<ExifTableRow, unknown>) => {
       onChange={(isSelected) => {
         row.toggleSelected(isSelected);
       }}
+      // There are no subrows to select, cell is a placeholder
+      isDisabled={
+        "entries" in row.original && row.originalSubRows?.length === 0
+      }
     />
   );
 };

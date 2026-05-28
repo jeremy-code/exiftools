@@ -52,7 +52,7 @@ const boxVariants = tv({
       true: "[--color:var(--color-red-700)] group-pressed/checkbox:[--color:var(--color-red-800)] dark:[--color:var(--color-red-600)] dark:group-pressed/checkbox:[--color:var(--color-red-700)] forced-colors:[--color:Mark]!",
     },
     isDisabled: {
-      true: "[--color:var(--color-fg-muted)] forced-colors:[--color:GrayText]!",
+      true: "[--color:var(--color-bg-muted)] forced-colors:[--color:GrayText]!",
     },
     size: {
       xs: "size-3",
