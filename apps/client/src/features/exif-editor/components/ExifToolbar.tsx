@@ -14,6 +14,7 @@ import { ExifMenu } from "./ExifMenu";
 import { AddEntryDialog } from "./dialogs/AddEntryDialog";
 import { AddGpsEntriesDialog } from "./dialogs/AddGpsEntriesDialog";
 import { useExifEditor } from "../contexts/ExifEditorContext";
+import { DiffDialog } from "./dialogs/DiffDialog";
 
 type ExifToolbarProps = Omit<ToolbarProps, "children">;
 
@@ -85,6 +86,7 @@ const ExifToolbar = (props: ExifToolbarProps) => {
           "Saving..."
         : "Save"}
       </Button>
+      <DiffDialog />
       <AddEntryDialog />
       <AddGpsEntriesDialog />
       <ExifMenu />
