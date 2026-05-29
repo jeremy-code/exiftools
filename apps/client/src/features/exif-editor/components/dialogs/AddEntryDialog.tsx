@@ -1,3 +1,5 @@
+import { lazy, Suspense } from "react";
+
 import { Plus } from "lucide-react";
 
 import { Button } from "@exifi/ui/components/Button";
@@ -11,10 +13,15 @@ import {
   DialogDescription,
 } from "@exifi/ui/components/Dialog";
 import { Modal } from "@exifi/ui/components/Modal";
-
-import { ExifEntryAddForm } from "../entries/add/ExifEntryAddForm";
+import { Skeleton } from "@exifi/ui/components/Skeleton";
 
 type AddEntryDialogProps = Omit<DialogTriggerProps, "children">;
+
+const ExifEntryAddForm = lazy(() =>
+  import("../entries/add/ExifEntryAddForm").then((m) => ({
+    default: m.ExifEntryAddForm,
+  })),
+);
 
 const AddEntryDialog = (props: AddEntryDialogProps) => {
   return (
@@ -32,7 +39,9 @@ const AddEntryDialog = (props: AddEntryDialogProps) => {
             </DialogDescription>
           </DialogHeader>
           <DialogBody>
-            <ExifEntryAddForm />
+            <Suspense fallback={<Skeleton className="h-50 w-full" />}>
+              <ExifEntryAddForm />
+            </Suspense>
           </DialogBody>
         </Dialog>
       </Modal>

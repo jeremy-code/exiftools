@@ -1,3 +1,5 @@
+import { lazy, Suspense } from "react";
+
 import { MapPin } from "lucide-react";
 
 import { Button } from "@exifi/ui/components/Button";
@@ -11,10 +13,15 @@ import {
   DialogDescription,
 } from "@exifi/ui/components/Dialog";
 import { Modal } from "@exifi/ui/components/Modal";
-
-import { ExifEntryAddGpsForm } from "../entries/add/ExifEntryAddGpsForm";
+import { Skeleton } from "@exifi/ui/components/Skeleton";
 
 type AddGpsEntriesDialogProps = Omit<DialogTriggerProps, "children">;
+
+const ExifEntryAddGpsForm = lazy(() =>
+  import("../entries/add/ExifEntryAddGpsForm").then((m) => ({
+    default: m.ExifEntryAddGpsForm,
+  })),
+);
 
 const AddGpsEntriesDialog = (props: AddGpsEntriesDialogProps) => {
   return (
@@ -31,7 +38,9 @@ const AddGpsEntriesDialog = (props: AddGpsEntriesDialogProps) => {
             </DialogDescription>
           </DialogHeader>
           <DialogBody>
-            <ExifEntryAddGpsForm />
+            <Suspense fallback={<Skeleton className="h-50 w-full" />}>
+              <ExifEntryAddGpsForm />
+            </Suspense>
           </DialogBody>
         </Dialog>
       </Modal>

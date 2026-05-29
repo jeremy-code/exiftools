@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 
 import { useShallow } from "zustand/react/shallow";
 
@@ -15,6 +15,7 @@ import {
   DialogFooter,
 } from "@exifi/ui/components/Dialog";
 import { Modal } from "@exifi/ui/components/Modal";
+import { Skeleton } from "@exifi/ui/components/Skeleton";
 
 type DiffDialogProps = Omit<DialogTriggerProps, "children">;
 
@@ -46,10 +47,12 @@ const DiffDialog = (props: DiffDialogProps) => {
             <DialogDescription>View the Exif data diff here.</DialogDescription>
           </DialogHeader>
           <DialogBody>
-            <JsonDiffViewer
-              oldValue={initialExifDataObject}
-              newValue={exifDataObject}
-            />
+            <Suspense fallback={<Skeleton className="h-50 w-full" />}>
+              <JsonDiffViewer
+                oldValue={initialExifDataObject}
+                newValue={exifDataObject}
+              />
+            </Suspense>
           </DialogBody>
           <DialogFooter closeButton></DialogFooter>
         </Dialog>
