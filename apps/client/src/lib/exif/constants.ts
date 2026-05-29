@@ -1,4 +1,4 @@
-import type { DataType, SupportLevel } from "libexif-wasm";
+import type { DataType, SupportLevel, Tag } from "libexif-wasm";
 
 const MAX_INT32_VALUE = 0x7fffffff;
 
@@ -22,4 +22,19 @@ const SUPPORT_LEVEL_MAP: Record<SupportLevel, string> = {
   OPTIONAL: "Optional",
 };
 
-export { MAX_INT32_VALUE, MAX_UINT32_VALUE, DATA_TYPE_MAP, SUPPORT_LEVEL_MAP };
+const GEOLOCATION_TAGS: Tag[] = [
+  "LATITUDE",
+  "LONGITUDE",
+  "ALTITUDE",
+  "LONGITUDE_REF",
+  "LATITUDE_REF",
+  "ALTITUDE_REF",
+];
+
+export {
+  MAX_INT32_VALUE,
+  MAX_UINT32_VALUE,
+  DATA_TYPE_MAP,
+  SUPPORT_LEVEL_MAP,
+  GEOLOCATION_TAGS,
+};
