@@ -3,6 +3,7 @@ import { useExifData } from "#hooks/useExifData";
 
 import { ExifTable } from "./components/ExifTable";
 import { ExifToolbar } from "./components/ExifToolbar";
+import { UnsavedDialog } from "./components/dialogs/UnsavedDialog";
 import { ExifEditorProvider } from "./contexts/ExifEditorContext";
 
 const ExifEditorContent = ({ file }: { file: File }) => {
@@ -13,6 +14,7 @@ const ExifEditorContent = ({ file }: { file: File }) => {
       <ExifInformation exifData={exifData} />
       <ExifToolbar />
       <ExifTable />
+      <UnsavedDialog />
     </ExifEditorProvider>
   );
 };
