@@ -1,6 +1,7 @@
-import { useState, type ComponentPropsWithRef } from "react";
+import { useState } from "react";
 
 import { Fragment } from "react/jsx-runtime";
+import { Group, type GroupProps } from "react-aria-components/Group";
 
 import {
   NumberField,
@@ -20,7 +21,7 @@ type GpsTagVersionInputProps = {
   value?: number[];
   onValueChange?: (value: number[]) => void;
   inputProps?: Omit<NumberFieldProps, "value" | "onChange">;
-} & ComponentPropsWithRef<"div">;
+} & GroupProps;
 
 const GpsTagVersionInput = ({
   className,
@@ -37,7 +38,7 @@ const GpsTagVersionInput = ({
   ]);
 
   return (
-    <div className="flex items-baseline gap-1" {...props}>
+    <Group className="flex items-baseline gap-1" {...props}>
       {gpsTagVersion.map((byte, index) => (
         <Fragment key={index}>
           <NumberField
@@ -57,7 +58,7 @@ const GpsTagVersionInput = ({
           {index !== NUMBER_OF_DIGITS - 1 && <span>.</span>}
         </Fragment>
       ))}
-    </div>
+    </Group>
   );
 };
 

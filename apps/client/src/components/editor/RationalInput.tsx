@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Decimal } from "decimal.js";
 import type { RationalObject } from "libexif-wasm";
 import { useNumberFormatter } from "react-aria/useNumberFormatter";
+import { Group } from "react-aria-components/Group";
 
 import { approximateRational } from "#lib/math/approximateRational";
 import {
@@ -48,7 +49,7 @@ const RationalInput = ({
   );
 
   return (
-    <div className="flex items-center gap-2">
+    <Group className="flex items-center gap-2">
       <NumberField
         {...sharedProps}
         {...numeratorInputProps}
@@ -119,7 +120,7 @@ const RationalInput = ({
           setRational?.(rational);
         }}
       />
-    </div>
+    </Group>
   );
 };
 

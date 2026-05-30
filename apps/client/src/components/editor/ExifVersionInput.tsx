@@ -1,5 +1,6 @@
-import { useState, type ComponentPropsWithRef } from "react";
+import { useState } from "react";
 
+import { Group, type GroupProps } from "react-aria-components/Group";
 import { cn } from "tailwind-variants";
 
 import type { ExifVersion } from "#features/exif-editor/editors/quick/types";
@@ -12,7 +13,7 @@ type ExifVersionInputProps = {
   value?: ExifVersion;
   onValueChange?: (value: ExifVersion) => void;
   inputProps?: Omit<NumberFieldProps, "value" | "onChange">;
-} & ComponentPropsWithRef<"div">;
+} & GroupProps;
 
 const ExifVersionInput = ({
   className,
@@ -27,7 +28,7 @@ const ExifVersionInput = ({
   }>(value ?? { major: undefined, minor: undefined });
 
   return (
-    <div className={cn("flex items-baseline gap-2", className)} {...props}>
+    <Group className={cn("flex items-baseline gap-2", className)} {...props}>
       <NumberField
         {...inputProps}
         aria-label={
@@ -35,6 +36,7 @@ const ExifVersionInput = ({
             inputProps["aria-label"] + " Major"
           : "Major"
         }
+        size="xs"
         minValue={1}
         maxValue={2}
         value={exifVersion.major}
@@ -68,6 +70,7 @@ const ExifVersionInput = ({
           : "Minor"
         }
         minValue={0}
+        size="xs"
         value={exifVersion.minor}
         onChange={(target) => {
           setExifVersion((prev) => {
@@ -90,7 +93,7 @@ const ExifVersionInput = ({
           });
         }}
       />
-    </div>
+    </Group>
   );
 };
 
