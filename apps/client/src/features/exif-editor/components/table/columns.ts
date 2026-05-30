@@ -3,12 +3,12 @@ import type { Ifd } from "libexif-wasm";
 
 import type { ExifEntryObject } from "#lib/exif/interfaces";
 
+import { EditCell } from "./EditCell";
 import { IfdCell } from "./IfdCell";
 import { SelectCell } from "./SelectCell";
 import { SelectHeader } from "./SelectHeader";
 import { TagCell } from "./TagCell";
 import { ValueCell } from "./ValueCell";
-import { EditEntryDialog } from "../dialogs/EditEntryDialog";
 
 type ExifTableRow = ExifEntryObject | { ifd: Ifd; entries: ExifTableRow[] };
 
@@ -45,7 +45,7 @@ const columns = [
   }),
   columnHelper.display({
     id: "edit",
-    cell: EditEntryDialog,
+    cell: EditCell,
     size: 56, // 3.5rem
   }),
 ];

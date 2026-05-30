@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 
 import { MapPin } from "lucide-react";
 
+import { useDialogState } from "#hooks/useDialogState";
 import { Button } from "@exifi/ui/components/Button";
 import {
   Dialog,
@@ -24,8 +25,10 @@ const ExifEntryAddGpsForm = lazy(() =>
 );
 
 const AddGpsEntriesDialog = (props: AddGpsEntriesDialogProps) => {
+  const { isOpen, onOpenChange } = useDialogState();
+
   return (
-    <DialogTrigger {...props}>
+    <DialogTrigger isOpen={isOpen} onOpenChange={onOpenChange} {...props}>
       <Button variant="outline" size="icon" aria-label="Add GPS entries">
         <MapPin size="16" />
       </Button>

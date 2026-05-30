@@ -1,10 +1,11 @@
-import type { ComponentPropsWithRef } from "react";
+import { useEffect, type ComponentPropsWithRef } from "react";
 
 import { cn } from "tailwind-variants";
 
 import { ExifEntryDraftContext } from "#features/exif-editor/contexts/ExifEntryDraftContext";
 import { useExifEntryDraft } from "#features/exif-editor/hooks/useExifEntryDraft";
 import type { ExifEntryObject } from "#lib/exif/interfaces";
+import { useDialogBlockerStore } from "#stores/dialogBlockerStore";
 import { Button } from "@exifi/ui/components/Button";
 
 import { ExifEntryByteEditor } from "./ExifEntryByteEditor";
@@ -23,6 +24,10 @@ const ExifEntryInspector = ({
 }: ExifEntryInspectorProps) => {
   const { draft, setDraft, isChanged, save } =
     useExifEntryDraft(exifEntryObject);
+
+  useEffect(() => {
+    useDialogBlockerStore.getState().setIsDialogBlocked(isChanged);
+  }, [isChanged]);
 
   return (
     <div className={cn("flex flex-col gap-4", className)} {...props}>

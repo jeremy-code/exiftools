@@ -12,6 +12,7 @@ import {
 } from "#features/exif-editor/forms/addEntryForm";
 import { GEOLOCATION_TAGS, SUPPORT_LEVEL_MAP } from "#lib/exif/constants";
 import { EXIF_TAG_MAP } from "#lib/exif/exifTagMap";
+import { useDialogBlockerStore } from "#stores/dialogBlockerStore";
 import { Button } from "@exifi/ui/components/Button";
 import { Callout, CalloutText } from "@exifi/ui/components/Callout";
 import { ComboBox, ComboBoxItem } from "@exifi/ui/components/ComboBox";
@@ -25,6 +26,9 @@ const EXIF_TAG_TABLE = getExifTagTable();
 type ExifEntryAddFormProps = ComponentPropsWithRef<"form">;
 
 const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
+  const setIsDialogBlocked = useDialogBlockerStore(
+    (state) => state.setIsDialogBlocked,
+  );
   const addExifEntry = useExifEditor((state) => state.addExifEntry);
   const addForm = useForm({
     ...addEntryFormOptions(),
@@ -37,6 +41,12 @@ const ExifEntryAddForm = (props: ExifEntryAddFormProps) => {
 
       addExifEntry({ tag: tagEntry.tag, ...exifEntryObject }, entryValue);
       addForm.reset();
+      setIsDialogBlocked(false);
+    },
+    listeners: {
+      onChange: (props) => {
+        setIsDialogBlocked(!props.formApi.state.isDefaultValue);
+      },
     },
   });
 

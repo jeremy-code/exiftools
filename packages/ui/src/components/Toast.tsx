@@ -39,7 +39,7 @@ const toastQueue = new ToastQueue<ToastInfo>({
 const toastRegionVariants = tv({
   extend: focusRing,
   base: [
-    "fixed inset-x-4 bottom-4 flex flex-col-reverse gap-2 rounded-lg sm:justify-self-end",
+    "fixed inset-x-4 bottom-4 z-2000 flex flex-col-reverse gap-2 rounded-lg sm:justify-self-end",
   ],
 });
 

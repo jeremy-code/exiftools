@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 
 import { Plus } from "lucide-react";
 
+import { useDialogState } from "#hooks/useDialogState";
 import { Button } from "@exifi/ui/components/Button";
 import {
   Dialog,
@@ -24,8 +25,10 @@ const ExifEntryAddForm = lazy(() =>
 );
 
 const AddEntryDialog = (props: AddEntryDialogProps) => {
+  const { isOpen, onOpenChange } = useDialogState();
+
   return (
-    <DialogTrigger {...props}>
+    <DialogTrigger isOpen={isOpen} onOpenChange={onOpenChange} {...props}>
       <Button variant="outline" size="icon" aria-label="Add entry">
         <Plus size="16" />
       </Button>

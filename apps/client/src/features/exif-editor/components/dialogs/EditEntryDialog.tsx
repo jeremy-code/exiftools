@@ -1,8 +1,9 @@
 import { lazy, Suspense } from "react";
 
-import type { CellContext } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
 
+import { useDialogState } from "#hooks/useDialogState";
+import type { ExifEntryObject } from "#lib/exif/interfaces";
 import { Button } from "@exifi/ui/components/Button";
 import {
   Dialog,
@@ -15,23 +16,21 @@ import {
 import { Modal } from "@exifi/ui/components/Modal";
 import { Skeleton } from "@exifi/ui/components/Skeleton";
 
-import type { ExifTableRow } from "../table/columns";
-
-type EditEntryDialogProps = CellContext<ExifTableRow, unknown>;
-
 const ExifEntryInspector = lazy(() =>
   import("../entries/edit/ExifEntryInspector").then((m) => ({
     default: m.ExifEntryInspector,
   })),
 );
 
-const EditEntryDialog = ({ row }: EditEntryDialogProps) => {
-  if ("entries" in row.original) {
-    return null;
-  }
+type EditEntryDialogProps = {
+  exifEntryObject: ExifEntryObject;
+};
+
+const EditEntryDialog = ({ exifEntryObject }: EditEntryDialogProps) => {
+  const { isOpen, onOpenChange } = useDialogState();
 
   return (
-    <DialogTrigger>
+    <DialogTrigger isOpen={isOpen} onOpenChange={onOpenChange}>
       <Button variant="outline" size="icon" aria-label="Edit">
         <Pencil size="16" />
       </Button>
@@ -46,7 +45,7 @@ const EditEntryDialog = ({ row }: EditEntryDialogProps) => {
           </DialogHeader>
           <DialogBody>
             <Suspense fallback={<Skeleton className="h-50 w-full" />}>
-              <ExifEntryInspector exifEntryObject={row.original} />
+              <ExifEntryInspector exifEntryObject={exifEntryObject} />
             </Suspense>
           </DialogBody>
         </Dialog>

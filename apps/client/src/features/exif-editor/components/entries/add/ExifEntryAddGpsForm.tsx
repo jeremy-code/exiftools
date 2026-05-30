@@ -9,6 +9,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useExifEditor } from "#features/exif-editor/contexts/ExifEditorContext";
 import { addGpsEntriesFormOptions } from "#features/exif-editor/forms/addGpsEntriesForm";
 import { updateLatLng } from "#lib/exif/actions/updateLatLng";
+import { useDialogBlockerStore } from "#stores/dialogBlockerStore";
 import { getCurrentPosition } from "#utils/getCurrentPosition";
 import { Button } from "@exifi/ui/components/Button";
 import { NumberField } from "@exifi/ui/components/NumberField";
@@ -22,6 +23,9 @@ const ExifEntryAddGpsForm = ({
   className,
   ...props
 }: ExifEntryAddGpsFormProps) => {
+  const setIsDialogBlocked = useDialogBlockerStore(
+    (state) => state.setIsDialogBlocked,
+  );
   const listFormatter = useListFormatter({
     style: "short",
     type: "conjunction",
@@ -43,7 +47,13 @@ const ExifEntryAddGpsForm = ({
         );
         updateExifDataObject();
         gpsForm.reset();
+        setIsDialogBlocked(false);
       }
+    },
+    listeners: {
+      onChange: (props) => {
+        setIsDialogBlocked(!props.formApi.state.isDefaultValue);
+      },
     },
   });
 
