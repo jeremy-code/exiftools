@@ -14,7 +14,7 @@ type DropzoneStoreActions = {
 
 type DropzoneStore = DropzoneStoreState & DropzoneStoreActions;
 
-const useDropzoneStore = create<DropzoneStore>((set) => ({
+const useDropzoneStore = create<DropzoneStore>((set, _, store) => ({
   acceptedFiles: [],
   addAcceptedFiles: (acceptedFiles) =>
     set((state) => ({
@@ -45,7 +45,7 @@ const useDropzoneStore = create<DropzoneStore>((set) => ({
         acceptedFiles: state.acceptedFiles.with(index, acceptedFile),
       };
     }),
-  resetAcceptedFiles: () => set({ acceptedFiles: [] }),
+  resetAcceptedFiles: () => set(store.getInitialState()),
 }));
 
 export { useDropzoneStore, type DropzoneStore };
