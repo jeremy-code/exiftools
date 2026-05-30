@@ -13,7 +13,6 @@ import { Modal } from "@exifi/ui/components/Modal";
 
 const UnsavedDialog = () => {
   const isDirty = useExifEditor((state) => state.isDirty);
-  console.log(isDirty);
   const { proceed, reset, status } = useBlocker({
     shouldBlockFn: () => isDirty,
     withResolver: true,
