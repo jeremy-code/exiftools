@@ -3,6 +3,12 @@ import type { ReactNode } from "react";
 import { createFileRoute, Link as RouterLink } from "@tanstack/react-router";
 import { ClipboardCheck, Lock, Wrench } from "lucide-react";
 
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionPanel,
+  AccordionItem,
+} from "@exifi/ui/components/Accordion";
 import { buttonVariants } from "@exifi/ui/components/Button";
 import { Card } from "@exifi/ui/components/Card";
 import { Heading } from "@exifi/ui/components/Heading";
@@ -63,6 +69,30 @@ const FEATURES = [
   },
 ] satisfies FeatureCardProps[];
 
+const FAQS = [
+  {
+    question: "What is this?",
+    answer:
+      "exifi is an open-source tool to view and edit Exif data in the browser. It uses the C library libexif-wasm compiled to WebAssembly.",
+  },
+  {
+    question: "What image formats are supported?",
+    answer:
+      "As of right now, only JPEG images are supported since libexif does not support TIFF images.",
+  },
+  {
+    question:
+      "Why should I use this over a specialized tool like ExifTool or Adobe Lightroom?",
+    answer:
+      "Realistically, if you are a photographer or someone who edits images, you probably should be using a specialized tool for the job. This is more a service for those who want to quickly add a little bit of metadata to their images quickly online without having to upload them to someone's server.",
+  },
+  {
+    question: "What image metadata can be edited?",
+    answer:
+      "Only the Exif standard 2.1 and most of 2.2 are supported. Other metadata that may be stored, such as XMP, are not supported.",
+  },
+];
+
 const HomeComponent = () => {
   return (
     <div className="container py-8">
@@ -109,6 +139,25 @@ const HomeComponent = () => {
               <FeatureCard key={informationItem.title} {...informationItem} />
             ))}
           </dl>
+        </div>
+      </div>
+      <div className="py-16">
+        <div className="text-center">
+          <Heading level={2} size="3xl">
+            FAQ
+          </Heading>
+        </div>
+        <div className="mt-12">
+          <Accordion variant="enclosed" allowsMultipleExpanded>
+            {FAQS.map((faq) => (
+              <AccordionItem key={faq.question}>
+                <AccordionHeader>{faq.question}</AccordionHeader>
+                <AccordionPanel className="text-fg-muted">
+                  {faq.answer}
+                </AccordionPanel>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </div>
     </div>
